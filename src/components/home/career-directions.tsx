@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowDownRight, ArrowUpRight, Briefcase, Code2, Megaphone, PenTool } from "lucide-react";
+import { ArrowUpRight, Briefcase, Code2, Megaphone, PenTool } from "lucide-react";
 import { cn } from "cn";
 
 const DIRECTIONS = [
@@ -12,6 +12,7 @@ const DIRECTIONS = [
     heading: "Create What People See.",
     tags: ["Design", "Visual Content", "Animation"],
     icon: PenTool,
+    base: "from-primary via-primary/70 to-brand-green/40",
   },
   {
     number: "02",
@@ -19,6 +20,7 @@ const DIRECTIONS = [
     heading: "Build What Makes It Work.",
     tags: ["Development", "Programming", "Digital Products"],
     icon: Code2,
+    base: "from-brand-green via-primary/60 to-[#0b3d50]",
   },
   {
     number: "03",
@@ -26,7 +28,7 @@ const DIRECTIONS = [
     heading: "Help Ideas Reach People.",
     tags: ["Content & Social", "Search", "Analytics"],
     icon: Megaphone,
-    featured: true,
+    base: "from-primary via-primary/70 to-brand-green/40",
   },
   {
     number: "04",
@@ -34,6 +36,7 @@ const DIRECTIONS = [
     heading: "Build Work You Can Take With You.",
     tags: ["Freelance Projects", "Remote Work", "Entrepreneurship"],
     icon: Briefcase,
+    base: "from-[#0b3d50] to-primary",
   },
 ] as const;
 
@@ -68,13 +71,14 @@ function useRevealOnView<T extends HTMLElement>() {
 
 export function CareerDirections() {
   const { ref, visible } = useRevealOnView<HTMLElement>();
+  const [creative, technology, marketing, independent] = DIRECTIONS;
 
   return (
     <section ref={ref} className="px-4 py-14 sm:px-6 sm:py-16">
       <div className="mx-auto max-w-[1800px]">
         <div
           className={cn(
-            "max-w-2xl transition-all duration-700",
+            "flex flex-col gap-4 transition-all duration-700 sm:flex-row sm:items-end sm:justify-between sm:gap-10",
             visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
           )}
         >
@@ -83,22 +87,34 @@ export function CareerDirections() {
             Career Paths
           </div>
 
-          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-balance text-foreground sm:text-4xl lg:text-5xl">
-            Build Skills That Open More Than One Door.
+          <h2 className="max-w-3xl text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl">
+            <span className="text-foreground">Build Skills That Open </span>
+            <span className="text-muted-foreground">More Than One Door.</span>
           </h2>
-
-          <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Different students want different futures. Techno Gurukul
-            focuses on practical skills, real project work and portfolio
-            development so students can explore career directions that
-            match what they enjoy and what they can build.
-          </p>
         </div>
 
-        <div className="mt-10 flex flex-col gap-3 lg:mt-12 lg:gap-4">
-          {DIRECTIONS.map((direction, index) => (
-            <DirectionRow key={direction.number} direction={direction} index={index} visible={visible} />
-          ))}
+        <p
+          className={cn(
+            "mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground transition-all delay-100 duration-700 sm:text-lg",
+            visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+          )}
+        >
+          Different students want different futures. Techno Gurukul focuses
+          on practical skills, real project work and portfolio development
+          so students can explore career directions that match what they
+          enjoy and what they can build.
+        </p>
+
+        <div className="mt-10 grid grid-cols-1 gap-4 lg:mt-12 lg:grid-cols-2 lg:items-stretch lg:gap-6">
+          <LargeTile direction={creative} index={0} visible={visible} />
+
+          <div className="flex flex-col gap-4 lg:gap-6">
+            <MediumTile direction={technology} index={1} visible={visible} />
+            <div className="grid grid-cols-2 gap-4 lg:gap-6">
+              <AccentTile direction={marketing} index={2} visible={visible} />
+              <SmallTile direction={independent} index={3} visible={visible} />
+            </div>
+          </div>
         </div>
 
         <div
@@ -123,67 +139,107 @@ export function CareerDirections() {
   );
 }
 
-function DirectionRow({
-  direction,
-  index,
-  visible,
-}: {
-  direction: (typeof DIRECTIONS)[number];
-  index: number;
-  visible: boolean;
-}) {
-  const Icon = direction.icon;
-  const isFeatured = "featured" in direction && direction.featured;
+type Direction = (typeof DIRECTIONS)[number];
 
+function revealClass(visible: boolean) {
+  return cn(
+    "transition-all duration-500",
+    visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+  );
+}
+
+function tileStyle(index: number, visible: boolean) {
+  return { transitionDelay: visible ? `${index * 120 + 150}ms` : "0ms" };
+}
+
+/* CAREER SECTION VISUAL — FINAL ASSET TO BE PROVIDED for each tile below.
+   Final markup: replace each gradient div's contents with
+   <img src="..." className="absolute inset-0 h-full w-full object-cover" /> */
+
+function LargeTile({ direction, index, visible }: { direction: Direction; index: number; visible: boolean }) {
+  const Icon = direction.icon;
   return (
     <div
       className={cn(
-        "group relative flex flex-col gap-4 overflow-visible rounded-[1.75rem] border p-6 transition-all duration-500 sm:p-7 lg:flex-row lg:items-center lg:justify-between lg:gap-8",
-        isFeatured ? "border-brand-green/30 bg-brand-green/15" : "border-primary/10 bg-card hover:border-primary/20",
-        visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+        "group relative aspect-[4/3] overflow-hidden rounded-[2rem] lg:aspect-auto lg:h-full",
+        revealClass(visible)
       )}
-      style={{ transitionDelay: visible ? `${index * 120}ms` : "0ms" }}
+      style={tileStyle(index, visible)}
     >
-      <div className="flex items-center gap-4">
-        <span className="relative flex size-14 shrink-0 items-center justify-center rounded-full bg-card text-primary shadow-[0_8px_20px_-12px_rgba(16,20,28,0.3)] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-105">
-          <Icon className="size-6" aria-hidden="true" />
-          <span className="absolute -right-1 -bottom-1 flex size-6 items-center justify-center rounded-full border border-primary/10 bg-background text-muted-foreground transition-transform duration-300 group-hover:translate-x-0.5 group-hover:translate-y-0.5">
-            <ArrowDownRight className="size-3" aria-hidden="true" />
-          </span>
-        </span>
-
-        <div>
-          <p className="text-xs font-semibold tracking-wide text-muted-foreground">
-            {direction.number} — {direction.label}
-          </p>
-          <p className="mt-1 text-xl font-semibold text-foreground sm:text-2xl lg:text-3xl">
-            {direction.heading}
-          </p>
-        </div>
+      <div className={cn("absolute inset-0 bg-gradient-to-br transition-transform duration-500 group-hover:scale-105", direction.base)} />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+      <span className="absolute top-5 left-5 flex size-10 items-center justify-center rounded-full bg-background/90 text-foreground">
+        <Icon className="size-4" aria-hidden="true" />
+      </span>
+      <div className="absolute inset-x-5 bottom-5">
+        <p className="text-xl font-semibold text-background sm:text-2xl">{direction.heading}</p>
+        <p className="mt-2 text-sm leading-relaxed text-background/75">{direction.tags.join(" · ")}</p>
       </div>
+    </div>
+  );
+}
 
-      {/* CAREER SECTION VISUAL — FINAL ASSET TO BE PROVIDED.
-          Desktop-only floating visual on the featured row (matches the
-          Hero's own floating-card pattern: decorative elements hide
-          below lg rather than being squeezed into the mobile layout). */}
-      {isFeatured && (
-        <div
-          aria-hidden="true"
-          className="hidden shrink-0 lg:block lg:h-24 lg:w-24 lg:-translate-y-2 lg:rotate-6 lg:self-center"
-        >
-          <div className="h-full w-full overflow-hidden rounded-2xl shadow-[0_16px_32px_-12px_rgba(16,20,28,0.35)]">
-            <div className="h-full w-full bg-gradient-to-br from-brand-green via-primary/70 to-[#0b3d50]" />
-          </div>
-        </div>
+function MediumTile({ direction, index, visible }: { direction: Direction; index: number; visible: boolean }) {
+  const Icon = direction.icon;
+  return (
+    <div
+      className={cn(
+        "group relative aspect-[16/9] overflow-hidden rounded-[2rem]",
+        revealClass(visible)
       )}
+      style={tileStyle(index, visible)}
+    >
+      <div className={cn("absolute inset-0 bg-gradient-to-br transition-transform duration-500 group-hover:scale-105", direction.base)} />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/5 to-transparent" />
+      <span className="absolute top-5 left-5 flex size-10 items-center justify-center rounded-full bg-background/90 text-foreground">
+        <Icon className="size-4" aria-hidden="true" />
+      </span>
+      <div className="absolute inset-x-5 bottom-5">
+        <p className="text-lg font-semibold text-background sm:text-xl">{direction.heading}</p>
+        <p className="mt-1 text-sm text-background/75">{direction.tags[0]}</p>
+      </div>
+    </div>
+  );
+}
 
-      <ul className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground lg:flex-col lg:items-end lg:text-right">
-        {direction.tags.map((tag) => (
-          <li key={tag} className="before:mr-1.5 before:content-['•'] lg:before:content-none">
-            {tag}
-          </li>
-        ))}
-      </ul>
+function AccentTile({ direction, index, visible }: { direction: Direction; index: number; visible: boolean }) {
+  const Icon = direction.icon;
+  return (
+    <div
+      className={cn(
+        "flex aspect-square flex-col justify-between rounded-[1.75rem] bg-brand-green/90 p-5 transition-all duration-500 hover:-translate-y-0.5",
+        revealClass(visible)
+      )}
+      style={tileStyle(index, visible)}
+    >
+      <div className="flex items-center justify-between">
+        <Icon className="size-6 text-background" aria-hidden="true" />
+        <ArrowUpRight className="size-5 text-background/80" aria-hidden="true" />
+      </div>
+      <div>
+        <p className="text-base font-semibold text-background sm:text-lg">{direction.label}</p>
+        <p className="mt-1 text-xs text-background/75 sm:text-sm">{direction.heading}</p>
+      </div>
+    </div>
+  );
+}
+
+function SmallTile({ direction, index, visible }: { direction: Direction; index: number; visible: boolean }) {
+  const Icon = direction.icon;
+  return (
+    <div
+      className={cn(
+        "group relative aspect-square overflow-hidden rounded-[1.75rem]",
+        revealClass(visible)
+      )}
+      style={tileStyle(index, visible)}
+    >
+      <div className={cn("absolute inset-0 bg-gradient-to-br transition-transform duration-500 group-hover:scale-105", direction.base)} />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/5 to-transparent" />
+      <span className="absolute top-4 left-4 flex size-9 items-center justify-center rounded-full bg-background/90 text-foreground">
+        <Icon className="size-4" aria-hidden="true" />
+      </span>
+      <p className="absolute inset-x-4 bottom-4 text-sm font-semibold text-background">{direction.label}</p>
     </div>
   );
 }
