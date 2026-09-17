@@ -88,7 +88,7 @@ function FloatingCard({
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden lg:flex lg:min-h-[640px] lg:items-center">
+    <section className="relative overflow-hidden">
       {/* Two-tone diagonal backdrop, desktop only - fills the full hero
           height so the image's bottom edge lands exactly on this shape's
           bottom edge (the "hero baseline"). */}
@@ -127,7 +127,7 @@ export function Hero() {
             industry-relevant tools.
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 pb-14 sm:pb-20 lg:pb-24">
+          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 pb-14 sm:pb-20 lg:pb-16">
             <Link
               href="/programs"
               className={cn(
