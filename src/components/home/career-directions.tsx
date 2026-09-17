@@ -88,7 +88,7 @@ export function CareerDirections() {
             Career Paths
           </div>
 
-          <div className="mt-4 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
+          <div className="mt-4 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-10">
             <h2 className="max-w-xl text-3xl font-semibold tracking-tight text-balance text-foreground sm:text-4xl lg:text-5xl">
               Build Skills That Open More Than One Door.
             </h2>
