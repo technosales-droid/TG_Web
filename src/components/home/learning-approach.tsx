@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { ChevronRight } from "lucide-react";
 import { cn } from "cn";
 import { ChecklistIcon } from "@/components/icons/checklist";
 import { IterationIcon } from "@/components/icons/iteration";
@@ -13,8 +14,7 @@ const STAGES = [
     label: "Learn",
     icon: ChecklistIcon,
     heading: "Build the Fundamentals",
-    description:
-      "Understand the concepts, tools and workflows that form the foundation of your chosen discipline.",
+    description: "Understand the concepts, tools and workflows behind your discipline.",
     panel: "bg-card text-foreground",
     badge: "bg-primary/10 text-primary",
     numeral: "text-primary",
@@ -25,8 +25,7 @@ const STAGES = [
     label: "Practice",
     icon: IterationIcon,
     heading: "Learn by Doing",
-    description:
-      "Apply what you learn through practical exercises and progressively more complex work.",
+    description: "Apply what you learn through hands-on exercises that grow more complex.",
     panel: "bg-accent text-foreground",
     badge: "bg-card/80 text-primary",
     numeral: "text-primary",
@@ -37,8 +36,7 @@ const STAGES = [
     label: "Build",
     icon: IntegrationIcon,
     heading: "Create Real Projects",
-    description:
-      "Combine your skills to develop projects that move beyond isolated exercises.",
+    description: "Combine your skills into projects that go beyond isolated exercises.",
     panel: "bg-brand-green/15 text-foreground",
     badge: "bg-card/80 text-brand-green",
     numeral: "text-brand-green",
@@ -49,9 +47,8 @@ const STAGES = [
     label: "Show",
     icon: HandoffIcon,
     heading: "Build Your Portfolio",
-    description:
-      "Turn completed work into projects you can present, refine and use to demonstrate your abilities.",
-    panel: "bg-foreground text-background",
+    description: "Turn finished work into projects you can present and refine.",
+    panel: "bg-[#0b3d50] text-background",
     badge: "bg-background/15 text-brand-green",
     numeral: "text-background",
     muted: "text-background/70",
@@ -92,9 +89,9 @@ export function LearningApproach() {
   const { ref, visible } = useRevealOnView<HTMLElement>();
 
   return (
-    <section ref={ref} className="px-4 py-14 sm:px-6 sm:py-16">
+    <section ref={ref} className="px-4 py-12 sm:px-6 sm:py-14">
       <div className="mx-auto max-w-[1800px]">
-        <div className="rounded-[2.5rem] border border-primary/10 bg-muted/50 p-6 sm:p-10 lg:p-12">
+        <div className="rounded-[2.5rem] border border-primary/10 bg-muted/50 p-6 sm:p-8 lg:p-10">
           <div
             className={cn(
               "max-w-2xl transition-all duration-700",
@@ -118,9 +115,23 @@ export function LearningApproach() {
             </p>
           </div>
 
-          <div className="mt-10 flex flex-col gap-4 lg:mt-12 lg:flex-row">
+          <div className="mt-8 flex flex-col gap-4 lg:mt-10 lg:flex-row lg:items-stretch lg:gap-0">
             {STAGES.map((stage, index) => (
-              <StageCard key={stage.number} stage={stage} index={index} visible={visible} />
+              <div key={stage.number} className="flex flex-1 items-stretch lg:gap-3">
+                <StageCard stage={stage} index={index} visible={visible} />
+                {index < STAGES.length - 1 && (
+                  <div className="hidden shrink-0 items-center lg:flex">
+                    <ChevronRight
+                      className={cn(
+                        "size-4 text-primary/25 transition-opacity duration-500",
+                        visible ? "opacity-100" : "opacity-0"
+                      )}
+                      style={{ transitionDelay: visible ? `${index * 120 + 150}ms` : "0ms" }}
+                      aria-hidden="true"
+                    />
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>
@@ -143,7 +154,7 @@ function StageCard({
   return (
     <div
       className={cn(
-        "group relative flex-1 overflow-hidden rounded-[1.75rem] p-6 transition-all duration-500 sm:p-7 lg:transition-[flex-grow,opacity,transform] lg:duration-500 lg:hover:flex-[1.2]",
+        "group relative flex-1 overflow-hidden rounded-[1.75rem] p-6 shadow-[0_0_0_rgba(16,20,28,0)] transition-all duration-500 hover:shadow-[0_16px_32px_-16px_rgba(16,20,28,0.35)] sm:p-7 lg:transition-[flex-grow,box-shadow,opacity,transform] lg:duration-500 lg:hover:flex-[1.2]",
         stage.panel,
         visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
       )}
@@ -152,7 +163,7 @@ function StageCard({
       <span
         aria-hidden="true"
         className={cn(
-          "pointer-events-none absolute -top-2 right-4 text-7xl font-bold opacity-[0.08] select-none sm:text-8xl",
+          "pointer-events-none absolute -top-2 right-4 text-7xl font-bold opacity-[0.08] transition-opacity duration-300 select-none group-hover:opacity-[0.14] sm:text-8xl",
           stage.numeral
         )}
       >
@@ -171,7 +182,9 @@ function StageCard({
       <p className={cn("relative mt-6 text-xs font-semibold tracking-wide", stage.muted)}>
         {stage.number} — {stage.label}
       </p>
-      <p className="relative mt-3 text-lg font-semibold">{stage.heading}</p>
+      <p className="relative mt-3 text-lg font-semibold transition-transform duration-300 group-hover:translate-x-0.5">
+        {stage.heading}
+      </p>
       <p className={cn("relative mt-2 text-sm leading-relaxed", stage.muted)}>{stage.description}</p>
     </div>
   );
