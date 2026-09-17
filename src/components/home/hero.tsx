@@ -88,7 +88,7 @@ function FloatingCard({
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative overflow-hidden lg:min-h-[540px]">
       {/* Two-tone diagonal backdrop, desktop only - fills the full hero
           height so the image's bottom edge lands exactly on this shape's
           bottom edge (the "hero baseline"). */}
@@ -150,7 +150,7 @@ export function Hero() {
 
       {/* Hero image: in-flow on mobile/tablet, pinned to the section's
           bottom-right on desktop so the subjects' feet touch the baseline. */}
-      <div className="relative mx-4 aspect-[16/11] sm:mx-6 lg:absolute lg:inset-y-0 lg:right-4 lg:mx-0 lg:aspect-auto lg:w-[calc(54%-2rem)]">
+      <div className="relative mx-4 aspect-[16/11] sm:mx-6 lg:absolute lg:right-4 lg:bottom-0 lg:mx-0 lg:h-[500px] lg:aspect-auto lg:w-[calc(54%-2rem)]">
         <Image
           src="/hero/students.png"
           alt="Techno Gurukul students"
