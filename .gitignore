@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# local npm cache/log redirection (machine-specific, not for other environments)
+.npmrc
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
