@@ -89,10 +89,10 @@ export function OutcomesShowcase() {
           </p>
         </div>
 
-        <div className="mt-12 grid gap-8 lg:mt-16 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-14">
+        <div className="mt-12 grid gap-8 lg:mt-16 lg:grid-cols-[1fr_1.1fr] lg:items-stretch lg:gap-14">
           <div
             className={cn(
-              "relative aspect-square w-full overflow-hidden rounded-[2rem] transition-all duration-700",
+              "relative aspect-square w-full overflow-hidden rounded-[2rem] transition-all duration-700 lg:aspect-auto lg:h-full",
               visible ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"
             )}
           >
