@@ -24,21 +24,21 @@ function MobileSection({
   onNavigate: () => void;
 }) {
   return (
-    <div className="py-3">
+    <div className="py-1">
       <Link
         href={href}
         onClick={onNavigate}
-        className="block font-heading text-base font-semibold text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none rounded-md"
+        className="block rounded-md py-2 font-heading text-base font-semibold text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
       >
         {title}
       </Link>
-      <ul className="mt-2 flex flex-col gap-2">
+      <ul className="flex flex-col">
         {links.map((link) => (
           <li key={link.href}>
             <Link
               href={link.href}
               onClick={onNavigate}
-              className="block text-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none rounded-md"
+              className="block rounded-md py-2 text-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
             >
               {link.label}
             </Link>
@@ -62,31 +62,31 @@ export function MobileNav({
       hidden={!open}
       className="absolute inset-x-3 top-full z-40 mt-3 max-h-[calc(100vh-7rem)] overflow-y-auto rounded-3xl border border-primary/10 bg-card p-5 shadow-[0_16px_40px_-16px_rgba(16,20,28,0.3)] lg:hidden"
     >
-      <div className="py-2">
+      <div className="py-1">
         <Link
           href="/"
           onClick={onClose}
-          className="block font-heading text-base font-semibold text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none rounded-md"
+          className="block rounded-md py-2 font-heading text-base font-semibold text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
           Home
         </Link>
       </div>
       <div className="h-px bg-border" />
 
-      <div className="py-3">
+      <div className="py-1">
         <Link
           href="/programs"
           onClick={onClose}
-          className="block font-heading text-base font-semibold text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none rounded-md"
+          className="block rounded-md py-2 font-heading text-base font-semibold text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
           Programs
         </Link>
-        <ul className="mt-2 flex flex-col gap-2">
+        <ul className="flex flex-col">
           <li>
             <Link
               href={FLAGSHIP_PROGRAM.href}
               onClick={onClose}
-              className="block text-sm font-medium text-primary"
+              className="block rounded-md py-2 text-sm font-medium text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
             >
               {FLAGSHIP_PROGRAM.label} — {FLAGSHIP_PROGRAM.tagline}
             </Link>
@@ -96,7 +96,7 @@ export function MobileNav({
               <Link
                 href={program.href}
                 onClick={onClose}
-                className="block text-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none rounded-md"
+                className="block rounded-md py-2 text-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
               >
                 {program.label}
               </Link>
@@ -107,7 +107,7 @@ export function MobileNav({
               <Link
                 href={program.href}
                 onClick={onClose}
-                className="block text-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none rounded-md"
+                className="block rounded-md py-2 text-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
               >
                 {program.label}
               </Link>
@@ -117,11 +117,11 @@ export function MobileNav({
       </div>
       <div className="h-px bg-border" />
 
-      <div className="py-3">
+      <div className="py-1">
         <Link
           href="/career-paths"
           onClick={onClose}
-          className="block font-heading text-base font-semibold text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none rounded-md"
+          className="block rounded-md py-2 font-heading text-base font-semibold text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
           Career Paths
         </Link>

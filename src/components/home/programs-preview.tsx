@@ -233,7 +233,8 @@ function ProgramCard({ program, duplicate }: { program: Program; duplicate?: boo
   );
 
   const className = cn(
-    "group relative flex aspect-[4/3] w-80 shrink-0 flex-col overflow-hidden rounded-[2rem] sm:aspect-[16/11] sm:w-[28rem] lg:w-[32rem]"
+    "group relative flex aspect-[3/4] w-72 shrink-0 flex-col overflow-hidden rounded-[2rem] sm:aspect-[16/11] sm:w-[28rem] lg:w-[32rem]",
+    duplicate && "motion-reduce:hidden"
   );
 
   if (isActive) {
