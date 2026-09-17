@@ -15,6 +15,16 @@ export const FLAGSHIP_PROGRAM: ProgramLink = {
   tagline: "Professional Game Development & Design",
 };
 
+export const DIGITAL_MARKETING_CATEGORY = "Digital Marketing";
+
+export const DIGITAL_MARKETING_PROGRAMS: ProgramLink[] = [
+  {
+    label: "TG Digital Marketing",
+    href: "/programs/tg-digital-marketing",
+    tagline: "SEO, Social Media & Performance Marketing",
+  },
+];
+
 export const SPECIALIZED_PROGRAMS: ProgramLink[] = [
   {
     label: "TG Unity Studio",

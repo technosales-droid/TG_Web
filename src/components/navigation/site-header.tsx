@@ -41,21 +41,21 @@ export function SiteHeader() {
   }, [mobileOpen]);
 
   return (
-    <header className="sticky top-0 z-50 px-3 pt-4 sm:px-4">
-      <div className="relative mx-auto max-w-6xl">
-        <div className="flex items-center justify-between gap-3 rounded-full border border-border bg-card/95 py-2 pr-2 pl-3 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-card/85 sm:pl-4 sm:pr-3">
+    <header className="sticky top-0 z-50 px-3 pt-5 sm:px-6">
+      <div className="relative mx-auto max-w-7xl">
+        <div className="flex items-center justify-between gap-4 rounded-full border border-primary/10 bg-card/95 py-2.5 pr-3 pl-4 shadow-[0_12px_32px_-16px_rgba(16,20,28,0.25)] backdrop-blur supports-[backdrop-filter]:bg-card/85 sm:pl-5 sm:pr-4">
           <Link
             href="/"
-            className="flex items-center gap-2 rounded-full focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            className="flex items-center gap-3 rounded-full focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           >
-            <img src="/brand/logomark.svg" alt="Techno Gurukul" className="h-8 w-auto" />
-            <span className="font-heading text-base font-semibold tracking-tight text-foreground">
+            <img src="/brand/logomark.svg" alt="Techno Gurukul" className="h-11 w-auto" />
+            <span className="text-xl font-semibold tracking-tight text-foreground">
               Techno Gurukul
             </span>
           </Link>
 
           <NavigationMenu className="hidden lg:flex">
-            <NavigationMenuList>
+            <NavigationMenuList className="gap-1">
               <NavigationMenuItem>
                 <NavigationMenuLink
                   render={<Link href="/" />}
@@ -82,12 +82,12 @@ export function SiteHeader() {
             </NavigationMenuList>
           </NavigationMenu>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <Link
               href={CTA_LINK.href}
               className={cn(
                 buttonVariants({ variant: "default" }),
-                "hidden h-9 rounded-full px-4 lg:inline-flex"
+                "hidden h-11 rounded-full px-6 text-[15px] lg:inline-flex"
               )}
             >
               {CTA_LINK.label}
@@ -99,7 +99,7 @@ export function SiteHeader() {
               aria-controls="mobile-nav-panel"
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
               onClick={() => setMobileOpen((value) => !value)}
-              className="inline-flex size-9 items-center justify-center rounded-full text-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none lg:hidden"
+              className="inline-flex size-10 items-center justify-center rounded-full text-foreground hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none lg:hidden"
             >
               {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
             </button>

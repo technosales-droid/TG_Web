@@ -5,6 +5,7 @@ import {
   ABOUT_LINKS,
   CAREERS_LINKS,
   CTA_LINK,
+  DIGITAL_MARKETING_PROGRAMS,
   FLAGSHIP_PROGRAM,
   LEARNING_LINKS,
   SPECIALIZED_PROGRAMS,
@@ -59,7 +60,7 @@ export function MobileNav({
     <div
       id="mobile-nav-panel"
       hidden={!open}
-      className="absolute inset-x-4 top-full z-40 mt-2 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-2xl border border-border bg-card p-4 shadow-lg lg:hidden"
+      className="absolute inset-x-3 top-full z-40 mt-3 max-h-[calc(100vh-7rem)] overflow-y-auto rounded-3xl border border-primary/10 bg-card p-5 shadow-[0_16px_40px_-16px_rgba(16,20,28,0.3)] lg:hidden"
     >
       <div className="py-2">
         <Link
@@ -101,6 +102,17 @@ export function MobileNav({
               </Link>
             </li>
           ))}
+          {DIGITAL_MARKETING_PROGRAMS.map((program) => (
+            <li key={program.href}>
+              <Link
+                href={program.href}
+                onClick={onClose}
+                className="block text-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none rounded-md"
+              >
+                {program.label}
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
       <div className="h-px bg-border" />
@@ -125,7 +137,7 @@ export function MobileNav({
       <Link
         href={CTA_LINK.href}
         onClick={onClose}
-        className="mt-4 flex w-full items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+        className="mt-4 flex h-11 w-full items-center justify-center rounded-full bg-primary px-5 text-[15px] font-medium text-primary-foreground hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
       >
         {CTA_LINK.label}
       </Link>
