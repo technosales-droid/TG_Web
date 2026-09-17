@@ -126,11 +126,11 @@ export function ProgramsPreview() {
         <div className="mx-auto max-w-[1800px]">
           <div
             className={cn(
-              "max-w-2xl transition-all duration-700",
+              "mx-auto max-w-4xl text-center transition-all duration-700",
               visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
             )}
           >
-            <div className="flex items-center gap-2 text-sm font-medium text-primary">
+            <div className="flex items-center justify-center gap-2 text-sm font-medium text-primary">
               <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
               Explore Our Programs
             </div>
@@ -139,7 +139,7 @@ export function ProgramsPreview() {
               Choose a Skill. Build Your Path.
             </h2>
 
-            <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
+            <p className="mx-auto mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg xl:text-nowrap">
               Practical programs designed to help you learn, create and build
               work that moves you toward your next opportunity.
             </p>
@@ -167,7 +167,7 @@ export function ProgramsPreview() {
         <div className="mx-auto max-w-[1800px]">
           <div
             className={cn(
-              "mt-10 flex flex-col items-start gap-4 border-t border-primary/10 pt-8 transition-all delay-300 duration-700 sm:flex-row sm:items-center sm:justify-between lg:mt-12",
+              "mt-10 flex flex-col items-center gap-4 border-t border-primary/10 pt-8 text-center transition-all delay-300 duration-700 lg:mt-12",
               visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
             )}
           >
@@ -233,7 +233,7 @@ function ProgramCard({ program, duplicate }: { program: Program; duplicate?: boo
   );
 
   const className = cn(
-    "group relative flex aspect-[4/3] w-72 shrink-0 flex-col overflow-hidden rounded-[2rem] sm:aspect-[16/11] sm:w-96"
+    "group relative flex aspect-[4/3] w-80 shrink-0 flex-col overflow-hidden rounded-[2rem] sm:aspect-[16/11] sm:w-[28rem] lg:w-[32rem]"
   );
 
   if (isActive) {
