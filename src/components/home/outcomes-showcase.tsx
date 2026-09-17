@@ -92,16 +92,19 @@ export function OutcomesShowcase() {
         <div className="mt-12 grid gap-8 lg:mt-16 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-14">
           <div
             className={cn(
-              "relative aspect-[4/5] w-full overflow-hidden rounded-[2rem] transition-all duration-700",
+              "relative aspect-square w-full overflow-hidden rounded-[2rem] transition-all duration-700",
               visible ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"
             )}
           >
-            {/* SHOWCASE IMAGE PLACEHOLDER — FINAL STUDENT/PROJECT ASSET WILL BE PROVIDED.
-                Final markup: replace this div's contents with
-                <img src="..." className="absolute inset-0 h-full w-full object-cover" /> */}
+            {/* SHOWCASE IMAGE/VIDEO PLACEHOLDER — FINAL STUDENT/PROJECT ASSET WILL BE PROVIDED.
+                Final markup: replace this div's contents with either
+                <img src="..." className="absolute inset-0 h-full w-full object-cover" />
+                or a <video> with the same sizing classes. */}
             <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/70 to-[#0b3d50]" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-            <Play className="absolute right-8 bottom-8 size-24 text-background/10" aria-hidden="true" />
+            <span className="absolute top-1/2 left-1/2 flex size-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-background/15">
+              <Play className="size-6 translate-x-0.5 text-background/70" aria-hidden="true" />
+            </span>
           </div>
 
           <div className="flex flex-col gap-4">

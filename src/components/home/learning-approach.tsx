@@ -108,7 +108,7 @@ export function LearningApproach() {
                 Learning Should Lead to Something You Can Build.
               </h2>
 
-              <p className="max-w-sm text-base leading-relaxed text-muted-foreground sm:text-lg lg:text-right">
+              <p className="max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg lg:max-w-lg lg:text-right">
                 At Techno Gurukul, learning is designed to move beyond
                 theory. Students build their understanding step by step,
                 apply their skills through practical work, and bring what
