@@ -26,7 +26,7 @@ const HERO_CARDS = [
     title: "Industry-Relevant Tools",
     detail: "Real-World Skills",
     tone: "green" as const,
-    className: "right-2 top-6 sm:-right-6 sm:top-16",
+    className: "right-2 top-6 sm:right-6 sm:top-16",
     delay: "0.8s",
   },
   {
@@ -42,7 +42,7 @@ const HERO_CARDS = [
     title: "Career Focused",
     detail: "Build Your Future",
     tone: "accent" as const,
-    className: "right-2 bottom-10 sm:-right-4",
+    className: "right-2 bottom-10 sm:right-6",
     delay: "0.4s",
   },
 ] as const;
@@ -150,7 +150,7 @@ export function Hero() {
 
       {/* Hero image: in-flow on mobile/tablet, pinned to the section's
           bottom-right on desktop so the subjects' feet touch the baseline. */}
-      <div className="relative mx-4 aspect-[16/11] sm:mx-6 lg:absolute lg:inset-y-0 lg:right-0 lg:mx-0 lg:aspect-auto lg:w-[calc(54%-1rem)]">
+      <div className="relative mx-4 aspect-[16/11] sm:mx-6 lg:absolute lg:inset-y-0 lg:right-4 lg:mx-0 lg:aspect-auto lg:w-[calc(54%-2rem)]">
         <Image
           src="/hero/students.png"
           alt="Techno Gurukul students"
