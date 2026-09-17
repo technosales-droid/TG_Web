@@ -1,5 +1,9 @@
-import { PageShell } from "@/components/page-shell";
+import { Hero } from "@/components/home/hero";
 
 export default function Page() {
-  return <PageShell title="Home" />;
+  return (
+    <main>
+      <Hero />
+    </main>
+  );
 }

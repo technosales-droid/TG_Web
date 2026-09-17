@@ -1,25 +1,18 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Space_Grotesk, IBM_Plex_Sans, Geist_Mono } from "next/font/google";
+import { SiteHeader } from "@/components/navigation/site-header";
 import "./globals.css";
 
-const NAV_LINKS: [string, string][] = [
-  ["/", "Home"],
-  ["/programs", "Programs"],
-  ["/career-paths", "Career Paths"],
-  ["/learning", "Learning"],
-  ["/careers-placement", "Careers & Placement"],
-  ["/faculty", "Faculty"],
-  ["/about", "About"],
-  ["/student-stories", "Student Stories"],
-  ["/admissions", "Admissions"],
-  ["/resources", "Resources"],
-  ["/contact", "Contact"],
-];
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const heading = Space_Grotesk({
+  variable: "--font-heading",
   subsets: ["latin"],
+  weight: ["500", "600", "700"],
+});
+
+const body = IBM_Plex_Sans({
+  variable: "--font-body",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
 });
 
 const geistMono = Geist_Mono({
@@ -36,18 +29,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${heading.variable} ${body.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <nav>
-          <ul>
-            {NAV_LINKS.map(([href, label]) => (
-              <li key={href}>
-                <Link href={href}>{label}</Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+      <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
+        <SiteHeader />
         {children}
       </body>
     </html>
