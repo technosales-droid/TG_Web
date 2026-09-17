@@ -103,12 +103,12 @@ export function LearningApproach() {
               How We Learn
             </div>
 
-            <div className="mt-4 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
+            <div className="mt-4 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-10">
               <h2 className="max-w-xl text-3xl font-semibold tracking-tight text-balance text-foreground sm:text-4xl lg:text-5xl">
                 Learning Should Lead to Something You Can Build.
               </h2>
 
-              <p className="max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg lg:max-w-lg lg:text-right">
+              <p className="max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg lg:max-w-xl lg:pt-2 lg:text-right">
                 At Techno Gurukul, learning is designed to move beyond
                 theory. Students build their understanding step by step,
                 apply their skills through practical work, and bring what
