@@ -92,27 +92,50 @@ export function LearningApproach() {
     <section ref={ref} className="px-4 py-12 sm:px-6 sm:py-14">
       <div className="mx-auto max-w-[1800px]">
         <div className="rounded-[2.5rem] border border-primary/10 bg-muted/50 p-6 sm:p-8 lg:p-10">
-          <div
-            className={cn(
-              "max-w-2xl transition-all duration-700",
-              visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-            )}
-          >
-            <div className="flex items-center gap-2 text-sm font-medium text-primary">
-              <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
-              How We Learn
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
+            <div
+              className={cn(
+                "max-w-2xl transition-all duration-700",
+                visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+              )}
+            >
+              <div className="flex items-center gap-2 text-sm font-medium text-primary">
+                <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
+                How We Learn
+              </div>
+
+              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-balance text-foreground sm:text-4xl lg:text-5xl">
+                Learning Should Lead to Something You Can Build.
+              </h2>
+
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+                At Techno Gurukul, learning is designed to move beyond
+                theory. Students build their understanding step by step,
+                apply their skills through practical work, and bring what
+                they learn together in projects they can actually show.
+              </p>
             </div>
 
-            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-balance text-foreground sm:text-4xl lg:text-5xl">
-              Learning Should Lead to Something You Can Build.
-            </h2>
-
-            <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
-              At Techno Gurukul, learning is designed to move beyond theory.
-              Students build their understanding step by step, apply their
-              skills through practical work, and bring what they learn
-              together in projects they can actually show.
-            </p>
+            <div
+              className={cn(
+                "hidden shrink-0 items-center gap-3 transition-all delay-300 duration-700 lg:flex",
+                visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+              )}
+            >
+              {STAGES.map((stage, index) => (
+                <div key={stage.number} className="flex items-center gap-3">
+                  <div className="flex flex-col items-center gap-2">
+                    <span className="flex size-9 items-center justify-center rounded-full border border-primary/20 bg-card text-xs font-semibold text-primary">
+                      {stage.number}
+                    </span>
+                    <span className="text-[11px] text-muted-foreground">{stage.label}</span>
+                  </div>
+                  {index < STAGES.length - 1 && (
+                    <span className="h-px w-6 bg-primary/15" aria-hidden="true" />
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="mt-8 flex flex-col gap-4 lg:mt-10 lg:flex-row lg:items-stretch lg:gap-0">
@@ -154,7 +177,7 @@ function StageCard({
   return (
     <div
       className={cn(
-        "group relative flex-1 overflow-hidden rounded-[1.75rem] p-6 shadow-[0_0_0_rgba(16,20,28,0)] transition-all duration-500 hover:shadow-[0_16px_32px_-16px_rgba(16,20,28,0.35)] sm:p-7 lg:transition-[flex-grow,box-shadow,opacity,transform] lg:duration-500 lg:hover:flex-[1.2]",
+        "group relative flex-1 overflow-hidden rounded-[1.75rem] p-7 shadow-[0_0_0_rgba(16,20,28,0)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_16px_32px_-16px_rgba(16,20,28,0.35)] sm:p-8 lg:transition-[flex-grow,box-shadow,opacity,transform] lg:duration-500 lg:hover:flex-[1.2]",
         stage.panel,
         visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
       )}
@@ -163,7 +186,7 @@ function StageCard({
       <span
         aria-hidden="true"
         className={cn(
-          "pointer-events-none absolute -top-2 right-4 text-7xl font-bold opacity-[0.08] transition-opacity duration-300 select-none group-hover:opacity-[0.14] sm:text-8xl",
+          "pointer-events-none absolute top-3 right-5 text-7xl font-bold opacity-[0.08] transition-all duration-300 select-none group-hover:translate-y-1 group-hover:opacity-[0.14] sm:text-8xl",
           stage.numeral
         )}
       >
@@ -172,14 +195,14 @@ function StageCard({
 
       <span
         className={cn(
-          "relative flex size-11 items-center justify-center rounded-full transition-transform duration-300 group-hover:scale-110",
+          "relative flex size-11 items-center justify-center rounded-full transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-110",
           stage.badge
         )}
       >
         <Icon className="size-5" aria-hidden="true" />
       </span>
 
-      <p className={cn("relative mt-6 text-xs font-semibold tracking-wide", stage.muted)}>
+      <p className={cn("relative mt-7 text-xs font-semibold tracking-wide", stage.muted)}>
         {stage.number} — {stage.label}
       </p>
       <p className="relative mt-3 text-lg font-semibold transition-transform duration-300 group-hover:translate-x-0.5">
