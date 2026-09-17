@@ -4,9 +4,9 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
 
 const HERO_CARDS = [
-  { value: "30 Months", label: "Flagship Program" },
-  { value: "Unity + Unreal", label: "Game Development" },
-  { value: "2D + 3D", label: "Game Art" },
+  { value: "30 Months", label: "Flagship Program", className: "left-2 top-6 sm:-left-6 sm:top-10" },
+  { value: "Unity + Unreal", label: "Game Development", className: "right-2 top-1/2 -translate-y-1/2 sm:-right-8" },
+  { value: "2D + 3D", label: "Game Art", className: "left-2 bottom-6 sm:-left-4 sm:bottom-10" },
 ] as const;
 
 function FloatingCard({
@@ -21,7 +21,7 @@ function FloatingCard({
   return (
     <div
       className={cn(
-        "absolute hidden w-44 rounded-2xl border border-primary/10 bg-card p-4 shadow-[0_12px_28px_-14px_rgba(16,20,28,0.25)] lg:block",
+        "absolute z-20 hidden w-44 rounded-2xl border border-primary/10 bg-card p-4 shadow-[0_12px_28px_-14px_rgba(16,20,28,0.3)] lg:block",
         className
       )}
     >
@@ -33,8 +33,15 @@ function FloatingCard({
 
 export function Hero() {
   return (
-    <section className="px-3 pt-10 pb-16 sm:px-6 sm:pt-14 sm:pb-24">
-      <div className="mx-auto max-w-7xl">
+    <section className="relative overflow-hidden">
+      {/* Two-tone diagonal backdrop, desktop only - the image (a transparent PNG)
+          will sit directly on top of this so the geometry shows through around it. */}
+      <div aria-hidden="true" className="absolute inset-0 -z-10 hidden lg:block">
+        <div className="absolute inset-y-0 right-0 w-[58%] bg-brand-green/15 [clip-path:polygon(22%_0%,100%_0%,100%_100%,0%_100%)]" />
+        <div className="absolute inset-y-0 right-0 w-[58%] bg-primary/12 [clip-path:polygon(58%_0%,100%_0%,100%_38%)]" />
+      </div>
+
+      <div className="relative mx-auto max-w-7xl px-3 py-14 sm:px-6 sm:py-20 lg:py-24">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div>
             <div className="flex items-center gap-2 text-sm font-medium text-primary">
@@ -71,27 +78,18 @@ export function Hero() {
             </p>
           </div>
 
-          <div className="relative mx-auto w-full max-w-sm lg:max-w-none">
-            <div
-              aria-hidden="true"
-              className="absolute -inset-4 -z-10 rounded-[2.5rem] bg-accent sm:-inset-6"
-            />
-            <div
-              aria-hidden="true"
-              className="absolute -bottom-5 -right-5 -z-10 size-24 rounded-3xl bg-brand-green/15 sm:size-32"
-            />
-
-            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[2rem] border border-primary/10 bg-muted">
-              {/* HERO IMAGE PLACEHOLDER — FINAL ASSET WILL BE PROVIDED */}
-              <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-muted-foreground">
-                <ImageIcon className="size-10" aria-hidden="true" />
-                <span className="text-sm">Hero image</span>
-              </div>
+          <div className="relative mx-auto aspect-[4/5] w-full max-w-sm lg:aspect-auto lg:h-[520px] lg:max-w-none">
+            {/* HERO IMAGE PLACEHOLDER — FINAL ASSET WILL BE PROVIDED
+                Final markup: <img src="..." className="absolute inset-0 h-full w-full object-contain object-bottom" />
+                A transparent PNG here will reveal the diagonal backdrop above. */}
+            <div className="flex h-full w-full flex-col items-center justify-end gap-2 rounded-[1.5rem] border-2 border-dashed border-primary/25 pb-8 text-muted-foreground lg:rounded-none lg:border-none">
+              <ImageIcon className="size-10" aria-hidden="true" />
+              <span className="text-sm">Hero image (transparent PNG)</span>
             </div>
 
-            <FloatingCard value={HERO_CARDS[0].value} label={HERO_CARDS[0].label} className="-left-10 top-10" />
-            <FloatingCard value={HERO_CARDS[1].value} label={HERO_CARDS[1].label} className="-right-8 top-1/2 -translate-y-1/2" />
-            <FloatingCard value={HERO_CARDS[2].value} label={HERO_CARDS[2].label} className="-left-6 -bottom-6" />
+            <FloatingCard value={HERO_CARDS[0].value} label={HERO_CARDS[0].label} className={HERO_CARDS[0].className} />
+            <FloatingCard value={HERO_CARDS[1].value} label={HERO_CARDS[1].label} className={HERO_CARDS[1].className} />
+            <FloatingCard value={HERO_CARDS[2].value} label={HERO_CARDS[2].label} className={HERO_CARDS[2].className} />
           </div>
         </div>
       </div>
