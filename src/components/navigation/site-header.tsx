@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import {
@@ -46,12 +47,16 @@ export function SiteHeader() {
         <div className="flex items-center justify-between gap-4 rounded-full border border-primary/10 bg-card/95 py-2.5 pr-3 pl-4 shadow-[0_12px_32px_-16px_rgba(16,20,28,0.25)] backdrop-blur supports-[backdrop-filter]:bg-card/85 sm:pl-5 sm:pr-4">
           <Link
             href="/"
-            className="flex items-center gap-3 rounded-full focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            className="flex items-center rounded-full focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           >
-            <img src="/brand/logomark.svg" alt="Techno Gurukul" className="h-11 w-auto" />
-            <span className="text-xl font-semibold tracking-tight text-foreground">
-              Techno Gurukul
-            </span>
+            <Image
+              src="/brand/logo.png"
+              alt="Techno Gurukul"
+              width={1299}
+              height={179}
+              priority
+              className="h-9 w-auto sm:h-10"
+            />
           </Link>
 
           <NavigationMenu className="hidden lg:flex">
