@@ -139,7 +139,7 @@ export function ProgramsPreview() {
               Choose a Skill. Build Your Path.
             </h2>
 
-            <p className="mx-auto mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg xl:text-nowrap">
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               Practical programs designed to help you learn, create and build
               work that moves you toward your next opportunity.
             </p>
@@ -147,23 +147,19 @@ export function ProgramsPreview() {
         </div>
       </div>
 
-      <div className="px-4 sm:px-6">
-        <div className="mx-auto max-w-[1800px]">
-          <div
-            className={cn(
-              "group/marquee relative mt-10 overflow-hidden transition-all duration-700 motion-reduce:overflow-x-auto lg:mt-12",
-              visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
-            )}
-          >
-            <div className="flex w-max gap-6 [animation:marquee_140s_linear_infinite] group-hover/marquee:[animation-play-state:paused] motion-reduce:animate-none lg:gap-8">
-              {ALL_PROGRAMS.map((program) => (
-                <ProgramCard key={`a-${program.title}`} program={program} />
-              ))}
-              {ALL_PROGRAMS.map((program) => (
-                <ProgramCard key={`b-${program.title}`} program={program} duplicate />
-              ))}
-            </div>
-          </div>
+      <div
+        className={cn(
+          "group/marquee relative mt-10 overflow-hidden transition-all duration-700 motion-reduce:overflow-x-auto lg:mt-12",
+          visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+        )}
+      >
+        <div className="flex w-max gap-6 px-4 [animation:marquee_140s_linear_infinite] group-hover/marquee:[animation-play-state:paused] motion-reduce:animate-none sm:px-6 lg:gap-8">
+          {ALL_PROGRAMS.map((program) => (
+            <ProgramCard key={`a-${program.title}`} program={program} />
+          ))}
+          {ALL_PROGRAMS.map((program) => (
+            <ProgramCard key={`b-${program.title}`} program={program} duplicate />
+          ))}
         </div>
       </div>
 
