@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Briefcase, Code2, Megaphone, PenTool } from "lucide-react";
 import { cn } from "cn";
+import { buttonVariants } from "@/components/ui/button";
 
 const DIRECTIONS = [
   {
@@ -78,7 +79,7 @@ export function CareerDirections() {
       <div className="mx-auto max-w-[1800px]">
         <div
           className={cn(
-            "flex flex-col gap-4 transition-all duration-700 sm:flex-row sm:items-end sm:justify-between sm:gap-10",
+            "transition-all duration-700",
             visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
           )}
         >
@@ -87,23 +88,26 @@ export function CareerDirections() {
             Career Paths
           </div>
 
-          <h2 className="max-w-3xl text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl">
-            <span className="text-foreground">Build Skills That Open </span>
-            <span className="text-muted-foreground">More Than One Door.</span>
-          </h2>
-        </div>
+          <div className="mt-4 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
+            <h2 className="max-w-xl text-3xl font-semibold tracking-tight text-balance text-foreground sm:text-4xl lg:text-5xl">
+              Build Skills That Open More Than One Door.
+            </h2>
 
-        <p
-          className={cn(
-            "mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground transition-all delay-100 duration-700 sm:text-lg",
-            visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-          )}
-        >
-          Different students want different futures. Techno Gurukul focuses
-          on practical skills, real project work and portfolio development
-          so students can explore career directions that match what they
-          enjoy and what they can build.
-        </p>
+            <p className="max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg lg:max-w-xl lg:pt-2 lg:text-right">
+              Different students want different futures. Techno Gurukul
+              focuses on practical skills, real project work and portfolio
+              development so students can explore career directions that
+              match what they enjoy and what they can build.
+            </p>
+          </div>
+
+          <Link
+            href="/career-paths"
+            className={cn(buttonVariants({ variant: "default" }), "mt-6 h-11 rounded-full px-6 text-base")}
+          >
+            Explore Career Paths
+          </Link>
+        </div>
 
         <div className="mt-10 grid grid-cols-1 gap-4 lg:mt-12 lg:grid-cols-2 lg:items-stretch lg:gap-6">
           <LargeTile direction={creative} index={0} visible={visible} />
@@ -115,24 +119,6 @@ export function CareerDirections() {
               <SmallTile direction={independent} index={3} visible={visible} />
             </div>
           </div>
-        </div>
-
-        <div
-          className={cn(
-            "mt-10 flex flex-col items-start gap-4 border-t border-primary/10 pt-8 transition-all delay-500 duration-700 sm:flex-row sm:items-center sm:justify-between lg:mt-12",
-            visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-          )}
-        >
-          <p className="text-base text-muted-foreground">
-            Explore roles, skills and pathways in more detail.
-          </p>
-          <Link
-            href="/career-paths"
-            className="group flex items-center gap-1 text-base font-medium text-foreground transition-colors hover:text-primary"
-          >
-            Explore Career Paths
-            <ArrowUpRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
-          </Link>
         </div>
       </div>
     </section>
