@@ -1,64 +1,26 @@
 import Link from "next/link";
-import { ArrowUpRight, MapPin } from "lucide-react";
+import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 import { cn } from "cn";
 import { buttonVariants } from "@/components/ui/button";
-import { ABOUT_LINKS, LEARNING_LINKS } from "@/components/navigation/nav-data";
-
-// lucide-react no longer ships brand/logo icons, so these are small inline
-// monoline SVGs matching lucide's own style (24x24, stroke, currentColor).
-function InstagramIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <rect x="2" y="2" width="20" height="20" rx="5" />
-      <circle cx="12" cy="12" r="4" />
-      <path d="M17.5 6.5h.01" />
-    </svg>
-  );
-}
-
-function LinkedinIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4V8h4v1.5A5 5 0 0 1 16 8Z" />
-      <rect x="2" y="9" width="4" height="12" />
-      <circle cx="4" cy="4" r="2" />
-    </svg>
-  );
-}
-
-function YoutubeIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <path d="M2.5 8.5a3 3 0 0 1 3-3h13a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-13a3 3 0 0 1-3-3Z" />
-      <path d="m10 9 5 3-5 3Z" />
-    </svg>
-  );
-}
-
-function FacebookIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <path d="M15 3h-2a5 5 0 0 0-5 5v3H6v4h2v6h4v-6h3l1-4h-4V8a1 1 0 0 1 1-1h3Z" />
-    </svg>
-  );
-}
 
 const EXPLORE_LINKS = [
   { label: "Home", href: "/" },
   { label: "Programs", href: "/programs" },
   { label: "Career Paths", href: "/career-paths" },
+  { label: "Careers", href: "/careers-placement" },
+  { label: "About", href: "/about" },
 ];
 
-const PROGRAM_LINKS = [
+// Programs + core learning pages together, per the brief's single
+// "LEARNING" heading. Only the two currently-active programs are listed
+// as programs; everything else stays out of the footer entirely rather
+// than being presented as available.
+const LEARNING_LINKS = [
   { label: "Digital Marketing", href: "/programs/tg-digital-marketing" },
   { label: "Game Development & Design", href: "/programs/tg-gameforge" },
-];
-
-const COMPANY_LINKS = [
-  { label: "About Us", href: "/about" },
-  ...ABOUT_LINKS,
-  { label: "Careers", href: "/careers-placement" },
-  { label: "Contact / Enquire", href: "/contact" },
+  { label: "Curriculum", href: "/learning/curriculum" },
+  { label: "Certifications", href: "/learning/certifications" },
+  { label: "Resources", href: "/learning/resources" },
 ];
 
 const LEGAL_LINKS = [
@@ -68,25 +30,24 @@ const LEGAL_LINKS = [
   { label: "Disclaimer", href: "/legal/disclaimer" },
 ];
 
-// SOCIAL LINKS — visual presence only, no real handles exist yet for this
-// project. Swap href="#" for the real profile URLs when available.
-const SOCIAL_LINKS = [
-  { label: "Instagram", href: "#", icon: InstagramIcon },
-  { label: "LinkedIn", href: "#", icon: LinkedinIcon },
-  { label: "YouTube", href: "#", icon: YoutubeIcon },
-  { label: "Facebook", href: "#", icon: FacebookIcon },
-];
-
-function FooterColumn({ title, links }: { title: string; links: { label: string; href: string }[] }) {
+function FooterColumn({
+  title,
+  links,
+  className,
+}: {
+  title: string;
+  links: { label: string; href: string }[];
+  className?: string;
+}) {
   return (
-    <div>
+    <div className={className}>
       <p className="text-xs font-semibold tracking-wide text-background/50">{title}</p>
-      <ul className="mt-2 flex flex-col">
+      <ul className="mt-3 flex flex-col">
         {links.map((link) => (
           <li key={link.href}>
             <Link
               href={link.href}
-              className="block py-1.5 text-sm text-background/80 transition-colors hover:text-background"
+              className="block py-1.5 text-sm text-background/80 transition-colors duration-200 hover:text-background"
             >
               {link.label}
             </Link>
@@ -101,18 +62,20 @@ export function SiteFooter() {
   return (
     <footer className="bg-[#0b3d50] text-background">
       <div className="mx-auto max-w-[1800px] px-4 py-14 sm:px-6 sm:py-16">
-        <div className="flex flex-col gap-6 border-b border-background/10 pb-10 sm:flex-row sm:items-center sm:justify-between">
+        {/* Compact intro CTA - secondary to the homepage's own Section 06 CTA */}
+        <div className="flex flex-col gap-4 border-b border-background/10 pb-8 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-xl font-semibold text-background sm:text-2xl">Ready to Start Building?</p>
+            <p className="text-lg font-semibold text-background">Ready to Start Building?</p>
             <p className="mt-1 text-sm text-background/70">
-              Explore practical learning paths and find where you want to begin.
+              Explore practical learning paths and find where you want to
+              begin.
             </p>
           </div>
           <Link
             href="/programs"
             className={cn(
               buttonVariants({ variant: "default" }),
-              "h-11 w-full shrink-0 rounded-full bg-background px-6 text-base text-foreground hover:bg-background/90 sm:w-auto"
+              "h-10 w-full shrink-0 rounded-full bg-background px-5 text-sm text-foreground hover:bg-background/90 sm:w-auto"
             )}
           >
             Explore Programs
@@ -120,48 +83,62 @@ export function SiteFooter() {
           </Link>
         </div>
 
-        <div className="mt-12 grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-3 lg:grid-cols-[1.3fr_1fr_1fr_1fr_1.1fr]">
-          <div className="col-span-2 sm:col-span-3 lg:col-span-1">
+        <div className="mt-12 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-[1.2fr_0.8fr_0.9fr_1.2fr] lg:gap-10">
+          <div className="order-1">
             <span className="text-xl font-semibold tracking-tight text-background">Techno Gurukul</span>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-background/70">
               Practical learning for skills you can build with.
             </p>
-
-            <ul className="mt-5 flex items-center gap-2">
-              {SOCIAL_LINKS.map((social) => {
-                const Icon = social.icon;
-                return (
-                  <li key={social.label}>
-                    <Link
-                      href={social.href}
-                      aria-label={social.label}
-                      className="flex size-9 items-center justify-center rounded-full border border-background/15 text-background/70 transition-colors hover:border-background/30 hover:text-background"
-                    >
-                      <Icon className="size-4" aria-hidden="true" />
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
           </div>
 
-          <FooterColumn title="Explore" links={EXPLORE_LINKS} />
-
-          <div>
-            <FooterColumn title="Programs" links={PROGRAM_LINKS} />
-            <p className="mt-4 text-xs text-background/50">More learning pathways coming soon.</p>
+          {/* Contact - deliberately placed right after the brand on mobile,
+              since it's the most useful information on a small screen. */}
+          <div className="order-2 lg:order-none lg:col-start-4 lg:row-start-1">
+            <p className="text-xs font-semibold tracking-wide text-background/50">Get in Touch</p>
+            <div className="mt-3 flex flex-col gap-3">
+              <div className="flex items-start gap-3">
+                <Phone className="mt-0.5 size-4 shrink-0 text-background/50" aria-hidden="true" />
+                <div>
+                  <p className="text-xs text-background/50">Phone</p>
+                  {/* No phone number exists in the project yet - honestly
+                      labelled rather than a fabricated realistic-looking
+                      number. Swap for a tel: link once one is available. */}
+                  <p className="text-sm text-background/80">To be added</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Mail className="mt-0.5 size-4 shrink-0 text-background/50" aria-hidden="true" />
+                <div>
+                  <p className="text-xs text-background/50">Email</p>
+                  <p className="text-sm text-background/80">To be added</p>
+                </div>
+              </div>
+            </div>
+            <Link
+              href="/contact"
+              className="group mt-4 inline-flex items-center gap-1 text-sm font-medium text-background transition-colors duration-200 hover:text-brand-green"
+            >
+              Contact Us
+              <ArrowUpRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+            </Link>
           </div>
 
-          <FooterColumn title="Learning" links={LEARNING_LINKS} />
+          <FooterColumn title="Explore" links={EXPLORE_LINKS} className="order-3 lg:order-none lg:col-start-2" />
+          <FooterColumn title="Learning" links={LEARNING_LINKS} className="order-4 lg:order-none lg:col-start-3" />
 
-          <div>
-            <FooterColumn title="Company" links={COMPANY_LINKS} />
+          {/* Location + map - stacks below Contact within the same column
+              at desktop widths via shared col-start and grid auto-placement. */}
+          <div className="order-5 lg:order-none lg:col-start-4 lg:row-start-2">
+            <p className="text-xs font-semibold tracking-wide text-background/50">Visit Us</p>
+            <p className="mt-3 text-sm text-background/80">Techno Gurukul</p>
+            {/* No confirmed institute address exists in the project yet. */}
+            <p className="text-sm text-background/50">Location to be announced</p>
 
-            {/* CAMPUS/LOCATION MAP — no real address exists yet for this
-                project; placeholder only. Replace with a map embed or
-                image once a location is confirmed. */}
-            <div className="relative mt-5 aspect-[4/3] w-full max-w-[220px] overflow-hidden rounded-2xl bg-gradient-to-br from-primary/60 to-[#0a2f3d]">
-              <MapPin className="absolute top-1/2 left-1/2 size-6 -translate-x-1/2 -translate-y-1/2 text-background/70" aria-hidden="true" />
+            {/* LOCATION MAP — no real address or map embed exists yet for
+                this project. Replace with a real map embed/image once a
+                location is confirmed. */}
+            <div className="relative mt-4 aspect-[16/10] w-full overflow-hidden rounded-2xl bg-gradient-to-br from-primary/50 to-[#0a2f3d] transition-transform duration-300 hover:scale-[1.02]">
+              <MapPin className="absolute top-1/2 left-1/2 size-7 -translate-x-1/2 -translate-y-1/2 text-background/70" aria-hidden="true" />
             </div>
           </div>
         </div>
@@ -172,7 +149,7 @@ export function SiteFooter() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="block py-1 text-sm text-background/60 transition-colors hover:text-background"
+                  className="block py-1 text-sm text-background/60 transition-colors duration-200 hover:text-background"
                 >
                   {link.label}
                 </Link>
