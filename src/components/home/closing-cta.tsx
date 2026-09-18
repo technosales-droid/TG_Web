@@ -2,9 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Sparkles, Star } from "lucide-react";
+import { ArrowUpRight, Hammer, Lightbulb, Rocket, Sparkles, Star } from "lucide-react";
 import { cn } from "cn";
 import { buttonVariants } from "@/components/ui/button";
+
+const STEPS = [
+  { label: "Learn", icon: Lightbulb },
+  { label: "Build", icon: Hammer },
+  { label: "Move Forward", icon: Rocket },
+] as const;
 
 function prefersReducedMotion() {
   return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -50,7 +56,33 @@ export function ClosingCta() {
               className="absolute right-16 bottom-16 size-6 text-brand-green/40 motion-safe:animate-[pulse_4s_ease-in-out_infinite]"
               style={{ animationDelay: "1s" }}
             />
-            <span className="absolute top-1/2 right-[8%] size-2 -translate-y-1/2 rounded-full bg-background/20 motion-safe:animate-[gentle-float_6s_ease-in-out_infinite]" />
+          </div>
+
+          {/* Learn -> Build -> Move Forward progression, desktop only -
+              fills the open right side without becoming a card grid. */}
+          <div
+            className={cn(
+              "absolute top-1/2 right-14 hidden -translate-y-1/2 flex-col gap-7 transition-all delay-300 duration-700 xl:flex xl:right-20",
+              visible ? "translate-x-0 opacity-100" : "translate-x-4 opacity-0"
+            )}
+          >
+            {STEPS.map((step, index) => {
+              const Icon = step.icon;
+              return (
+                <div key={step.label} className="flex items-center gap-3">
+                  <span className="flex size-11 items-center justify-center rounded-full bg-background/10 text-background">
+                    <Icon className="size-5" aria-hidden="true" />
+                  </span>
+                  <span className="text-sm font-medium text-background/80">{step.label}</span>
+                  {index < STEPS.length - 1 && (
+                    <span
+                      aria-hidden="true"
+                      className="absolute top-11 left-[1.375rem] h-7 w-px translate-y-full bg-background/15"
+                    />
+                  )}
+                </div>
+              );
+            })}
           </div>
 
           <div
@@ -65,14 +97,15 @@ export function ClosingCta() {
             </span>
 
             <h2 className="mt-5 text-3xl font-semibold tracking-tight text-balance text-background sm:text-4xl lg:text-5xl">
-              Your Career Won&rsquo;t Be Built By Watching Tutorials.
+              Learn Skills.
               <br />
-              <span className="text-brand-green">It Will Be Built By Doing The Work.</span>
+              Build Real Work.{" "}
+              <span className="text-brand-green">Move Forward.</span>
             </h2>
 
             <p className="mt-5 max-w-xl text-base leading-relaxed text-background/75 sm:text-lg">
-              Start developing practical skills, build real projects and
-              create work you can take forward.
+              Turn practical learning into projects, skills and experiences
+              you can take into your next opportunity.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
