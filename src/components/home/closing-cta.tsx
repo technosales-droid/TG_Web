@@ -2,15 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Hammer, Lightbulb, Rocket, Sparkles, Star } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { cn } from "cn";
 import { buttonVariants } from "@/components/ui/button";
-
-const STEPS = [
-  { label: "Learn", icon: Lightbulb },
-  { label: "Build", icon: Hammer },
-  { label: "Move Forward", icon: Rocket },
-] as const;
 
 function prefersReducedMotion() {
   return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -48,42 +42,8 @@ export function ClosingCta() {
     <section ref={ref} className="px-4 py-14 sm:px-6 sm:py-16">
       <div className="mx-auto max-w-[1800px]">
         <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary to-[#0b3d50] px-6 py-14 sm:px-10 sm:py-16 lg:px-16 lg:py-20">
-          {/* Decorative accents, desktop only, subtle - same restrained
-              language as the Hero's own decorative doodles. */}
-          <div aria-hidden="true" className="absolute inset-0 hidden lg:block">
-            <Star className="absolute top-10 right-[22%] size-5 fill-background/10 text-background/20 motion-safe:animate-[pulse_5s_ease-in-out_infinite]" />
-            <Sparkles
-              className="absolute right-16 bottom-16 size-6 text-brand-green/40 motion-safe:animate-[pulse_4s_ease-in-out_infinite]"
-              style={{ animationDelay: "1s" }}
-            />
-          </div>
-
-          {/* Learn -> Build -> Move Forward progression, desktop only -
-              fills the open right side without becoming a card grid. */}
-          <div
-            className={cn(
-              "absolute top-1/2 right-14 hidden -translate-y-1/2 flex-col gap-7 transition-all delay-300 duration-700 xl:flex xl:right-20",
-              visible ? "translate-x-0 opacity-100" : "translate-x-4 opacity-0"
-            )}
-          >
-            {STEPS.map((step, index) => {
-              const Icon = step.icon;
-              return (
-                <div key={step.label} className="flex items-center gap-3">
-                  <span className="flex size-11 items-center justify-center rounded-full bg-background/10 text-background">
-                    <Icon className="size-5" aria-hidden="true" />
-                  </span>
-                  <span className="text-sm font-medium text-background/80">{step.label}</span>
-                  {index < STEPS.length - 1 && (
-                    <span
-                      aria-hidden="true"
-                      className="absolute top-11 left-[1.375rem] h-7 w-px translate-y-full bg-background/15"
-                    />
-                  )}
-                </div>
-              );
-            })}
-          </div>
+          {/* CLOSING CTA VISUAL — a PNG will be provided to fill this side.
+              Right side intentionally left blank until then. */}
 
           <div
             className={cn(
