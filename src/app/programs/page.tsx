@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ProgramsHero } from "@/components/programs/programs-hero";
+import { ProgramsListing } from "@/components/programs/programs-listing";
 
 export const metadata: Metadata = {
   title: "Programs | TechnoGurukul",
@@ -11,6 +12,7 @@ export default function Page() {
   return (
     <main>
       <ProgramsHero />
+      <ProgramsListing />
     </main>
   );
 }
