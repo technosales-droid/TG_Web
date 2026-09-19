@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { DigitalMarketingHero } from "@/components/programs/digital-marketing-hero";
+import { DigitalMarketingOverview } from "@/components/programs/digital-marketing-overview";
 import { getCourse } from "@/lib/content";
 
 export const metadata: Metadata = {
@@ -16,6 +17,7 @@ export default function Page() {
   return (
     <main>
       <DigitalMarketingHero focus={course.summary} />
+      <DigitalMarketingOverview />
     </main>
   );
 }
