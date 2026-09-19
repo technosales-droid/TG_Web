@@ -5,10 +5,14 @@ import { Briefcase, Building2, Clock, Gauge, Lightbulb, MapPin, Rocket, Target, 
 import { cn } from "cn";
 
 const STAGES = [
-  { label: "Concept", note: "How digital marketing works", icon: Lightbulb },
-  { label: "Strategy", note: "Why consumers behave the way they do", icon: Target },
-  { label: "Execution", note: "How brands acquire customers", icon: Rocket },
-  { label: "Measurement", note: "How marketers measure what works", icon: Gauge },
+  { label: "Concept", note: "Understanding consumers and why they behave the way they do.", icon: Lightbulb },
+  {
+    label: "Strategy",
+    note: "Understanding how brands acquire customers and how marketing strategy is developed.",
+    icon: Target,
+  },
+  { label: "Execution", note: "Turning marketing ideas into actual campaigns and digital activity.", icon: Rocket },
+  { label: "Measurement", note: "Understanding how marketers measure what works.", icon: Gauge },
 ] as const;
 
 const DETAILS = [
