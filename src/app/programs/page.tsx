@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ProgramsHero } from "@/components/programs/programs-hero";
 import { ProgramsListing } from "@/components/programs/programs-listing";
+import { ProgramsCareers } from "@/components/programs/programs-careers";
 import { ProgramsOutcomes } from "@/components/programs/programs-outcomes";
 import { ProgramsProcess } from "@/components/programs/programs-process";
 
@@ -17,6 +18,7 @@ export default function Page() {
       <ProgramsListing />
       <ProgramsProcess />
       <ProgramsOutcomes />
+      <ProgramsCareers />
     </main>
   );
 }
