@@ -85,7 +85,7 @@ function CurriculumSketch() {
 
 export function LearningHub() {
   return (
-    <section id="learning-hub" aria-labelledby="learning-hub-heading" className="scroll-mt-28 px-4 pb-14 sm:px-6 sm:pb-20">
+    <section id="learning-system" aria-labelledby="learning-hub-heading" className="scroll-mt-28 px-4 pb-14 sm:px-6 sm:pb-20">
       <div className="mx-auto max-w-[1800px]">
         <div className="max-w-3xl">
           <div className="flex items-center gap-2 text-sm font-medium text-primary">
