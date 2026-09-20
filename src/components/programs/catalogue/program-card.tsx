@@ -6,17 +6,40 @@ import {
   BarChart3,
   Box,
   Boxes,
+  Bot,
+  BookOpen,
+  Brain,
+  Bug,
   Clapperboard,
   Clock,
   Code2,
+  Coins,
   Cpu,
+  FileText,
+  Flame,
   Gamepad2,
+  Globe,
   Layers,
+  LayoutDashboard,
+  Lightbulb,
+  Link2,
+  MapPin,
   Megaphone,
+  MessageCircle,
+  Package,
   Palette,
   PenTool,
+  Rocket,
   Search,
+  SlidersHorizontal,
+  Smartphone,
   Sparkles,
+  Sun,
+  Target,
+  TrendingUp,
+  Users,
+  Workflow,
+  Zap,
 } from "lucide-react";
 import { cn } from "cn";
 import type {
@@ -39,6 +62,29 @@ const ICONS: Record<ProgramIcon, LucideIcon> = {
   palette: Palette,
   clapperboard: Clapperboard,
   cpu: Cpu,
+  target: Target,
+  "trending-up": TrendingUp,
+  users: Users,
+  "file-text": FileText,
+  globe: Globe,
+  message: MessageCircle,
+  bug: Bug,
+  rocket: Rocket,
+  smartphone: Smartphone,
+  brain: Brain,
+  workflow: Workflow,
+  link: Link2,
+  "map-pin": MapPin,
+  zap: Zap,
+  lightbulb: Lightbulb,
+  layout: LayoutDashboard,
+  sliders: SlidersHorizontal,
+  coins: Coins,
+  "book-open": BookOpen,
+  package: Package,
+  flame: Flame,
+  sun: Sun,
+  bot: Bot,
 };
 
 const TONES: Record<ProgramTone, string> = {
@@ -56,11 +102,12 @@ export function ProgramCard({
   program: CatalogueProgram;
   priority?: boolean;
 }) {
-  const { title, category, description, tags, image, visual, href } = program;
+  const { title, category, description, tags, image, visual, href, type, parentProgram } = program;
   const soon = program.status === "coming-soon";
-  const meta = [program.type, program.level, program.format].filter(
-    Boolean,
-  ) as string[];
+  const meta = [program.level, program.format].filter(Boolean) as string[];
+  // First icon is the large centre mark; the others flank it.
+  const [main, ...rest] = visual.icons;
+  const icons = [rest[0], main, rest[1]].filter((n): n is ProgramIcon => Boolean(n));
 
   return (
     <article
@@ -73,7 +120,7 @@ export function ProgramCard({
     >
       <div
         className={cn(
-          "relative h-28 overflow-hidden bg-gradient-to-br sm:h-32",
+          "relative aspect-video overflow-hidden bg-gradient-to-br",
           TONES[visual.tone],
         )}
       >
@@ -89,16 +136,21 @@ export function ProgramCard({
         ) : (
           <div
             aria-hidden="true"
-            className="absolute inset-0 flex items-center justify-end gap-4 pr-6 text-background/20 transition-transform duration-500 group-hover:scale-105 sm:gap-5 sm:pr-8"
+            className="absolute inset-0 flex items-center justify-center gap-6 text-background/25 transition-transform duration-500 group-hover:scale-105 sm:gap-8"
           >
-            {visual.icons.map((name) => {
+            {icons.map((name) => {
               const Icon = ICONS[name];
-              return <Icon key={name} className="size-9 sm:size-11" />;
+              return (
+                <Icon
+                  key={name}
+                  className={name === main ? "size-20 text-background/45 sm:size-24" : "size-10 sm:size-12"}
+                />
+              );
             })}
           </div>
         )}
-        <span className="absolute top-4 left-4 rounded-full bg-background/90 px-3 py-1.5 text-xs font-semibold text-foreground">
-          {category}
+        <span className="absolute top-4 left-4 rounded-full bg-background/90 px-3 py-1.5 text-xs font-semibold tracking-wide text-foreground uppercase">
+          {type}
         </span>
         {soon && (
           <span className="absolute top-4 right-4 inline-flex items-center gap-1.5 rounded-full bg-brand-green px-3 py-1.5 text-xs font-semibold tracking-wide text-white uppercase">
@@ -109,7 +161,11 @@ export function ProgramCard({
       </div>
 
       <div className="flex flex-1 flex-col p-5 sm:p-6">
-        <h3 className="text-xl font-semibold tracking-tight text-foreground">
+        <p className="text-sm font-medium text-primary">
+          {category}
+          {parentProgram && <span className="text-muted-foreground"> · {parentProgram}</span>}
+        </p>
+        <h3 className="mt-2 line-clamp-2 text-xl font-semibold tracking-tight text-foreground">
           {title}
         </h3>
         <p className="mt-2 line-clamp-3 text-base leading-relaxed text-muted-foreground">
@@ -135,7 +191,7 @@ export function ProgramCard({
           </p>
         )}
 
-        {soon ? (
+        {soon || !href ? (
           <p className="mt-auto inline-flex items-center gap-1.5 pt-5 text-base font-medium text-brand-green">
             <Clock className="size-4" aria-hidden="true" />
             Coming Soon

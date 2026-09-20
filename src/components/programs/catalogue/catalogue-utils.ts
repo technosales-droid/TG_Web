@@ -15,6 +15,7 @@ export interface Filters {
   level: string | null;
   format: string | null;
   type: string | null;
+  parent: string | null;
   tags: string[];
   sort: SortKey;
 }
@@ -25,6 +26,7 @@ export const EMPTY_FILTERS: Filters = {
   level: null,
   format: null,
   type: null,
+  parent: null,
   tags: [],
   sort: "featured",
 };
@@ -39,6 +41,7 @@ export interface Facets {
   levels: FacetOption[];
   formats: FacetOption[];
   types: FacetOption[];
+  parents: FacetOption[];
   tags: FacetOption[];
 }
 
@@ -69,12 +72,14 @@ export function buildFacets(programs: CatalogueProgram[]): Facets {
     levels: count(programs.map((p) => p.level)).sort(byLevel),
     formats: count(programs.map((p) => p.format)).sort(alpha),
     types: count(programs.map((p) => p.type)).sort(alpha),
+    // Insertion order = catalogue order, so parents list flagship first.
+    parents: count(programs.map((p) => p.parentProgram)),
     tags: count(programs.flatMap((p) => p.tags)).sort((a, b) => b.count - a.count || alpha(a, b)),
   };
 }
 
 export function searchText(p: CatalogueProgram): string {
-  return [p.title, p.identity, p.category, p.type, p.level, p.format, p.description, ...p.tags, ...(p.keywords ?? [])]
+  return [p.title, p.parentProgram, p.identity, p.category, p.type, p.level, p.format, p.description, ...p.tags, ...(p.keywords ?? [])]
     .filter(Boolean)
     .join(" ")
     .toLowerCase();
@@ -96,6 +101,7 @@ export function filterPrograms(
       if (f.level && p.level !== f.level) return false;
       if (f.format && p.format !== f.format) return false;
       if (f.type && p.type !== f.type) return false;
+      if (f.parent && p.parentProgram !== f.parent) return false;
       if (f.tags.length && !p.tags.some((t) => f.tags.includes(t))) return false;
       return terms.every((t) => t.test(haystack));
     })
@@ -119,7 +125,7 @@ export function sortPrograms(list: CatalogueProgram[], sort: SortKey): Catalogue
 }
 
 export function activeFilterCount(f: Filters): number {
-  return [f.category, f.level, f.format, f.type].filter(Boolean).length + f.tags.length;
+  return [f.category, f.level, f.format, f.type, f.parent].filter(Boolean).length + f.tags.length;
 }
 
 const find = (options: FacetOption[], slug: string | null) =>
@@ -134,6 +140,7 @@ export function parseFilters(params: URLSearchParams, facets: Facets): Filters {
     level: find(facets.levels, params.get("level")),
     format: find(facets.formats, params.get("format")),
     type: find(facets.types, params.get("type")),
+    parent: find(facets.parents, params.get("program")),
     tags: facets.tags.filter((t) => tagSlugs.includes(slugify(t.value))).map((t) => t.value),
     sort: SORT_OPTIONS.some((o) => o.value === sort) ? (sort as SortKey) : "featured",
   };
@@ -146,6 +153,7 @@ export function serializeFilters(f: Filters): string {
   if (f.level) p.set("level", slugify(f.level));
   if (f.format) p.set("format", slugify(f.format));
   if (f.type) p.set("type", slugify(f.type));
+  if (f.parent) p.set("program", slugify(f.parent));
   if (f.tags.length) p.set("tags", f.tags.map(slugify).join(","));
   if (f.sort !== "featured") p.set("sort", f.sort);
   return p.toString();

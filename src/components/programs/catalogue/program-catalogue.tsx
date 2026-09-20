@@ -94,7 +94,8 @@ function FilterPanel({ filters, facets, update }: { filters: Filters; facets: Fa
   const uid = useId();
   const [showAllTopics, setShowAllTopics] = useState(false);
   const topics = showAllTopics ? facets.tags : facets.tags.slice(0, TOPIC_LIMIT);
-  const allSelects: { key: "level" | "format" | "type"; label: string; options: FacetOption[] }[] = [
+  const allSelects: { key: "parent" | "level" | "format" | "type"; label: string; options: FacetOption[] }[] = [
+    { key: "parent", label: "Program", options: facets.parents },
     { key: "level", label: "Level", options: facets.levels },
     { key: "format", label: "Format", options: facets.formats },
     { key: "type", label: "Type", options: facets.types },
@@ -121,7 +122,7 @@ function FilterPanel({ filters, facets, update }: { filters: Filters; facets: Fa
       )}
 
       {selects.length > 0 && (
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {selects.map((s) => (
             <SelectFilter
               key={s.key}
@@ -174,6 +175,7 @@ function ActiveChips({ filters, update, clearAll }: { filters: Filters; update: 
   if (filters.category) chips.push({ key: "category", label: filters.category, remove: () => update({ category: null }) });
   if (filters.level) chips.push({ key: "level", label: filters.level, remove: () => update({ level: null }) });
   if (filters.format) chips.push({ key: "format", label: filters.format, remove: () => update({ format: null }) });
+  if (filters.parent) chips.push({ key: "parent", label: filters.parent, remove: () => update({ parent: null }) });
   if (filters.type) chips.push({ key: "type", label: filters.type, remove: () => update({ type: null }) });
   for (const t of filters.tags)
     chips.push({ key: `tag-${t}`, label: t, remove: () => update({ tags: filters.tags.filter((x) => x !== t) }) });
@@ -243,10 +245,14 @@ export function ProgramCatalogue({ programs }: { programs: CatalogueProgram[] })
     window.history.replaceState(window.history.state, "", url);
   }, [filters]);
 
+  const kinds = new Set(results.map((p) => p.type));
+  const only = kinds.size === 1 ? [...kinds][0] : null;
+  const one = results.length === 1;
+  const noun = only === "Course" ? (one ? "course" : "courses") : only === "Program" ? (one ? "program" : "programs") : "programs & courses";
   const countText =
     results.length === 0
-      ? "No programs found"
-      : `Showing ${shown.length} of ${results.length} program${results.length === 1 ? "" : "s"}${
+      ? "No results found"
+      : `Showing ${shown.length} of ${results.length} ${noun}${
           filtering && results.length !== programs.length ? ` (${programs.length} in catalogue)` : ""
         }`;
 
@@ -257,7 +263,7 @@ export function ProgramCatalogue({ programs }: { programs: CatalogueProgram[] })
         <form role="search" onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-3 sm:flex-row">
           <div className="relative min-w-0 flex-1">
             <label htmlFor={searchId} className="sr-only">
-              Search programs, skills or topics
+              Search courses, skills or topics
             </label>
             <Search
               className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-muted-foreground"
@@ -268,7 +274,7 @@ export function ProgramCatalogue({ programs }: { programs: CatalogueProgram[] })
               type="search"
               value={filters.q}
               onChange={(e) => update({ q: e.target.value })}
-              placeholder="Search programs, skills or topics..."
+              placeholder="Search courses, skills or topics..."
               autoComplete="off"
               className={cn(
                 "h-12 w-full rounded-full border border-primary/15 bg-card pr-11 pl-12 text-base text-foreground placeholder:text-muted-foreground [&::-webkit-search-cancel-button]:hidden",
@@ -424,7 +430,7 @@ export function ProgramCatalogue({ programs }: { programs: CatalogueProgram[] })
           <span className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
             <SearchX className="size-7" aria-hidden="true" />
           </span>
-          <h3 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">No programs found.</h3>
+          <h3 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">No courses or programs found.</h3>
           <p className="mt-2 max-w-md text-base text-muted-foreground">
             Try adjusting your search or clearing some filters.
           </p>
