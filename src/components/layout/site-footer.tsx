@@ -52,7 +52,41 @@ function SocialLinks() {
 }
 
 function LocationCard() {
-  const { name, type, locality, address, mapUrl } = footerLocation;
+  const { name, type, locality, shortAddress, address, mapUrl, mapEmbedUrl } = footerLocation;
+
+  if (mapUrl && mapEmbedUrl) {
+    return (
+      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[1.5rem] border border-background/15 sm:aspect-[2/1] xl:aspect-[21/9]">
+        <iframe
+          src={mapEmbedUrl}
+          title={`Map showing ${name} ${type}`}
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          tabIndex={-1}
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 size-full border-0"
+        />
+        <a
+          href={mapUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`${name} ${type}, ${address ?? locality} — view on Google Maps`}
+          style={{ backgroundImage: "linear-gradient(to top, rgba(8,44,58,0.92) 0%, rgba(8,44,58,0) 55%)" }}
+          className="group absolute inset-0 flex items-end justify-end gap-3 p-4 focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-white sm:justify-between sm:p-5"
+        >
+          <span className="hidden min-w-0 sm:block">
+            <span className="block text-base font-semibold text-background">{name}</span>
+            <span className="block text-sm text-background/85">{type}</span>
+            <span className="block text-sm text-background/85">{shortAddress ?? locality}</span>
+          </span>
+          <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-background px-3 py-1.5 text-sm font-medium text-[#0b3d50] transition-transform duration-200 motion-safe:group-hover:-translate-y-0.5">
+            View on Google Maps
+            <ArrowUpRight className="size-4" aria-hidden="true" />
+          </span>
+        </a>
+      </div>
+    );
+  }
 
   const body = (
     <>

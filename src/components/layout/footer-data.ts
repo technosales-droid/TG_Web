@@ -82,18 +82,24 @@ export const footerContact: { email: string | null; phone: string | null } = {
   phone: null,
 };
 
-// Only the city is stated in the source ("based in Nashik, Maharashtra, India").
-// Add the verified street address and Google Maps URL here to activate the address and map link.
+// Office number and building were provided by the team; the rest of the address is the place
+// Google Maps resolves for the team's share link (XQXG+VJ2 Platinum Plaza, Tilak Wadi, Nashik).
 export const footerLocation: {
   name: string;
   type: string;
   locality: string;
+  shortAddress: string | null;
   address: string | null;
   mapUrl: string | null;
+  mapEmbedUrl: string | null;
 } = {
   name: "Techno Gurukul",
   type: "Learning Institute",
   locality: "Nashik, Maharashtra, India",
-  address: null,
-  mapUrl: null,
+  shortAddress: "Office No. 305, Platinum Plaza",
+  address:
+    "Office No. 305, Platinum Plaza, opp. Ramayan Bungalow, next to Jain Oswal Boarding, Tilak Wadi, Police Staff Colony, Nashik, Maharashtra 422002",
+  mapUrl: "https://maps.app.goo.gl/HhqURkxhHpr5fCt29",
+  mapEmbedUrl:
+    "https://www.google.com/maps?q=XQXG%2BVJ2%20Platinum%20Plaza%2C%20Tilak%20Wadi%2C%20Nashik%2C%20Maharashtra%20422002&z=16&output=embed",
 };
