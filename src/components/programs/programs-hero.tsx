@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Code2, Compass, Hammer, Lightbulb, Megaphone, PenTool } from "lucide-react";
+import { ArrowDown, Code2, Compass, Hammer, Lightbulb, Megaphone, PenTool } from "lucide-react";
 import { cn } from "cn";
 import { buttonVariants } from "@/components/ui/button";
 
@@ -74,23 +74,22 @@ export function ProgramsHero() {
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
-                {/* Anchor target arrives with Section 02 (program listing). */}
                 <Link
-                  href="#programs-listing"
+                  href="/contact"
                   className={cn(
                     buttonVariants({ variant: "default" }),
                     "h-11 rounded-full px-6 text-base transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0"
                   )}
                 >
-                  Explore Programs
+                  Talk to Techno Gurukul
                 </Link>
                 <Link
-                  href="/contact"
+                  href="#programs-listing"
                   className="group flex items-center gap-1 py-2 text-base font-medium text-foreground transition-colors duration-300 hover:text-primary"
                 >
-                  Talk to Techno Gurukul
-                  <ArrowUpRight
-                    className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  Explore Programs
+                  <ArrowDown
+                    className="size-4 transition-transform duration-300 group-hover:translate-y-0.5"
                     aria-hidden="true"
                   />
                 </Link>

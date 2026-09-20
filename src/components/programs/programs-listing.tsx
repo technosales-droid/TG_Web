@@ -9,8 +9,7 @@ const PROGRAMS = [
   {
     category: "Digital & Marketing",
     title: "Digital Marketing",
-    description:
-      "Learn how brands grow in the digital world — from strategy and content to social media, search, advertising and analytics.",
+    description: "Learn how brands grow in the digital world through practical, hands-on work.",
     support: "Learn. Execute. Measure. Grow.",
     cta: "Explore Digital Marketing",
     href: "/programs/tg-digital-marketing",
@@ -20,10 +19,9 @@ const PROGRAMS = [
   {
     category: "Creative Technology",
     title: "Game Development & Design",
-    description:
-      "Learn to turn ideas into interactive experiences through game design, programming, digital art, engines, animation and practical project work.",
+    description: "Learn to turn ideas into interactive experiences through practical project work.",
     support: "Design. Build. Play.",
-    cta: "Explore Game Development",
+    cta: "Explore Game Development & Design",
     href: "/programs/tg-gameforge",
     icons: [Code2, PenTool, Boxes],
     base: "from-brand-green/80 via-primary/70 to-[#0b3d50]",
@@ -82,8 +80,7 @@ export function ProgramsListing() {
           </h2>
           <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
             Choose a practical learning direction based on what you want to
-            create, build and explore. Each program combines structured
-            learning with hands-on work and projects.
+            create, build and explore. Open a program to see its full details.
           </p>
         </div>
 

@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { ProgramsFinalCta } from "@/components/programs/programs-final-cta";
 import { ProgramsHero } from "@/components/programs/programs-hero";
 import { ProgramsListing } from "@/components/programs/programs-listing";
-import { ProgramsCareers } from "@/components/programs/programs-careers";
-import { ProgramsOutcomes } from "@/components/programs/programs-outcomes";
-import { ProgramsProcess } from "@/components/programs/programs-process";
+import { ProgramsPhilosophy } from "@/components/programs/programs-philosophy";
 
 export const metadata: Metadata = {
   title: "Programs | TechnoGurukul",
@@ -16,10 +14,8 @@ export default function Page() {
   return (
     <main>
       <ProgramsHero />
+      <ProgramsPhilosophy />
       <ProgramsListing />
-      <ProgramsProcess />
-      <ProgramsOutcomes />
-      <ProgramsCareers />
       <ProgramsFinalCta />
     </main>
   );
