@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CareerDirectionExplorer } from "@/components/career-paths/career-direction-explorer";
 import { CareerPathsHero } from "@/components/career-paths/career-paths-hero";
+import { CareerPathsFinalCta } from "@/components/career-paths/career-paths-final-cta";
 import { CareerProof } from "@/components/career-paths/career-proof";
 
 export const metadata: Metadata = {
@@ -15,6 +16,7 @@ export default function Page() {
       <CareerPathsHero />
       <CareerDirectionExplorer />
       <CareerProof />
+      <CareerPathsFinalCta />
     </main>
   );
 }
