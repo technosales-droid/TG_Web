@@ -4,6 +4,7 @@ import { DigitalMarketingAudience } from "@/components/programs/digital-marketin
 import { DigitalMarketingCareers } from "@/components/programs/digital-marketing-careers";
 import { DigitalMarketingCurriculum } from "@/components/programs/digital-marketing-curriculum";
 import { DigitalMarketingPractical } from "@/components/programs/digital-marketing-practical";
+import { DigitalMarketingFinalCta } from "@/components/programs/digital-marketing-final-cta";
 import { DigitalMarketingHero } from "@/components/programs/digital-marketing-hero";
 import { DigitalMarketingLearning } from "@/components/programs/digital-marketing-learning";
 import { DigitalMarketingOverview } from "@/components/programs/digital-marketing-overview";
@@ -28,6 +29,7 @@ export default function Page() {
       <DigitalMarketingPractical />
       <DigitalMarketingCareers />
       <DigitalMarketingAudience />
+      <DigitalMarketingFinalCta />
     </main>
   );
 }
