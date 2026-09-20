@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CareerDirectionExplorer } from "@/components/career-paths/career-direction-explorer";
 import { CareerPathsHero } from "@/components/career-paths/career-paths-hero";
+import { CareerProof } from "@/components/career-paths/career-proof";
 
 export const metadata: Metadata = {
   title: "Digital Marketing & Game Development Career Paths | TechnoGurukul",
@@ -13,6 +14,7 @@ export default function Page() {
     <main>
       <CareerPathsHero />
       <CareerDirectionExplorer />
+      <CareerProof />
     </main>
   );
 }

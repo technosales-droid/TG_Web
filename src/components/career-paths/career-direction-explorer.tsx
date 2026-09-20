@@ -111,7 +111,7 @@ function DirectionCard({ direction, tone }: { direction: CareerDirection; tone: 
       )}
 
       {/* Direction -> skills -> proof, joined by a rail */}
-      <div className="mt-auto pt-5">
+      <div className="pt-5">
       <div className="grid gap-5 border-l-2 border-primary/15 pl-4">
         <div className={cn("relative before:absolute before:top-1 before:-left-[1.4rem] before:size-2.5 before:rounded-full", t.dot)}>
           <p className={LABEL}>Skills to build</p>
