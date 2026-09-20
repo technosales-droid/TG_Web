@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { ProgramsFinalCta } from "@/components/programs/programs-final-cta";
+import { CatalogueSection } from "@/components/programs/catalogue/catalogue-section";
 import { ProgramsHero } from "@/components/programs/programs-hero";
-import { ProgramsListing } from "@/components/programs/programs-listing";
 import { ProgramsPhilosophy } from "@/components/programs/programs-philosophy";
 
 export const metadata: Metadata = {
@@ -14,9 +13,8 @@ export default function Page() {
   return (
     <main>
       <ProgramsHero />
+      <CatalogueSection />
       <ProgramsPhilosophy />
-      <ProgramsListing />
-      <ProgramsFinalCta />
     </main>
   );
 }
