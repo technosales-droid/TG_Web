@@ -1,5 +1,16 @@
-import { PageShell } from "@/components/page-shell";
+import type { Metadata } from "next";
+import { LearningHero } from "@/components/learning/learning-hero";
+
+export const metadata: Metadata = {
+  title: "How Techno Gurukul Teaches Practical Skills | TechnoGurukul",
+  description:
+    "Discover how Techno Gurukul combines practical learning, hands-on work, projects and portfolio development to help students build skills they can use.",
+};
 
 export default function Page() {
-  return <PageShell title="Learning" />;
+  return (
+    <main>
+      <LearningHero />
+    </main>
+  );
 }
