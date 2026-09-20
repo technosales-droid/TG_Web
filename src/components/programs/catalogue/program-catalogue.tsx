@@ -4,13 +4,15 @@ import { useDeferredValue, useEffect, useId, useMemo, useRef, useState } from "r
 import { useSearchParams } from "next/navigation";
 import { ChevronDown, Search, SearchX, SlidersHorizontal, X } from "lucide-react";
 import { cn } from "cn";
-import { CATALOGUE_PAGE_SIZE, type CatalogueEntry } from "@/data/catalogue";
+import { CATALOGUE_PAGE_SIZE, type CatalogueCourse, type CatalogueProgram } from "@/data/catalogue";
 import {
   EMPTY_FILTERS,
   SORT_OPTIONS,
   activeFilterCount,
   buildFacets,
   filterCourses,
+  filterPrograms,
+  programSearchText,
   parseFilters,
   searchText,
   serializeFilters,
@@ -21,6 +23,7 @@ import {
   type SortKey,
 } from "./catalogue-utils";
 import { ProgramCard } from "./program-card";
+import { ProgramContextCard } from "./program-context-card";
 
 const TOPIC_LIMIT = 10;
 const FOCUS = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
@@ -77,7 +80,7 @@ function SelectFilter({
           <option value="">All</option>
           {options.map((o) => (
             <option key={o.value} value={o.value}>
-              {o.value} ({o.count})
+              {o.value}{o.count > 0 ? ` (${o.count})` : ""}
             </option>
           ))}
         </select>
@@ -211,16 +214,32 @@ function ActiveChips({ filters, update, clearAll }: { filters: Filters; update: 
   );
 }
 
-export function ProgramCatalogue({ courses }: { courses: CatalogueEntry[] }) {
+export function ProgramCatalogue({ courses, programs }: { courses: CatalogueCourse[]; programs: CatalogueProgram[] }) {
   const searchParams = useSearchParams();
-  const facets = useMemo(() => buildFacets(courses), [courses]);
+  const facets = useMemo(() => buildFacets(courses, programs), [courses, programs]);
+  // Only current options are listed as filters. Future ones (roadmap) are still understood from a
+  // URL such as the "Browse courses" links in What's Coming Next, and show up as a chip.
+  const listed = useMemo<Facets>(
+    () => ({
+      industries: facets.industries.filter((o) => !o.future),
+      programs: facets.programs.filter((o) => !o.future),
+      levels: facets.levels.filter((o) => !o.future),
+      formats: facets.formats.filter((o) => !o.future),
+      statuses: facets.statuses.filter((o) => !o.future),
+      tags: facets.tags.filter((o) => !o.future),
+    }),
+    [facets]
+  );
   const index = useMemo(() => courses.map((course) => ({ course, haystack: searchText(course) })), [courses]);
+  const programIndex = useMemo(() => programs.map((program) => ({ program, haystack: programSearchText(program) })), [programs]);
 
   const [filters, setFilters] = useState<Filters>(() => parseFilters(new URLSearchParams(searchParams.toString()), facets));
   const [visibleCount, setVisibleCount] = useState(CATALOGUE_PAGE_SIZE);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const searchId = useId();
   const sortId = useId();
+  const programsHeadingId = useId();
+  const coursesHeadingId = useId();
 
   // Follow the URL when it changes from outside (e.g. a "Browse courses" link in the roadmap).
   // Our own replaceState below produces URLs equal to the current filters, so those are ignored.
@@ -240,9 +259,9 @@ export function ProgramCatalogue({ courses }: { courses: CatalogueEntry[] }) {
     () => sortCourses(filterCourses(index, { ...filters, q: deferredQ }), filters.sort),
     [index, filters, deferredQ]
   );
+  const programResults = useMemo(() => filterPrograms(programIndex, { ...filters, q: deferredQ }), [programIndex, filters, deferredQ]);
   const shown = results.slice(0, visibleCount);
   const active = activeFilterCount(filters);
-  const filtering = active > 0 || filters.q.trim() !== "";
 
   const update: Update = (patch) => {
     // Changing the industry clears a program that no longer belongs to it.
@@ -260,17 +279,13 @@ export function ProgramCatalogue({ courses }: { courses: CatalogueEntry[] }) {
     window.history.replaceState(window.history.state, "", url);
   }, [filters]);
 
-  // Count wording follows what is listed: courses, programs (a program with no courses), or both.
-  const kinds = new Set(results.map((p) => p.kind));
-  const one = results.length === 1;
-  const noun =
-    kinds.size > 1 ? "programs & courses" : kinds.has("program") ? (one ? "program" : "programs") : one ? "course" : "courses";
-  const countText =
-    results.length === 0
-      ? "No results found"
-      : `Showing ${shown.length} of ${results.length} ${noun}${
-          filtering && results.length !== courses.length ? ` (${courses.length} in catalogue)` : ""
-        }`;
+  // Courses only. Programs are shown above the courses and are never part of this count.
+  const allFuture = results.length > 0 && results.every((c) => c.industryStatus !== "active");
+  const noun = `${allFuture ? "future " : ""}course${results.length === 1 ? "" : "s"}`;
+  const countText = `Showing ${shown.length} of ${results.length} ${noun}`;
+  const futureScope =
+    facets.industries.some((o) => o.future && o.value === filters.industry) ||
+    facets.programs.some((o) => o.future && o.value === filters.program);
 
   return (
     <div>
@@ -330,7 +345,7 @@ export function ProgramCatalogue({ courses }: { courses: CatalogueEntry[] }) {
         </form>
 
         <div className="mt-5 hidden lg:block">
-          <FilterPanel filters={filters} facets={facets} update={update} />
+          <FilterPanel filters={filters} facets={listed} update={update} />
         </div>
       </div>
 
@@ -353,7 +368,7 @@ export function ProgramCatalogue({ courses }: { courses: CatalogueEntry[] }) {
           </button>
         </div>
         <div className="overflow-y-auto px-5 py-5">
-          <FilterPanel filters={filters} facets={facets} update={update} />
+          <FilterPanel filters={filters} facets={listed} update={update} />
         </div>
         <div className="flex gap-3 border-t border-primary/10 bg-background px-5 py-4">
           <button
@@ -379,13 +394,43 @@ export function ProgramCatalogue({ courses }: { courses: CatalogueEntry[] }) {
         </div>
       </dialog>
 
-      {/* Active filters, count and sort */}
-      <div className="mt-5 grid gap-4">
+      {/* Active filters */}
+      <div className="mt-5 grid gap-3">
         <ActiveChips filters={filters} update={update} clearAll={clearAll} />
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <p role="status" aria-live="polite" className="text-sm font-medium text-muted-foreground sm:text-base">
-            {countText}
+        {futureScope && (
+          <p className="rounded-2xl border border-primary/15 bg-primary/5 px-4 py-3 text-sm text-foreground">
+            You are viewing the future roadmap. These are planned learning paths, not open programs.
           </p>
+        )}
+      </div>
+
+      {/* Programs: the parent context. Not courses, and never counted as courses. */}
+      {programResults.length > 0 && (
+        <section aria-labelledby={programsHeadingId} className="mt-8">
+          <h3 id={programsHeadingId} className="text-sm font-semibold tracking-widest text-muted-foreground uppercase">
+            {programResults.length === 1 ? "Program" : "Programs"}
+          </h3>
+          <ul className="mt-3 grid gap-5 lg:grid-cols-2">
+            {programResults.map((program) => (
+              <li key={program.slug} className="min-w-0">
+                <ProgramContextCard program={program} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* Courses */}
+      <section aria-labelledby={coursesHeadingId} className="mt-8">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h3 id={coursesHeadingId} className="text-sm font-semibold tracking-widest text-muted-foreground uppercase">
+              Courses
+            </h3>
+            <p role="status" aria-live="polite" className="mt-1 text-sm font-medium text-foreground sm:text-base">
+              {countText}
+            </p>
+          </div>
           <div className="flex items-center gap-2">
             <label htmlFor={sortId} className="text-sm font-medium text-muted-foreground">
               Sort by
@@ -413,40 +458,44 @@ export function ProgramCatalogue({ courses }: { courses: CatalogueEntry[] }) {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Results */}
-      {results.length > 0 ? (
-        <>
-          <ul className="mt-5 grid gap-5 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-            {shown.map((p, i) => (
-              <li key={p.slug} className="min-w-0">
-                <ProgramCard course={p} priority={i < 3} />
-              </li>
-            ))}
-          </ul>
-          {results.length > visibleCount && (
-            <div className="mt-8 flex justify-center">
-              <button
-                type="button"
-                onClick={() => setVisibleCount((n) => n + CATALOGUE_PAGE_SIZE)}
-                className={cn(
-                  "h-12 rounded-full border border-primary/25 bg-card px-8 text-base font-semibold text-foreground transition-colors hover:bg-muted",
-                  FOCUS
-                )}
-              >
-                Load More
-                <span className="ml-2 font-normal text-muted-foreground">({results.length - visibleCount} more)</span>
-              </button>
-            </div>
-          )}
-        </>
-      ) : (
-        <div className="mt-5 flex flex-col items-center rounded-[2rem] border border-dashed border-primary/25 bg-card px-6 py-14 text-center">
+        {results.length > 0 ? (
+          <>
+            <ul className="mt-4 grid gap-5 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+              {shown.map((p, i) => (
+                <li key={p.slug} className="min-w-0">
+                  <ProgramCard course={p} priority={i < 3} />
+                </li>
+              ))}
+            </ul>
+            {results.length > visibleCount && (
+              <div className="mt-8 flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => setVisibleCount((n) => n + CATALOGUE_PAGE_SIZE)}
+                  className={cn(
+                    "h-12 rounded-full border border-primary/25 bg-card px-8 text-base font-semibold text-foreground transition-colors hover:bg-muted",
+                    FOCUS
+                  )}
+                >
+                  Load More
+                  <span className="ml-2 font-normal text-muted-foreground">({results.length - visibleCount} more)</span>
+                </button>
+              </div>
+            )}
+          </>
+        ) : programResults.length > 0 ? (
+          <p className="mt-4 rounded-2xl border border-dashed border-primary/25 bg-card px-5 py-4 text-base text-muted-foreground">
+            {programResults.some((pr) => pr.courseCount === 0)
+              ? "This program is currently offered as a complete learning program. Its curriculum is presented within the program overview."
+              : "No courses match your search or filters."}
+          </p>
+        ) : (
+        <div className="mt-4 flex flex-col items-center rounded-[2rem] border border-dashed border-primary/25 bg-card px-6 py-14 text-center">
           <span className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
             <SearchX className="size-7" aria-hidden="true" />
           </span>
-          <h3 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">Nothing found.</h3>
+          <h3 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">No results found.</h3>
           <p className="mt-2 max-w-md text-base text-muted-foreground">
             Try adjusting your search or clearing some filters.
           </p>
@@ -461,7 +510,8 @@ export function ProgramCatalogue({ courses }: { courses: CatalogueEntry[] }) {
             Clear Filters
           </button>
         </div>
-      )}
+        )}
+      </section>
     </div>
   );
 }

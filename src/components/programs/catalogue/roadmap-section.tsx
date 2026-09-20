@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Clock } from "lucide-react";
-import { CATALOGUE, INDUSTRIES, PROGRAMS } from "@/data/catalogue";
+import { COURSE_CATALOGUE, INDUSTRIES, PROGRAMS } from "@/data/catalogue";
 
 const LABEL = { "coming-soon": "Coming Soon", planned: "Planned", active: "Active" } as const;
 
@@ -30,7 +30,7 @@ export function RoadmapSection() {
         <ul className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {future.map((industry) => {
             const programs = PROGRAMS.filter((p) => p.industrySlug === industry.slug);
-            const courseCount = CATALOGUE.filter((c) => c.kind === "course" && c.industrySlug === industry.slug).length;
+            const courseCount = COURSE_CATALOGUE.filter((c) => c.industrySlug === industry.slug).length;
             return (
               <li key={industry.slug} className="min-w-0">
                 <article className="flex h-full flex-col rounded-[1.75rem] border border-brand-green/30 bg-card p-5 sm:p-6">
@@ -53,7 +53,7 @@ export function RoadmapSection() {
                       <li key={p.slug} className="flex items-baseline justify-between gap-3 text-sm">
                         <span className="font-medium text-foreground">{p.name}</span>
                         <span className="shrink-0 text-muted-foreground">
-                          {CATALOGUE.filter((c) => c.kind === "course" && c.programSlug === p.slug).length} courses · {LABEL[p.status]}
+                          {COURSE_CATALOGUE.filter((c) => c.programSlug === p.slug).length} courses · {LABEL[p.status]}
                         </span>
                       </li>
                     ))}

@@ -1,4 +1,4 @@
-import type { CatalogueEntry, CatalogueStatus } from "@/data/catalogue";
+import type { CatalogueCourse, CatalogueProgram, CatalogueStatus } from "@/data/catalogue";
 
 export type SortKey = "featured" | "newest" | "az" | "za";
 
@@ -42,6 +42,8 @@ export interface FacetOption {
   count: number;
   /** Programs only: the industry this program belongs to, so the list can follow the industry filter. */
   industry?: string;
+  /** Future roadmap only. Such options are parsed from the URL but never listed as current filters. */
+  future?: boolean;
 }
 
 export interface Facets {
@@ -63,58 +65,87 @@ export const slugify = (s: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 
-function count(values: (string | null)[]): FacetOption[] {
-  const map = new Map<string, number>();
-  for (const v of values) if (v) map.set(v, (map.get(v) ?? 0) + 1);
-  return [...map].map(([value, n]) => ({ value, count: n }));
+type Counted = { value: string; count: number; future: boolean; industry?: string };
+
+/** Counts values (in first-seen order). An option is "future" when only future entries use it. */
+function tally(items: { value: string | null; future: boolean; industry?: string }[]): Counted[] {
+  const map = new Map<string, Counted>();
+  for (const { value, future, industry } of items) {
+    if (!value) continue;
+    const o = map.get(value) ?? { value, count: 0, future: true, industry };
+    o.count += 1;
+    if (!future) o.future = false;
+    map.set(value, o);
+  }
+  return [...map.values()];
 }
 
-export function buildFacets(courses: CatalogueEntry[]): Facets {
+export function buildFacets(courses: CatalogueCourse[], programs: CatalogueProgram[]): Facets {
   const alpha = (a: FacetOption, b: FacetOption) => a.value.localeCompare(b.value);
   const rank = (order: string[]) => (a: FacetOption, b: FacetOption) =>
     (order.indexOf(a.value) === -1 ? 99 : order.indexOf(a.value)) -
       (order.indexOf(b.value) === -1 ? 99 : order.indexOf(b.value)) || alpha(a, b);
-  const currentTags = new Map<string, number>();
-  for (const c of courses) if (c.industryStatus === "active") for (const t of c.tags) currentTags.set(t, (currentTags.get(t) ?? 0) + 1);
-  const industryOf = new Map(courses.map((c) => [c.programName, c.industryName]));
+  const isFuture = (industryStatus: CatalogueStatus) => industryStatus !== "active";
+  const courseFuture = (c: CatalogueCourse) => isFuture(c.industryStatus);
+
   return {
-    // Industries and programs keep catalogue order (data order), not alphabetical.
-    industries: count(courses.map((c) => c.industryName)),
-    programs: count(courses.map((c) => c.programName)).map((o) => ({ ...o, industry: industryOf.get(o.value) })),
-    levels: count(courses.map((c) => c.level)).sort(rank(LEVEL_ORDER)),
-    formats: count(courses.map((c) => c.format)).sort(alpha),
-    statuses: count(courses.map((c) => STATUS_LABEL[c.status])).sort(rank(STATUS_ORDER)),
-    // Topics of current offerings come first, so the popular topics reflect what is available now.
-    tags: count(courses.flatMap((c) => c.tags))
-      .map((o) => ({ ...o, current: currentTags.get(o.value) ?? 0 }))
-      .sort((a, b) => b.current - a.current || b.count - a.count || alpha(a, b))
-      .map(({ value, count: n }) => ({ value, count: n })),
+    // Industries and programs keep data order. Counts are courses, so a program that is itself the
+    // offering (Digital Marketing) shows 0.
+    industries: tally(programs.map((p) => ({ value: p.industryName, future: isFuture(p.industryStatus) }))).map((o) => ({
+      ...o,
+      count: courses.filter((c) => c.industryName === o.value).length,
+    })),
+    programs: tally(
+      programs.map((p) => ({ value: p.name, future: isFuture(p.industryStatus), industry: p.industryName }))
+    ).map((o) => ({ ...o, count: courses.filter((c) => c.programName === o.value).length })),
+    levels: tally(courses.map((c) => ({ value: c.level, future: courseFuture(c) }))).sort(rank(LEVEL_ORDER)),
+    formats: tally([
+      ...courses.map((c) => ({ value: c.format, future: courseFuture(c) })),
+      ...programs.map((p) => ({ value: p.format, future: isFuture(p.industryStatus) })),
+    ]).sort(alpha),
+    statuses: tally([
+      ...courses.map((c) => ({ value: STATUS_LABEL[c.status], future: courseFuture(c) })),
+      ...programs.map((p) => ({ value: STATUS_LABEL[p.status], future: isFuture(p.industryStatus) })),
+    ]).sort(rank(STATUS_ORDER)),
+    // Topics describe courses. Topics of current courses come first.
+    tags: tally(courses.flatMap((c) => c.tags.map((t) => ({ value: t, future: courseFuture(c) })))).sort(
+      (a, b) => Number(a.future) - Number(b.future) || b.count - a.count || alpha(a, b)
+    ),
   };
 }
 
-export function searchText(c: CatalogueEntry): string {
-  return [c.title, c.subtitle, c.programName, c.industryName, c.level, c.format, c.description, ...c.tags, ...(c.keywords ?? []), ...(c.tools ?? [])]
+export const searchText = (c: CatalogueCourse): string =>
+  [c.title, c.subtitle, c.programName, c.industryName, c.level, c.format, c.description, ...c.tags, ...(c.keywords ?? []), ...(c.tools ?? [])]
     .filter(Boolean)
     .join(" ")
     .toLowerCase();
+
+export const programSearchText = (p: CatalogueProgram): string =>
+  [p.name, p.industryName, p.format, p.description, ...p.tags, ...p.keywords].filter(Boolean).join(" ").toLowerCase();
+
+export function activeFilterCount(f: Filters): number {
+  return [f.industry, f.program, f.level, f.format, f.status].filter(Boolean).length + f.tags.length;
 }
 
-export function filterCourses(
-  index: { course: CatalogueEntry; haystack: string }[],
-  f: Filters
-): CatalogueEntry[] {
+function termMatchers(q: string) {
   // Each term must match at the start of a word, so "ai" finds AI but not "campaigns".
-  const terms = f.q
+  return q
     .toLowerCase()
     .split(/\s+/)
     .filter(Boolean)
     .map((t) => new RegExp(`(^|[^a-z0-9])${t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
-  // With no search and no filters the catalogue lists current industries only; future industries
-  // are shown under "What's Coming Next" and appear here once you search or filter.
-  const currentOnly = terms.length === 0 && activeFilterCount(f) === 0;
+}
+
+// With no search and no filters the catalogue lists current industries only; future industries are
+// shown under "What's Coming Next" and appear here once you search or filter.
+const currentOnly = (f: Filters, terms: RegExp[]) => terms.length === 0 && activeFilterCount(f) === 0;
+
+export function filterCourses(index: { course: CatalogueCourse; haystack: string }[], f: Filters): CatalogueCourse[] {
+  const terms = termMatchers(f.q);
+  const scoped = currentOnly(f, terms);
   return index
     .filter(({ course: c, haystack }) => {
-      if (currentOnly && c.industryStatus !== "active") return false;
+      if (scoped && c.industryStatus !== "active") return false;
       if (f.industry && c.industryName !== f.industry) return false;
       if (f.program && c.programName !== f.program) return false;
       if (f.level && c.level !== f.level) return false;
@@ -126,10 +157,29 @@ export function filterCourses(
     .map(({ course }) => course);
 }
 
-const STATUS_RANK: Record<CatalogueStatus, number> = { active: 0, "coming-soon": 1, planned: 2 };
-const statusRank = (c: CatalogueEntry) => STATUS_RANK[c.status];
+/** Programs matching the same search and filters, to be shown as context above the courses. */
+export function filterPrograms(index: { program: CatalogueProgram; haystack: string }[], f: Filters): CatalogueProgram[] {
+  const terms = termMatchers(f.q);
+  const scoped = currentOnly(f, terms);
+  return index
+    .filter(({ program: p, haystack }) => {
+      if (scoped && p.industryStatus !== "active") return false;
+      if (f.industry && p.industryName !== f.industry) return false;
+      if (f.program && p.name !== f.program) return false;
+      if (f.level) return false; // programs carry no level
+      if (f.format && p.format !== f.format) return false;
+      if (f.status && STATUS_LABEL[p.status] !== f.status) return false;
+      if (f.tags.length && !p.tags.some((t) => f.tags.includes(t))) return false;
+      return terms.every((t) => t.test(haystack));
+    })
+    .map(({ program }) => program)
+    .sort((a, b) => a.order - b.order);
+}
 
-export function sortCourses(list: CatalogueEntry[], sort: SortKey): CatalogueEntry[] {
+const STATUS_RANK: Record<CatalogueStatus, number> = { active: 0, "coming-soon": 1, planned: 2 };
+const statusRank = (c: CatalogueCourse) => STATUS_RANK[c.status];
+
+export function sortCourses(list: CatalogueCourse[], sort: SortKey): CatalogueCourse[] {
   const out = [...list];
   switch (sort) {
     case "az":
@@ -141,10 +191,6 @@ export function sortCourses(list: CatalogueEntry[], sort: SortKey): CatalogueEnt
     default:
       return out.sort((a, b) => Number(b.featured) - Number(a.featured) || a.order - b.order);
   }
-}
-
-export function activeFilterCount(f: Filters): number {
-  return [f.industry, f.program, f.level, f.format, f.status].filter(Boolean).length + f.tags.length;
 }
 
 const find = (options: FacetOption[], slug: string | null) =>

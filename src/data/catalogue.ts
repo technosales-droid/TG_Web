@@ -8,8 +8,9 @@
 // A Program contains `courses` (records in course-catalogue.ts / future-catalogue.ts that name it via
 // `programSlug`) and/or a `curriculum` of modules. Curriculum modules are NOT courses: they are the
 // syllabus of a program (e.g. the 18 modules of the Digital Marketing Professional Program), are never
-// counted as courses and never appear as catalogue cards. A program with no courses is itself the
-// enrolment offering and is listed as a catalogue entry (`listing`).
+// counted as courses and never appear as catalogue cards. Programs and courses are different entities:
+// the catalogue lists COURSES only (COURSE_CATALOGUE) and shows programs separately, as context
+// (PROGRAM_CATALOGUE). A program with no courses (Digital Marketing) is itself the offering.
 //
 // A course names its `programSlug` and `industrySlug`; the program names its `industrySlug`. The
 // validation at the bottom checks the two agree. The slug of each entity is its id.
@@ -99,15 +100,12 @@ export interface CurriculumModule {
   keywords?: string[];
 }
 
-/** How a program with no courses appears in the catalogue, as the enrolment offering itself. */
+/** Extra facts for showing a program as an overview. */
 export interface ProgramListing {
   format: string | null;
   /** Extra topic tags; the tags of its curriculum modules are added automatically. */
   tags: string[];
   keywords?: string[];
-  image: string | null;
-  visual: { tone: ProgramTone; icons: ProgramIcon[] };
-  featured: boolean;
 }
 
 export interface Program {
@@ -121,7 +119,6 @@ export interface Program {
   origin: CatalogueOrigin;
   /** Syllabus modules. Optional; never counted as courses. */
   curriculum?: CurriculumModule[];
-  /** Required when the program has no courses: makes the program itself a catalogue entry. */
   listing?: ProgramListing;
   order: number;
 }
@@ -165,18 +162,35 @@ export interface Course {
   order: number;
 }
 
-/**
- * One catalogue card: a course, or a program that is itself the offering (kind "program", no courses).
- * Curriculum modules are never entries. Program and industry are resolved here.
- */
-export interface CatalogueEntry extends Course {
-  kind: "course" | "program";
-  /** Status of the industry. The default catalogue view lists only active industries; the rest live in "What's Coming Next". */
-  industryStatus: CatalogueStatus;
+/** A course with its program and industry resolved. The course grid renders only these. */
+export interface CatalogueCourse extends Course {
   programName: string;
   programHref: string | null;
+  industryName: string;
+  /** Status of the industry: only courses of active industries are in the default view. */
+  industryStatus: CatalogueStatus;
+}
+
+/** A program resolved for display as context above the courses. Never a course. */
+export interface CatalogueProgram {
+  slug: string;
+  name: string;
   industrySlug: string;
   industryName: string;
+  industryStatus: CatalogueStatus;
+  description: string;
+  status: CatalogueStatus;
+  origin: CatalogueOrigin;
+  href: string | null;
+  format: string | null;
+  tags: string[];
+  /** Search-only: includes curriculum module titles. */
+  keywords: string[];
+  courseCount: number;
+  /** Course counts by status, e.g. { active: 1, "coming-soon": 6 }. */
+  statusCounts: Partial<Record<CatalogueStatus, number>>;
+  curriculumCount: number;
+  order: number;
 }
 
 export const CATALOGUE_PAGE_SIZE = 12;
@@ -253,7 +267,7 @@ const CURRENT_PROGRAMS: Program[] = [
     name: "Digital Marketing Professional Program",
     industrySlug: "digital-marketing",
     description:
-      "Complete practical digital marketing learning program covering strategy, content, SEO, advertising, analytics, AI and more.",
+      "Complete practical digital marketing learning program covering strategy, content, SEO, advertising, analytics and AI.",
     status: "active",
     href: "/programs/tg-digital-marketing",
     origin: "source",
@@ -262,9 +276,6 @@ const CURRENT_PROGRAMS: Program[] = [
       format: "Offline / In-Person",
       tags: ["Marketing", "SEO", "Social Media", "Performance Marketing"],
       keywords: ["digital marketing", "practical", "campaigns", "advertising", "career"],
-      image: null,
-      visual: { tone: "blue", icons: ["megaphone", "bar-chart", "search"] },
-      featured: true,
     },
     order: 1,
   },
@@ -272,7 +283,8 @@ const CURRENT_PROGRAMS: Program[] = [
     slug: "game-development-and-design",
     name: "Game Development & Design",
     industrySlug: "game-development",
-    description: "Learn to turn ideas into interactive experiences through practical project work.",
+    description:
+      "A practical learning pathway covering game development, design, art, animation and emerging game technologies.",
     status: "active",
     href: null,
     origin: "source",
@@ -288,60 +300,55 @@ const COURSES: Course[] = [...CURRENT_COURSES, ...FUTURE_COURSES];
 const industryBySlug = new Map(INDUSTRIES.map((i) => [i.slug, i]));
 const programBySlug = new Map(PROGRAMS.map((p) => [p.slug, p]));
 
-function resolveCourse(course: Course): CatalogueEntry {
+function resolveCourse(course: Course): CatalogueCourse {
   const program = programBySlug.get(course.programSlug);
   const industry = industryBySlug.get(course.industrySlug);
   if (!program || !industry || program.industrySlug !== industry.slug)
     throw new Error(`[catalogue] course "${course.slug}" has no valid program/industry`);
   return {
     ...course,
-    kind: "course",
-    industryStatus: industry.status,
     programName: program.name,
     programHref: program.href,
     industrySlug: industry.slug,
     industryName: industry.name,
+    industryStatus: industry.status,
   };
 }
 
-// A program with no courses is itself the offering (e.g. the Digital Marketing Professional Program).
-function programEntry(program: Program): CatalogueEntry {
+function resolveProgram(program: Program): CatalogueProgram {
   const industry = industryBySlug.get(program.industrySlug);
-  const listing = program.listing;
-  if (!industry || !listing) throw new Error(`[catalogue] program "${program.slug}" has no courses and no listing`);
+  if (!industry) throw new Error(`[catalogue] program "${program.slug}" has no valid industry`);
+  const courses = COURSES.filter((c) => c.programSlug === program.slug);
   const modules = program.curriculum ?? [];
+  const statusCounts: CatalogueProgram["statusCounts"] = {};
+  for (const c of courses) statusCounts[c.status] = (statusCounts[c.status] ?? 0) + 1;
   return {
-    kind: "program",
     slug: program.slug,
-    title: program.name,
+    name: program.name,
     industrySlug: industry.slug,
-    programSlug: program.slug,
+    industryName: industry.name,
+    industryStatus: industry.status,
     description: program.description,
     status: program.status,
     origin: program.origin,
     href: program.href,
-    level: null,
-    format: listing.format,
+    format: program.listing?.format ?? null,
     // Modules make the program searchable and filterable by their topics, without becoming courses.
-    tags: [...new Set([...listing.tags, ...modules.flatMap((m) => m.tags)])],
-    keywords: [...(listing.keywords ?? []), ...modules.flatMap((m) => [m.title, ...(m.keywords ?? [])])],
-    image: listing.image,
-    visual: listing.visual,
-    featured: listing.featured,
+    tags: [...new Set([...(program.listing?.tags ?? []), ...modules.flatMap((m) => m.tags)])],
+    keywords: [...(program.listing?.keywords ?? []), ...modules.flatMap((m) => [m.title, ...(m.keywords ?? [])])],
+    courseCount: courses.length,
+    statusCounts,
+    curriculumCount: modules.length,
     order: program.order,
-    programName: program.name,
-    programHref: program.href,
-    industryName: industry.name,
-    industryStatus: industry.status,
   };
 }
 
 const hasCourses = (p: Program) => COURSES.some((c) => c.programSlug === p.slug);
 
-export const CATALOGUE: CatalogueEntry[] = [
-  ...PROGRAMS.filter((p) => !hasCourses(p)).map(programEntry),
-  ...COURSES.map(resolveCourse),
-];
+/** Courses only. Programs and curriculum modules never appear here. */
+export const COURSE_CATALOGUE: CatalogueCourse[] = COURSES.map(resolveCourse);
+/** Programs, shown separately as context. */
+export const PROGRAM_CATALOGUE: CatalogueProgram[] = PROGRAMS.map(resolveProgram);
 
 // Fails the build/dev server loudly if the catalogue hierarchy or data is malformed.
 const STATUSES: CatalogueStatus[] = ["active", "coming-soon", "planned"];
@@ -371,7 +378,6 @@ function validateCatalogue() {
     if (!industryBySlug.has(p.industrySlug)) fail(`program "${p.slug}" has an invalid industry`);
     const modules = p.curriculum ?? [];
     if (!hasCourses(p) && modules.length === 0) fail(`program "${p.slug}" has neither courses nor curriculum`);
-    if (!hasCourses(p) && !p.listing) fail(`program "${p.slug}" has no courses, so it needs a listing`);
     if (p.status === "active" && !hasCourses(p) && !p.href?.startsWith("/")) fail(`active program "${p.slug}" needs a valid route`);
     if (p.status !== "active" && p.href) fail(`${p.status} program "${p.slug}" must not have an href`);
     unique(`curriculum module slug in "${p.slug}"`, modules.map((m) => m.slug));
@@ -382,11 +388,15 @@ function validateCatalogue() {
     for (const t of p.listing?.tags ?? []) if (!isTopic(t)) fail(`program "${p.slug}" listing uses unknown topic "${t}"`);
   }
   // Curriculum modules must never be counted or listed as courses.
-  if (CATALOGUE.filter((e) => e.kind === "course").length !== COURSES.length)
-    fail("course count does not match the course records");
+  if (COURSE_CATALOGUE.length !== COURSES.length) fail("course count does not match the course records");
+  if (PROGRAM_CATALOGUE.length !== PROGRAMS.length) fail("program count does not match the program records");
+  // The default (current) catalogue may only contain active industries.
+  for (const i of INDUSTRIES)
+    if (i.status !== "active" && COURSE_CATALOGUE.some((c) => c.industrySlug === i.slug && c.industryStatus === "active"))
+      fail(`future industry "${i.slug}" leaks into the current catalogue`);
   const moduleSlugs = new Set(PROGRAMS.flatMap((p) => (p.curriculum ?? []).map((m) => `${p.slug}:${m.slug}`)));
   if (COURSES.some((c) => moduleSlugs.has(`${c.programSlug}:${c.slug}`))) fail("a curriculum module is also recorded as a course");
-  unique("catalogue entry slug", CATALOGUE.map((e) => e.slug));
+
   for (const i of INDUSTRIES) if (!PROGRAMS.some((p) => p.industrySlug === i.slug)) fail(`industry "${i.slug}" has no programs`);
 
   for (const c of COURSES) {

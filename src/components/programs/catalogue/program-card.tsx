@@ -51,7 +51,7 @@ import {
 } from "lucide-react";
 import { cn } from "cn";
 import type {
-  CatalogueEntry,
+  CatalogueCourse,
   ProgramIcon,
   ProgramTone,
 } from "@/data/catalogue";
@@ -115,10 +115,10 @@ export function ProgramCard({
   course,
   priority = false,
 }: {
-  course: CatalogueEntry;
+  course: CatalogueCourse;
   priority?: boolean;
 }) {
-  const { title, description, tags, image, visual, href, industryName, programName, subtitle, kind } = course;
+  const { title, description, tags, image, visual, href, industryName, programName, subtitle } = course;
   const soon = course.status !== "active";
   const statusLabel = course.status === "planned" ? "Planned" : "Coming Soon";
   const meta = [course.level, course.format].filter(Boolean) as string[];
@@ -180,8 +180,8 @@ export function ProgramCard({
       </div>
 
       <div className="flex flex-1 flex-col p-5 sm:p-6">
-        {kind === "course" && <p className="text-sm font-medium text-primary">{programName}</p>}
-        <h3 className={cn("line-clamp-2 text-xl font-semibold tracking-tight text-foreground", kind === "course" && "mt-2")}>
+        <p className="text-sm font-medium text-primary">{programName}</p>
+        <h3 className={cn("mt-2 line-clamp-2 text-xl font-semibold tracking-tight text-foreground")}>
           {title}
         </h3>
         {subtitle && <p className="mt-1 line-clamp-1 text-sm font-medium text-foreground/70">{subtitle}</p>}
@@ -219,7 +219,7 @@ export function ProgramCard({
             href={href}
             className="mt-auto inline-flex items-center gap-1 pt-5 text-base font-medium text-foreground transition-colors duration-300 group-hover:text-primary after:absolute after:inset-0 after:rounded-[1.75rem] focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-ring"
           >
-            {kind === "program" ? "Explore Program" : "Explore Course"}
+            Explore Course
             <span className="sr-only">: {title}</span>
             <ArrowUpRight
               className="size-4 transition-transform duration-300 motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5"
