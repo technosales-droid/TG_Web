@@ -74,7 +74,7 @@ export function buildFacets(programs: CatalogueProgram[]): Facets {
 }
 
 export function searchText(p: CatalogueProgram): string {
-  return [p.title, p.category, p.type, p.level, p.format, p.description, ...p.tags, ...(p.keywords ?? [])]
+  return [p.title, p.identity, p.category, p.type, p.level, p.format, p.description, ...p.tags, ...(p.keywords ?? [])]
     .filter(Boolean)
     .join(" ")
     .toLowerCase();
@@ -84,7 +84,12 @@ export function filterPrograms(
   index: { program: CatalogueProgram; haystack: string }[],
   f: Filters
 ): CatalogueProgram[] {
-  const terms = f.q.toLowerCase().split(/\s+/).filter(Boolean);
+  // Each term must match at the start of a word, so "ai" finds AI but not "campaigns".
+  const terms = f.q
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((t) => new RegExp(`(^|[^a-z0-9])${t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
   return index
     .filter(({ program: p, haystack }) => {
       if (f.category && p.category !== f.category) return false;
@@ -92,10 +97,12 @@ export function filterPrograms(
       if (f.format && p.format !== f.format) return false;
       if (f.type && p.type !== f.type) return false;
       if (f.tags.length && !p.tags.some((t) => f.tags.includes(t))) return false;
-      return terms.every((t) => haystack.includes(t));
+      return terms.every((t) => t.test(haystack));
     })
     .map(({ program }) => program);
 }
+
+const statusRank = (p: CatalogueProgram) => (p.status === "active" ? 0 : 1);
 
 export function sortPrograms(list: CatalogueProgram[], sort: SortKey): CatalogueProgram[] {
   const out = [...list];
@@ -105,7 +112,7 @@ export function sortPrograms(list: CatalogueProgram[], sort: SortKey): Catalogue
     case "za":
       return out.sort((a, b) => b.title.localeCompare(a.title));
     case "newest":
-      return out.sort((a, b) => b.order - a.order);
+      return out.sort((a, b) => statusRank(a) - statusRank(b) || b.order - a.order);
     default:
       return out.sort((a, b) => Number(b.featured) - Number(a.featured) || a.order - b.order);
   }
