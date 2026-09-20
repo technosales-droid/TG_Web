@@ -5,7 +5,15 @@ import {
   ArrowUpRight,
   BarChart3,
   Box,
+  Blocks,
   Boxes,
+  Cloud,
+  Database,
+  Lock,
+  Network,
+  Server,
+  Shield,
+  Terminal,
   Bot,
   BookOpen,
   Brain,
@@ -85,6 +93,14 @@ const ICONS: Record<ProgramIcon, LucideIcon> = {
   flame: Flame,
   sun: Sun,
   bot: Bot,
+  shield: Shield,
+  lock: Lock,
+  terminal: Terminal,
+  database: Database,
+  cloud: Cloud,
+  network: Network,
+  blocks: Blocks,
+  server: Server,
 };
 
 const TONES: Record<ProgramTone, string> = {
@@ -103,7 +119,8 @@ export function ProgramCard({
   priority?: boolean;
 }) {
   const { title, description, tags, image, visual, href, industryName, programName, subtitle } = course;
-  const soon = course.status === "coming-soon";
+  const soon = course.status !== "active";
+  const statusLabel = course.status === "planned" ? "Planned" : "Coming Soon";
   const meta = [course.level, course.format].filter(Boolean) as string[];
   // First icon is the large centre mark; the others flank it.
   const [main, ...rest] = visual.icons;
@@ -153,9 +170,11 @@ export function ProgramCard({
           {industryName}
         </span>
         {soon && (
-          <span className="absolute top-4 right-4 inline-flex items-center gap-1.5 rounded-full bg-brand-green px-3 py-1.5 text-xs font-semibold tracking-wide text-white uppercase">
+          <span className={cn("absolute top-4 right-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide text-white uppercase",
+              course.status === "planned" ? "bg-[#0b3d50]" : "bg-brand-green"
+            )}>
             <Clock className="size-3" aria-hidden="true" />
-            Coming Soon
+            {statusLabel}
           </span>
         )}
       </div>
@@ -194,7 +213,7 @@ export function ProgramCard({
         {soon || !href ? (
           <p className="mt-auto inline-flex items-center gap-1.5 pt-5 text-base font-medium text-brand-green">
             <Clock className="size-4" aria-hidden="true" />
-            Coming Soon
+            {statusLabel}
             <span className="sr-only">: {title} is not open yet</span>
           </p>
         ) : (

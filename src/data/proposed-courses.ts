@@ -48,6 +48,7 @@ function group(key: GroupKey, rows: Row[]): Course[] {
     industrySlug: g.industrySlug,
     programSlug: g.programSlug,
     status: opts?.status ?? "coming-soon",
+    origin: "proposed",
     href: opts?.href ?? null,
     level: null,
     format: null,

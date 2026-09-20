@@ -12,6 +12,7 @@ export const SORT_OPTIONS: { value: SortKey; label: string }[] = [
 export const STATUS_LABEL: Record<CatalogueStatus, string> = {
   active: "Active",
   "coming-soon": "Coming Soon",
+  planned: "Planned",
 };
 
 export interface Filters {
@@ -115,7 +116,8 @@ export function filterCourses(
     .map(({ course }) => course);
 }
 
-const statusRank = (c: CatalogueCourse) => (c.status === "active" ? 0 : 1);
+const STATUS_RANK: Record<CatalogueStatus, number> = { active: 0, "coming-soon": 1, planned: 2 };
+const statusRank = (c: CatalogueCourse) => STATUS_RANK[c.status];
 
 export function sortCourses(list: CatalogueCourse[], sort: SortKey): CatalogueCourse[] {
   const out = [...list];

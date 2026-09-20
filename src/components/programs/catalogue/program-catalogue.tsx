@@ -223,6 +223,19 @@ export function ProgramCatalogue({ courses }: { courses: CatalogueCourse[] }) {
   const searchId = useId();
   const sortId = useId();
 
+  // Follow the URL when it changes from outside (e.g. a "Browse courses" link in the roadmap).
+  // Our own replaceState below produces URLs equal to the current filters, so those are ignored.
+  const urlQs = searchParams.toString();
+  const [seenQs, setSeenQs] = useState(urlQs);
+  if (urlQs !== seenQs) {
+    setSeenQs(urlQs);
+    const next = parseFilters(new URLSearchParams(urlQs), facets);
+    if (serializeFilters(next) !== serializeFilters(filters)) {
+      setFilters(next);
+      setVisibleCount(CATALOGUE_PAGE_SIZE);
+    }
+  }
+
   const deferredQ = useDeferredValue(filters.q);
   const results = useMemo(
     () => sortCourses(filterCourses(index, { ...filters, q: deferredQ }), filters.sort),

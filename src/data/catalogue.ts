@@ -14,7 +14,8 @@
 //
 // Adding a course = adding one row in course-catalogue.ts. Adding a program or industry = adding one
 // object below. No component changes are needed.
-import { COURSES } from "./course-catalogue";
+import { COURSES as CURRENT_COURSES } from "./course-catalogue";
+import { FUTURE_COURSES, FUTURE_INDUSTRIES, FUTURE_PROGRAMS } from "./future-catalogue";
 
 export type ProgramIcon =
   | "megaphone"
@@ -52,18 +53,35 @@ export type ProgramIcon =
   | "package"
   | "flame"
   | "sun"
-  | "bot";
+  | "bot"
+  | "shield"
+  | "lock"
+  | "terminal"
+  | "database"
+  | "cloud"
+  | "network"
+  | "blocks"
+  | "server";
 
 export type ProgramTone = "blue" | "green" | "navy";
 
-/** "coming-soon" entries are listed and searchable but have no detail page to link to yet. */
-export type CatalogueStatus = "active" | "coming-soon";
+/**
+ * "active"       = live, has a detail page.
+ * "coming-soon"  = a committed future offering, listed and searchable but not linked.
+ * "planned"      = an earlier-stage proposal, listed and searchable but not linked.
+ * Only current, source-backed records may be "active".
+ */
+export type CatalogueStatus = "active" | "coming-soon" | "planned";
+
+/** "source" = named in the source documents. "proposed" = a strategic proposal, not from the source. */
+export type CatalogueOrigin = "source" | "proposed";
 
 export interface Industry {
   slug: string;
   name: string;
   description: string;
   status: CatalogueStatus;
+  origin: CatalogueOrigin;
   order: number;
 }
 
@@ -75,6 +93,7 @@ export interface Program {
   status: CatalogueStatus;
   /** Existing program-level overview page, if there is one. Not a course page. */
   href: string | null;
+  origin: CatalogueOrigin;
   order: number;
 }
 
@@ -88,8 +107,9 @@ export interface Course {
   programSlug: string;
   description: string;
   status: CatalogueStatus;
+  origin: CatalogueOrigin;
   /**
-   * Detail page. Required when active, must be null when coming-soon (nothing is linked).
+   * Detail page. Required when active, must be null otherwise (nothing is linked).
    * Until /courses/[slug] pages exist, TG GameForge points at its existing page.
    */
   href: string | null;
@@ -157,14 +177,29 @@ export const TOPIC_VOCABULARY = [
   "Lead Generation",
   "E-commerce",
   "Freelancing",
+  "Data Analytics",
+  "Data Science",
+  "Machine Learning",
+  "Python",
+  "SQL",
+  "Cybersecurity",
+  "Ethical Hacking",
+  "Cloud",
+  "DevOps",
+  "Blockchain",
+  "Web3",
+  "Web Development",
+  "Mobile Development",
+  "UI/UX Design",
 ] as const;
 
-export const INDUSTRIES: Industry[] = [
+const CURRENT_INDUSTRIES: Industry[] = [
   {
     slug: "digital-marketing",
     name: "Digital Marketing",
     description: "Learning in digital marketing.",
     status: "active",
+    origin: "source",
     order: 1,
   },
   {
@@ -172,11 +207,12 @@ export const INDUSTRIES: Industry[] = [
     name: "Game Development",
     description: "Learning in game development.",
     status: "active",
+    origin: "source",
     order: 2,
   },
 ];
 
-export const PROGRAMS: Program[] = [
+const CURRENT_PROGRAMS: Program[] = [
   {
     slug: "digital-marketing",
     name: "Digital Marketing Professional Program",
@@ -184,6 +220,7 @@ export const PROGRAMS: Program[] = [
     description: "Learn how brands grow in the digital world through practical, hands-on work.",
     status: "active",
     href: "/programs/tg-digital-marketing",
+    origin: "source",
     order: 1,
   },
   {
@@ -193,9 +230,15 @@ export const PROGRAMS: Program[] = [
     description: "Learn to turn ideas into interactive experiences through practical project work.",
     status: "active",
     href: null,
+    origin: "source",
     order: 2,
   },
 ];
+
+// Current offerings first, then the future roadmap (future-catalogue.ts: coming-soon / planned only).
+export const INDUSTRIES: Industry[] = [...CURRENT_INDUSTRIES, ...FUTURE_INDUSTRIES];
+export const PROGRAMS: Program[] = [...CURRENT_PROGRAMS, ...FUTURE_PROGRAMS];
+const COURSES: Course[] = [...CURRENT_COURSES, ...FUTURE_COURSES];
 
 const industryBySlug = new Map(INDUSTRIES.map((i) => [i.slug, i]));
 const programBySlug = new Map(PROGRAMS.map((p) => [p.slug, p]));
@@ -216,6 +259,8 @@ function resolve(course: Course): CatalogueCourse {
 export const COURSE_CATALOGUE: CatalogueCourse[] = COURSES.map(resolve);
 
 // Fails the build/dev server loudly if the catalogue hierarchy or data is malformed.
+const STATUSES: CatalogueStatus[] = ["active", "coming-soon", "planned"];
+
 function validateCatalogue() {
   const fail = (msg: string): never => {
     throw new Error(`[catalogue] ${msg}`);
@@ -227,6 +272,10 @@ function validateCatalogue() {
       seen.add(v);
     }
   };
+  for (const x of [...INDUSTRIES, ...PROGRAMS]) {
+    if (!STATUSES.includes(x.status)) fail(`"${x.slug}" has an invalid status`);
+    if (x.status === "active" && x.origin !== "source") fail(`"${x.slug}" cannot be active: it is not source-backed`);
+  }
   unique("industry slug", INDUSTRIES.map((i) => i.slug));
   unique("program slug", PROGRAMS.map((p) => p.slug));
   unique("course slug", COURSES.map((c) => c.slug));
@@ -243,9 +292,11 @@ function validateCatalogue() {
     if (!program) fail(`course "${c.slug}" is an orphan (unknown program)`);
     if (program?.industrySlug !== c.industrySlug) fail(`course "${c.slug}" industry does not match its program's industry`);
     if (!c.title.trim() || !c.description.trim()) fail(`course "${c.slug}" needs a title and description`);
-    if (c.status !== "active" && c.status !== "coming-soon") fail(`course "${c.slug}" has an invalid status`);
+    if (!STATUSES.includes(c.status)) fail(`course "${c.slug}" has an invalid status`);
     if (c.status === "active" && !c.href) fail(`active course "${c.slug}" needs an href`);
-    if (c.status === "coming-soon" && c.href) fail(`coming-soon course "${c.slug}" must not have an href`);
+    if (c.status !== "active" && c.href) fail(`${c.status} course "${c.slug}" must not have an href`);
+    if (c.status === "active" && (c.origin !== "source" || program?.status !== "active"))
+      fail(`course "${c.slug}" cannot be active: only source-backed courses of an active program can`);
     for (const t of c.tags)
       if (!(TOPIC_VOCABULARY as readonly string[]).includes(t)) fail(`course "${c.slug}" uses unknown topic "${t}"`);
   }
