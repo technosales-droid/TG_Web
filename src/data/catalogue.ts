@@ -3,11 +3,14 @@
 // Three levels:  INDUSTRY  ->  PROGRAM  ->  COURSE
 //   Industry = the broad field         (e.g. "Game Development")
 //   Program  = the umbrella inside it  (e.g. "Game Development & Design")
-//   Course   = the enrolment offering  (e.g. "TG Unreal Development") - what a student chooses
+//   Course   = the enrolment offering  (e.g. "TG Unreal Studio") - what a student chooses
 //
-// A course stores only its `programSlug`; the program stores only its `industrySlug`. Everything
-// else (industry name, program name, ...) is derived in COURSE_CATALOGUE, so parent data is never
-// repeated. The slug of each entity is its id.
+// A course names its `programSlug` and `industrySlug`; the program names its `industrySlug`. The
+// validation at the bottom checks the two agree, and the display names (industry, program) are
+// resolved in COURSE_CATALOGUE. The slug of each entity is its id.
+//
+// Source of truth for current offerings: Techno Gurukul Web copy (Digital Marketing) and
+// Techno-Gurukul-Game-Development-Programs. Do not add offerings the sources do not support.
 //
 // Adding a course = adding one row in course-catalogue.ts. Adding a program or industry = adding one
 // object below. No component changes are needed.
@@ -79,6 +82,9 @@ export interface Course {
   /** Unique; also the future route segment: /courses/[slug]. */
   slug: string;
   title: string;
+  /** Source display line under the title, e.g. "Unity Game Development". */
+  subtitle?: string;
+  industrySlug: string;
   programSlug: string;
   description: string;
   status: CatalogueStatus;
@@ -91,8 +97,11 @@ export interface Course {
   level: string | null;
   /** e.g. "Offline / In-Person", or null when not stated. */
   format: string | null;
-  /** Reserved for the future course page; leave unset until the value is approved. */
+  /** Only where the source states it for this specific course. Not shown on cards. */
   duration?: string;
+  /** Software the source names for this course. Searchable; not shown on cards. */
+  tools?: string[];
+  /** Not in the sources yet: leave unset until approved. */
   fee?: string;
   faculty?: string[];
   /** Shown on the card (max 4) and used by the topic filter. Must be in TOPIC_VOCABULARY. */
@@ -144,6 +153,10 @@ export const TOPIC_VOCABULARY = [
   "VFX",
   "Cinematics",
   "Game AI",
+  "Website",
+  "Lead Generation",
+  "E-commerce",
+  "Freelancing",
 ] as const;
 
 export const INDUSTRIES: Industry[] = [
@@ -166,7 +179,7 @@ export const INDUSTRIES: Industry[] = [
 export const PROGRAMS: Program[] = [
   {
     slug: "digital-marketing",
-    name: "Digital Marketing",
+    name: "Digital Marketing Professional Program",
     industrySlug: "digital-marketing",
     description: "Learn how brands grow in the digital world through practical, hands-on work.",
     status: "active",
@@ -189,8 +202,8 @@ const programBySlug = new Map(PROGRAMS.map((p) => [p.slug, p]));
 
 function resolve(course: Course): CatalogueCourse {
   const program = programBySlug.get(course.programSlug);
-  const industry = program && industryBySlug.get(program.industrySlug);
-  if (!program || !industry) throw new Error(`[catalogue] course "${course.slug}" has no valid program/industry`);
+  const industry = industryBySlug.get(course.industrySlug);
+  if (!program || !industry || program.industrySlug !== industry.slug) throw new Error(`[catalogue] course "${course.slug}" has no valid program/industry`);
   return {
     ...course,
     programName: program.name,
@@ -217,7 +230,7 @@ function validateCatalogue() {
   unique("industry slug", INDUSTRIES.map((i) => i.slug));
   unique("program slug", PROGRAMS.map((p) => p.slug));
   unique("course slug", COURSES.map((c) => c.slug));
-  unique("course title", COURSES.map((c) => c.title.toLowerCase()));
+  unique("course title within a program", COURSES.map((c) => `${c.programSlug}:${c.title.toLowerCase()}`));
 
   for (const p of PROGRAMS) {
     if (!industryBySlug.has(p.industrySlug)) fail(`program "${p.slug}" has an invalid industry`);
@@ -226,7 +239,9 @@ function validateCatalogue() {
   for (const i of INDUSTRIES) if (!PROGRAMS.some((p) => p.industrySlug === i.slug)) fail(`industry "${i.slug}" has no programs`);
 
   for (const c of COURSES) {
-    if (!programBySlug.has(c.programSlug)) fail(`course "${c.slug}" is an orphan (unknown program)`);
+    const program = programBySlug.get(c.programSlug);
+    if (!program) fail(`course "${c.slug}" is an orphan (unknown program)`);
+    if (program?.industrySlug !== c.industrySlug) fail(`course "${c.slug}" industry does not match its program's industry`);
     if (!c.title.trim() || !c.description.trim()) fail(`course "${c.slug}" needs a title and description`);
     if (c.status !== "active" && c.status !== "coming-soon") fail(`course "${c.slug}" has an invalid status`);
     if (c.status === "active" && !c.href) fail(`active course "${c.slug}" needs an href`);

@@ -102,7 +102,7 @@ export function ProgramCard({
   course: CatalogueCourse;
   priority?: boolean;
 }) {
-  const { title, description, tags, image, visual, href, industryName, programName } = course;
+  const { title, description, tags, image, visual, href, industryName, programName, subtitle } = course;
   const soon = course.status === "coming-soon";
   const meta = [course.level, course.format].filter(Boolean) as string[];
   // First icon is the large centre mark; the others flank it.
@@ -167,6 +167,7 @@ export function ProgramCard({
         <h3 className="mt-2 line-clamp-2 text-xl font-semibold tracking-tight text-foreground">
           {title}
         </h3>
+        {subtitle && <p className="mt-1 line-clamp-1 text-sm font-medium text-foreground/70">{subtitle}</p>}
         <p className="mt-2 line-clamp-3 text-base leading-relaxed text-muted-foreground">
           {description}
         </p>

@@ -86,7 +86,7 @@ export function buildFacets(courses: CatalogueCourse[]): Facets {
 }
 
 export function searchText(c: CatalogueCourse): string {
-  return [c.title, c.programName, c.industryName, c.level, c.format, c.description, ...c.tags, ...(c.keywords ?? [])]
+  return [c.title, c.subtitle, c.programName, c.industryName, c.level, c.format, c.description, ...c.tags, ...(c.keywords ?? []), ...(c.tools ?? [])]
     .filter(Boolean)
     .join(" ")
     .toLowerCase();

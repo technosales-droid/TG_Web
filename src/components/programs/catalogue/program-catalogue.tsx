@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ArrowUpRight, ChevronDown, Search, SearchX, SlidersHorizontal, X } from "lucide-react";
 import { cn } from "cn";
-import { CATALOGUE_PAGE_SIZE, PROGRAMS, type CatalogueCourse } from "@/data/catalogue";
+import { CATALOGUE_PAGE_SIZE, INDUSTRIES, PROGRAMS, type CatalogueCourse } from "@/data/catalogue";
 import {
   EMPTY_FILTERS,
   SORT_OPTIONS,
@@ -230,8 +230,14 @@ export function ProgramCatalogue({ courses }: { courses: CatalogueCourse[] }) {
   );
   const shown = results.slice(0, visibleCount);
   const active = activeFilterCount(filters);
-  const selectedProgram = PROGRAMS.find((p) => p.name === filters.program);
-  const programOverview = selectedProgram?.href ? { name: selectedProgram.name, href: selectedProgram.href } : null;
+  // The program in scope: the chosen one, or the only program of the chosen industry.
+  const industrySlug = INDUSTRIES.find((i) => i.name === filters.industry)?.slug;
+  const scoped = filters.program
+    ? PROGRAMS.filter((p) => p.name === filters.program)
+    : industrySlug
+      ? PROGRAMS.filter((p) => p.industrySlug === industrySlug)
+      : [];
+  const programOverview = scoped.length === 1 && scoped[0].href ? { name: scoped[0].name, href: scoped[0].href } : null;
   const filtering = active > 0 || filters.q.trim() !== "";
 
   const update: Update = (patch) => {
@@ -373,7 +379,7 @@ export function ProgramCatalogue({ courses }: { courses: CatalogueCourse[] }) {
             href={programOverview.href}
             className={cn("inline-flex w-fit items-center gap-1 text-sm font-medium text-primary underline-offset-4 hover:underline", FOCUS)}
           >
-            View the {programOverview.name} program overview
+            View the {programOverview.name} overview
             <ArrowUpRight className="size-4" aria-hidden="true" />
           </Link>
         )}
