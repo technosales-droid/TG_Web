@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { HowWeTeachSection } from "@/components/learning/how-we-teach-section";
 import { LearningHub } from "@/components/learning/learning-hub";
+import { LearningProjectsPreview } from "@/components/learning/learning-projects-preview";
 import { LearningHero } from "@/components/learning/learning-hero";
 
 export const metadata: Metadata = {
@@ -15,6 +16,7 @@ export default function Page() {
       <LearningHero />
       <HowWeTeachSection />
       <LearningHub />
+      <LearningProjectsPreview />
     </main>
   );
 }
