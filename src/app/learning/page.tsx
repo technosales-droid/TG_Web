@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { HowWeTeachSection } from "@/components/learning/how-we-teach-section";
 import { LearningHub } from "@/components/learning/learning-hub";
+import { LearningOutcomes } from "@/components/learning/learning-outcomes";
 import { LearningProjectsPreview } from "@/components/learning/learning-projects-preview";
 import { LearningHero } from "@/components/learning/learning-hero";
 
@@ -17,6 +18,7 @@ export default function Page() {
       <HowWeTeachSection />
       <LearningHub />
       <LearningProjectsPreview />
+      <LearningOutcomes />
     </main>
   );
 }
