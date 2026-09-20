@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { HowWeTeachSection } from "@/components/learning/how-we-teach-section";
 import { LearningHero } from "@/components/learning/learning-hero";
 
 export const metadata: Metadata = {
@@ -11,6 +12,7 @@ export default function Page() {
   return (
     <main>
       <LearningHero />
+      <HowWeTeachSection />
     </main>
   );
 }
