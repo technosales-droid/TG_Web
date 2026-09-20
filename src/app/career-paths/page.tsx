@@ -1,5 +1,16 @@
-import { PageShell } from "@/components/page-shell";
+import type { Metadata } from "next";
+import { CareerPathsHero } from "@/components/career-paths/career-paths-hero";
+
+export const metadata: Metadata = {
+  title: "Digital Marketing & Game Development Career Paths | TechnoGurukul",
+  description:
+    "Explore career directions across digital marketing and game development. Build practical skills, projects and portfolio evidence with TechnoGurukul.",
+};
 
 export default function Page() {
-  return <PageShell title="Career Paths" />;
+  return (
+    <main>
+      <CareerPathsHero />
+    </main>
+  );
 }
