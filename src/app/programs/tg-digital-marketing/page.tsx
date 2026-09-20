@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { DigitalMarketingAudience } from "@/components/programs/digital-marketing-audience";
 import { DigitalMarketingCareers } from "@/components/programs/digital-marketing-careers";
 import { DigitalMarketingCurriculum } from "@/components/programs/digital-marketing-curriculum";
 import { DigitalMarketingPractical } from "@/components/programs/digital-marketing-practical";
@@ -26,6 +27,7 @@ export default function Page() {
       <DigitalMarketingCurriculum />
       <DigitalMarketingPractical />
       <DigitalMarketingCareers />
+      <DigitalMarketingAudience />
     </main>
   );
 }
