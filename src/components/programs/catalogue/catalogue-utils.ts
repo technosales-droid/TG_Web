@@ -1,4 +1,4 @@
-import type { CatalogueCourse, CatalogueStatus } from "@/data/catalogue";
+import type { CatalogueEntry, CatalogueStatus } from "@/data/catalogue";
 
 export type SortKey = "featured" | "newest" | "az" | "za";
 
@@ -69,11 +69,13 @@ function count(values: (string | null)[]): FacetOption[] {
   return [...map].map(([value, n]) => ({ value, count: n }));
 }
 
-export function buildFacets(courses: CatalogueCourse[]): Facets {
+export function buildFacets(courses: CatalogueEntry[]): Facets {
   const alpha = (a: FacetOption, b: FacetOption) => a.value.localeCompare(b.value);
   const rank = (order: string[]) => (a: FacetOption, b: FacetOption) =>
     (order.indexOf(a.value) === -1 ? 99 : order.indexOf(a.value)) -
       (order.indexOf(b.value) === -1 ? 99 : order.indexOf(b.value)) || alpha(a, b);
+  const currentTags = new Map<string, number>();
+  for (const c of courses) if (c.industryStatus === "active") for (const t of c.tags) currentTags.set(t, (currentTags.get(t) ?? 0) + 1);
   const industryOf = new Map(courses.map((c) => [c.programName, c.industryName]));
   return {
     // Industries and programs keep catalogue order (data order), not alphabetical.
@@ -82,11 +84,15 @@ export function buildFacets(courses: CatalogueCourse[]): Facets {
     levels: count(courses.map((c) => c.level)).sort(rank(LEVEL_ORDER)),
     formats: count(courses.map((c) => c.format)).sort(alpha),
     statuses: count(courses.map((c) => STATUS_LABEL[c.status])).sort(rank(STATUS_ORDER)),
-    tags: count(courses.flatMap((c) => c.tags)).sort((a, b) => b.count - a.count || alpha(a, b)),
+    // Topics of current offerings come first, so the popular topics reflect what is available now.
+    tags: count(courses.flatMap((c) => c.tags))
+      .map((o) => ({ ...o, current: currentTags.get(o.value) ?? 0 }))
+      .sort((a, b) => b.current - a.current || b.count - a.count || alpha(a, b))
+      .map(({ value, count: n }) => ({ value, count: n })),
   };
 }
 
-export function searchText(c: CatalogueCourse): string {
+export function searchText(c: CatalogueEntry): string {
   return [c.title, c.subtitle, c.programName, c.industryName, c.level, c.format, c.description, ...c.tags, ...(c.keywords ?? []), ...(c.tools ?? [])]
     .filter(Boolean)
     .join(" ")
@@ -94,17 +100,21 @@ export function searchText(c: CatalogueCourse): string {
 }
 
 export function filterCourses(
-  index: { course: CatalogueCourse; haystack: string }[],
+  index: { course: CatalogueEntry; haystack: string }[],
   f: Filters
-): CatalogueCourse[] {
+): CatalogueEntry[] {
   // Each term must match at the start of a word, so "ai" finds AI but not "campaigns".
   const terms = f.q
     .toLowerCase()
     .split(/\s+/)
     .filter(Boolean)
     .map((t) => new RegExp(`(^|[^a-z0-9])${t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
+  // With no search and no filters the catalogue lists current industries only; future industries
+  // are shown under "What's Coming Next" and appear here once you search or filter.
+  const currentOnly = terms.length === 0 && activeFilterCount(f) === 0;
   return index
     .filter(({ course: c, haystack }) => {
+      if (currentOnly && c.industryStatus !== "active") return false;
       if (f.industry && c.industryName !== f.industry) return false;
       if (f.program && c.programName !== f.program) return false;
       if (f.level && c.level !== f.level) return false;
@@ -117,9 +127,9 @@ export function filterCourses(
 }
 
 const STATUS_RANK: Record<CatalogueStatus, number> = { active: 0, "coming-soon": 1, planned: 2 };
-const statusRank = (c: CatalogueCourse) => STATUS_RANK[c.status];
+const statusRank = (c: CatalogueEntry) => STATUS_RANK[c.status];
 
-export function sortCourses(list: CatalogueCourse[], sort: SortKey): CatalogueCourse[] {
+export function sortCourses(list: CatalogueEntry[], sort: SortKey): CatalogueEntry[] {
   const out = [...list];
   switch (sort) {
     case "az":

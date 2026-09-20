@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { CATALOGUE_PAGE_SIZE, COURSE_CATALOGUE } from "@/data/catalogue";
+import { CATALOGUE_PAGE_SIZE, CATALOGUE } from "@/data/catalogue";
 import { sortCourses } from "./catalogue-utils";
 import { ProgramCard } from "./program-card";
 import { ProgramCatalogue } from "./program-catalogue";
@@ -29,7 +29,7 @@ export function CatalogueSection() {
           <Suspense
             fallback={
               <ul className="grid gap-5 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-                {sortCourses(COURSE_CATALOGUE, "featured").slice(0, CATALOGUE_PAGE_SIZE).map((p) => (
+                {sortCourses(CATALOGUE.filter((c) => c.industryStatus === "active"), "featured").slice(0, CATALOGUE_PAGE_SIZE).map((p) => (
                   <li key={p.slug} className="min-w-0">
                     <ProgramCard course={p} />
                   </li>
@@ -37,7 +37,7 @@ export function CatalogueSection() {
               </ul>
             }
           >
-            <ProgramCatalogue courses={COURSE_CATALOGUE} />
+            <ProgramCatalogue courses={CATALOGUE} />
           </Suspense>
         </div>
       </div>

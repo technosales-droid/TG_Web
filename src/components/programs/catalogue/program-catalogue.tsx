@@ -1,11 +1,10 @@
 "use client";
 
 import { useDeferredValue, useEffect, useId, useMemo, useRef, useState } from "react";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ArrowUpRight, ChevronDown, Search, SearchX, SlidersHorizontal, X } from "lucide-react";
+import { ChevronDown, Search, SearchX, SlidersHorizontal, X } from "lucide-react";
 import { cn } from "cn";
-import { CATALOGUE_PAGE_SIZE, INDUSTRIES, PROGRAMS, type CatalogueCourse } from "@/data/catalogue";
+import { CATALOGUE_PAGE_SIZE, type CatalogueEntry } from "@/data/catalogue";
 import {
   EMPTY_FILTERS,
   SORT_OPTIONS,
@@ -212,7 +211,7 @@ function ActiveChips({ filters, update, clearAll }: { filters: Filters; update: 
   );
 }
 
-export function ProgramCatalogue({ courses }: { courses: CatalogueCourse[] }) {
+export function ProgramCatalogue({ courses }: { courses: CatalogueEntry[] }) {
   const searchParams = useSearchParams();
   const facets = useMemo(() => buildFacets(courses), [courses]);
   const index = useMemo(() => courses.map((course) => ({ course, haystack: searchText(course) })), [courses]);
@@ -243,14 +242,6 @@ export function ProgramCatalogue({ courses }: { courses: CatalogueCourse[] }) {
   );
   const shown = results.slice(0, visibleCount);
   const active = activeFilterCount(filters);
-  // The program in scope: the chosen one, or the only program of the chosen industry.
-  const industrySlug = INDUSTRIES.find((i) => i.name === filters.industry)?.slug;
-  const scoped = filters.program
-    ? PROGRAMS.filter((p) => p.name === filters.program)
-    : industrySlug
-      ? PROGRAMS.filter((p) => p.industrySlug === industrySlug)
-      : [];
-  const programOverview = scoped.length === 1 && scoped[0].href ? { name: scoped[0].name, href: scoped[0].href } : null;
   const filtering = active > 0 || filters.q.trim() !== "";
 
   const update: Update = (patch) => {
@@ -269,7 +260,11 @@ export function ProgramCatalogue({ courses }: { courses: CatalogueCourse[] }) {
     window.history.replaceState(window.history.state, "", url);
   }, [filters]);
 
-  const noun = results.length === 1 ? "course" : "courses";
+  // Count wording follows what is listed: courses, programs (a program with no courses), or both.
+  const kinds = new Set(results.map((p) => p.kind));
+  const one = results.length === 1;
+  const noun =
+    kinds.size > 1 ? "programs & courses" : kinds.has("program") ? (one ? "program" : "programs") : one ? "course" : "courses";
   const countText =
     results.length === 0
       ? "No results found"
@@ -387,15 +382,6 @@ export function ProgramCatalogue({ courses }: { courses: CatalogueCourse[] }) {
       {/* Active filters, count and sort */}
       <div className="mt-5 grid gap-4">
         <ActiveChips filters={filters} update={update} clearAll={clearAll} />
-        {programOverview && (
-          <Link
-            href={programOverview.href}
-            className={cn("inline-flex w-fit items-center gap-1 text-sm font-medium text-primary underline-offset-4 hover:underline", FOCUS)}
-          >
-            View the {programOverview.name} overview
-            <ArrowUpRight className="size-4" aria-hidden="true" />
-          </Link>
-        )}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p role="status" aria-live="polite" className="text-sm font-medium text-muted-foreground sm:text-base">
             {countText}
@@ -460,7 +446,7 @@ export function ProgramCatalogue({ courses }: { courses: CatalogueCourse[] }) {
           <span className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
             <SearchX className="size-7" aria-hidden="true" />
           </span>
-          <h3 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">No courses found.</h3>
+          <h3 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">Nothing found.</h3>
           <p className="mt-2 max-w-md text-base text-muted-foreground">
             Try adjusting your search or clearing some filters.
           </p>
