@@ -1,20 +1,21 @@
 "use client";
 
 import { useDeferredValue, useEffect, useId, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ChevronDown, Search, SearchX, SlidersHorizontal, X } from "lucide-react";
+import { ArrowUpRight, ChevronDown, Search, SearchX, SlidersHorizontal, X } from "lucide-react";
 import { cn } from "cn";
-import { CATALOGUE_PAGE_SIZE, type CatalogueProgram } from "@/data/program-catalogue";
+import { CATALOGUE_PAGE_SIZE, PROGRAMS, type CatalogueCourse } from "@/data/catalogue";
 import {
   EMPTY_FILTERS,
   SORT_OPTIONS,
   activeFilterCount,
   buildFacets,
-  filterPrograms,
+  filterCourses,
   parseFilters,
   searchText,
   serializeFilters,
-  sortPrograms,
+  sortCourses,
   type Facets,
   type FacetOption,
   type Filters,
@@ -94,26 +95,27 @@ function FilterPanel({ filters, facets, update }: { filters: Filters; facets: Fa
   const uid = useId();
   const [showAllTopics, setShowAllTopics] = useState(false);
   const topics = showAllTopics ? facets.tags : facets.tags.slice(0, TOPIC_LIMIT);
-  const allSelects: { key: "parent" | "level" | "format" | "type"; label: string; options: FacetOption[] }[] = [
-    { key: "parent", label: "Program", options: facets.parents },
+  const programOptions = filters.industry ? facets.programs.filter((o) => o.industry === filters.industry) : facets.programs;
+  const allSelects: { key: "program" | "level" | "format" | "status"; label: string; options: FacetOption[] }[] = [
+    { key: "program", label: "Program", options: programOptions },
     { key: "level", label: "Level", options: facets.levels },
     { key: "format", label: "Format", options: facets.formats },
-    { key: "type", label: "Type", options: facets.types },
+    { key: "status", label: "Status", options: facets.statuses },
   ];
   // A filter with fewer than two real values is meaningless, so it stays hidden until data supports it.
   const selects = allSelects.filter((s) => s.options.length >= 2);
 
   return (
     <div className="grid gap-5">
-      {facets.categories.length >= 2 && (
-        <div role="group" aria-label="Category">
-          <p className="mb-2 text-xs font-semibold tracking-widest text-muted-foreground uppercase">Category</p>
+      {facets.industries.length >= 2 && (
+        <div role="group" aria-label="Industry">
+          <p className="mb-2 text-xs font-semibold tracking-widest text-muted-foreground uppercase">Industry</p>
           <div className="flex flex-wrap gap-2">
-            <Pill active={filters.category === null} onClick={() => update({ category: null })}>
+            <Pill active={filters.industry === null} onClick={() => update({ industry: null })}>
               All
             </Pill>
-            {facets.categories.map((c) => (
-              <Pill key={c.value} active={filters.category === c.value} onClick={() => update({ category: c.value })}>
+            {facets.industries.map((c) => (
+              <Pill key={c.value} active={filters.industry === c.value} onClick={() => update({ industry: c.value })}>
                 {c.value}
               </Pill>
             ))}
@@ -172,11 +174,11 @@ function FilterPanel({ filters, facets, update }: { filters: Filters; facets: Fa
 
 function ActiveChips({ filters, update, clearAll }: { filters: Filters; update: Update; clearAll: () => void }) {
   const chips: { key: string; label: string; remove: () => void }[] = [];
-  if (filters.category) chips.push({ key: "category", label: filters.category, remove: () => update({ category: null }) });
+  if (filters.industry) chips.push({ key: "industry", label: `Industry: ${filters.industry}`, remove: () => update({ industry: null }) });
   if (filters.level) chips.push({ key: "level", label: filters.level, remove: () => update({ level: null }) });
   if (filters.format) chips.push({ key: "format", label: filters.format, remove: () => update({ format: null }) });
-  if (filters.parent) chips.push({ key: "parent", label: filters.parent, remove: () => update({ parent: null }) });
-  if (filters.type) chips.push({ key: "type", label: filters.type, remove: () => update({ type: null }) });
+  if (filters.program) chips.push({ key: "program", label: `Program: ${filters.program}`, remove: () => update({ program: null }) });
+  if (filters.status) chips.push({ key: "status", label: filters.status, remove: () => update({ status: null }) });
   for (const t of filters.tags)
     chips.push({ key: `tag-${t}`, label: t, remove: () => update({ tags: filters.tags.filter((x) => x !== t) }) });
   if (chips.length === 0) return null;
@@ -210,10 +212,10 @@ function ActiveChips({ filters, update, clearAll }: { filters: Filters; update: 
   );
 }
 
-export function ProgramCatalogue({ programs }: { programs: CatalogueProgram[] }) {
+export function ProgramCatalogue({ courses }: { courses: CatalogueCourse[] }) {
   const searchParams = useSearchParams();
-  const facets = useMemo(() => buildFacets(programs), [programs]);
-  const index = useMemo(() => programs.map((program) => ({ program, haystack: searchText(program) })), [programs]);
+  const facets = useMemo(() => buildFacets(courses), [courses]);
+  const index = useMemo(() => courses.map((course) => ({ course, haystack: searchText(course) })), [courses]);
 
   const [filters, setFilters] = useState<Filters>(() => parseFilters(new URLSearchParams(searchParams.toString()), facets));
   const [visibleCount, setVisibleCount] = useState(CATALOGUE_PAGE_SIZE);
@@ -223,15 +225,18 @@ export function ProgramCatalogue({ programs }: { programs: CatalogueProgram[] })
 
   const deferredQ = useDeferredValue(filters.q);
   const results = useMemo(
-    () => sortPrograms(filterPrograms(index, { ...filters, q: deferredQ }), filters.sort),
+    () => sortCourses(filterCourses(index, { ...filters, q: deferredQ }), filters.sort),
     [index, filters, deferredQ]
   );
   const shown = results.slice(0, visibleCount);
   const active = activeFilterCount(filters);
+  const selectedProgram = PROGRAMS.find((p) => p.name === filters.program);
+  const programOverview = selectedProgram?.href ? { name: selectedProgram.name, href: selectedProgram.href } : null;
   const filtering = active > 0 || filters.q.trim() !== "";
 
   const update: Update = (patch) => {
-    setFilters((f) => ({ ...f, ...patch }));
+    // Changing the industry clears a program that no longer belongs to it.
+    setFilters((f) => ({ ...f, ...("industry" in patch && !("program" in patch) ? { program: null } : {}), ...patch }));
     setVisibleCount(CATALOGUE_PAGE_SIZE);
   };
   const clearAll = () => {
@@ -245,15 +250,12 @@ export function ProgramCatalogue({ programs }: { programs: CatalogueProgram[] })
     window.history.replaceState(window.history.state, "", url);
   }, [filters]);
 
-  const kinds = new Set(results.map((p) => p.type));
-  const only = kinds.size === 1 ? [...kinds][0] : null;
-  const one = results.length === 1;
-  const noun = only === "Course" ? (one ? "course" : "courses") : only === "Program" ? (one ? "program" : "programs") : "programs & courses";
+  const noun = results.length === 1 ? "course" : "courses";
   const countText =
     results.length === 0
       ? "No results found"
       : `Showing ${shown.length} of ${results.length} ${noun}${
-          filtering && results.length !== programs.length ? ` (${programs.length} in catalogue)` : ""
+          filtering && results.length !== courses.length ? ` (${courses.length} in catalogue)` : ""
         }`;
 
   return (
@@ -366,6 +368,15 @@ export function ProgramCatalogue({ programs }: { programs: CatalogueProgram[] })
       {/* Active filters, count and sort */}
       <div className="mt-5 grid gap-4">
         <ActiveChips filters={filters} update={update} clearAll={clearAll} />
+        {programOverview && (
+          <Link
+            href={programOverview.href}
+            className={cn("inline-flex w-fit items-center gap-1 text-sm font-medium text-primary underline-offset-4 hover:underline", FOCUS)}
+          >
+            View the {programOverview.name} program overview
+            <ArrowUpRight className="size-4" aria-hidden="true" />
+          </Link>
+        )}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p role="status" aria-live="polite" className="text-sm font-medium text-muted-foreground sm:text-base">
             {countText}
@@ -405,7 +416,7 @@ export function ProgramCatalogue({ programs }: { programs: CatalogueProgram[] })
           <ul className="mt-5 grid gap-5 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {shown.map((p, i) => (
               <li key={p.slug} className="min-w-0">
-                <ProgramCard program={p} priority={i < 3} />
+                <ProgramCard course={p} priority={i < 3} />
               </li>
             ))}
           </ul>
@@ -430,7 +441,7 @@ export function ProgramCatalogue({ programs }: { programs: CatalogueProgram[] })
           <span className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
             <SearchX className="size-7" aria-hidden="true" />
           </span>
-          <h3 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">No courses or programs found.</h3>
+          <h3 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">No courses found.</h3>
           <p className="mt-2 max-w-md text-base text-muted-foreground">
             Try adjusting your search or clearing some filters.
           </p>

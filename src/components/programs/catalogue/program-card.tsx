@@ -43,10 +43,10 @@ import {
 } from "lucide-react";
 import { cn } from "cn";
 import type {
-  CatalogueProgram,
+  CatalogueCourse,
   ProgramIcon,
   ProgramTone,
-} from "@/data/program-catalogue";
+} from "@/data/catalogue";
 
 const ICONS: Record<ProgramIcon, LucideIcon> = {
   megaphone: Megaphone,
@@ -96,15 +96,15 @@ const TONES: Record<ProgramTone, string> = {
 const MAX_TAGS = 4;
 
 export function ProgramCard({
-  program,
+  course,
   priority = false,
 }: {
-  program: CatalogueProgram;
+  course: CatalogueCourse;
   priority?: boolean;
 }) {
-  const { title, category, description, tags, image, visual, href, type, parentProgram } = program;
-  const soon = program.status === "coming-soon";
-  const meta = [program.level, program.format].filter(Boolean) as string[];
+  const { title, description, tags, image, visual, href, industryName, programName } = course;
+  const soon = course.status === "coming-soon";
+  const meta = [course.level, course.format].filter(Boolean) as string[];
   // First icon is the large centre mark; the others flank it.
   const [main, ...rest] = visual.icons;
   const icons = [rest[0], main, rest[1]].filter((n): n is ProgramIcon => Boolean(n));
@@ -150,7 +150,7 @@ export function ProgramCard({
           </div>
         )}
         <span className="absolute top-4 left-4 rounded-full bg-background/90 px-3 py-1.5 text-xs font-semibold tracking-wide text-foreground uppercase">
-          {type}
+          {industryName}
         </span>
         {soon && (
           <span className="absolute top-4 right-4 inline-flex items-center gap-1.5 rounded-full bg-brand-green px-3 py-1.5 text-xs font-semibold tracking-wide text-white uppercase">
@@ -162,8 +162,7 @@ export function ProgramCard({
 
       <div className="flex flex-1 flex-col p-5 sm:p-6">
         <p className="text-sm font-medium text-primary">
-          {category}
-          {parentProgram && <span className="text-muted-foreground"> · {parentProgram}</span>}
+          {programName}
         </p>
         <h3 className="mt-2 line-clamp-2 text-xl font-semibold tracking-tight text-foreground">
           {title}
@@ -202,7 +201,7 @@ export function ProgramCard({
             href={href}
             className="mt-auto inline-flex items-center gap-1 pt-5 text-base font-medium text-foreground transition-colors duration-300 group-hover:text-primary after:absolute after:inset-0 after:rounded-[1.75rem] focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-ring"
           >
-            Explore Program
+            Explore Course
             <span className="sr-only">: {title}</span>
             <ArrowUpRight
               className="size-4 transition-transform duration-300 motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5"

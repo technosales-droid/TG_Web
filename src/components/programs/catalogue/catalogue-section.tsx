@@ -1,5 +1,6 @@
 import { Suspense } from "react";
-import { CATALOGUE_PAGE_SIZE, PROGRAM_CATALOGUE } from "@/data/program-catalogue";
+import { CATALOGUE_PAGE_SIZE, COURSE_CATALOGUE } from "@/data/catalogue";
+import { sortCourses } from "./catalogue-utils";
 import { ProgramCard } from "./program-card";
 import { ProgramCatalogue } from "./program-catalogue";
 
@@ -20,8 +21,7 @@ export function CatalogueSection() {
             Build Your Path.
           </h2>
           <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Search and filter our practical learning programs, then open a program to see its full
-            details.
+            Browse courses by industry and program. Search by skill, tool or topic to find where to start.
           </p>
         </div>
 
@@ -29,15 +29,15 @@ export function CatalogueSection() {
           <Suspense
             fallback={
               <ul className="grid gap-5 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-                {PROGRAM_CATALOGUE.slice(0, CATALOGUE_PAGE_SIZE).map((p) => (
+                {sortCourses(COURSE_CATALOGUE, "featured").slice(0, CATALOGUE_PAGE_SIZE).map((p) => (
                   <li key={p.slug} className="min-w-0">
-                    <ProgramCard program={p} />
+                    <ProgramCard course={p} />
                   </li>
                 ))}
               </ul>
             }
           >
-            <ProgramCatalogue programs={PROGRAM_CATALOGUE} />
+            <ProgramCatalogue courses={COURSE_CATALOGUE} />
           </Suspense>
         </div>
       </div>

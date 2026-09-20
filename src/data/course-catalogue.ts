@@ -1,22 +1,25 @@
-// Individual courses that sit under a parent program. Every record here is "coming-soon": a catalogue
-// placeholder that is not open yet. Adding a course = adding one row to a group below.
-// When a course is approved: set `href` (e.g. "/courses/seo-fundamentals"), `status: "active"` and
+// Individual courses (the enrolment offerings). Each names its program through `programSlug`;
+// the industry is derived from the program (see catalogue.ts).
+// Every course here is "coming-soon" unless stated: a catalogue entry that is not open yet.
+// Adding a course = adding one row to a group below.
+// When a course is approved: set `status: "active"`, `href` (e.g. "/courses/seo-fundamentals") and
 // optionally `image`. No component changes are needed.
 // `tags` are the browsable topic filters (see TOPIC_VOCABULARY); tools and technical terms go in
 // `keywords`, which are searchable but never shown as filters.
-import type { CatalogueProgram, ProgramIcon, ProgramTone } from "./program-catalogue";
+import type { Course, CatalogueStatus, ProgramIcon, ProgramTone } from "./catalogue";
 
-type ParentKey = "dm" | "forge" | "unity" | "unreal" | "art" | "design" | "anim" | "ai";
+// Groups only decide the program and the fallback visual tone.
+type GroupKey = "dm" | "forge" | "unity" | "unreal" | "art" | "design" | "anim" | "ai";
 
-const PARENTS: Record<ParentKey, { name: string; slug: string; category: string; tone: ProgramTone }> = {
-  dm: { name: "Digital Marketing", slug: "tg-digital-marketing", category: "Digital & Marketing", tone: "blue" },
-  forge: { name: "TG GameForge", slug: "tg-gameforge", category: "Creative Technology", tone: "green" },
-  unity: { name: "TG Unity Studio", slug: "tg-unity-studio", category: "Creative Technology", tone: "navy" },
-  unreal: { name: "TG Unreal Studio", slug: "tg-unreal-studio", category: "Creative Technology", tone: "blue" },
-  art: { name: "TG GameArt Studio", slug: "tg-gameart-studio", category: "Creative Technology", tone: "green" },
-  design: { name: "TG GameDesign Studio", slug: "tg-gamedesign-studio", category: "Creative Technology", tone: "navy" },
-  anim: { name: "TG Game Animation & VFX", slug: "tg-game-animation-vfx", category: "Creative Technology", tone: "blue" },
-  ai: { name: "TG AI for Games", slug: "tg-ai-for-games", category: "Creative Technology", tone: "green" },
+const GROUPS: Record<GroupKey, { programSlug: string; tone: ProgramTone }> = {
+  dm: { programSlug: "digital-marketing", tone: "blue" },
+  forge: { programSlug: "game-development-and-design", tone: "green" },
+  unity: { programSlug: "game-development-and-design", tone: "navy" },
+  unreal: { programSlug: "game-development-and-design", tone: "blue" },
+  art: { programSlug: "game-development-and-design", tone: "green" },
+  design: { programSlug: "game-development-and-design", tone: "navy" },
+  anim: { programSlug: "game-development-and-design", tone: "blue" },
+  ai: { programSlug: "game-development-and-design", tone: "green" },
 };
 
 const toSlug = (s: string) =>
@@ -26,7 +29,6 @@ const toSlug = (s: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 
-// Programs use order 1-2 (active); the coming-soon programs are placed after the courses.
 let order = 2;
 
 type Row = [
@@ -35,35 +37,56 @@ type Row = [
   tags: string[],
   keywords: string[],
   icons: ProgramIcon[],
-  opts?: { slug?: string; featured?: boolean },
+  opts?: { slug?: string; featured?: boolean; order?: number; status?: CatalogueStatus; href?: string },
 ];
 
-function group(parent: ParentKey, rows: Row[]): CatalogueProgram[] {
-  const p = PARENTS[parent];
+function group(key: GroupKey, rows: Row[]): Course[] {
+  const g = GROUPS[key];
   return rows.map(([title, description, tags, keywords, icons, opts]) => ({
     slug: opts?.slug ?? toSlug(title),
-    href: null,
-    status: "coming-soon",
-    identity: title,
     title,
-    parentProgram: p.name,
-    parentProgramSlug: p.slug,
-    category: p.category,
-    type: "Course",
+    programSlug: g.programSlug,
+    status: opts?.status ?? "coming-soon",
+    href: opts?.href ?? null,
     level: null,
     format: null,
     description,
     tags,
     keywords,
     image: null,
-    visual: { tone: p.tone, icons },
+    visual: { tone: g.tone, icons },
     featured: opts?.featured ?? false,
-    order: ++order,
+    order: opts?.order ?? ++order,
   }));
 }
 
+// ------------------------------------------------------------------ Game Development & Design: named courses (7)
+const NAMED_GAME_COURSES: Course[] = [
+  ...group("forge", [
+    ["TG GameForge", "Learn to turn ideas into interactive experiences through practical project work.", ["Game Development", "Game Design", "Programming", "Animation"], ["interactive", "digital art", "design", "projects"], ["code", "pen-tool", "boxes"], { slug: "tg-gameforge", featured: true, order: 1, status: "active", href: "/programs/tg-gameforge" }],
+  ]),
+  ...group("unity", [
+    ["TG Unity Development", "Build games with Unity and C#, from gameplay systems and interaction to optimization and deployment.", ["Unity", "Game Development", "Programming"], ["c#", "gameplay", "interactive"], ["gamepad", "code", "cube"], { slug: "tg-unity-development", order: 103 }],
+  ]),
+  ...group("unreal", [
+    ["TG Unreal Development", "Build interactive experiences with Unreal Engine, Blueprints and C++.", ["Unreal Engine", "Game Development", "Programming"], ["blueprints", "c++", "3d"], ["cube", "code", "gamepad"], { slug: "tg-unreal-development", order: 104 }],
+  ]),
+  ...group("art", [
+    ["TG Game Art", "Create characters, environments, props and game-ready visual assets through practical 2D and 3D workflows.", ["2D Art", "3D Art"], ["game art", "blender", "character design", "environments", "props"], ["palette", "pen-tool", "cube"], { slug: "tg-game-art", order: 105 }],
+  ]),
+  ...group("design", [
+    ["TG Game Design", "Design game mechanics, levels, progression and player experiences through practical game-design work.", ["Game Design", "Level Design"], ["game mechanics", "prototyping", "interactive", "player experience"], ["layers", "boxes", "pen-tool"], { slug: "tg-game-design", order: 106 }],
+  ]),
+  ...group("anim", [
+    ["TG Game Animation & VFX", "Bring interactive experiences to life through animation, visual effects, lighting and cinematic workflows.", ["Animation", "VFX", "Cinematics"], ["3d", "lighting", "game development"], ["clapperboard", "sparkles", "cube"], { slug: "tg-game-animation-vfx", order: 107 }],
+  ]),
+  ...group("ai", [
+    ["TG AI for Games", "Explore game AI, intelligent NPC systems and practical AI-assisted game-development workflows.", ["AI", "Game AI", "Game Development"], ["generative ai", "npc systems", "artificial intelligence"], ["cpu", "sparkles", "gamepad"], { slug: "tg-ai-for-games", order: 108 }],
+  ]),
+];
+
 // ------------------------------------------------------------------ Digital Marketing (40)
-const DIGITAL_MARKETING: CatalogueProgram[] = [
+const DIGITAL_MARKETING: Course[] = [
   // Strategy & fundamentals (5)
   ...group("dm", [
     ["Digital Marketing Fundamentals", "Understand how digital channels work together and how campaigns move from idea to audience.", ["Marketing", "Strategy"], ["basics", "introduction", "channels"], ["megaphone", "globe", "target"], { featured: true }],
@@ -128,7 +151,7 @@ const DIGITAL_MARKETING: CatalogueProgram[] = [
 ];
 
 // ------------------------------------------------------------------ Game development & creative technology (60)
-const GAME_COURSES: CatalogueProgram[] = [
+const GAME_COURSES: Course[] = [
   // TG GameForge: general game development (10)
   ...group("forge", [
     ["Game Development Foundations", "Get an overview of how games are made, from idea and prototype to a playable build.", ["Game Development"], ["basics", "introduction", "game pipeline"], ["gamepad", "code", "layers"], { featured: true }],
@@ -212,4 +235,4 @@ const GAME_COURSES: CatalogueProgram[] = [
   ]),
 ];
 
-export const COURSES: CatalogueProgram[] = [...DIGITAL_MARKETING, ...GAME_COURSES];
+export const COURSES: Course[] = [...NAMED_GAME_COURSES, ...DIGITAL_MARKETING, ...GAME_COURSES];
