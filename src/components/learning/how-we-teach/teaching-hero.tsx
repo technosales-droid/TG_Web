@@ -60,13 +60,13 @@ export function TeachingHero() {
             <div className="absolute inset-0 bg-brand-green/10 [clip-path:polygon(62%_0%,100%_0%,100%_45%)]" />
           </div>
 
-          <div className="relative grid items-center gap-10 lg:min-h-[480px] lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-12 xl:gap-20">
+          <div className="relative grid items-center gap-10 lg:min-h-[480px] lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-12 xl:gap-20">
             <div>
               <div className="flex items-center gap-2 text-sm font-medium text-primary">
                 <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
                 How We Teach
               </div>
-              <h1 className="mt-4 max-w-2xl text-4xl font-semibold tracking-tight text-balance text-foreground sm:text-5xl xl:text-6xl">
+              <h1 className="mt-4 max-w-2xl text-[2rem] leading-[1.12] font-semibold tracking-tight text-balance text-foreground min-[400px]:text-4xl sm:text-5xl lg:text-[2.75rem] xl:text-[3.25rem] min-[1400px]:text-6xl">
                 <span className="block">Learn by Doing.</span>
                 <span className={cn("block", GRADIENT_TEXT)}>Build by Practising.</span>
               </h1>
@@ -86,7 +86,7 @@ export function TeachingHero() {
                 </Link>
                 <Link
                   href="/learning/curriculum"
-                  className="group flex items-center gap-1 rounded-full text-base font-medium text-foreground transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+                  className="group flex min-h-11 items-center gap-1 rounded-full text-base font-medium text-foreground transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
                 >
                   View Curriculum
                   <ChevronRight

@@ -22,12 +22,15 @@ export function TeachingModel() {
 
         <ol aria-label="The five stages of the teaching model" className="relative mt-12 grid gap-8 lg:mt-16 lg:grid-cols-5 lg:gap-6">
           {/* Rail (decorative) */}
-          <span aria-hidden="true" className="absolute top-3 bottom-3 left-[0.95rem] w-1 rounded-full bg-gradient-to-b from-primary/30 to-brand-green/60 lg:top-[0.95rem] lg:right-3 lg:bottom-auto lg:left-3 lg:h-1 lg:w-auto lg:bg-gradient-to-r" />
+          <span aria-hidden="true" className="absolute hidden rounded-full bg-gradient-to-r from-primary/30 to-brand-green/60 lg:top-[0.95rem] lg:right-3 lg:left-3 lg:block lg:h-1" />
 
           {TEACHING_MODEL.map((s, i) => {
             const last = i === TEACHING_MODEL.length - 1;
             return (
               <li key={s.number} className="group relative min-w-0 pl-12 lg:pt-12 lg:pl-0">
+                {!last && (
+                  <span aria-hidden="true" className="absolute top-8 -bottom-8 left-[0.95rem] w-1 rounded-full bg-gradient-to-b from-primary/30 to-primary/10 lg:hidden" />
+                )}
                 <span
                   aria-hidden="true"
                   className={cn(
