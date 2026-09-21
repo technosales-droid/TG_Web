@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CertificationsHero } from "@/components/learning/certifications/certifications-hero";
+import { CertificationsRecord } from "@/components/learning/certifications/certifications-record";
 
 export const metadata: Metadata = {
   title: "Certifications at Techno Gurukul: Learning You Can Document | TechnoGurukul",
@@ -11,6 +12,7 @@ export default function Page() {
   return (
     <main>
       <CertificationsHero />
+      <CertificationsRecord />
     </main>
   );
 }
