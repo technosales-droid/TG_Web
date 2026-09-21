@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { CertificationsFinalCta } from "@/components/learning/certifications/certifications-final-cta";
 import { CertificationsHero } from "@/components/learning/certifications/certifications-hero";
 import { CertificationsEvidence } from "@/components/learning/certifications/certifications-evidence";
 import { CertificationsRecord } from "@/components/learning/certifications/certifications-record";
@@ -15,6 +16,7 @@ export default function Page() {
       <CertificationsHero />
       <CertificationsRecord />
       <CertificationsEvidence />
+      <CertificationsFinalCta />
     </main>
   );
 }
