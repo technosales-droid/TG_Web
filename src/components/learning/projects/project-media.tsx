@@ -1,10 +1,12 @@
 import Image from "next/image";
 import {
+  Code2,
   ExternalLink,
   FileSpreadsheet,
   FileText,
   Image as ImageIcon,
   Images,
+  LayoutTemplate,
   Play,
   Presentation,
 } from "lucide-react";
@@ -13,7 +15,7 @@ import { cn } from "cn";
 import type { MediaType, ProjectMedia } from "@/data/projects";
 import { mediaAction, mediaBadge } from "./project-utils";
 
-const ICON: Record<MediaType, LucideIcon> = {
+export const MEDIA_ICON: Record<MediaType, LucideIcon> = {
   image: ImageIcon,
   video: Play,
   pdf: FileText,
@@ -39,9 +41,35 @@ const TINT: Record<MediaType, string> = {
 const hasAsset = (m: ProjectMedia) => Boolean(m.thumbnail || (m.type === "image" && m.url));
 
 // Abstract art for each kind of media. Never a real screenshot: it only tells you what you would open.
-function Art({ type }: { type: MediaType }) {
+function Art({ type }: { type: MediaType | "prototype" | "code" }) {
   const line = "block h-1.5 rounded-full bg-primary/20";
   switch (type) {
+    case "prototype":
+      return (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="grid w-[64%] grid-cols-[28%_1fr] gap-2 rounded-lg border border-primary/20 bg-card p-2.5 shadow-md transition-transform duration-300 motion-safe:group-hover:-translate-y-1">
+            <span className="row-span-3 rounded bg-primary/20" />
+            <span className="h-3 rounded bg-primary/35" />
+            <span className="h-9 rounded bg-gradient-to-br from-primary/20 to-brand-green/35" />
+            <span className="flex gap-2">
+              <span className="h-3 flex-1 rounded bg-brand-green/40" />
+              <span className="h-3 flex-1 rounded bg-primary/15" />
+            </span>
+          </div>
+        </div>
+      );
+    case "code":
+      return (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="grid w-[64%] gap-2 rounded-lg border border-primary/25 bg-[#0b3d50] p-3 shadow-md transition-transform duration-300 motion-safe:group-hover:-translate-y-1">
+            <span className="block h-1.5 w-1/3 rounded-full bg-brand-green/70" />
+            <span className="ml-3 block h-1.5 w-2/3 rounded-full bg-background/40" />
+            <span className="ml-3 block h-1.5 w-1/2 rounded-full bg-background/25" />
+            <span className="ml-6 block h-1.5 w-3/5 rounded-full bg-primary/60" />
+            <span className="block h-1.5 w-1/4 rounded-full bg-brand-green/70" />
+          </div>
+        </div>
+      );
     case "image":
       return (
         <div className="absolute inset-0">
@@ -116,10 +144,10 @@ function Art({ type }: { type: MediaType }) {
       );
     case "gallery":
       return (
-        <div className="absolute inset-0 grid grid-cols-3 grid-rows-2 gap-2 p-4">
-          <span className="col-span-2 row-span-2 rounded-lg bg-primary/25" />
-          <span className="rounded-lg bg-brand-green/35" />
-          <span className="rounded-lg bg-primary/15" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="absolute h-[58%] w-[40%] -translate-x-[70%] -rotate-6 rounded-lg border border-primary/15 bg-primary/25 shadow" />
+          <span className="absolute h-[58%] w-[40%] translate-x-[70%] rotate-6 rounded-lg border border-primary/15 bg-brand-green/35 shadow" />
+          <span className="relative h-[66%] w-[42%] rounded-lg border border-primary/20 bg-gradient-to-br from-primary/30 to-brand-green/30 shadow-md transition-transform duration-300 motion-safe:group-hover:-translate-y-1" />
         </div>
       );
   }
@@ -131,34 +159,59 @@ export function MediaPreview({
   alt,
   className,
   large = false,
+  compact = false,
+  fill = false,
 }: {
   media: ProjectMedia;
   alt: string;
   className?: string;
   large?: boolean;
+  /** Smaller badge and chip, for the list-view thumbnail. */
+  compact?: boolean;
+  /** Fill the parent's height instead of using the 16:10 ratio. */
+  fill?: boolean;
 }) {
-  const Icon = ICON[media.type];
+  const Icon = media.art === "code" ? Code2 : media.art === "prototype" ? LayoutTemplate : MEDIA_ICON[media.type];
+  const badge = media.art === "code" ? "CODE" : media.art === "prototype" ? "PROTOTYPE" : mediaBadge(media);
   const src = media.thumbnail ?? (media.type === "image" ? media.url : null);
   const soon = !hasAsset(media);
 
   return (
-    <div className={cn("relative aspect-[16/10] overflow-hidden rounded-2xl bg-gradient-to-br", TINT[media.type], className)}>
+    <div className={cn("relative overflow-hidden bg-gradient-to-br", fill ? "h-full min-h-28" : "aspect-[16/10]", TINT[media.type], className)}>
       {src ? (
-        <Image src={src} alt={alt} fill unoptimized sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw" className="object-cover" />
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          unoptimized
+          sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
+          className="object-cover transition-transform duration-500 motion-safe:group-hover:scale-[1.03]"
+        />
       ) : (
         <div aria-hidden="true">
-          <Art type={media.type} />
+          <Art type={media.art ?? media.type} />
         </div>
       )}
 
-      <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-background/90 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-foreground">
-        <Icon className="size-3.5 text-primary" aria-hidden="true" />
-        {mediaBadge(media)}
+      <span
+        className={cn(
+          "absolute inline-flex items-center gap-1.5 rounded-md bg-background/90 font-semibold tracking-wide text-foreground",
+          compact ? "top-2 left-2 px-1.5 py-0.5 text-[10px]" : "top-3 left-3 px-2 py-1 text-[11px]"
+        )}
+      >
+        <Icon className={cn("text-primary", compact ? "size-3" : "size-3.5")} aria-hidden="true" />
+        {badge}
       </span>
 
       {soon && (
-        <span className={cn("absolute bottom-3 left-3 rounded-full bg-foreground/70 px-2.5 py-1 font-medium text-background", large ? "text-xs" : "text-[11px]")}>
-          Preview coming soon
+        <span
+          className={cn(
+            "absolute rounded-md bg-foreground/70 font-medium text-background",
+            compact ? "bottom-2 left-2 px-1.5 py-0.5 text-[10px]" : "bottom-3 left-3 px-2 py-1",
+            !compact && (large ? "text-xs" : "text-[11px]")
+          )}
+        >
+          Preview Coming Soon
         </span>
       )}
     </div>
@@ -178,7 +231,7 @@ const LINK =
 
 /** One media item inside the project preview: the real thing when a URL exists, otherwise a clear note. */
 export function MediaViewer({ media }: { media: ProjectMedia }) {
-  const Icon = ICON[media.type];
+  const Icon = MEDIA_ICON[media.type];
   const { url } = media;
 
   return (
@@ -197,7 +250,7 @@ export function MediaViewer({ media }: { media: ProjectMedia }) {
       <div className="mt-3">
         {!url && !(media.type === "gallery" && media.images?.length) ? (
           <p className="rounded-xl border border-dashed border-primary/25 bg-muted/50 px-4 py-6 text-center text-sm text-muted-foreground">
-            Project media will be added soon.
+            Preview Coming Soon
           </p>
         ) : media.type === "image" && url ? (
           <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-muted">
