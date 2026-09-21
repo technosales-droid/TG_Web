@@ -3,7 +3,7 @@ import { ArrowUpRight, ChevronRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
 
-const FOCUS = "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-background focus-visible:ring-0";
+const FOCUS = "focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-4 focus-visible:outline-background focus-visible:ring-0";
 const STEPS = ["Learn", "Build", "Document"];
 
 // Abstract and decorative: a stack of document sheets, a project frame and a three-step path
