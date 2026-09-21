@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ProjectsHero } from "@/components/learning/projects/projects-hero";
+import { ProjectsShowcase } from "@/components/learning/projects/projects-showcase";
 import { ProjectsTypes } from "@/components/learning/projects/projects-types";
 
 export const metadata: Metadata = {
@@ -13,6 +14,7 @@ export default function Page() {
     <main>
       <ProjectsHero />
       <ProjectsTypes />
+      <ProjectsShowcase />
     </main>
   );
 }
