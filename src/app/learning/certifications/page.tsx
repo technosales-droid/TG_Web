@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CertificationsHero } from "@/components/learning/certifications/certifications-hero";
+import { CertificationsEvidence } from "@/components/learning/certifications/certifications-evidence";
 import { CertificationsRecord } from "@/components/learning/certifications/certifications-record";
 
 export const metadata: Metadata = {
@@ -13,6 +14,7 @@ export default function Page() {
     <main>
       <CertificationsHero />
       <CertificationsRecord />
+      <CertificationsEvidence />
     </main>
   );
 }
