@@ -86,10 +86,10 @@ export function AboutFinalCta() {
                   </Link>
                 </div>
                 <Link
-                  href="/career-paths"
+                  href="/careers-placement"
                   className={cn("group mt-3 inline-flex min-h-11 items-center gap-1.5 rounded-full text-sm font-medium text-background/80 transition-colors hover:text-background", FOCUS)}
                 >
-                  Explore Career Paths
+                  Explore Careers &amp; Placement
                   <ArrowRight className="size-4 transition-transform duration-200 motion-safe:group-hover:translate-x-1" aria-hidden="true" />
                 </Link>
               </div>

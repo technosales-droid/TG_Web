@@ -4,8 +4,7 @@ import type { LucideIcon } from "lucide-react";
 import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
 
 const CAREER_LINKS = [
-  { title: "Career Paths", text: "Explore possible directions your skills can lead toward.", href: "/career-paths" },
-  { title: "Careers & Placement", text: "Prepare your work, communication and professional readiness.", href: "/careers-placement" },
+  { title: "Careers & Placement", text: "Explore possible directions and prepare your work, communication and professional readiness.", href: "/careers-placement" },
 ];
 
 const PROGRAMS: { title: string; Icon: LucideIcon; themes: string[]; href: string }[] = [
@@ -32,7 +31,7 @@ export function MissionDirections() {
             directions and professional expectations.
           </SectionHeader>
 
-          <ul className="mt-10 grid gap-4 md:grid-cols-2">
+          <ul className="mt-10 grid max-w-xl gap-4">
             {CAREER_LINKS.map((l) => (
               <li key={l.href} className="min-w-0">
                 <article className="group relative flex h-full flex-col rounded-2xl border border-primary/15 bg-card p-6 transition-all duration-300 hover:border-primary/40 hover:shadow-[0_18px_36px_-26px_rgba(16,20,28,0.45)] motion-safe:hover:-translate-y-0.5 sm:p-8">

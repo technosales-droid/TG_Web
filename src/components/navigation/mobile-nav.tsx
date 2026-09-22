@@ -119,11 +119,11 @@ export function MobileNav({
 
       <div className="py-1">
         <Link
-          href="/career-paths"
+          href="/blogs"
           onClick={onClose}
           className="block rounded-md py-2 font-heading text-base font-semibold text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
-          Career Paths
+          Blogs
         </Link>
       </div>
       <div className="h-px bg-border" />

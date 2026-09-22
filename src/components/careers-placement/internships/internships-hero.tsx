@@ -109,13 +109,13 @@ export function InternshipsHero() {
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
                 <Link
-                  href="/career-paths"
+                  href="/learning"
                   className={cn(
                     buttonVariants({ variant: "default" }),
                     "h-11 rounded-full px-6 text-base transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:translate-y-0 focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-4 focus-visible:outline-primary"
                   )}
                 >
-                  Explore Career Paths
+                  Explore Learning
                 </Link>
                 <Link
                   href="/programs"

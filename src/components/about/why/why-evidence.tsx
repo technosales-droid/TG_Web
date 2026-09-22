@@ -9,8 +9,7 @@ const LAYERS = [
 ];
 
 const CAREER = [
-  { title: "Career Paths", text: "Explore possible directions skills can lead toward.", href: "/career-paths" },
-  { title: "Careers & Placement", text: "Explore practical preparation for professional opportunities.", href: "/careers-placement" },
+  { title: "Careers & Placement", text: "Explore possible directions and practical preparation for professional opportunities.", href: "/careers-placement" },
 ];
 
 /** Sections 7 and 8: why visible work matters, and why career context matters. */
@@ -85,7 +84,7 @@ export function WhyEvidence() {
               </p>
             </div>
 
-            <ul className="mt-10 grid gap-4 md:grid-cols-2">
+            <ul className="mt-10 grid max-w-xl gap-4">
               {CAREER.map((c) => (
                 <li key={c.href} className="min-w-0">
                   <article className="group relative flex h-full flex-col rounded-2xl border border-primary/15 bg-card p-6 transition-all duration-300 hover:border-primary/40 hover:shadow-[0_18px_36px_-26px_rgba(16,20,28,0.45)] motion-safe:hover:-translate-y-0.5 sm:p-8">

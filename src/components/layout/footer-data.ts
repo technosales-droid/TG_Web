@@ -33,7 +33,7 @@ export const footerNavigation: FooterGroup[] = [
     links: [
       { label: "Home", href: "/" },
       { label: "Programs", href: "/programs" },
-      { label: "Career Paths", href: "/career-paths" },
+      { label: "Blogs", href: "/blogs" },
       { label: "Learning", href: "/learning" },
       { label: "Careers", href: "/careers-placement" },
       { label: "Contact", href: "/contact" },

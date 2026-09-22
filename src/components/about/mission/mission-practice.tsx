@@ -8,7 +8,7 @@ const AREAS: { title: string; text: string; href?: string; linkText?: string; Ic
   { title: "Practice", text: "Learners should have opportunities to apply concepts.", href: "/learning/how-we-teach", linkText: "Explore How We Teach", Icon: GraduationCap },
   { title: "Projects", text: "Learning should produce practical work.", href: "/learning/projects", linkText: "Explore Projects", Icon: FolderOpen },
   { title: "Feedback", text: "Improvement should be part of the process.", Icon: MessageSquare },
-  { title: "Career Context", text: "Learners should understand where their skills can be applied.", href: "/career-paths", linkText: "Explore Career Paths", Icon: Briefcase },
+  { title: "Career Context", text: "Learners should understand where their skills can be applied.", Icon: Briefcase },
 ];
 
 /** Section 4: the mission in practice, five areas that shape the actual learning experience. */

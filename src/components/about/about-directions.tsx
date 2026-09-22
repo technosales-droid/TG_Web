@@ -25,8 +25,7 @@ const DIRECTIONS: { id: string; title: string; Icon: LucideIcon; themes: string[
 const READINESS = ["Learn", "Practise", "Build", "Portfolio", "Career Preparation"];
 
 const LINKS = [
-  { title: "Career Paths", text: "Explore the possible directions your skills can lead toward.", href: "/career-paths" },
-  { title: "Careers & Placement", text: "Prepare your work, your communication and your professional readiness.", href: "/careers-placement" },
+  { title: "Careers & Placement", text: "Explore possible directions and prepare your work, communication and professional readiness.", href: "/careers-placement" },
 ];
 
 /** Sections 7 and 8: programs as directions, and the flow from learning to career readiness. */
@@ -126,7 +125,7 @@ export function AboutDirections() {
               ))}
             </ol>
 
-            <ul className="mt-8 grid gap-4 md:grid-cols-2">
+            <ul className="mt-8 grid max-w-xl gap-4">
               {LINKS.map((l) => (
                 <li key={l.href} className="min-w-0">
                   <article className="group relative flex h-full flex-col rounded-2xl border border-primary/15 bg-card p-6 transition-all duration-300 hover:border-primary/40 hover:shadow-[0_18px_36px_-26px_rgba(16,20,28,0.45)] motion-safe:hover:-translate-y-0.5">

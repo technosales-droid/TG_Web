@@ -85,7 +85,7 @@ export function CareerDirections() {
         >
           <div className="flex items-center gap-2 text-sm font-medium text-primary">
             <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
-            Career Paths
+            Career Directions
           </div>
 
           <div className="mt-4 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-10">
@@ -102,10 +102,10 @@ export function CareerDirections() {
           </div>
 
           <Link
-            href="/career-paths"
+            href="/careers-placement"
             className={cn(buttonVariants({ variant: "default" }), "mt-6 h-11 rounded-full px-6 text-base")}
           >
-            Explore Career Paths
+            Explore Careers &amp; Placement
           </Link>
         </div>
 

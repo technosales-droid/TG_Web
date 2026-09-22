@@ -1,19 +1,6 @@
-import { notFound } from "next/navigation";
-import { PageShell } from "@/components/page-shell";
-import { getCareer, getCareers } from "@/lib/content";
+import { redirect } from "next/navigation";
 
-export function generateStaticParams() {
-  return getCareers().map((career) => ({ slug: career.slug }));
-}
-
-export default async function CareerPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
-  const career = getCareer(slug);
-  if (!career) notFound();
-
-  return <PageShell title={career.title} />;
+// Career Paths has been retired and replaced by Blogs; no per-slug career pages exist any more.
+export default function CareerPage() {
+  redirect("/blogs");
 }

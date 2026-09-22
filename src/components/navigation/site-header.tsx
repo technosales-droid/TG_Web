@@ -74,10 +74,10 @@ export function SiteHeader() {
 
               <NavigationMenuItem>
                 <NavigationMenuLink
-                  render={<Link href="/career-paths" />}
+                  render={<Link href="/blogs" />}
                   className={navigationMenuTriggerStyle()}
                 >
-                  Career Paths
+                  Blogs
                 </NavigationMenuLink>
               </NavigationMenuItem>
 

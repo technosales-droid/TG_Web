@@ -1,7 +1,7 @@
 import { ArrowUpRight, Mail, MapPin } from "lucide-react";
 import { footerContact, footerLocation } from "../layout/footer-data";
 
-const TOPICS = ["Programs", "Learning", "Admissions", "Career Paths", "Careers & Placement"];
+const TOPICS = ["Programs", "Learning", "Admissions", "Careers & Placement"];
 
 /** Verified contact details only: the email and address already used in the global footer.
  * No phone or social links render — footerContact.phone and every footerSocials href are null. */

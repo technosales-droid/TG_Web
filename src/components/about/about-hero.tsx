@@ -100,10 +100,10 @@ export function AboutHero() {
                 </Link>
               </div>
               <Link
-                href="/career-paths"
+                href="/careers-placement"
                 className="group mt-3 inline-flex min-h-11 items-center gap-1.5 rounded-full text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-4 focus-visible:outline-primary"
               >
-                Explore Career Paths
+                Explore Careers &amp; Placement
                 <ChevronRight className="size-4 transition-transform duration-200 motion-safe:group-hover:translate-x-1" aria-hidden="true" />
               </Link>
             </div>

@@ -16,8 +16,8 @@ const FAQS = [
     a: (
       <>
         Yes. You can enquire through the form, or explore{" "}
-        <Link href="/career-paths" className="font-semibold text-primary underline-offset-2 hover:underline">
-          Career Paths
+        <Link href="/careers-placement" className="font-semibold text-primary underline-offset-2 hover:underline">
+          Careers &amp; Placement
         </Link>{" "}
         first.
       </>

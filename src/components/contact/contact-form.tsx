@@ -6,7 +6,7 @@ import { cn } from "cn";
 import { buttonVariants } from "@/components/ui/button";
 import { footerContact } from "../layout/footer-data";
 
-const ENQUIRY_TYPES = ["Programs", "Learning", "Admissions", "Career Paths", "Careers & Placement", "General Enquiry"] as const;
+const ENQUIRY_TYPES = ["Programs", "Learning", "Admissions", "Careers & Placement", "General Enquiry"] as const;
 
 // Only the two currently active programme directions, matching the rest of the site (About/Mission/
 // Approach/Why pages). Not a full catalogue dump, and no future/proposed catalogue items.

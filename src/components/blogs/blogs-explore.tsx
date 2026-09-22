@@ -1,35 +1,34 @@
 import Link from "next/link";
-import { ArrowRight, Compass, GraduationCap, LayoutGrid } from "lucide-react";
+import { ArrowRight, Compass, GraduationCap, Info, LayoutGrid } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { GRADIENT_TEXT, SectionHeader } from "../learning/curriculum/section-header";
 
 const CARDS: { title: string; text: string; href: string; Icon: LucideIcon }[] = [
   { title: "Programs", text: "See the current programme directions and what each one covers.", href: "/programs", Icon: LayoutGrid },
-  { title: "Careers & Placement", text: "Explore possible directions and how to prepare for them.", href: "/careers-placement", Icon: Compass },
   { title: "Learning", text: "Understand how the learning experience is structured.", href: "/learning", Icon: GraduationCap },
+  { title: "Careers & Placement", text: "Explore career directions and how to prepare for them.", href: "/careers-placement", Icon: Compass },
+  { title: "About Techno Gurukul", text: "Understand the institute's approach and philosophy.", href: "/about", Icon: Info },
 ];
 
-/** A self-service path before or after the form. */
-export function ContactDirections() {
+/** A self-service path while the Blogs content library is still empty. */
+export function BlogsExplore() {
   return (
-    <section aria-labelledby="ct-directions-heading" className="px-4 py-10 sm:px-6 sm:py-14 xl:py-20">
+    <section aria-labelledby="bl-explore-heading" className="px-4 py-10 sm:px-6 sm:py-14 xl:py-20">
       <div className="mx-auto max-w-[1800px] xl:px-8">
         <SectionHeader
-          id="ct-directions-heading"
-          eyebrow="Not Sure Yet?"
+          id="bl-explore-heading"
+          eyebrow="In the Meantime"
           title={
             <>
-              Not Sure Which <span className={GRADIENT_TEXT}>Direction to Choose?</span>
+              Explore Techno Gurukul <span className={GRADIENT_TEXT}>While You Wait.</span>
             </>
           }
-        >
-          You can start by exploring the programs, career preparation and learning experience before sending an enquiry.
-        </SectionHeader>
+        />
 
-        <ul className="mt-10 grid gap-4 sm:grid-cols-3">
+        <ul className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4 xl:gap-5">
           {CARDS.map(({ title, text, href, Icon }) => (
             <li key={href} className="min-w-0">
-              <article className="group relative flex h-full flex-col rounded-2xl border border-primary/15 bg-card p-6 transition-all duration-300 hover:border-primary/40 hover:shadow-[0_18px_36px_-26px_rgba(16,20,28,0.45)] motion-safe:hover:-translate-y-0.5 sm:p-7">
+              <article className="group relative flex h-full flex-col rounded-2xl border border-primary/15 bg-card p-6 transition-all duration-300 hover:border-primary/40 hover:shadow-[0_18px_36px_-26px_rgba(16,20,28,0.45)] motion-safe:hover:-translate-y-0.5">
                 <span aria-hidden="true" className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <Icon className="size-5" />
                 </span>
