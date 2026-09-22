@@ -180,12 +180,12 @@ function OutcomeCard({
         aria-hidden="true"
         className="absolute inset-0 -z-[5] bg-[linear-gradient(to_bottom,rgba(0,0,0,0.7)_0%,transparent_10%,transparent_85%,rgba(0,0,0,0.7)_100%)]"
       />
-      {/* Hover-only scrim: fades in and extends the bottom band upward to cover the taller
-          expanded title/description/highlights, instead of the base band already being sized
-          for that (which made the resting card too dark). */}
+      {/* Extends the bottom band upward to cover the taller title/description/highlights.
+          Below lg that content is always shown (no hover there), so this stays on permanently;
+          at lg+ the content is hover-only, so this fades in only on hover to match it. */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-[5] bg-[linear-gradient(to_bottom,transparent_0%,transparent_35%,rgba(0,0,0,0.7)_50%,rgba(0,0,0,0.7)_100%)] opacity-0 transition-opacity duration-300 lg:group-hover:opacity-100 lg:group-hover:delay-150"
+        className="absolute inset-0 -z-[5] bg-[linear-gradient(to_bottom,transparent_0%,transparent_35%,rgba(0,0,0,0.7)_50%,rgba(0,0,0,0.7)_100%)] opacity-100 transition-opacity duration-300 lg:opacity-0 lg:group-hover:opacity-100 lg:group-hover:delay-150"
       />
 
       {/* Tag pill and icon badge share one row so they stay vertically aligned and the pill
