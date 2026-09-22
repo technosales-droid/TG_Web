@@ -42,10 +42,10 @@ export function ClosingCta() {
   return (
     <section ref={ref} className="px-4 py-14 sm:px-6 sm:py-16">
       <div className="mx-auto max-w-[1800px]">
-        <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary to-[#0b3d50] px-6 py-14 sm:px-10 sm:py-16 lg:flex lg:items-end lg:gap-10 lg:px-16 lg:py-16">
+        <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary to-[#0b3d50] lg:flex lg:items-stretch">
           <div
             className={cn(
-              "relative max-w-2xl transition-all duration-700 lg:w-[42%] lg:shrink-0 lg:self-center",
+              "relative max-w-2xl px-6 py-14 transition-all duration-700 sm:px-10 sm:py-16 lg:max-w-sm lg:shrink-0 lg:px-16 lg:py-16 lg:flex lg:flex-col lg:justify-center xl:max-w-lg",
               visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
             )}
           >
@@ -89,19 +89,32 @@ export function ClosingCta() {
             </div>
           </div>
 
-          {/* Intrinsic width/height (not `fill`) so the image's own aspect ratio drives its
-              rendered height directly — it always uses its full column width with zero
-              letterboxing, instead of being forced into a fixed box that leaves empty space
-              above it. Stacked below the text on mobile/tablet (DOM order), side-by-side with
-              the text (never overlapping, by flex construction) from lg up. */}
-          <div aria-hidden="true" className="pointer-events-none relative mt-10 lg:mt-0 lg:flex-1">
+          {/* Mobile/tablet (below lg): stacked below the text, full column width, intrinsic
+              aspect ratio — never cropped. */}
+          <div className="px-6 pb-14 sm:px-10 sm:pb-16 lg:hidden">
             <Image
               src="/brand/index-cta.png"
               alt=""
+              aria-hidden="true"
               width={1672}
               height={941}
-              sizes="(min-width: 1024px) 56vw, 90vw"
-              className="h-auto w-full"
+              sizes="90vw"
+              className="pointer-events-none mt-10 h-auto w-full"
+            />
+          </div>
+
+          {/* Desktop (lg+): a flex-1 column, bounded by construction — it can never invade the
+              text column's space no matter how tall the panel gets, unlike sizing the image by
+              its own aspect ratio off the panel's height. Zero padding on this column, so the
+              photo sits flush against the panel's top/right/bottom edges; object-cover crops
+              only the transparent margin around the subject to make that fit exact. */}
+          <div aria-hidden="true" className="pointer-events-none relative hidden lg:block lg:flex-1">
+            <Image
+              src="/brand/index-cta.png"
+              alt=""
+              fill
+              sizes="55vw"
+              className="object-cover object-[center_30%]"
             />
           </div>
         </div>
