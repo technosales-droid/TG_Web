@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { Check, FileText, FlaskConical, FolderOpen, Layers, Puzzle, Target } from "lucide-react";
 import { cn } from "cn";
 
@@ -13,6 +14,8 @@ const OUTCOMES = [
       "Apply a concept through exercises, challenges and smaller pieces of work. Practice helps turn new ideas into skills you can use.",
     highlights: ["Short, focused exercises", "Increasing difficulty", "Skills you can reuse"],
     icon: Target,
+    image: "/brand/practice-work.jpg",
+    alt: "A desk by a window overlooking a lake, with a laptop, papers and books",
   },
   {
     number: "02",
@@ -22,6 +25,8 @@ const OUTCOMES = [
       "Combine what you have learned to solve a problem, explore an idea or create something from start to finish.",
     highlights: ["Multiple skills at once", "A real start-to-finish flow", "Room to make decisions"],
     icon: Layers,
+    image: "/brand/projects.jpg",
+    alt: "A group reviewing notes and sketches pinned to a wall in a studio",
   },
   {
     number: "03",
@@ -31,6 +36,8 @@ const OUTCOMES = [
       "Explore different approaches, tools and ideas. Not everything needs to become a finished project; experimentation is part of learning.",
     highlights: ["Low-stakes exploration", "Comparing approaches", "Learning from what doesn't work"],
     icon: FlaskConical,
+    image: "/brand/experiments.jpg",
+    alt: "A person reviewing printed charts and wireframes on a glass wall",
   },
   {
     number: "04",
@@ -40,6 +47,8 @@ const OUTCOMES = [
       "Break down a challenge, make decisions, test possible solutions and learn from what works and what needs to change.",
     highlights: ["Breaking down challenges", "Weighing trade-offs", "Iterating on solutions"],
     icon: Puzzle,
+    image: "/brand/problem-solving.jpg",
+    alt: "An illustration of a person thinking through a problem toward an idea",
   },
   {
     number: "05",
@@ -49,6 +58,8 @@ const OUTCOMES = [
       "Explain what you built, how you approached it, what you learned and how you improved it. Good work becomes more useful when others can understand it.",
     highlights: ["Explaining your process", "Recording decisions", "Writing for other people"],
     icon: FileText,
+    image: "/brand/documentation.jpg",
+    alt: "A person writing goals and notes on a whiteboard",
   },
   {
     number: "06",
@@ -58,6 +69,8 @@ const OUTCOMES = [
       "Select and refine work that represents your skills, process and progress, then present it in a way that is easy to understand.",
     highlights: ["Selecting your best work", "Refining and polishing", "Presenting it clearly"],
     icon: FolderOpen,
+    image: "/brand/portfolio.jpg",
+    alt: "A stylized desk scene with a laptop and everyday objects",
   },
 ] as const;
 
@@ -98,7 +111,7 @@ export function OutcomesShowcase() {
       <div className="mx-auto max-w-[1800px]">
         <div
           className={cn(
-            "mx-auto max-w-2xl text-center transition-all duration-700",
+            "mx-auto max-w-4xl text-center transition-all duration-700",
             visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
           )}
         >
@@ -111,7 +124,7 @@ export function OutcomesShowcase() {
             Don&rsquo;t Just Learn the Skill. Build Something With It.
           </h2>
 
-          <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+          <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
             Learning becomes more meaningful when you can use what you know.
             From focused practice and experiments to complete projects and
             portfolio pieces, the goal is to turn learning into work you can
@@ -154,15 +167,14 @@ function OutcomeCard({
       )}
       style={{ transitionDelay: visible ? `${index * 90}ms` : "0ms" }}
     >
-      {/* CARD IMAGE PLACEHOLDER — no photo exists per topic yet, so this stays an honest gradient
-          panel (matching the hero's dark-teal treatment) rather than a fabricated stock photo.
-          Swap in a real photo later: replace this div and the two overlay divs below it with
-          <Image src="..." alt="..." fill className="object-cover" />, keep the scrim div. */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 opacity-25 [background-image:radial-gradient(rgba(255,255,255,0.35)_1px,transparent_1px)] [background-size:22px_22px]"
+      <Image
+        src={outcome.image}
+        alt={outcome.alt}
+        fill
+        sizes="(min-width: 1024px) 40vw, (min-width: 640px) 50vw, 100vw"
+        className="-z-10 object-cover"
       />
-      <div aria-hidden="true" className="absolute inset-0 -z-[5] bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+      <div aria-hidden="true" className="absolute inset-0 -z-[5] bg-gradient-to-t from-black/70 via-black/15 to-black/10" />
 
       {/* Tag pill and icon badge share one row so they stay vertically aligned and the pill
           truncates gracefully instead of running under the icon on narrower (shrunk) cards. */}
