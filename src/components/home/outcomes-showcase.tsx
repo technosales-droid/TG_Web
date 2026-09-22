@@ -174,12 +174,18 @@ function OutcomeCard({
         sizes="(min-width: 1024px) 40vw, (min-width: 640px) 50vw, 100vw"
         className="-z-10 object-cover"
       />
-      {/* One gradient, not two stacked ones: two full-height gradients darken the middle where
-          they overlap. Hard stops keep the middle photo clear (0%) between a solid top band
-          (pill/icon) and a solid bottom band (label/description). */}
+      {/* Base scrim: capped at 70% black (not solid), small bands top/bottom, most of the
+          photo left clear — sized for the short resting label. */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-[5] bg-[linear-gradient(to_bottom,black_0%,transparent_15%,transparent_38%,black_48%,black_100%)]"
+        className="absolute inset-0 -z-[5] bg-[linear-gradient(to_bottom,rgba(0,0,0,0.7)_0%,transparent_10%,transparent_85%,rgba(0,0,0,0.7)_100%)]"
+      />
+      {/* Hover-only scrim: fades in and extends the bottom band upward to cover the taller
+          expanded title/description/highlights, instead of the base band already being sized
+          for that (which made the resting card too dark). */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 -z-[5] bg-[linear-gradient(to_bottom,transparent_0%,transparent_35%,rgba(0,0,0,0.7)_50%,rgba(0,0,0,0.7)_100%)] opacity-0 transition-opacity duration-300 lg:group-hover:opacity-100 lg:group-hover:delay-150"
       />
 
       {/* Tag pill and icon badge share one row so they stay vertically aligned and the pill
