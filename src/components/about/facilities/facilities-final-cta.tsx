@@ -5,7 +5,7 @@ import { cn } from "cn";
 
 // `outline-solid` matters: the shared button style sets `outline-none`, which would otherwise cancel the ring.
 const FOCUS = "focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-4 focus-visible:outline-background focus-visible:ring-0";
-const STEPS = ["Space", "People", "Build"];
+const STEPS = ["People", "Place", "Build"];
 
 // Abstract and decorative: a workspace frame and a three-step path. No company, offer, statistic or logo.
 function PathVisual() {
@@ -55,11 +55,11 @@ export function FacilitiesFinalCta() {
           <div className="relative grid items-center gap-8 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] xl:gap-8">
             <div>
               <h2 id="fc-final-cta-heading" className="text-3xl font-semibold tracking-tight text-balance text-background sm:text-4xl xl:text-5xl">
-                Explore How the <span className="bg-gradient-to-r from-[#8fd3f0] to-brand-green bg-clip-text text-transparent">Learning Comes Together.</span>
+                Explore the People and Place{" "}
+                <span className="bg-gradient-to-r from-[#8fd3f0] to-brand-green bg-clip-text text-transparent">Behind the Learning.</span>
               </h2>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-background/75 sm:text-lg">
-                See how Techno Gurukul teaches, and how the approach behind it brings structure, practice and guidance
-                together.
+                See how the learning environment, faculty support and practical approach come together.
               </p>
             </div>
 
@@ -78,13 +78,13 @@ export function FacilitiesFinalCta() {
                     <ArrowUpRight className="ml-1 size-4 transition-transform duration-200 motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5" aria-hidden="true" />
                   </Link>
                   <Link
-                    href="/learning/how-we-teach"
+                    href="/learning"
                     className={cn(
                       "group inline-flex h-12 w-full items-center justify-center gap-1 rounded-full border-2 border-background/60 px-6 text-base font-medium text-background transition-all duration-200 hover:-translate-y-0.5 hover:border-background hover:bg-background/10 active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:w-auto xl:w-full",
                       FOCUS
                     )}
                   >
-                    Explore How We Teach
+                    Explore Learning
                     <ChevronRight className="size-4 transition-transform duration-200 motion-safe:group-hover:translate-x-1" aria-hidden="true" />
                   </Link>
                 </div>
