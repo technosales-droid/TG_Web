@@ -42,14 +42,14 @@ export function ClosingCta() {
   return (
     <section ref={ref} className="px-4 py-14 sm:px-6 sm:py-16">
       <div className="mx-auto max-w-[1800px]">
-        <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary to-[#0b3d50] px-6 py-14 sm:px-10 sm:py-16 lg:flex lg:min-h-[720px] lg:items-stretch lg:gap-10 lg:px-16 lg:py-16">
+        <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary to-[#0b3d50] px-6 py-14 sm:px-10 sm:py-16 lg:flex lg:items-end lg:gap-10 lg:px-16 lg:py-16">
           <div
             className={cn(
-              "relative max-w-2xl shrink-0 transition-all duration-700 lg:flex lg:flex-col lg:justify-center",
+              "relative max-w-2xl transition-all duration-700 lg:w-[42%] lg:shrink-0 lg:self-center",
               visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
             )}
           >
-            <span className="inline-flex items-center gap-2 rounded-full bg-background/15 px-3 py-1.5 text-xs font-semibold text-background">
+            <span className="inline-flex w-fit shrink-0 items-center gap-2 self-start rounded-full bg-background/15 px-3 py-1.5 text-xs font-semibold text-background">
               <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
               Start Building
             </span>
@@ -89,18 +89,19 @@ export function ClosingCta() {
             </div>
           </div>
 
-          {/* Side-by-side flex column (not absolute) so the image can be large without ever
-              overlapping the text — it only ever takes the width left over after max-w-2xl. */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none relative mt-10 hidden min-w-0 flex-1 lg:mt-0 lg:block"
-          >
+          {/* Intrinsic width/height (not `fill`) so the image's own aspect ratio drives its
+              rendered height directly — it always uses its full column width with zero
+              letterboxing, instead of being forced into a fixed box that leaves empty space
+              above it. Stacked below the text on mobile/tablet (DOM order), side-by-side with
+              the text (never overlapping, by flex construction) from lg up. */}
+          <div aria-hidden="true" className="pointer-events-none relative mt-10 lg:mt-0 lg:flex-1">
             <Image
               src="/brand/index-cta.png"
               alt=""
-              fill
-              sizes="45vw"
-              className="object-contain object-bottom"
+              width={1672}
+              height={941}
+              sizes="(min-width: 1024px) 56vw, 90vw"
+              className="h-auto w-full"
             />
           </div>
         </div>
