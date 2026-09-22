@@ -174,8 +174,13 @@ function OutcomeCard({
         sizes="(min-width: 1024px) 40vw, (min-width: 640px) 50vw, 100vw"
         className="-z-10 object-cover"
       />
-      <div aria-hidden="true" className="absolute inset-0 -z-[5] bg-gradient-to-t from-black to-transparent" />
-      <div aria-hidden="true" className="absolute inset-0 -z-[5] bg-gradient-to-b from-black/60 to-transparent" />
+      {/* One gradient, not two stacked ones: two full-height gradients darken the middle where
+          they overlap. Hard stops keep the middle photo clear (0%) between a solid top band
+          (pill/icon) and a solid bottom band (label/description). */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 -z-[5] bg-[linear-gradient(to_bottom,black_0%,transparent_15%,transparent_38%,black_48%,black_100%)]"
+      />
 
       {/* Tag pill and icon badge share one row so they stay vertically aligned and the pill
           truncates gracefully instead of running under the icon on narrower (shrunk) cards. */}
