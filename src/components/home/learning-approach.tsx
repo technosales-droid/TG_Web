@@ -1,57 +1,36 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ChevronRight } from "lucide-react";
+import { BarChart3, Book, Image as ImageIcon, Settings2, Shapes } from "lucide-react";
 import { cn } from "cn";
-import { ChecklistIcon } from "@/components/icons/checklist";
-import { IterationIcon } from "@/components/icons/iteration";
-import { IntegrationIcon } from "@/components/icons/integration";
-import { HandoffIcon } from "@/components/icons/handoff";
 
+// No real classroom/project photography exists in the repository yet (see the /about/facilities
+// audit). Each card's image area stays an empty, clearly-a-placeholder panel — no stock photo, no
+// generated image — ready for a real photo to be dropped in later.
 const STAGES = [
   {
     number: "01",
     label: "Learn",
-    icon: ChecklistIcon,
-    heading: "Build the Fundamentals",
+    icon: Book,
     description: "Understand the concepts, tools and workflows behind your discipline.",
-    panel: "bg-card text-foreground",
-    badge: "bg-primary/10 text-primary",
-    numeral: "text-primary",
-    muted: "text-muted-foreground",
   },
   {
     number: "02",
-    label: "Practice",
-    icon: IterationIcon,
-    heading: "Learn by Doing",
+    label: "Practise",
+    icon: Settings2,
     description: "Apply what you learn through hands-on exercises that grow more complex.",
-    panel: "bg-accent text-foreground",
-    badge: "bg-card/80 text-primary",
-    numeral: "text-primary",
-    muted: "text-foreground/70",
   },
   {
     number: "03",
     label: "Build",
-    icon: IntegrationIcon,
-    heading: "Create Real Projects",
-    description: "Combine your skills into projects that go beyond isolated exercises.",
-    panel: "bg-brand-green/15 text-foreground",
-    badge: "bg-card/80 text-brand-green",
-    numeral: "text-brand-green",
-    muted: "text-foreground/70",
+    icon: Shapes,
+    description: "Create real projects that bring your skills together.",
   },
   {
     number: "04",
     label: "Show",
-    icon: HandoffIcon,
-    heading: "Build Your Portfolio",
-    description: "Turn finished work into projects you can present and refine.",
-    panel: "bg-[#0b3d50] text-background",
-    badge: "bg-background/15 text-brand-green",
-    numeral: "text-background",
-    muted: "text-background/70",
+    icon: BarChart3,
+    description: "Present your work, get feedback and prepare for what's next.",
   },
 ] as const;
 
@@ -117,23 +96,9 @@ export function LearningApproach() {
             </div>
           </div>
 
-          <div className="mt-8 flex flex-col gap-4 lg:mt-10 lg:flex-row lg:items-stretch lg:gap-0">
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:mt-10 lg:grid-cols-4">
             {STAGES.map((stage, index) => (
-              <div key={stage.number} className="flex flex-1 items-stretch lg:gap-3">
-                <StageCard stage={stage} index={index} visible={visible} />
-                {index < STAGES.length - 1 && (
-                  <div className="hidden shrink-0 items-center lg:flex">
-                    <ChevronRight
-                      className={cn(
-                        "size-4 text-primary/25 transition-opacity duration-500",
-                        visible ? "opacity-100" : "opacity-0"
-                      )}
-                      style={{ transitionDelay: visible ? `${index * 120 + 150}ms` : "0ms" }}
-                      aria-hidden="true"
-                    />
-                  </div>
-                )}
-              </div>
+              <StageCard key={stage.number} stage={stage} index={index} visible={visible} />
             ))}
           </div>
         </div>
@@ -156,38 +121,32 @@ function StageCard({
   return (
     <div
       className={cn(
-        "group relative flex-1 overflow-hidden rounded-[1.75rem] p-7 shadow-[0_0_0_rgba(16,20,28,0)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_16px_32px_-16px_rgba(16,20,28,0.35)] sm:p-8 lg:transition-[flex-grow,box-shadow,opacity,transform] lg:duration-500 lg:hover:flex-[1.2]",
-        stage.panel,
+        "group flex flex-col overflow-hidden rounded-[1.75rem] bg-card shadow-[0_0_0_rgba(16,20,28,0)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_16px_32px_-16px_rgba(16,20,28,0.35)]",
         visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
       )}
       style={{ transitionDelay: visible ? `${index * 120}ms` : "0ms" }}
     >
-      <span
-        aria-hidden="true"
-        className={cn(
-          "pointer-events-none absolute top-3 right-5 text-7xl font-bold opacity-[0.08] transition-all duration-300 select-none group-hover:translate-y-1 group-hover:opacity-[0.14] sm:text-8xl",
-          stage.numeral
-        )}
-      >
-        {stage.number}
-      </span>
+      {/* Image placeholder: intentionally empty until a real photo is provided. */}
+      <div aria-hidden="true" className="relative aspect-[4/3] w-full overflow-hidden border-b border-primary/10 bg-muted">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <ImageIcon className="size-8 text-primary/15" />
+        </div>
+      </div>
 
-      <span
-        className={cn(
-          "relative flex size-11 items-center justify-center rounded-full transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-110",
-          stage.badge
-        )}
-      >
-        <Icon className="size-5" aria-hidden="true" />
-      </span>
+      <div className="relative -mt-6 flex items-end justify-between px-6">
+        <span className="flex size-12 items-center justify-center rounded-full bg-card text-primary shadow-[0_8px_20px_-8px_rgba(16,20,28,0.35)] ring-4 ring-card">
+          <Icon className="size-5" aria-hidden="true" />
+        </span>
+        <span aria-hidden="true" className="text-6xl font-bold text-primary/10">
+          {stage.number}
+        </span>
+      </div>
 
-      <p className={cn("relative mt-7 text-xs font-semibold tracking-wide", stage.muted)}>
-        {stage.number} — {stage.label}
-      </p>
-      <p className="relative mt-3 text-lg font-semibold transition-transform duration-300 group-hover:translate-x-0.5">
-        {stage.heading}
-      </p>
-      <p className={cn("relative mt-2 text-sm leading-relaxed", stage.muted)}>{stage.description}</p>
+      <div className="flex flex-1 flex-col px-6 pt-4 pb-7">
+        <h3 className="text-xl font-semibold tracking-tight text-foreground">{stage.label}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{stage.description}</p>
+      </div>
     </div>
   );
 }
+
