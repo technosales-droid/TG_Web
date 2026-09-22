@@ -43,21 +43,21 @@ export function Hero() {
           {/* Readability overlay: sits above the video/gradient, below the content. */}
           <div aria-hidden="true" className="absolute inset-0 -z-[5] bg-gradient-to-t from-black/55 via-black/20 to-black/10" />
 
-          <div className="relative max-w-2xl">
+          <div className="relative max-w-4xl">
             <div className="flex items-center gap-2 text-sm font-medium text-white/80">
               <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
               Techno Gurukul
             </div>
 
-            <h1 className="mt-5 text-[2.25rem] leading-[1.05] font-semibold tracking-tight text-balance text-white min-[430px]:text-5xl sm:text-6xl lg:text-7xl xl:text-[5rem]">
+            <h1 className="mt-5 max-w-3xl text-[2.25rem] leading-[1.05] font-semibold tracking-tight text-balance text-white min-[430px]:text-5xl sm:text-6xl lg:text-7xl xl:text-[5rem]">
               Learn. Create.
               <br />
               Build{" "}
               <span className="bg-gradient-to-r from-[#8fd3f0] to-brand-green bg-clip-text text-transparent">What&rsquo;s Next.</span>
             </h1>
 
-            <p className="mt-6 max-w-md text-base leading-relaxed text-white/80 sm:text-lg">
-              Techno Gurukul is built around practical learning — helping students develop creative, technical and
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
+              Techno Gurukul is built around practical learning, helping students develop creative, technical and
               digital skills through hands-on education, real projects and industry-relevant tools.
             </p>
 
