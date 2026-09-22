@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { FileText, FlaskConical, FolderOpen, Layers, Puzzle, Target } from "lucide-react";
+import { Check, FileText, FlaskConical, FolderOpen, Layers, Puzzle, Target } from "lucide-react";
 import { cn } from "cn";
 
 const OUTCOMES = [
@@ -11,6 +11,7 @@ const OUTCOMES = [
     title: "Start Small. Build Confidence.",
     description:
       "Apply a concept through exercises, challenges and smaller pieces of work. Practice helps turn new ideas into skills you can use.",
+    highlights: ["Short, focused exercises", "Increasing difficulty", "Skills you can reuse"],
     icon: Target,
   },
   {
@@ -19,6 +20,7 @@ const OUTCOMES = [
     title: "Bring Skills Together.",
     description:
       "Combine what you have learned to solve a problem, explore an idea or create something from start to finish.",
+    highlights: ["Multiple skills at once", "A real start-to-finish flow", "Room to make decisions"],
     icon: Layers,
   },
   {
@@ -27,6 +29,7 @@ const OUTCOMES = [
     title: "Try. Test. Improve.",
     description:
       "Explore different approaches, tools and ideas. Not everything needs to become a finished project; experimentation is part of learning.",
+    highlights: ["Low-stakes exploration", "Comparing approaches", "Learning from what doesn't work"],
     icon: FlaskConical,
   },
   {
@@ -35,6 +38,7 @@ const OUTCOMES = [
     title: "Think Through Real Problems.",
     description:
       "Break down a challenge, make decisions, test possible solutions and learn from what works and what needs to change.",
+    highlights: ["Breaking down challenges", "Weighing trade-offs", "Iterating on solutions"],
     icon: Puzzle,
   },
   {
@@ -43,6 +47,7 @@ const OUTCOMES = [
     title: "Make Your Work Understandable.",
     description:
       "Explain what you built, how you approached it, what you learned and how you improved it. Good work becomes more useful when others can understand it.",
+    highlights: ["Explaining your process", "Recording decisions", "Writing for other people"],
     icon: FileText,
   },
   {
@@ -51,6 +56,7 @@ const OUTCOMES = [
     title: "Turn Your Work Into Evidence.",
     description:
       "Select and refine work that represents your skills, process and progress, then present it in a way that is easy to understand.",
+    highlights: ["Selecting your best work", "Refining and polishing", "Presenting it clearly"],
     icon: FolderOpen,
   },
 ] as const;
@@ -113,7 +119,10 @@ export function OutcomesShowcase() {
           </p>
         </div>
 
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3">
+        {/* Below lg: a static grid, every card fully readable (no hover on touch devices).
+            At lg+: a single accordion row — each card is narrow at rest and grows on hover
+            to reveal the description + highlights, matching the reference layout. */}
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:mt-16 lg:flex lg:h-[540px] lg:gap-3">
           {OUTCOMES.map((outcome, index) => (
             <OutcomeCard key={outcome.tag} outcome={outcome} index={index} visible={visible} />
           ))}
@@ -135,9 +144,12 @@ function OutcomeCard({
   const Icon = outcome.icon;
 
   return (
+    // ponytail: hover-only expand — fine here since the lg:grid-cols-2 fallback below already
+    // shows every card's full content unconditionally, so touch/keyboard users never lose access
+    // to it; they just don't get the accordion animation.
     <div
       className={cn(
-        "group relative isolate flex aspect-[3/4] flex-col justify-end overflow-hidden rounded-[1.75rem] border border-white/10 bg-gradient-to-br from-[#0b3d50] via-[#0d5674] to-primary p-6 transition-all duration-500 hover:-translate-y-1",
+        "group relative isolate flex aspect-[3/4] flex-col justify-end overflow-hidden rounded-[1.75rem] border border-white/10 bg-gradient-to-br from-[#0b3d50] via-[#0d5674] to-primary p-6 transition-all duration-500 lg:aspect-auto lg:h-full lg:min-w-0 lg:flex-1 lg:p-0 lg:hover:flex-[3]",
         visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
       )}
       style={{ transitionDelay: visible ? `${index * 90}ms` : "0ms" }}
@@ -152,7 +164,7 @@ function OutcomeCard({
       />
       <div aria-hidden="true" className="absolute inset-0 -z-[5] bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
 
-      <div className="absolute top-5 left-5 flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
+      <div className="absolute top-5 left-5 flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-medium whitespace-nowrap text-white backdrop-blur-sm">
         <span aria-hidden="true">{outcome.number}</span>
         <span aria-hidden="true" className="text-white/50">/</span>
         {outcome.tag}
@@ -161,9 +173,27 @@ function OutcomeCard({
         <Icon className="size-4" aria-hidden="true" />
       </span>
 
-      <div className="relative">
+      {/* Collapsed state — lg+ only, rest state. Sideways label, hidden below lg where the
+          expanded content (next block) is always shown instead. */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 hidden items-end justify-center pb-8 transition-opacity duration-200 lg:flex lg:group-hover:opacity-0"
+      >
+        <span className="origin-center -rotate-90 text-sm font-semibold whitespace-nowrap text-white">{outcome.tag}</span>
+      </div>
+
+      {/* Expanded content — always shown below lg; at lg+ it's the hover reveal. */}
+      <div className="relative lg:absolute lg:inset-x-0 lg:bottom-0 lg:p-6 lg:opacity-0 lg:transition-opacity lg:duration-300 lg:group-hover:opacity-100 lg:group-hover:delay-150">
         <h3 className="text-lg font-semibold text-white">{outcome.title}</h3>
         <p className="mt-2 text-sm leading-relaxed text-white/75">{outcome.description}</p>
+        <ul className="mt-4 space-y-1.5">
+          {outcome.highlights.map((highlight) => (
+            <li key={highlight} className="flex items-center gap-1.5 text-xs text-white/70">
+              <Check className="size-3.5 shrink-0 text-brand-green" aria-hidden="true" />
+              {highlight}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
