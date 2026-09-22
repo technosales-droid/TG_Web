@@ -1,168 +1,90 @@
-import Image from "next/image";
 import Link from "next/link";
-import {
-  ChevronRight,
-  GraduationCap,
-  Laptop,
-  Lightbulb,
-  Sparkles,
-  Star,
-  Wrench,
-} from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
 
-const HERO_CARDS = [
-  {
-    icon: Wrench,
-    title: "Practical Learning",
-    detail: "Learn by Doing",
-    tone: "accent" as const,
-    className: "left-2 top-6 sm:-left-4 sm:top-10",
-    delay: "0s",
-  },
-  {
-    icon: Laptop,
-    title: "Industry-Relevant Tools",
-    detail: "Real-World Skills",
-    tone: "green" as const,
-    className: "right-2 top-6 sm:right-6 sm:top-16",
-    delay: "0.8s",
-  },
-  {
-    icon: Lightbulb,
-    title: "Creative Skills",
-    detail: "Turn Ideas Into Reality",
-    tone: "green" as const,
-    className: "left-2 top-1/2 -translate-y-1/2 sm:-left-8",
-    delay: "1.6s",
-  },
-  {
-    icon: GraduationCap,
-    title: "Career Focused",
-    detail: "Build Your Future",
-    tone: "accent" as const,
-    className: "right-2 bottom-10 sm:right-6",
-    delay: "0.4s",
-  },
-] as const;
+// No real hero video exists in the repository yet (checked public/ and the whole repo — nothing
+// but static images). The gradient + texture layers below are the permanent base of the panel, so
+// the hero already looks intentional without one. Once a real video is added — e.g. to
+// public/hero/<file>.mp4, with an optional poster frame at public/hero/<file>.jpg — set these two
+// and it plays as the full-bleed background with no other changes needed.
+const HERO_VIDEO_SRC: string | null = null;
+const HERO_POSTER_SRC: string | null = null;
 
-const CARD_TONE = {
-  accent: "bg-accent text-primary",
-  green: "bg-brand-green/15 text-brand-green",
-} as const;
-
-function FloatingCard({
-  icon: Icon,
-  title,
-  detail,
-  tone,
-  className,
-  delay,
-}: {
-  icon: typeof Wrench;
-  title: string;
-  detail: string;
-  tone: "accent" | "green";
-  className: string;
-  delay: string;
-}) {
-  return (
-    <div
-      style={{ animationDelay: delay }}
-      className={cn(
-        "absolute z-20 hidden w-48 items-start gap-3 rounded-2xl border border-primary/10 bg-card p-4 shadow-[0_12px_28px_-14px_rgba(16,20,28,0.3)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_32px_-14px_rgba(16,20,28,0.35)] motion-safe:animate-[gentle-float_6s_ease-in-out_infinite] lg:flex",
-        className
-      )}
-    >
-      <span className={cn("flex size-9 shrink-0 items-center justify-center rounded-full", CARD_TONE[tone])}>
-        <Icon className="size-4" aria-hidden="true" />
-      </span>
-      <span>
-        <p className="text-sm font-semibold text-foreground">{title}</p>
-        <p className="text-xs text-muted-foreground">{detail}</p>
-      </span>
-    </div>
-  );
-}
+// `outline-solid` matters: the shared button style sets `outline-none`, which would otherwise cancel the ring.
+const FOCUS = "focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-4 focus-visible:outline-background";
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden lg:min-h-[540px]">
-      {/* Two-tone diagonal backdrop, desktop only - fills the full hero
-          height so the image's bottom edge lands exactly on this shape's
-          bottom edge (the "hero baseline"). */}
-      <div aria-hidden="true" className="absolute inset-0 -z-10 hidden lg:block">
-        <div className="absolute inset-y-0 right-0 w-[58%] bg-brand-green/15 [clip-path:polygon(22%_0%,100%_0%,100%_100%,0%_100%)]" />
-        <div className="absolute inset-y-0 right-0 w-[58%] bg-primary/12 [clip-path:polygon(58%_0%,100%_0%,100%_38%)]" />
-      </div>
+    <section className="px-4 pt-6 pb-10 sm:px-6 sm:pt-8 sm:pb-14">
+      <div className="mx-auto max-w-[1800px]">
+        <div className="relative isolate flex min-h-[560px] flex-col justify-center overflow-hidden rounded-[2.5rem] border border-white/10 bg-gradient-to-br from-[#0b3d50] via-[#0d5674] to-primary px-6 py-14 sm:min-h-[640px] sm:px-10 sm:py-16 lg:min-h-[720px] lg:px-16 xl:min-h-[800px]">
+          {/* Texture: a faint dot grid, consistent with the dark panels used across the rest of the site. */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 -z-10 opacity-30 [background-image:radial-gradient(rgba(255,255,255,0.35)_1px,transparent_1px)] [background-size:26px_26px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]"
+          />
+          <div aria-hidden="true" className="pointer-events-none absolute -bottom-48 -left-40 -z-10 size-[34rem] rounded-full border border-white/10" />
+          <div aria-hidden="true" className="pointer-events-none absolute -top-56 right-0 -z-10 size-[36rem] rounded-full border border-white/5" />
 
-      {/* Decorative doodles, desktop only, subtle and slow */}
-      <div aria-hidden="true" className="absolute inset-0 -z-10 hidden lg:block">
-        <Star className="absolute left-[46%] top-16 size-6 fill-primary/20 text-primary/30 motion-safe:animate-[pulse_5s_ease-in-out_infinite]" />
-        <Sparkles className="absolute right-[6%] top-1/3 size-6 text-brand-green/40 motion-safe:animate-[pulse_4s_ease-in-out_infinite]" style={{ animationDelay: "1s" }} />
-        <ChevronRight className="absolute right-[10%] bottom-24 size-8 -rotate-45 text-primary/25 motion-safe:animate-[pulse_6s_ease-in-out_infinite]" style={{ animationDelay: "0.5s" }} />
-      </div>
-
-      <div className="relative mx-auto w-full max-w-[1800px] px-4 pt-14 pb-8 sm:px-6 sm:pt-20 lg:pb-0">
-        <div className="lg:max-w-[46%]">
-          <div className="flex items-center gap-2 text-sm font-medium text-primary">
-            <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
-            Techno Gurukul
-          </div>
-
-          <h1 className="mt-4 max-w-xl text-4xl font-semibold tracking-tight text-balance text-foreground sm:text-5xl lg:text-6xl">
-            Learn. Create.
-            <br />
-            Build{" "}
-            <span className="bg-gradient-to-r from-primary to-brand-green bg-clip-text text-transparent">
-              What&rsquo;s Next.
-            </span>
-          </h1>
-
-          <p className="mt-5 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Techno Gurukul is built around practical learning — helping
-            students develop creative, technical and digital skills
-            through hands-on education, real projects and
-            industry-relevant tools.
-          </p>
-
-          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 pb-14 sm:pb-20 lg:pb-16">
-            <Link
-              href="/programs"
-              className={cn(
-                buttonVariants({ variant: "default" }),
-                "h-11 rounded-full px-6 text-base transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0"
-              )}
+          {HERO_VIDEO_SRC && (
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster={HERO_POSTER_SRC ?? undefined}
+              className="absolute inset-0 -z-10 size-full object-cover"
             >
-              Explore Programs
-            </Link>
-            <Link
-              href="/about"
-              className="group flex items-center gap-1 text-base font-medium text-foreground transition-colors hover:text-primary"
-            >
-              Discover Techno Gurukul
-              <ChevronRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true" />
-            </Link>
+              <source src={HERO_VIDEO_SRC} type="video/mp4" />
+            </video>
+          )}
+
+          {/* Readability overlay: sits above the video/gradient, below the content. */}
+          <div aria-hidden="true" className="absolute inset-0 -z-[5] bg-gradient-to-t from-black/55 via-black/20 to-black/10" />
+
+          <div className="relative max-w-2xl">
+            <div className="flex items-center gap-2 text-sm font-medium text-white/80">
+              <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
+              Techno Gurukul
+            </div>
+
+            <h1 className="mt-5 text-[2.25rem] leading-[1.05] font-semibold tracking-tight text-balance text-white min-[430px]:text-5xl sm:text-6xl lg:text-7xl xl:text-[5rem]">
+              Learn. Create.
+              <br />
+              Build{" "}
+              <span className="bg-gradient-to-r from-[#8fd3f0] to-brand-green bg-clip-text text-transparent">What&rsquo;s Next.</span>
+            </h1>
+
+            <p className="mt-6 max-w-md text-base leading-relaxed text-white/80 sm:text-lg">
+              Techno Gurukul is built around practical learning — helping students develop creative, technical and
+              digital skills through hands-on education, real projects and industry-relevant tools.
+            </p>
+
+            <div className="mt-9 flex flex-wrap items-center gap-4">
+              <Link
+                href="/programs"
+                className={cn(
+                  buttonVariants({ variant: "default" }),
+                  "h-12 rounded-full bg-white px-7 text-base text-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-lg active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:translate-y-0",
+                  FOCUS
+                )}
+              >
+                Explore Programs
+              </Link>
+              <Link
+                href="/about"
+                className={cn(
+                  "group inline-flex h-12 items-center gap-1.5 rounded-full border-2 border-white/50 px-6 text-base font-medium text-white transition-all duration-200 hover:-translate-y-0.5 hover:border-white hover:bg-white/10 active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:translate-y-0",
+                  FOCUS
+                )}
+              >
+                Discover Techno Gurukul
+                <ChevronRight className="size-4 transition-transform duration-200 motion-safe:group-hover:translate-x-1" aria-hidden="true" />
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Hero image: in-flow on mobile/tablet, pinned to the section's
-          bottom-right on desktop so the subjects' feet touch the baseline. */}
-      <div className="relative mx-4 aspect-[16/11] sm:mx-6 lg:absolute lg:right-4 lg:bottom-0 lg:mx-0 lg:h-[500px] lg:aspect-auto lg:w-[calc(54%-2rem)]">
-        <Image
-          src="/hero/students.png"
-          alt="Techno Gurukul students"
-          fill
-          priority
-          sizes="(min-width: 1024px) 50vw, 90vw"
-          className="object-contain object-bottom"
-        />
-
-        {HERO_CARDS.map((card) => (
-          <FloatingCard key={card.title} {...card} />
-        ))}
       </div>
     </section>
   );
