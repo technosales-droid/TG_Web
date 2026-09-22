@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "cn";
@@ -42,8 +43,13 @@ export function ClosingCta() {
     <section ref={ref} className="px-4 py-14 sm:px-6 sm:py-16">
       <div className="mx-auto max-w-[1800px]">
         <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary to-[#0b3d50] px-6 py-14 sm:px-10 sm:py-16 lg:px-16 lg:py-20">
-          {/* CLOSING CTA VISUAL — a PNG will be provided to fill this side.
-              Right side intentionally left blank until then. */}
+          <Image
+            src="/brand/index-cta.png"
+            alt="A student smiling while working at a laptop, with books and a plant on the desk"
+            width={1672}
+            height={941}
+            className="pointer-events-none absolute right-0 bottom-0 hidden h-auto w-[42%] max-w-xl object-contain object-bottom lg:block"
+          />
 
           <div
             className={cn(
