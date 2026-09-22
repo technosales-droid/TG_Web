@@ -1,35 +1,41 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { BarChart3, Book, Image as ImageIcon, Settings2, Shapes } from "lucide-react";
+import Image from "next/image";
+import { BarChart3, Book, Settings2, Shapes } from "lucide-react";
 import { cn } from "cn";
 
-// No real classroom/project photography exists in the repository yet (see the /about/facilities
-// audit). Each card's image area stays an empty, clearly-a-placeholder panel — no stock photo, no
-// generated image — ready for a real photo to be dropped in later.
 const STAGES = [
   {
     number: "01",
     label: "Learn",
     icon: Book,
+    image: "/brand/learn.jpg",
+    alt: "Reaching for a book on a shelf",
     description: "Understand the concepts, tools and workflows behind your discipline.",
   },
   {
     number: "02",
     label: "Practise",
     icon: Settings2,
+    image: "/brand/practise.jpg",
+    alt: "A laptop and tablet set up for focused work",
     description: "Apply what you learn through hands-on exercises that grow more complex.",
   },
   {
     number: "03",
     label: "Build",
     icon: Shapes,
+    image: "/brand/build.jpg",
+    alt: "A laptop showing a 3D structural model beside hand-drawn sketches",
     description: "Create real projects that bring your skills together.",
   },
   {
     number: "04",
     label: "Show",
     icon: BarChart3,
+    image: "/brand/show.jpg",
+    alt: "A graduate in cap and gown walking toward a city skyline",
     description: "Present your work, get feedback and prepare for what's next.",
   },
 ] as const;
@@ -126,11 +132,14 @@ function StageCard({
       )}
       style={{ transitionDelay: visible ? `${index * 120}ms` : "0ms" }}
     >
-      {/* Image placeholder: intentionally empty until a real photo is provided. */}
-      <div aria-hidden="true" className="relative aspect-[4/3] w-full overflow-hidden border-b border-primary/10 bg-muted">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <ImageIcon className="size-8 text-primary/15" />
-        </div>
+      <div className="relative aspect-[4/3] w-full overflow-hidden border-b border-primary/10 bg-muted">
+        <Image
+          src={stage.image}
+          alt={stage.alt}
+          fill
+          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
+        />
       </div>
 
       <div className="relative -mt-6 flex items-end justify-between px-6">
