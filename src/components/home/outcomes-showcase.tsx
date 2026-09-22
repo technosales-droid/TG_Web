@@ -164,22 +164,26 @@ function OutcomeCard({
       />
       <div aria-hidden="true" className="absolute inset-0 -z-[5] bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
 
-      <div className="absolute top-5 left-5 flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-medium whitespace-nowrap text-white backdrop-blur-sm">
-        <span aria-hidden="true">{outcome.number}</span>
-        <span aria-hidden="true" className="text-white/50">/</span>
-        {outcome.tag}
+      {/* Tag pill and icon badge share one row so they stay vertically aligned and the pill
+          truncates gracefully instead of running under the icon on narrower (shrunk) cards. */}
+      <div className="absolute inset-x-5 top-5 flex h-10 items-center justify-between gap-2">
+        <div className="flex h-10 min-w-0 items-center gap-1.5 rounded-full bg-white/15 px-3 text-xs font-medium text-white backdrop-blur-sm">
+          <span aria-hidden="true" className="shrink-0">{outcome.number}</span>
+          <span aria-hidden="true" className="shrink-0 text-white/50">/</span>
+          <span className="truncate">{outcome.tag}</span>
+        </div>
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
+          <Icon className="size-4" aria-hidden="true" />
+        </span>
       </div>
-      <span className="absolute top-5 right-5 flex size-10 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
-        <Icon className="size-4" aria-hidden="true" />
-      </span>
 
-      {/* Collapsed state — lg+ only, rest state. Sideways label, hidden below lg where the
-          expanded content (next block) is always shown instead. */}
+      {/* Collapsed state — lg+ only, rest state. Horizontal label (no rotation), hidden below
+          lg where the expanded content (next block) is always shown instead. */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 hidden items-end justify-center pb-8 transition-opacity duration-200 lg:flex lg:group-hover:opacity-0"
+        className="absolute inset-x-0 bottom-0 hidden px-6 pb-6 transition-opacity duration-200 lg:block lg:group-hover:opacity-0"
       >
-        <span className="origin-center -rotate-90 text-sm font-semibold whitespace-nowrap text-white">{outcome.tag}</span>
+        <span className="text-lg font-semibold text-white">{outcome.tag}</span>
       </div>
 
       {/* Expanded content — always shown below lg; at lg+ it's the hover reveal. */}
