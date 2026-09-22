@@ -111,7 +111,7 @@ export function OutcomesShowcase() {
       <div className="mx-auto max-w-[1800px]">
         <div
           className={cn(
-            "mx-auto max-w-4xl text-center transition-all duration-700",
+            "mx-auto max-w-[1400px] text-center transition-all duration-700",
             visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
           )}
         >
@@ -124,7 +124,7 @@ export function OutcomesShowcase() {
             Don&rsquo;t Just Learn the Skill. Build Something With It.
           </h2>
 
-          <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
+          <p className="mx-auto mt-5 max-w-6xl text-base leading-relaxed text-balance text-muted-foreground sm:text-lg">
             Learning becomes more meaningful when you can use what you know.
             From focused practice and experiments to complete projects and
             portfolio pieces, the goal is to turn learning into work you can
@@ -175,6 +175,7 @@ function OutcomeCard({
         className="-z-10 object-cover"
       />
       <div aria-hidden="true" className="absolute inset-0 -z-[5] bg-gradient-to-t from-black to-transparent" />
+      <div aria-hidden="true" className="absolute inset-0 -z-[5] bg-gradient-to-b from-black/60 to-transparent" />
 
       {/* Tag pill and icon badge share one row so they stay vertically aligned and the pill
           truncates gracefully instead of running under the icon on narrower (shrunk) cards. */}
