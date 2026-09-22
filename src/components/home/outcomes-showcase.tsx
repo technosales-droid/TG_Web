@@ -1,33 +1,57 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Cpu, FolderOpen, Palette, Play } from "lucide-react";
+import { FileText, FlaskConical, FolderOpen, Layers, Puzzle, Target } from "lucide-react";
 import { cn } from "cn";
 
 const OUTCOMES = [
   {
-    icon: Play,
-    heading: "Playable Projects",
+    number: "01",
+    tag: "Practice Work",
+    title: "Start Small. Build Confidence.",
     description:
-      "Turn ideas into interactive experiences. Students progress from concepts and prototypes toward playable projects.",
+      "Apply a concept through exercises, challenges and smaller pieces of work. Practice helps turn new ideas into skills you can use.",
+    icon: Target,
   },
   {
-    icon: Palette,
-    heading: "Creative Work",
+    number: "02",
+    tag: "Projects",
+    title: "Bring Skills Together.",
     description:
-      "Create worlds, characters and visual experiences. Develop work across characters, environments, interfaces, animation and effects.",
+      "Combine what you have learned to solve a problem, explore an idea or create something from start to finish.",
+    icon: Layers,
   },
   {
-    icon: Cpu,
-    heading: "Technical Work",
+    number: "03",
+    tag: "Experiments",
+    title: "Try. Test. Improve.",
     description:
-      "Build the systems behind the experience. Apply programming, game engines, gameplay systems, AI and technical workflows.",
+      "Explore different approaches, tools and ideas. Not everything needs to become a finished project; experimentation is part of learning.",
+    icon: FlaskConical,
   },
   {
+    number: "04",
+    tag: "Problem Solving",
+    title: "Think Through Real Problems.",
+    description:
+      "Break down a challenge, make decisions, test possible solutions and learn from what works and what needs to change.",
+    icon: Puzzle,
+  },
+  {
+    number: "05",
+    tag: "Documentation",
+    title: "Make Your Work Understandable.",
+    description:
+      "Explain what you built, how you approached it, what you learned and how you improved it. Good work becomes more useful when others can understand it.",
+    icon: FileText,
+  },
+  {
+    number: "06",
+    tag: "Portfolio Work",
+    title: "Turn Your Work Into Evidence.",
+    description:
+      "Select and refine work that represents your skills, process and progress, then present it in a way that is easy to understand.",
     icon: FolderOpen,
-    heading: "Portfolio Work",
-    description:
-      "Turn completed work into something you can show. Refine projects and documentation into a portfolio that demonstrates practical ability.",
   },
 ] as const;
 
@@ -82,43 +106,24 @@ export function OutcomesShowcase() {
           </h2>
 
           <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Learning becomes more meaningful when students can put their
-            skills together. From individual exercises to larger projects,
-            the focus is on creating work that can be tested, refined and
-            eventually presented.
+            Learning becomes more meaningful when you can use what you know.
+            From focused practice and experiments to complete projects and
+            portfolio pieces, the goal is to turn learning into work you can
+            understand, improve and show.
           </p>
         </div>
 
-        <div className="mt-12 grid gap-8 lg:mt-16 lg:grid-cols-[1fr_1.1fr] lg:items-stretch lg:gap-14">
-          <div
-            className={cn(
-              "relative aspect-square w-full overflow-hidden rounded-[2rem] transition-all duration-700 lg:aspect-auto lg:h-full",
-              visible ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"
-            )}
-          >
-            {/* SHOWCASE IMAGE/VIDEO PLACEHOLDER — FINAL STUDENT/PROJECT ASSET WILL BE PROVIDED.
-                Final markup: replace this div's contents with either
-                <img src="..." className="absolute inset-0 h-full w-full object-cover" />
-                or a <video> with the same sizing classes. */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/70 to-[#0b3d50]" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-            <span className="absolute top-1/2 left-1/2 flex size-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-background/15">
-              <Play className="size-6 translate-x-0.5 text-background/70" aria-hidden="true" />
-            </span>
-          </div>
-
-          <div className="flex flex-col gap-4">
-            {OUTCOMES.map((outcome, index) => (
-              <OutcomeRow key={outcome.heading} outcome={outcome} index={index} visible={visible} />
-            ))}
-          </div>
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3">
+          {OUTCOMES.map((outcome, index) => (
+            <OutcomeCard key={outcome.tag} outcome={outcome} index={index} visible={visible} />
+          ))}
         </div>
       </div>
     </section>
   );
 }
 
-function OutcomeRow({
+function OutcomeCard({
   outcome,
   index,
   visible,
@@ -132,17 +137,33 @@ function OutcomeRow({
   return (
     <div
       className={cn(
-        "group flex items-start gap-4 rounded-2xl bg-muted/60 p-5 transition-all duration-500 hover:bg-muted sm:p-6",
-        visible ? "translate-x-0 opacity-100" : "translate-x-4 opacity-0"
+        "group relative isolate flex aspect-[3/4] flex-col justify-end overflow-hidden rounded-[1.75rem] border border-white/10 bg-gradient-to-br from-[#0b3d50] via-[#0d5674] to-primary p-6 transition-all duration-500 hover:-translate-y-1",
+        visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
       )}
-      style={{ transitionDelay: visible ? `${index * 120 + 150}ms` : "0ms" }}
+      style={{ transitionDelay: visible ? `${index * 90}ms` : "0ms" }}
     >
-      <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary transition-transform duration-300 group-hover:scale-110">
-        <Icon className="size-5" aria-hidden="true" />
+      {/* CARD IMAGE PLACEHOLDER — no photo exists per topic yet, so this stays an honest gradient
+          panel (matching the hero's dark-teal treatment) rather than a fabricated stock photo.
+          Swap in a real photo later: replace this div and the two overlay divs below it with
+          <Image src="..." alt="..." fill className="object-cover" />, keep the scrim div. */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 -z-10 opacity-25 [background-image:radial-gradient(rgba(255,255,255,0.35)_1px,transparent_1px)] [background-size:22px_22px]"
+      />
+      <div aria-hidden="true" className="absolute inset-0 -z-[5] bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+
+      <div className="absolute top-5 left-5 flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
+        <span aria-hidden="true">{outcome.number}</span>
+        <span aria-hidden="true" className="text-white/50">/</span>
+        {outcome.tag}
+      </div>
+      <span className="absolute top-5 right-5 flex size-10 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
+        <Icon className="size-4" aria-hidden="true" />
       </span>
-      <div>
-        <p className="text-base font-semibold text-foreground">{outcome.heading}</p>
-        <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{outcome.description}</p>
+
+      <div className="relative">
+        <h3 className="text-lg font-semibold text-white">{outcome.title}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-white/75">{outcome.description}</p>
       </div>
     </div>
   );
