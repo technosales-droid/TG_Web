@@ -3,12 +3,7 @@ import { ChevronRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
 
-// No real hero video exists in the repository yet (checked public/ and the whole repo — nothing
-// but static images). The gradient + texture layers below are the permanent base of the panel, so
-// the hero already looks intentional without one. Once a real video is added — e.g. to
-// public/hero/<file>.mp4, with an optional poster frame at public/hero/<file>.jpg — set these two
-// and it plays as the full-bleed background with no other changes needed.
-const HERO_VIDEO_SRC: string | null = null;
+const HERO_VIDEO_SRC: string | null = "/hero/hero-video.mp4";
 const HERO_POSTER_SRC: string | null = null;
 
 // `outline-solid` matters: the shared button style sets `outline-none`, which would otherwise cancel the ring.

@@ -7,7 +7,6 @@ import { cn } from "cn";
 
 const STAGES = [
   {
-    number: "01",
     label: "Learn",
     icon: Book,
     image: "/brand/learn.jpg",
@@ -15,7 +14,6 @@ const STAGES = [
     description: "Understand the concepts, tools and workflows behind your discipline.",
   },
   {
-    number: "02",
     label: "Practise",
     icon: Settings2,
     image: "/brand/practise.jpg",
@@ -23,7 +21,6 @@ const STAGES = [
     description: "Apply what you learn through hands-on exercises that grow more complex.",
   },
   {
-    number: "03",
     label: "Build",
     icon: Shapes,
     image: "/brand/build.jpg",
@@ -31,7 +28,6 @@ const STAGES = [
     description: "Create real projects that bring your skills together.",
   },
   {
-    number: "04",
     label: "Show",
     icon: BarChart3,
     image: "/brand/show.jpg",
@@ -104,7 +100,7 @@ export function LearningApproach() {
 
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:mt-10 lg:grid-cols-4">
             {STAGES.map((stage, index) => (
-              <StageCard key={stage.number} stage={stage} index={index} visible={visible} />
+              <StageCard key={stage.label} stage={stage} index={index} visible={visible} />
             ))}
           </div>
         </div>
@@ -142,12 +138,9 @@ function StageCard({
         />
       </div>
 
-      <div className="relative -mt-6 flex items-end justify-between px-6">
+      <div className="relative -mt-6 flex items-end px-6">
         <span className="flex size-12 items-center justify-center rounded-full bg-card text-primary shadow-[0_8px_20px_-8px_rgba(16,20,28,0.35)] ring-4 ring-card">
           <Icon className="size-5" aria-hidden="true" />
-        </span>
-        <span aria-hidden="true" className="text-6xl font-bold text-primary/10">
-          {stage.number}
         </span>
       </div>
 
