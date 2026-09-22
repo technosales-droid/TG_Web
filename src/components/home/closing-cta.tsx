@@ -42,18 +42,10 @@ export function ClosingCta() {
   return (
     <section ref={ref} className="px-4 py-14 sm:px-6 sm:py-16">
       <div className="mx-auto max-w-[1800px]">
-        <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary to-[#0b3d50] px-6 py-14 sm:px-10 sm:py-16 lg:px-16 lg:py-20">
-          <Image
-            src="/brand/index-cta.png"
-            alt="A student smiling while working at a laptop, with books and a plant on the desk"
-            width={1672}
-            height={941}
-            className="pointer-events-none absolute right-0 bottom-0 hidden h-auto w-[42%] max-w-xl object-contain object-bottom lg:block"
-          />
-
+        <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary to-[#0b3d50] px-6 py-14 sm:px-10 sm:py-16 lg:flex lg:min-h-[720px] lg:items-stretch lg:gap-10 lg:px-16 lg:py-16">
           <div
             className={cn(
-              "relative max-w-2xl transition-all duration-700",
+              "relative max-w-2xl shrink-0 transition-all duration-700 lg:flex lg:flex-col lg:justify-center",
               visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
             )}
           >
@@ -95,6 +87,21 @@ export function ClosingCta() {
                 />
               </Link>
             </div>
+          </div>
+
+          {/* Side-by-side flex column (not absolute) so the image can be large without ever
+              overlapping the text — it only ever takes the width left over after max-w-2xl. */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none relative mt-10 hidden min-w-0 flex-1 lg:mt-0 lg:block"
+          >
+            <Image
+              src="/brand/index-cta.png"
+              alt=""
+              fill
+              sizes="45vw"
+              className="object-contain object-bottom"
+            />
           </div>
         </div>
       </div>
