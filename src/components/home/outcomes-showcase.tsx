@@ -174,7 +174,7 @@ function OutcomeCard({
         sizes="(min-width: 1024px) 40vw, (min-width: 640px) 50vw, 100vw"
         className="-z-10 object-cover"
       />
-      <div aria-hidden="true" className="absolute inset-0 -z-[5] bg-gradient-to-t from-black/70 via-black/15 to-black/10" />
+      <div aria-hidden="true" className="absolute inset-0 -z-[5] bg-gradient-to-t from-black to-transparent" />
 
       {/* Tag pill and icon badge share one row so they stay vertically aligned and the pill
           truncates gracefully instead of running under the icon on narrower (shrunk) cards. */}
