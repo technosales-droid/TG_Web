@@ -42,7 +42,7 @@ export function ClosingCta() {
   return (
     <section ref={ref} className="px-4 py-14 sm:px-6 sm:py-16">
       <div className="mx-auto max-w-[1800px]">
-        <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary to-[#0b3d50] px-6 py-14 sm:px-10 sm:py-16 lg:px-16 lg:py-16">
+        <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary to-[#0b3d50] px-6 py-14 sm:px-10 sm:py-16 lg:overflow-visible lg:px-16 lg:py-16">
           <div
             className={cn(
               "relative z-10 max-w-2xl transition-all duration-700",
@@ -103,11 +103,12 @@ export function ClosingCta() {
             />
           </div>
 
-          {/* Desktop (lg+): sized off its own aspect ratio (not cropped, not boxed to a
-              column), taller than the panel and bottom-anchored so the extra height pushes it
-              up past the panel's top edge — the panel's `overflow-hidden` clips whatever spills
-              out. Free to sit under the text (z-10) where they overlap, since the source PNG is
-              transparent there. */}
+          {/* Desktop (lg+): sized off its own aspect ratio, taller than the panel and
+              bottom-anchored so the extra height pushes it up past the panel's top edge. The
+              panel switches to `overflow-visible` at lg (its rounded corners are painted by its
+              own border-radius regardless, so they still read as rounded) so her head genuinely
+              breaks the frame instead of being clipped. Free to sit under the text (z-10) where
+              they overlap, since the source PNG is transparent there. */}
           <Image
             src="/brand/index-cta.png"
             alt=""
@@ -115,7 +116,7 @@ export function ClosingCta() {
             width={1672}
             height={941}
             sizes="60vw"
-            className="pointer-events-none absolute right-0 bottom-0 hidden h-[140%] w-auto max-w-none lg:block"
+            className="pointer-events-none absolute right-0 bottom-0 z-0 hidden h-[155%] w-auto max-w-none lg:block"
           />
         </div>
       </div>
