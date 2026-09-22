@@ -42,10 +42,10 @@ export function ClosingCta() {
   return (
     <section ref={ref} className="px-4 py-14 sm:px-6 sm:py-16">
       <div className="mx-auto max-w-[1800px]">
-        <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary to-[#0b3d50] lg:flex lg:items-stretch">
+        <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary to-[#0b3d50] px-6 py-14 sm:px-10 sm:py-16 lg:px-16 lg:py-16">
           <div
             className={cn(
-              "relative max-w-2xl px-6 py-14 transition-all duration-700 sm:px-10 sm:py-16 lg:max-w-sm lg:shrink-0 lg:px-16 lg:py-16 lg:flex lg:flex-col lg:justify-center xl:max-w-lg",
+              "relative z-10 max-w-2xl transition-all duration-700",
               visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
             )}
           >
@@ -103,20 +103,20 @@ export function ClosingCta() {
             />
           </div>
 
-          {/* Desktop (lg+): a flex-1 column, bounded by construction — it can never invade the
-              text column's space no matter how tall the panel gets, unlike sizing the image by
-              its own aspect ratio off the panel's height. Zero padding on this column, so the
-              photo sits flush against the panel's top/right/bottom edges; object-cover crops
-              only the transparent margin around the subject to make that fit exact. */}
-          <div aria-hidden="true" className="pointer-events-none relative hidden lg:block lg:flex-1">
-            <Image
-              src="/brand/index-cta.png"
-              alt=""
-              fill
-              sizes="55vw"
-              className="object-cover object-[center_30%]"
-            />
-          </div>
+          {/* Desktop (lg+): sized off its own aspect ratio (not cropped, not boxed to a
+              column), taller than the panel and bottom-anchored so the extra height pushes it
+              up past the panel's top edge — the panel's `overflow-hidden` clips whatever spills
+              out. Free to sit under the text (z-10) where they overlap, since the source PNG is
+              transparent there. */}
+          <Image
+            src="/brand/index-cta.png"
+            alt=""
+            aria-hidden="true"
+            width={1672}
+            height={941}
+            sizes="60vw"
+            className="pointer-events-none absolute right-0 bottom-0 hidden h-[140%] w-auto max-w-none lg:block"
+          />
         </div>
       </div>
     </section>
