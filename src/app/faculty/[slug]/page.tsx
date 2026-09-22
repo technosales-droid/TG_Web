@@ -1,19 +1,6 @@
-import { notFound } from "next/navigation";
-import { PageShell } from "@/components/page-shell";
-import { getFacultyMember, getFaculty } from "@/lib/content";
+import { redirect } from "next/navigation";
 
-export function generateStaticParams() {
-  return getFaculty().map((member) => ({ slug: member.slug }));
-}
-
-export default async function FacultyMemberPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
-  const member = getFacultyMember(slug);
-  if (!member) notFound();
-
-  return <PageShell title={member.name} />;
+// Faculty is now covered by the combined About destination; no per-member pages exist.
+export default function FacultyMemberPage() {
+  redirect("/about/facilities");
 }

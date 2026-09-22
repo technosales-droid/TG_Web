@@ -1,5 +1,6 @@
-import { PageShell } from "@/components/page-shell";
+import { redirect } from "next/navigation";
 
+// Faculty is now covered by the combined About destination.
 export default function Page() {
-  return <PageShell title="Faculty" />;
+  redirect("/about/facilities");
 }

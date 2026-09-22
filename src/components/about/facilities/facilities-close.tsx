@@ -1,38 +1,38 @@
 import Link from "next/link";
-import { ArrowRight, Building2, Info, Lightbulb, Route } from "lucide-react";
+import { ArrowRight, Info, Lightbulb, Route, Target } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
 
 const EXPLORE: { title: string; text: string; href: string; Icon: LucideIcon }[] = [
-  { title: "Why Techno Gurukul", text: "Explore the thinking behind the learning model.", href: "/about/why-technogurukul", Icon: Lightbulb },
-  { title: "Our Approach", text: "See how the mission becomes a practical learning experience.", href: "/about/approach", Icon: Route },
-  { title: "Facilities & Faculty", text: "Explore the learning environment and the people who support it.", href: "/about/facilities", Icon: Building2 },
+  { title: "Our Mission", text: "Understand the purpose behind the learning model.", href: "/about/mission", Icon: Target },
+  { title: "Why Techno Gurukul", text: "Explore the reasoning behind the practical learning philosophy.", href: "/about/why-technogurukul", Icon: Lightbulb },
+  { title: "Our Approach", text: "See how the philosophy becomes an actual teaching and learning experience.", href: "/about/approach", Icon: Route },
   { title: "About Techno Gurukul", text: "Return to the broader institutional overview.", href: "/about", Icon: Info },
 ];
 
-/** Sections 10 and 11: the mission can grow, and related About pages. */
-export function MissionClose() {
+/** Sections 5 and 6: honest positioning, then related About pages. */
+export function FacilitiesClose() {
   return (
     <>
-      <section aria-labelledby="ms-grow-heading" className="px-4 py-10 sm:px-6 sm:py-14 xl:py-20">
+      <section aria-labelledby="fc-honest-heading" className="px-4 py-10 sm:px-6 sm:py-14 xl:py-20">
         <div className="mx-auto max-w-[1800px] xl:px-8">
           <div className="mx-auto max-w-4xl rounded-[2rem] border border-primary/15 bg-card px-6 py-8 sm:px-10 sm:py-10">
             <div aria-hidden="true" className="h-1 w-16 rounded-full bg-gradient-to-r from-primary to-brand-green" />
-            <h2 id="ms-grow-heading" className="mt-5 text-2xl font-semibold tracking-tight text-balance text-foreground sm:text-3xl xl:text-4xl">
-              The Direction Can Grow. <span className={GRADIENT_TEXT}>The Principle Stays.</span>
+            <h2 id="fc-honest-heading" className="mt-5 text-2xl font-semibold tracking-tight text-balance text-foreground sm:text-3xl xl:text-4xl">
+              A Space and a Team Support Learning. <span className={GRADIENT_TEXT}>They Do Not Replace It.</span>
             </h2>
             <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Programs, tools and learning resources can evolve as learner needs and professional contexts change. The
-              underlying emphasis remains practical: understand, practise, build, show and keep improving.
+              A well-designed space and supportive guidance can make practice easier and feedback more available. What a
+              learner builds and understands still depends on their own effort, curiosity and practice.
             </p>
           </div>
         </div>
       </section>
 
-      <section aria-labelledby="ms-related-heading" className="px-4 py-10 sm:px-6 sm:py-14 xl:py-20">
+      <section aria-labelledby="fc-related-heading" className="px-4 py-10 sm:px-6 sm:py-14 xl:py-20">
         <div className="mx-auto max-w-[1800px] xl:px-8">
           <SectionHeader
-            id="ms-related-heading"
+            id="fc-related-heading"
             eyebrow="Related About Pages"
             title={
               <>

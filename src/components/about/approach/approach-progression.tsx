@@ -11,7 +11,7 @@ const PROGRESSION = [
 
 const ENVIRONMENT = ["Focused practice", "Collaboration", "Project work", "Feedback", "Access to relevant tools", "Discussion", "Review"];
 
-/** Sections 11 and 12: how the approach supports progression, and the learning environment (briefly, linking to Facilities). */
+/** Sections 11 and 12: how the approach supports progression, and the learning environment (briefly, linking to Facilities & Faculty). */
 export function ApproachProgression() {
   return (
     <>
@@ -69,7 +69,7 @@ export function ApproachProgression() {
                   href="/about/facilities"
                   className="group mt-6 inline-flex min-h-11 items-center gap-1.5 rounded-lg text-base font-semibold text-primary focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-primary"
                 >
-                  Explore Facilities
+                  Explore Facilities &amp; Faculty
                   <ArrowRight className="size-4 transition-transform duration-200 motion-safe:group-hover:translate-x-1" aria-hidden="true" />
                 </Link>
               </div>

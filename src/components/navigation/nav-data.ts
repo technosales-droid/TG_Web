@@ -78,7 +78,7 @@ export const ABOUT_LINKS: NavLink[] = [
   { label: "Mission", href: "/about/mission" },
   { label: "Why Techno Gurukul", href: "/about/why-technogurukul" },
   { label: "Our Approach", href: "/about/approach" },
-  { label: "Facilities", href: "/about/facilities" },
+  { label: "Facilities & Faculty", href: "/about/facilities" },
 ];
 
 export const CTA_LINK: NavLink = { label: "Enquire Now", href: "/contact" };

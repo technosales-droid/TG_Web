@@ -16,7 +16,7 @@ const RESPONSIBILITIES = [
 const EXPLORE: { title: string; text: string; href: string; Icon: LucideIcon }[] = [
   { title: "Our Mission", text: "Understand the purpose behind the learning model.", href: "/about/mission", Icon: Target },
   { title: "Why Techno Gurukul", text: "Explore the reasoning behind the practical learning philosophy.", href: "/about/why-technogurukul", Icon: Lightbulb },
-  { title: "Facilities", text: "Explore the physical and learning environment.", href: "/about/facilities", Icon: Building2 },
+  { title: "Facilities & Faculty", text: "Explore the learning environment and the people who support it.", href: "/about/facilities", Icon: Building2 },
   { title: "About Techno Gurukul", text: "Return to the broader institutional overview.", href: "/about", Icon: Info },
 ];
 

@@ -14,7 +14,7 @@ const EXPLORE: { title: string; text: string; href: string; Icon: LucideIcon }[]
   { title: "Mission", text: "Understand the purpose and direction behind Techno Gurukul.", href: "/about/mission", Icon: Target },
   { title: "Why Techno Gurukul", text: "Explore the thinking behind the learning model.", href: "/about/why-technogurukul", Icon: Lightbulb },
   { title: "Our Approach", text: "Go deeper into how the learning experience is designed.", href: "/about/approach", Icon: Route },
-  { title: "Facilities", text: "Explore the physical and learning environment and facilities.", href: "/about/facilities", Icon: Building2 },
+  { title: "Facilities & Faculty", text: "Explore the learning environment and the people who support it.", href: "/about/facilities", Icon: Building2 },
 ];
 
 /** Sections 9, 10 and 11: our emphasis, the About destination hub, and transparent positioning. */
