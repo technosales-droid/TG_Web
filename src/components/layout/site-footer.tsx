@@ -187,7 +187,7 @@ export function SiteFooter() {
               aria-label="Techno Gurukul home"
               className="inline-flex rounded-2xl bg-background px-4 py-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
-              <Image src="/brand/logo.png" alt="Techno Gurukul" width={1299} height={179} className="h-8 w-auto" />
+              <Image src="/brand/logo.png" alt="Techno Gurukul" width={1710} height={281} className="h-8 w-auto" />
             </Link>
             <p className="mt-5 text-base leading-relaxed text-background/80">{footerBrand.tagline}</p>
             <div className="mt-6">

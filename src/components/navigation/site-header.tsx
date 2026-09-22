@@ -52,8 +52,8 @@ export function SiteHeader() {
             <Image
               src="/brand/logo.png"
               alt="Techno Gurukul"
-              width={1299}
-              height={179}
+              width={1710}
+              height={281}
               priority
               className="h-8 w-auto sm:h-10"
             />
