@@ -3,33 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
-  Aperture,
   ArrowUpRight,
   BarChart3,
   Boxes,
   Bot,
-  Briefcase,
-  Camera,
-  Clapperboard,
   Cloud,
-  Code,
   Code2,
-  Film,
   Gamepad2,
-  Laptop,
   Megaphone,
-  Monitor,
   PenTool,
-  Palette,
-  Rocket,
-  Search,
   Shapes,
   ShieldCheck,
-  Share2,
-  Smartphone,
-  Sparkles,
-  Terminal,
-  Wand2,
 } from "lucide-react";
 import { cn } from "cn";
 import { buttonVariants } from "@/components/ui/button";
@@ -40,7 +24,7 @@ const ACTIVE_PROGRAMS = [
     category: "Digital & Marketing",
     title: "Digital Marketing",
     description:
-      "Learn how brands grow in the digital world — from strategy and content to social media, search, advertising and analytics.",
+      "Build practical skills across digital marketing, content, campaigns, audience understanding and measurable digital work.",
     outcome: "Learn. Execute. Measure. Grow.",
     href: "/programs/tg-digital-marketing",
     icon: Megaphone,
@@ -51,7 +35,7 @@ const ACTIVE_PROGRAMS = [
     category: "Creative Technology",
     title: "Game Development & Design",
     description:
-      "Learn to turn ideas into interactive experiences through game design, programming, digital art, engines, animation and practical project work.",
+      "Learn the foundations of game creation through design, development, interactive systems and hands-on project work.",
     outcome: "Design. Build. Play.",
     href: "/programs/tg-gameforge",
     icon: Gamepad2,
@@ -59,31 +43,48 @@ const ACTIVE_PROGRAMS = [
   },
 ];
 
+// Committed future directions, not yet enrollable — no routes, no fabricated details.
 const COMING_SOON_PROGRAMS = [
-  { title: "Web Development", description: "Learn to build modern websites and web applications using HTML, CSS, JavaScript and modern frameworks.", icon: Code2 },
-  { title: "UI/UX Design", description: "Learn to design websites and apps through user research, wireframes, visual design and prototyping.", icon: PenTool },
-  { title: "Graphic Design", description: "Learn to create professional visual designs for branding, social media, advertising and digital content.", icon: Palette },
-  { title: "Video Editing", description: "Learn to edit professional videos for YouTube, social media, advertising and digital campaigns.", icon: Clapperboard },
-  { title: "Motion Graphics", description: "Learn to create animated graphics, titles, promotional visuals and engaging digital content.", icon: Wand2 },
-  { title: "3D Design & Animation", description: "Learn to create 3D models, environments, animations and visual assets for digital media.", icon: Shapes },
-  { title: "AI & Generative AI", description: "Learn how to use modern AI tools for content creation, productivity, automation and creative workflows.", icon: Sparkles },
-  { title: "AI-Assisted Development", description: "Learn how AI can support coding, debugging, prototyping and software development workflows.", icon: Bot },
-  { title: "Data Analytics", description: "Learn to work with data, create dashboards, identify patterns and turn information into useful insights.", icon: BarChart3 },
-  { title: "Python Programming", description: "Learn Python fundamentals, problem solving, automation, data handling and practical programming.", icon: Terminal },
-  { title: "App Development", description: "Learn to design and build mobile applications from interface to functionality and deployment.", icon: Smartphone },
-  { title: "Software Development", description: "Learn programming fundamentals, software architecture, development workflows and application building.", icon: Code },
-  { title: "Cybersecurity Fundamentals", description: "Learn the fundamentals of digital security, networks, threats, vulnerabilities and safe computing.", icon: ShieldCheck },
-  { title: "Cloud Computing", description: "Learn cloud fundamentals, deployment, storage, services and modern cloud-based workflows.", icon: Cloud },
-  { title: "Content Creation", description: "Learn to plan, create and publish content for YouTube, Instagram, websites and digital platforms.", icon: Camera },
-  { title: "Social Media Management", description: "Learn content planning, platform strategy, community management, analytics and campaign execution.", icon: Share2 },
-  { title: "SEO", description: "Learn how search engines work and how to improve websites through technical, on-page and content SEO.", icon: Search },
-  { title: "Photography & Digital Imaging", description: "Learn photography fundamentals, image composition, editing and digital post-production.", icon: Aperture },
-  { title: "Animation", description: "Learn 2D/3D animation principles, character movement, storytelling and digital production workflows.", icon: Film },
-  { title: "CAD & 3D Modelling", description: "Learn computer-aided design, technical modelling and 3D workflows for digital and physical applications.", icon: Boxes },
-  { title: "Office & Productivity Skills", description: "Learn practical skills in documents, spreadsheets, presentations, collaboration and everyday digital productivity.", icon: Briefcase },
-  { title: "Computer Fundamentals", description: "Build essential computer skills including operating systems, files, internet usage, software and digital workflows.", icon: Monitor },
-  { title: "Entrepreneurship & Digital Business", description: "Learn how to develop ideas, build digital businesses, market products and manage online operations.", icon: Rocket },
-  { title: "Freelancing & Remote Work", description: "Learn how to build a portfolio, find opportunities, communicate with clients and manage freelance projects.", icon: Laptop },
+  {
+    title: "Cybersecurity",
+    description: "Explore the fundamentals of cybersecurity, digital safety, systems protection and responsible security practices.",
+    icon: ShieldCheck,
+  },
+  {
+    title: "Data Science & Analytics",
+    description: "Learn how data can be explored, interpreted and turned into useful insights, visualisations and decisions.",
+    icon: BarChart3,
+  },
+  {
+    title: "Artificial Intelligence & Machine Learning",
+    description: "Explore artificial intelligence, machine learning concepts and practical ways intelligent systems can be designed and applied.",
+    icon: Bot,
+  },
+  {
+    title: "Full-Stack Web Development",
+    description: "Learn how modern web experiences are built across interfaces, applications, databases and the systems connecting them.",
+    icon: Code2,
+  },
+  {
+    title: "UI/UX & Product Design",
+    description: "Explore user experience, interface design, interaction thinking and the process of turning ideas into useful digital products.",
+    icon: PenTool,
+  },
+  {
+    title: "Cloud Computing & DevOps",
+    description: "Understand modern cloud infrastructure, deployment workflows, automation and the systems that support digital products.",
+    icon: Cloud,
+  },
+  {
+    title: "3D Design & Animation",
+    description: "Explore 3D modelling, visual design, animation and digital environments through creative project-based work.",
+    icon: Shapes,
+  },
+  {
+    title: "Blockchain & Web3",
+    description: "Explore blockchain concepts, decentralised systems, digital assets and the technologies shaping Web3.",
+    icon: Boxes,
+  },
 ].map((program) => ({ ...program, status: "coming-soon" as const, base: "from-muted to-border" }));
 
 const ALL_PROGRAMS = [...ACTIVE_PROGRAMS, ...COMING_SOON_PROGRAMS];
@@ -153,7 +154,7 @@ export function ProgramsPreview() {
           visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
         )}
       >
-        <div className="flex w-max gap-6 px-4 [animation:marquee_140s_linear_infinite] group-hover/marquee:[animation-play-state:paused] motion-reduce:animate-none sm:px-6 lg:gap-8">
+        <div className="flex w-max gap-7 px-4 [animation:marquee_55s_linear_infinite] group-hover/marquee:[animation-play-state:paused] motion-reduce:animate-none sm:px-6 lg:gap-10">
           {ALL_PROGRAMS.map((program) => (
             <ProgramCard key={`a-${program.title}`} program={program} />
           ))}
@@ -202,13 +203,13 @@ function ProgramCard({ program, duplicate }: { program: Program; duplicate?: boo
           <img src="..." className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
           or a <video> with the same sizing classes. */}
       <div className={cn("absolute inset-0 bg-gradient-to-br transition-transform duration-500 group-hover:scale-105", program.base)}>
-        <Icon className={cn("absolute right-6 bottom-6 size-24", isActive ? "text-background/10" : "text-foreground/10")} aria-hidden="true" />
+        <Icon className={cn("absolute right-7 bottom-7 size-28", isActive ? "text-background/10" : "text-foreground/10")} aria-hidden="true" />
       </div>
       <div className={cn("absolute inset-0 bg-gradient-to-t to-transparent", isActive ? "from-black/70 via-black/10" : "from-black/40 via-black/5")} />
 
       <span
         className={cn(
-          "relative m-5 inline-flex w-fit items-center rounded-full px-3 py-1.5 text-xs font-semibold",
+          "relative m-6 inline-flex w-fit items-center rounded-full px-3.5 py-1.5 text-xs font-semibold",
           isActive ? "bg-background/90 text-foreground" : "bg-background/70 text-muted-foreground"
         )}
       >
@@ -218,22 +219,22 @@ function ProgramCard({ program, duplicate }: { program: Program; duplicate?: boo
       {isActive && (
         <span
           aria-hidden="true"
-          className="absolute top-5 right-5 flex size-10 items-center justify-center rounded-full bg-background/90 text-foreground transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          className="absolute top-6 right-6 flex size-11 items-center justify-center rounded-full bg-background/90 text-foreground transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
         >
           <ArrowUpRight className="size-4" />
         </span>
       )}
 
-      <div className="relative mt-auto flex flex-col gap-2 p-5 pt-0">
-        <p className={cn("text-xl font-semibold", isActive ? "text-background" : "text-background/90")}>{program.title}</p>
-        <p className={cn("text-sm leading-relaxed", isActive ? "text-background/80" : "text-background/60")}>{program.description}</p>
+      <div className="relative mt-auto flex flex-col gap-2.5 p-6 pt-0">
+        <p className={cn("text-2xl font-semibold", isActive ? "text-background" : "text-background/90")}>{program.title}</p>
+        <p className={cn("text-base leading-relaxed", isActive ? "text-background/80" : "text-background/60")}>{program.description}</p>
         {isActive && <p className="mt-1 text-xs font-semibold tracking-wide text-background/70">{program.outcome}</p>}
       </div>
     </>
   );
 
   const className = cn(
-    "group relative flex aspect-[3/4] w-72 shrink-0 flex-col overflow-hidden rounded-[2rem] sm:aspect-[16/11] sm:w-[28rem] lg:w-[32rem]",
+    "group relative flex aspect-[3/4] w-80 shrink-0 flex-col overflow-hidden rounded-[2.5rem] sm:aspect-[16/11] sm:w-[30rem] lg:w-[36rem]",
     duplicate && "motion-reduce:hidden"
   );
 
