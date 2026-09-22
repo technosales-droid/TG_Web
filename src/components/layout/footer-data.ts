@@ -1,6 +1,5 @@
 import {
   ABOUT_LINKS,
-  CTA_LINK,
   DIGITAL_MARKETING_PROGRAMS,
   FLAGSHIP_PROGRAM,
   LEARNING_LINKS,
@@ -13,13 +12,6 @@ import {
 export const footerBrand = {
   name: "Techno Gurukul",
   tagline: "Practical learning for skills you can build with.",
-} as const;
-
-export const footerCta = {
-  eyebrow: "Ready to start building?",
-  text: "Build practical skills. Explore a program, find your path, or talk to Techno Gurukul.",
-  primary: { label: "Explore Programs", href: "/programs" } satisfies NavLink,
-  secondary: CTA_LINK,
 } as const;
 
 export interface FooterGroup {

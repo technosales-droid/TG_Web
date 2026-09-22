@@ -5,7 +5,6 @@ import { cn } from "cn";
 import {
   footerBrand,
   footerContact,
-  footerCta,
   footerLegal,
   footerLocation,
   footerNavigation,
@@ -149,38 +148,8 @@ export function SiteFooter() {
   return (
     <footer className="bg-[#0b3d50] text-background">
       <div className="mx-auto max-w-[1800px] px-4 pt-14 pb-8 sm:px-6 sm:pt-16">
-        {/* Layer 1 — call to action */}
-        <div className="flex flex-col gap-6 rounded-[2rem] border border-background/15 bg-background/10 p-6 sm:p-8 xl:flex-row xl:items-center xl:justify-between xl:gap-12 xl:px-10 xl:py-9">
-          <div className="max-w-2xl">
-            <h2 className="text-sm font-semibold tracking-widest text-background/80 uppercase">
-              {footerCta.eyebrow}
-            </h2>
-            <p className="mt-3 text-2xl font-semibold tracking-tight text-balance text-background sm:text-3xl">
-              {footerCta.text}
-            </p>
-          </div>
-          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
-            <Link
-              href={footerCta.primary.href}
-              className="inline-flex min-h-12 items-center justify-center rounded-full bg-background px-6 py-2 text-center text-base font-semibold text-[#0b3d50] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:translate-y-0"
-            >
-              {footerCta.primary.label}
-            </Link>
-            <Link
-              href={footerCta.secondary.href}
-              className="group inline-flex min-h-12 items-center justify-center gap-1.5 rounded-full border border-background/35 px-6 py-2 text-center text-base font-medium text-background transition-colors duration-200 hover:bg-background/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-            >
-              {footerCta.secondary.label}
-              <ArrowUpRight
-                className="size-4 transition-transform duration-200 motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5"
-                aria-hidden="true"
-              />
-            </Link>
-          </div>
-        </div>
-
         {/* Layer 2 — brand, navigation, contact */}
-        <div className="mt-12 grid gap-12 xl:mt-14 xl:grid-cols-[minmax(0,1fr)_minmax(0,2.4fr)] xl:gap-x-16">
+        <div className="grid gap-12 xl:grid-cols-[minmax(0,1fr)_minmax(0,2.4fr)] xl:gap-x-16">
           <div className="order-1 max-w-sm xl:col-start-1 xl:row-start-1">
             <Link
               href="/"
