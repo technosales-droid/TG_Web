@@ -52,8 +52,8 @@ export type SocialId = "instagram" | "facebook" | "linkedin" | "youtube" | "what
 export const footerSocials: { id: SocialId; label: string; href: string | null }[] = [
   { id: "instagram", label: "Instagram", href: "https://www.instagram.com/_technogurukul_/" },
   { id: "facebook", label: "Facebook", href: "https://www.facebook.com/share/1EsCQmrfKt/" },
-  { id: "linkedin", label: "LinkedIn", href: null },
-  { id: "youtube", label: "YouTube", href: null },
+  { id: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com/company/technogurukul" },
+  { id: "youtube", label: "YouTube", href: "https://www.youtube.com/@techno_gurukul" },
   { id: "whatsapp", label: "WhatsApp", href: null },
   { id: "threads", label: "Threads", href: "https://www.threads.com/@_technogurukul_" },
   { id: "pinterest", label: "Pinterest", href: "https://pin.it/1EuzMsFLY" },
