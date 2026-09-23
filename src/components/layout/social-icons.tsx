@@ -1,4 +1,12 @@
-import { FaFacebook, FaInstagram, FaLinkedin, FaWhatsapp, FaYoutube } from "react-icons/fa6";
+import {
+  FaFacebook,
+  FaInstagram,
+  FaLinkedin,
+  FaPinterest,
+  FaThreads,
+  FaWhatsapp,
+  FaYoutube,
+} from "react-icons/fa6";
 import type { SocialId } from "./footer-data";
 
 // Real brand marks (react-icons' Font Awesome 6 Brands set), not hand-drawn approximations.
@@ -8,6 +16,8 @@ const ICONS: Record<SocialId, React.ComponentType<{ className?: string }>> = {
   linkedin: FaLinkedin,
   youtube: FaYoutube,
   whatsapp: FaWhatsapp,
+  threads: FaThreads,
+  pinterest: FaPinterest,
 };
 
 export function SocialIcon({ id, className }: { id: SocialId; className?: string }) {
