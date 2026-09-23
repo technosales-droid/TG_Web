@@ -143,7 +143,8 @@ const GAME_COURSES: Course[] = [
     ["Game Design", "Level Design"],
     ["game mechanics", "game loops", "progression", "balancing", "narrative", "world building", "quest design", "prototyping", "gamedesign studio"],
     ["layers", "boxes", "pen-tool"],
-    "navy"
+    "navy",
+    { status: "active", href: "/programs/tg-gamedesign-studio", featured: true }
   ),
   game(
     "tg-game-animation-vfx",
