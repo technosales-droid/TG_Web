@@ -49,8 +49,8 @@ export const ACTIVE_PROGRAMS: ActiveProgram[] = [
     outcome: "Mechanics. Levels. Play.",
     href: "/programs/tg-gamedesign-studio",
     image: null,
-    video: null,
-    alt: "",
+    video: "/brand/programs-gamedesign-studio.mp4",
+    alt: "A montage of game design work: 3D terrain and level design tools alongside digital character art",
     visual: { tone: "navy", icon: "layers" },
   },
 ];
