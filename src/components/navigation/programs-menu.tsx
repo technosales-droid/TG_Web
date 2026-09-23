@@ -1,4 +1,7 @@
+import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { cn } from "cn";
 import {
   NavigationMenuContent,
   NavigationMenuItem,
@@ -11,84 +14,89 @@ import {
   FLAGSHIP_PROGRAM,
   PROGRAM_CATEGORY,
   SPECIALIZED_PROGRAMS,
+  type ProgramLink,
 } from "@/components/navigation/nav-data";
+
+function Tile({
+  program,
+  eyebrow,
+  flagship,
+  className,
+}: {
+  program: ProgramLink;
+  eyebrow?: string;
+  flagship?: boolean;
+  className?: string;
+}) {
+  return (
+    <NavigationMenuLink
+      render={<Link href={program.href} />}
+      closeOnClick
+      className={cn(
+        "group/item relative block items-stretch overflow-hidden rounded-2xl bg-muted p-0 text-white hover:bg-muted hover:text-white focus:bg-muted focus:text-white",
+        className
+      )}
+    >
+      <Image
+        src={program.image}
+        alt=""
+        fill
+        sizes={flagship ? "480px" : "240px"}
+        className="object-cover transition-transform duration-700 ease-out motion-safe:group-hover/item:scale-105"
+      />
+      <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+
+      {flagship && (
+        <span className="absolute top-4 left-4 rounded-full bg-brand-green px-3 py-1 text-[11px] font-semibold tracking-wide text-white uppercase">
+          Flagship
+        </span>
+      )}
+      <span className="absolute top-3 right-3 flex size-8 items-center justify-center rounded-full bg-white text-foreground opacity-0 transition-all duration-300 motion-safe:translate-y-1 group-hover/item:opacity-100 motion-safe:group-hover/item:translate-y-0 group-focus-visible/item:opacity-100">
+        <ArrowUpRight className="size-4" aria-hidden="true" />
+      </span>
+
+      <span className={cn("absolute inset-x-0 bottom-0 block", flagship ? "p-5" : "p-3.5")}>
+        {eyebrow && (
+          <span className="mb-1 block text-[11px] font-semibold tracking-widest text-white/75 uppercase">{eyebrow}</span>
+        )}
+        <span className={cn("block leading-tight font-semibold", flagship ? "text-2xl" : "text-sm")}>{program.label}</span>
+        <span className={cn("mt-1 block text-white/80", flagship ? "max-w-xs text-sm" : "line-clamp-2 text-xs")}>
+          {program.tagline}
+        </span>
+      </span>
+    </NavigationMenuLink>
+  );
+}
 
 export function ProgramsMenu() {
   return (
     <NavigationMenuItem>
       <NavigationMenuTrigger>Programs</NavigationMenuTrigger>
       <NavigationMenuContent>
-        <div className="w-[40rem] p-6">
-          <p className="mb-4 px-1 text-sm font-medium text-muted-foreground">
-            {PROGRAM_CATEGORY}
-          </p>
-          <div className="grid grid-cols-2 gap-4">
-            <NavigationMenuLink
-              render={<Link href={FLAGSHIP_PROGRAM.href} />}
-              closeOnClick
-              className="flex h-full flex-col justify-between rounded-2xl border border-primary/25 bg-accent p-5 hover:bg-accent"
-            >
-              <span className="text-lg font-semibold text-foreground">
-                {FLAGSHIP_PROGRAM.label}
-              </span>
-              <span className="mt-2 text-sm text-muted-foreground">
-                {FLAGSHIP_PROGRAM.tagline}
-              </span>
-              <span className="mt-5 text-xs font-medium text-primary">
-                Flagship program
-              </span>
-            </NavigationMenuLink>
-
-            <div className="flex flex-col gap-1">
-              {SPECIALIZED_PROGRAMS.map((program) => (
-                <NavigationMenuLink
-                  key={program.href}
-                  render={<Link href={program.href} />}
-                  closeOnClick
-                  className="flex flex-col items-start gap-0 p-2.5"
-                >
-                  <span className="text-sm font-medium text-foreground">
-                    {program.label}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {program.tagline}
-                  </span>
-                </NavigationMenuLink>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-5 border-t border-border pt-5">
-            <p className="mb-2 px-1 text-sm font-medium text-muted-foreground">
-              {DIGITAL_MARKETING_CATEGORY}
-            </p>
-            <div className="flex flex-col gap-1">
-              {DIGITAL_MARKETING_PROGRAMS.map((program) => (
-                <NavigationMenuLink
-                  key={program.href}
-                  render={<Link href={program.href} />}
-                  closeOnClick
-                  className="flex flex-col items-start gap-0 p-2.5"
-                >
-                  <span className="text-sm font-medium text-foreground">
-                    {program.label}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {program.tagline}
-                  </span>
-                </NavigationMenuLink>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-5 border-t border-border pt-5">
+        <div className="w-[min(64rem,calc(100vw-3rem))] p-5">
+          <div className="mb-4 flex items-center justify-between px-1">
+            <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">Explore Programs</p>
             <NavigationMenuLink
               render={<Link href="/programs" />}
               closeOnClick
-              className="font-medium text-primary"
+              className="group/item w-auto gap-1.5 px-3 py-1.5 text-sm font-medium text-primary"
             >
               View All Programs
+              <ArrowRight
+                className="size-4 transition-transform duration-300 motion-safe:group-hover/item:translate-x-1"
+                aria-hidden="true"
+              />
             </NavigationMenuLink>
+          </div>
+
+          <div className="grid auto-rows-[9.5rem] grid-cols-4 gap-3">
+            <Tile program={FLAGSHIP_PROGRAM} eyebrow={PROGRAM_CATEGORY} flagship className="col-span-2 row-span-2" />
+            {SPECIALIZED_PROGRAMS.map((program) => (
+              <Tile key={program.href} program={program} />
+            ))}
+            {DIGITAL_MARKETING_PROGRAMS.map((program) => (
+              <Tile key={program.href} program={program} eyebrow={DIGITAL_MARKETING_CATEGORY} className="col-span-2" />
+            ))}
           </div>
         </div>
       </NavigationMenuContent>

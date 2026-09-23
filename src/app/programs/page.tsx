@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ProgramsDiscoverySection } from "@/components/programs/discovery/programs-discovery-section";
+import { ProgramsFinalCta } from "@/components/programs/programs-final-cta";
 import { ProgramsHero } from "@/components/programs/programs-hero";
-import { ProgramsPhilosophy } from "@/components/programs/programs-philosophy";
 
 export const metadata: Metadata = {
   title: "Programs | TechnoGurukul",
@@ -14,7 +14,7 @@ export default function Page() {
     <main>
       <ProgramsHero />
       <ProgramsDiscoverySection />
-      <ProgramsPhilosophy />
+      <ProgramsFinalCta />
     </main>
   );
 }
