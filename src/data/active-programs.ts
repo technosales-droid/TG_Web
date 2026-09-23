@@ -3,9 +3,7 @@
 // stay in sync — do not duplicate this list elsewhere.
 //
 // `video` is optional: the Programs page hero plays it (muted, looped, 16:9 source expected) in
-// place of `image` when set. No real per-program video footage exists in the project yet, so it
-// is left unset here rather than filled with an unrelated stock clip — add a real 16:9 .mp4 under
-// public/brand/ and set the path here once one exists for a program.
+// place of `image` when set.
 export const ACTIVE_PROGRAMS = [
   {
     category: "Digital & Marketing",
@@ -26,7 +24,7 @@ export const ACTIVE_PROGRAMS = [
     outcome: "Design. Build. Play.",
     href: "/programs/tg-gameforge",
     image: "/brand/programs-game-development.jpg",
-    video: null as string | null,
+    video: "/brand/programs-game-development.mp4" as string | null,
     alt: "A person editing a game scene across multiple monitors in a production studio",
   },
 ] as const;
