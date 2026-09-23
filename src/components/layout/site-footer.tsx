@@ -149,14 +149,7 @@ export function SiteFooter() {
   const { name, type, locality, address, mapUrl } = footerLocation;
 
   return (
-    <footer
-      className="relative overflow-hidden bg-[#0b3d50] text-background before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-brand-green/70 before:to-transparent"
-      style={{
-        backgroundImage:
-          "linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px)",
-        backgroundSize: "40px 40px",
-      }}
-    >
+    <footer className="relative bg-[#0b3d50] text-background before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-brand-green/70 before:to-transparent">
       <div className="relative mx-auto max-w-[1800px] px-4 pt-14 pb-8 sm:px-6 sm:pt-16">
         {/* Layer 2 — brand, navigation, contact */}
         <div className="grid gap-12 xl:grid-cols-[minmax(0,1fr)_minmax(0,2.4fr)] xl:gap-x-16">
