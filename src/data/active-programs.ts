@@ -27,7 +27,7 @@ export const ACTIVE_PROGRAMS: ActiveProgram[] = [
     outcome: "Learn. Execute. Measure. Grow.",
     href: "/programs/tg-digital-marketing",
     image: "/brand/programs-digital-marketing.jpg",
-    video: null,
+    video: "/brand/programs-digital-marketing.mp4",
     alt: "A laptop showing a digital marketing strategy breakdown beside matching handwritten notes",
   },
   {
