@@ -148,3 +148,12 @@
     transform: translateX(-50%);
   }
 }
+
+@keyframes progress-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}

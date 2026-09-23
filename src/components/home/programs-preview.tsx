@@ -6,31 +6,9 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "cn";
 import { buttonVariants } from "@/components/ui/button";
+import { ACTIVE_PROGRAMS as ACTIVE_PROGRAMS_DATA } from "@/data/active-programs";
 
-const ACTIVE_PROGRAMS = [
-  {
-    status: "active" as const,
-    category: "Digital & Marketing",
-    title: "Digital Marketing",
-    description:
-      "Build practical skills across digital marketing, content, campaigns, audience understanding and measurable digital work.",
-    outcome: "Learn. Execute. Measure. Grow.",
-    href: "/programs/tg-digital-marketing",
-    image: "/brand/programs-digital-marketing.jpg",
-    alt: "A laptop showing a digital marketing strategy breakdown beside matching handwritten notes",
-  },
-  {
-    status: "active" as const,
-    category: "Creative Technology",
-    title: "Game Development & Design",
-    description:
-      "Learn the foundations of game creation through design, development, interactive systems and hands-on project work.",
-    outcome: "Design. Build. Play.",
-    href: "/programs/tg-gameforge",
-    image: "/brand/programs-game-development.jpg",
-    alt: "A person editing a game scene across multiple monitors in a production studio",
-  },
-];
+const ACTIVE_PROGRAMS = ACTIVE_PROGRAMS_DATA.map((p) => ({ ...p, status: "active" as const }));
 
 // Committed future directions, not yet enrollable — no routes, no fabricated details.
 const COMING_SOON_PROGRAMS = [
