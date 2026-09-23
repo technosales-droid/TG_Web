@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { cn } from "cn";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const DIMENSIONS = [
   { title: "Capability", text: "Develop useful skills." },
@@ -14,7 +14,6 @@ const FLOW = ["Learn", "Practise", "Build", "Document", "Show"];
 
 const DESTINATIONS = [
   { title: "Projects", text: "Build work through practical projects.", href: "/learning/projects" },
-  { title: "Certifications", text: "Keep a record of completed learning and supporting evidence.", href: "/learning/certifications" },
   { title: "Resources", text: "Continue learning and practising beyond the core learning path.", href: "/learning/resources" },
 ];
 
@@ -87,7 +86,7 @@ export function MissionLearner() {
               ))}
             </ol>
 
-            <ul className="mt-8 grid gap-4 md:grid-cols-3">
+            <ul className="mt-8 grid gap-4 md:grid-cols-2">
               {DESTINATIONS.map((d) => (
                 <li key={d.href} className="min-w-0">
                   <article className="group relative flex h-full flex-col rounded-2xl border border-primary/15 bg-card p-6">
@@ -104,10 +103,6 @@ export function MissionLearner() {
                 </li>
               ))}
             </ul>
-            <p className="mt-6 text-base leading-relaxed text-muted-foreground">
-              Certifications record completed learning at Techno Gurukul. They do not imply external accreditation or
-              employer recognition.
-            </p>
           </div>
         </div>
       </section>

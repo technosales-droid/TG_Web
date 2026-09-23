@@ -1,6 +1,6 @@
 import { Building2, GraduationCap, UserRound } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { GRADIENT_TEXT } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT } from "@/components/ui/section-header";
 
 const PARTS: { title: string; text: string; Icon: LucideIcon }[] = [
   { title: "Faculty", text: "Guidance, explanation and feedback.", Icon: UserRound },

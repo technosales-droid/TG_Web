@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Info, Lightbulb, Route, Target } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const EXPLORE: { title: string; text: string; href: string; Icon: LucideIcon }[] = [
   { title: "Mission", text: "Understand the purpose behind the learning model.", href: "/about/mission", Icon: Target },

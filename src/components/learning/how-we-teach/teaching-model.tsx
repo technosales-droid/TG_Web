@@ -1,5 +1,5 @@
 import { cn } from "cn";
-import { GRADIENT_TEXT, SectionHeader } from "../curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 import { TEACHING_MODEL } from "./how-we-teach-data";
 
 // One continuous method: a single rail with five nodes on it, and open text beneath. Horizontal from

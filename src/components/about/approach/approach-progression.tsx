@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const PROGRESSION = [
   { title: "Early Stage", text: "More structure and guidance." },

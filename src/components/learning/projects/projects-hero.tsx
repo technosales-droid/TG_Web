@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Check, ChevronRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
-import { GRADIENT_TEXT } from "../curriculum/section-header";
+import { GRADIENT_TEXT } from "@/components/ui/section-header";
 
 // The stages a project moves through. The visual marks how far along the imaginary project is.
 const STAGES = ["Idea", "Plan", "Create", "Test", "Refine", "Present"];

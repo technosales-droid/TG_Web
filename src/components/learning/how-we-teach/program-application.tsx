@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "cn";
-import { GRADIENT_TEXT, SectionHeader } from "../curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 import { PROGRAM_LINKS } from "./how-we-teach-data";
 
 // Brief on purpose: two program links. Their curriculum and content stay on their own pages.

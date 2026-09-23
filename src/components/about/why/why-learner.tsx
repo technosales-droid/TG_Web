@@ -1,5 +1,5 @@
 import { Check } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const ASKS = [
   { title: "Participate", text: "Learning requires active involvement." },

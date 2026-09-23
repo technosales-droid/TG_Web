@@ -1,4 +1,4 @@
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const PILLARS = [
   { title: "Skills", text: "Build practical capability in the tools and concepts relevant to your chosen direction." },

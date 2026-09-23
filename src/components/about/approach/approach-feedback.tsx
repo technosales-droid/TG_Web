@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { cn } from "cn";
-import { GRADIENT_TEXT } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT } from "@/components/ui/section-header";
 
 const LOOP = ["Create", "Review", "Feedback", "Revise", "Create Again"];
 

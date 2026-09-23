@@ -1,6 +1,6 @@
 import { ArrowUpRight, MapPin } from "lucide-react";
 import { footerLocation } from "../../layout/footer-data";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 /** Section: Location. The one place on this page with fully verified, specific detail — the
  * same address and map already used in the global footer. */

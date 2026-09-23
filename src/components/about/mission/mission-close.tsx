@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Building2, Info, Lightbulb, Route } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const EXPLORE: { title: string; text: string; href: string; Icon: LucideIcon }[] = [
   { title: "Why Techno Gurukul", text: "Explore the thinking behind the learning model.", href: "/about/why-technogurukul", Icon: Lightbulb },

@@ -1,4 +1,4 @@
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const QUESTION_TYPES = [
   { title: "About You", text: "Questions that help someone understand your background and direction." },

@@ -1,5 +1,5 @@
 import { Check } from "lucide-react";
-import { GRADIENT_TEXT } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT } from "@/components/ui/section-header";
 
 const BEFORE = [
   { title: "Skills", text: "Know the tools and concepts relevant to the roles you are considering." },

@@ -1,5 +1,5 @@
 import { cn } from "cn";
-import { GRADIENT_TEXT, SectionHeader } from "../curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 import { PROJECT_LIFECYCLE, PROJECT_PRINCIPLES } from "./how-we-teach-data";
 
 // A chevron ribbon for the project lifecycle (horizontal from lg, stacked below), then four principles

@@ -1,6 +1,6 @@
 import { ArrowDown, Check } from "lucide-react";
 import { cn } from "cn";
-import { GRADIENT_TEXT, SectionHeader } from "../curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 import { PASSIVE_STEPS, PRACTICAL_STEPS } from "./how-we-teach-data";
 
 // Two paths side by side: a short one and a longer one that ends in a finished piece of work. The point is

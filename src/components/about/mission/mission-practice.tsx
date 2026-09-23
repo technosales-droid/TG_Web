@@ -1,17 +1,16 @@
 import Link from "next/link";
-import { ArrowRight, Briefcase, BookOpen, FolderOpen, GraduationCap, MessageSquare } from "lucide-react";
+import { ArrowRight, Briefcase, FolderOpen, GraduationCap, MessageSquare } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const AREAS: { title: string; text: string; href?: string; linkText?: string; Icon: LucideIcon }[] = [
-  { title: "Curriculum", text: "Learning should have structure and progression.", href: "/learning/curriculum", linkText: "Explore Curriculum", Icon: BookOpen },
   { title: "Practice", text: "Learners should have opportunities to apply concepts.", href: "/learning/how-we-teach", linkText: "Explore How We Teach", Icon: GraduationCap },
   { title: "Projects", text: "Learning should produce practical work.", href: "/learning/projects", linkText: "Explore Projects", Icon: FolderOpen },
   { title: "Feedback", text: "Improvement should be part of the process.", Icon: MessageSquare },
   { title: "Career Context", text: "Learners should understand where their skills can be applied.", Icon: Briefcase },
 ];
 
-/** Section 4: the mission in practice, five areas that shape the actual learning experience. */
+/** Section 4: the mission in practice, four areas that shape the actual learning experience. */
 export function MissionPractice() {
   return (
     <section aria-labelledby="ms-practice-heading" className="px-4 py-10 sm:px-6 sm:py-14 xl:py-20">
@@ -26,7 +25,7 @@ export function MissionPractice() {
           }
         />
 
-        <ul className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-5 xl:gap-5">
+        <ul className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4 xl:gap-5">
           {AREAS.map(({ title, text, href, linkText, Icon }) => (
             <li key={title} className="min-w-0">
               <article className="group relative flex h-full flex-col rounded-2xl border border-primary/15 bg-card p-6">

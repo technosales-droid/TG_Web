@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Building2, Info, Route, Target } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const CARDS: { title: string; text: string; href: string; Icon: LucideIcon }[] = [
   { title: "Our Mission", text: "Understand the purpose behind the learning model.", href: "/about/mission", Icon: Target },

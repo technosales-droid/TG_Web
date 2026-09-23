@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, BarChart3, Gamepad2 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const PROGRAMS: { title: string; Icon: LucideIcon; themes: string[]; href: string }[] = [
   { title: "Digital Marketing", Icon: BarChart3, themes: ["Strategy", "Content", "Campaigns", "Analytics", "Communication"], href: "/programs/tg-digital-marketing" },

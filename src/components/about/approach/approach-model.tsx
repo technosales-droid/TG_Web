@@ -1,4 +1,4 @@
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const STAGES = [
   { name: "Understand", text: "Learn the concepts and fundamentals." },

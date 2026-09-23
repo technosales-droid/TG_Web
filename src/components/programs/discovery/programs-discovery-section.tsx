@@ -3,7 +3,7 @@
 import { useDeferredValue, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { cn } from "cn";
 import { ALL_OFFERINGS } from "@/data/programs";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 import { FilterRail, FilterSheet } from "./program-filters";
 import { ProgramsGrid } from "./programs-grid";
 import { ActiveFilters, QuickBrowse, ResultsToolbar, SearchField } from "./program-toolbar";

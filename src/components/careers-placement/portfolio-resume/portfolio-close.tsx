@@ -1,6 +1,4 @@
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const CERT_POINTS = [
   "Certificates can document learning or completion.",
@@ -28,9 +26,6 @@ const PORTFOLIO_CHECK = [
   "Reflection and documentation",
   "Easy navigation",
 ];
-
-const LINK =
-  "group inline-flex min-h-11 items-center gap-1.5 rounded-lg text-base font-semibold text-primary focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-primary";
 
 function Checklist({ id, title, items }: { id: string; title: string; items: string[] }) {
   return (
@@ -68,10 +63,6 @@ export function PortfolioClose() {
               <p className="mt-5 border-l-2 border-brand-green pl-4 text-base leading-relaxed text-foreground sm:text-lg">
                 A certificate tells someone you completed a course. A portfolio shows them what you can do.
               </p>
-              <Link href="/learning/certifications" className={LINK + " mt-5"}>
-                Explore Certifications
-                <ArrowRight className="size-4 transition-transform duration-200 motion-safe:group-hover:translate-x-1" aria-hidden="true" />
-              </Link>
             </div>
             <ul className="grid content-center gap-1">
               {CERT_POINTS.map((p) => (

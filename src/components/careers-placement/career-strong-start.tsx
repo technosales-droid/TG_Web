@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
 import { cn } from "cn";
-import { GRADIENT_TEXT } from "../learning/curriculum/section-header";
+import { GRADIENT_TEXT } from "@/components/ui/section-header";
 
 const AREAS = [
   { title: "Skills", text: "Know what you can actually do." },

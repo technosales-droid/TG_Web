@@ -3,7 +3,7 @@ import { ArrowLeft, Check, ChevronRight, ClipboardCheck, FolderOpen, MessageSqua
 import type { LucideIcon } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
-import { GRADIENT_TEXT } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT } from "@/components/ui/section-header";
 
 const STEPS = ["Learn", "Apply", "Contribute", "Reflect"];
 const CURRENT = 2; // "Contribute"

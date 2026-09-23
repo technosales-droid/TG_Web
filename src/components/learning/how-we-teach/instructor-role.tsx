@@ -1,5 +1,5 @@
 import { cn } from "cn";
-import { GRADIENT_TEXT, SectionHeader } from "../curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 import { INSTRUCTOR_ROLES } from "./how-we-teach-data";
 
 // Four supportive roles as quadrants separated by thin lines. No claims about faculty qualifications.

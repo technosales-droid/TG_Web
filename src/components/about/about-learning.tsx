@@ -1,13 +1,11 @@
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, BookOpen, FileCheck2, FolderOpen, GraduationCap, Library, TrendingUp, Wrench } from "lucide-react";
+import { ArrowRight, FileCheck2, FolderOpen, GraduationCap, Library, TrendingUp, Wrench } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const DESTINATIONS: { title: string; text: string; href: string; Icon: LucideIcon }[] = [
-  { title: "Curriculum", text: "Follow structured learning that builds knowledge progressively.", href: "/learning/curriculum", Icon: BookOpen },
   { title: "How We Teach", text: "Understand the practical teaching model behind the learning experience.", href: "/learning/how-we-teach", Icon: GraduationCap },
   { title: "Projects", text: "Apply learning and create work that can be explored and presented.", href: "/learning/projects", Icon: FolderOpen },
-  { title: "Certifications", text: "Keep a record of completed learning and supporting evidence.", href: "/learning/certifications", Icon: BadgeCheck },
   { title: "Resources", text: "Continue learning beyond the core classroom experience.", href: "/learning/resources", Icon: Library },
 ];
 
@@ -34,9 +32,9 @@ export function AboutLearning() {
             }
           />
 
-          <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-6 xl:gap-5">
-            {DESTINATIONS.map(({ title, text, href, Icon }, i) => (
-              <li key={href} className={"min-w-0 " + (i < 2 ? "lg:col-span-3" : "lg:col-span-2") + (i === 4 ? " sm:max-lg:col-span-2" : "")}>
+          <ul className="mt-10 grid gap-4 sm:grid-cols-3 xl:gap-5">
+            {DESTINATIONS.map(({ title, text, href, Icon }) => (
+              <li key={href} className="min-w-0">
                 <article className="group relative flex h-full flex-col rounded-2xl border border-primary/15 bg-card p-6 transition-all duration-300 hover:border-primary/40 hover:shadow-[0_18px_36px_-26px_rgba(16,20,28,0.45)] motion-safe:hover:-translate-y-0.5 sm:p-7">
                   <span aria-hidden="true" className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
                     <Icon className="size-5" />
@@ -54,10 +52,6 @@ export function AboutLearning() {
               </li>
             ))}
           </ul>
-          <p className="mt-6 max-w-3xl text-base leading-relaxed text-muted-foreground">
-            Certifications record completed learning at Techno Gurukul. They do not imply external accreditation or employer
-            recognition.
-          </p>
         </div>
       </section>
 

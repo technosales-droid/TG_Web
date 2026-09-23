@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { GRADIENT_TEXT } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT } from "@/components/ui/section-header";
 
 const FLOW = [
   { name: "Question", text: "Decide what problem the project addresses." },

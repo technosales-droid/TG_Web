@@ -5,6 +5,16 @@ export const STATUSES = ["School Student", "College Student", "Graduate", "Worki
 export const CONTACT_METHODS = ["Phone", "WhatsApp", "Email"] as const;
 export const SOURCES = ["Google Search", "Instagram", "Facebook", "YouTube", "Referral", "Other"] as const;
 
+export const MESSAGE_MAX = 1000;
+export const REQUIRED_KEYS = ["fullName", "email", "phone", "interest", "message", "consent"] as const;
+
+/** Groups a plain Indian mobile number as `XXXXX XXXXX`; anything starting with `+` is only cleaned. */
+export function formatPhone(raw: string): string {
+  if (raw.trim().startsWith("+")) return "+" + raw.replace(/[^\d\s()-]/g, "").replace(/^\s+/, "").slice(0, 18);
+  const d = raw.replace(/\D/g, "").slice(0, 10);
+  return d.length > 5 ? `${d.slice(0, 5)} ${d.slice(5)}` : d;
+}
+
 export interface EnquiryValues {
   fullName: string;
   email: string;
@@ -48,6 +58,7 @@ export function validateEnquiry(v: EnquiryValues): EnquiryErrors {
   }
   if (!v.interest) e.interest = "Please tell us what you're interested in.";
   if (!v.message.trim()) e.message = "Please enter a message.";
+  else if (v.message.length > MESSAGE_MAX) e.message = `Please keep your message under ${MESSAGE_MAX} characters.`;
   if (!v.consent) e.consent = "Please agree to be contacted.";
   return e;
 }

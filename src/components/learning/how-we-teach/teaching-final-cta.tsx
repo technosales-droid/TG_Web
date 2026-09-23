@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, LayoutList } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
 
@@ -47,16 +47,6 @@ export function TeachingFinalCta() {
                   className="ml-1 size-4 transition-transform duration-200 motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5"
                   aria-hidden="true"
                 />
-              </Link>
-              <Link
-                href="/learning/curriculum"
-                className={cn(
-                  "inline-flex h-12 w-full items-center justify-center gap-2 rounded-full border-2 border-background/60 px-6 text-base font-medium text-background transition-all duration-200 hover:-translate-y-0.5 hover:border-background hover:bg-background/10 active:translate-y-0",
-                  FOCUS
-                )}
-              >
-                <LayoutList className="size-4" aria-hidden="true" />
-                View Curriculum
               </Link>
             </div>
           </div>

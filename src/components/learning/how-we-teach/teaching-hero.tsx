@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
-import { GRADIENT_TEXT } from "../curriculum/section-header";
+import { GRADIENT_TEXT } from "@/components/ui/section-header";
 import { HERO_STEPS } from "./how-we-teach-data";
 
 // Abstract teaching workflow: six connected steps, the last one lit. Not a classroom or dashboard.
@@ -83,16 +82,6 @@ export function TeachingHero() {
                   )}
                 >
                   Explore Programs
-                </Link>
-                <Link
-                  href="/learning/curriculum"
-                  className="group flex min-h-11 items-center gap-1 rounded-full text-base font-medium text-foreground transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
-                >
-                  View Curriculum
-                  <ChevronRight
-                    className="size-4 transition-transform duration-200 motion-safe:group-hover:translate-x-1"
-                    aria-hidden="true"
-                  />
                 </Link>
               </div>
             </div>

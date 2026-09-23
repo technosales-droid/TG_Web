@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Compass, RefreshCw, Rss, Scale } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { GRADIENT_TEXT } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT } from "@/components/ui/section-header";
 
 const PROJECT_STEPS = [
   { name: "Brief", text: "Define the problem and what a good outcome looks like." },

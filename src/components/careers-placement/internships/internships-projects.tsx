@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ChevronRight, Compass, Eye, MessageSquare, RefreshCw, ShieldCheck, ListChecks } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const FLOW = ["Project", "Portfolio", "Application", "Interview", "Experience"];
 

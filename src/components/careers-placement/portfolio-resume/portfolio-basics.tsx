@@ -1,4 +1,4 @@
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const RESUME_CAN = ["Skills", "Education", "Projects", "Relevant experience", "Tools and technologies", "Contact information"];
 const PORTFOLIO_CAN = [

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowLeft, Check, ChevronRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
-import { GRADIENT_TEXT } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT } from "@/components/ui/section-header";
 
 const PARTS = ["Skills", "Projects", "Portfolio", "Resume", "Interview"];
 const PROGRESS = ["Build", "Show", "Prepare"];

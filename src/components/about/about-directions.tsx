@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, BarChart3, ChevronRight, Gamepad2 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const DIRECTIONS: { id: string; title: string; Icon: LucideIcon; themes: string[]; cta: string; href: string }[] = [
   {

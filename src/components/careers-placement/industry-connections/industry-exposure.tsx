@@ -3,7 +3,7 @@ import { BookOpen, CalendarDays, ChevronRight, FolderOpen, MonitorPlay, Search, 
 import type { LucideIcon } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
-import { GRADIENT_TEXT } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT } from "@/components/ui/section-header";
 
 // `outline-solid` matters: the shared button style sets `outline-none`, which would otherwise cancel the ring.
 const FOCUS = "focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-4 focus-visible:outline-background focus-visible:ring-0";

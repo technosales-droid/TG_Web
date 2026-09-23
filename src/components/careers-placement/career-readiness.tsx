@@ -1,7 +1,7 @@
 import { BookOpen, FolderOpen, Hammer, MessageSquare } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "cn";
-import { GRADIENT_TEXT, SectionHeader } from "../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const CARDS: { title: string; text: string; Icon: LucideIcon }[] = [
   { title: "Practical Skills", text: "Build skills through structured learning and hands-on practice.", Icon: BookOpen },

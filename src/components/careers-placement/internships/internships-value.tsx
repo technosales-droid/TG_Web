@@ -1,6 +1,6 @@
 import { ClipboardCheck, MessageSquare, RefreshCw, Wrench } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const AREAS: { title: string; text: string; Icon: LucideIcon }[] = [
   { title: "Apply Skills", text: "Use concepts and tools in practical situations.", Icon: Wrench },

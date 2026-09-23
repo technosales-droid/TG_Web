@@ -1,26 +1,28 @@
 import type { Metadata } from "next";
-import { HowWeTeachSection } from "@/components/learning/how-we-teach-section";
-import { LearningFinalCta } from "@/components/learning/learning-final-cta";
-import { LearningHub } from "@/components/learning/learning-hub";
-import { LearningOutcomes } from "@/components/learning/learning-outcomes";
-import { LearningProjectsPreview } from "@/components/learning/learning-projects-preview";
-import { LearningHero } from "@/components/learning/learning-hero";
+import { LearningCta } from "@/components/learning/overview/learning-cta";
+import { LearningHero } from "@/components/learning/overview/learning-hero";
+import { LearningMethod } from "@/components/learning/overview/learning-method";
+import { LearningOutcomes } from "@/components/learning/overview/learning-outcomes";
+import { LearningProcess } from "@/components/learning/overview/learning-process";
+import { LearningProjects } from "@/components/learning/overview/learning-projects";
+import { LearningSystem } from "@/components/learning/overview/learning-system";
 
 export const metadata: Metadata = {
-  title: "How Techno Gurukul Teaches Practical Skills | TechnoGurukul",
+  title: "How We Learn | Techno Gurukul",
   description:
-    "Discover how Techno Gurukul combines practical learning, hands-on work, projects and portfolio development to help students build skills they can use.",
+    "Explore how Techno Gurukul approaches practical learning through understanding, practice, projects and continuous improvement.",
 };
 
 export default function Page() {
   return (
     <main>
       <LearningHero />
-      <HowWeTeachSection />
-      <LearningHub />
-      <LearningProjectsPreview />
+      <LearningProcess />
+      <LearningMethod />
+      <LearningProjects />
       <LearningOutcomes />
-      <LearningFinalCta />
+      <LearningSystem />
+      <LearningCta />
     </main>
   );
 }

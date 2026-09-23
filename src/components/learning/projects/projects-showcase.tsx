@@ -3,7 +3,7 @@
 import { useDeferredValue, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { cn } from "cn";
 import { PROJECTS, PROJECT_PAGE_SIZE, type Project } from "@/data/projects";
-import { GRADIENT_TEXT, SectionHeader } from "../curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 import { FeaturedProject } from "./project-card";
 import { ProjectEmptyState } from "./project-empty-state";
 import { ProjectPreview } from "./project-preview";

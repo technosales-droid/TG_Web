@@ -1,4 +1,4 @@
-import { SectionHeader } from "../learning/curriculum/section-header";
+import { SectionHeader } from "@/components/ui/section-header";
 
 const STAGES = [
   { name: "Learn", text: "Understand the concepts and tools relevant to your chosen area." },

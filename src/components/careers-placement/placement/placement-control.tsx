@@ -1,5 +1,5 @@
 import { Check } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const ITEMS = [
   { title: "Practical Skills", text: "Strengthen the skills relevant to your chosen field." },

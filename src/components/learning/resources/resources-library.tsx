@@ -3,7 +3,7 @@
 import { useDeferredValue, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { cn } from "cn";
 import { RESOURCES, RESOURCE_PAGE_SIZE, type Resource } from "@/data/resources";
-import { GRADIENT_TEXT, SectionHeader } from "../curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 import { FeaturedResource } from "./resource-card";
 import { ResourceEmptyState } from "./resource-empty-state";
 import { ResourcePreviewDrawer } from "./resource-preview";

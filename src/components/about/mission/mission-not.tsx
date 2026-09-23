@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Award, Gauge, Users, Zap } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const NOT: { title: string; text: string; Icon: LucideIcon }[] = [
   { title: "Guaranteed Outcomes", text: "Learning can create preparation, not guaranteed employment.", Icon: Award },

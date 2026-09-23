@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, Building2, Briefcase, ClipboardList, FolderOpen, MessageSquare } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "cn";
-import { GRADIENT_TEXT, SectionHeader } from "../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 // Every card links to its child route, whether or not that page is finished yet.
 const CARDS: { title: string; text: string; cta: string; href: string; Icon: LucideIcon; span: string }[] = [

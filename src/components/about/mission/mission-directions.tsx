@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, BarChart3, Gamepad2 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const CAREER_LINKS = [
   { title: "Careers & Placement", text: "Explore possible directions and prepare your work, communication and professional readiness.", href: "/careers-placement" },

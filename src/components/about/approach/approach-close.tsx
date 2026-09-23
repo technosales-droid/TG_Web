@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, Building2, Info, Lightbulb, Target } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Check } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const RESPONSIBILITIES = [
   { title: "Show Up", text: "Be present and engaged." },

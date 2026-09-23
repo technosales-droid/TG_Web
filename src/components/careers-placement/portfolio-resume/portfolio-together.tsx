@@ -1,5 +1,5 @@
 import { ChevronRight } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const LAYERS = [
   { name: "Resume", text: "Summarises your background." },

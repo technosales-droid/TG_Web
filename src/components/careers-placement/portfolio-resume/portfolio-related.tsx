@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const CARDS = [
   { title: "Placement Preparation", text: "Build career readiness around your skills and evidence.", href: "/careers-placement/placement" },

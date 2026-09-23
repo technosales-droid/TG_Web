@@ -1,5 +1,5 @@
 import { Check } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const QUESTIONS = [
   { label: "About the Work", text: "What kinds of problems do people in this field solve?" },

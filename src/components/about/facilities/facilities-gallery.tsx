@@ -1,5 +1,5 @@
 import { ImageOff } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 // A full repository audit (public/, content/) found no real facility photography or video —
 // only the site logo and a generic stock-style hero graphic already used on the homepage, neither

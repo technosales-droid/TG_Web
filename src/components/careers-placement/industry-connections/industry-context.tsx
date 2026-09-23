@@ -1,6 +1,6 @@
 import { ClipboardList, Clock, FileText, ListChecks, MessageSquare, Repeat, Send, Users, Wrench } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const AREAS: { title: string; text: string; Icon: LucideIcon }[] = [
   { title: "Tools", text: "Understand how software, technologies and workflows are used in practice.", Icon: Wrench },

@@ -1,5 +1,5 @@
 import { UserRound } from "lucide-react";
-import { GRADIENT_TEXT, SectionHeader } from "../../learning/curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 // The only record in content/faculty/ is `sample-faculty.json` — name "Sample Faculty", bio
 // "Lorem ipsum...". It is an explicit placeholder, not a verified person, so it is never rendered

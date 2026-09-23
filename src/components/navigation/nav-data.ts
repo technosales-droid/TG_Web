@@ -68,10 +68,8 @@ export const SPECIALIZED_PROGRAMS: ProgramLink[] = [
 ];
 
 export const LEARNING_LINKS: NavLink[] = [
-  { label: "Curriculum", href: "/learning/curriculum" },
   { label: "How We Teach", href: "/learning/how-we-teach" },
   { label: "Projects", href: "/learning/projects" },
-  { label: "Certifications", href: "/learning/certifications" },
   { label: "Resources", href: "/learning/resources" },
 ];
 

@@ -1,7 +1,7 @@
 import { Code2, Palette, Presentation, TrendingUp } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "cn";
-import { GRADIENT_TEXT, SectionHeader } from "../curriculum/section-header";
+import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 // Program-agnostic project TYPES, not claims about completed student work. The same four categories
 // as the projects section on /learning. No program curricula, roles, counts, clients or outcomes.
