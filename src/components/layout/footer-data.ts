@@ -1,4 +1,10 @@
-import { ABOUT_LINKS, CAREERS_LINKS, LEARNING_LINKS, type NavLink } from "@/components/navigation/nav-data";
+import {
+  ABOUT_LINKS,
+  CAREERS_LINKS,
+  CTA_LINK,
+  LEARNING_LINKS,
+  type NavLink,
+} from "@/components/navigation/nav-data";
 
 // Single source of truth for the global footer. Every value that is not yet verified is `null`;
 // the footer only renders a value once it is filled in here.
@@ -6,6 +12,13 @@ import { ABOUT_LINKS, CAREERS_LINKS, LEARNING_LINKS, type NavLink } from "@/comp
 export const footerBrand = {
   name: "Techno Gurukul",
   tagline: "Practical learning for skills you can build with.",
+} as const;
+
+export const footerCta = {
+  eyebrow: "Ready to start building?",
+  text: "Build practical skills. Explore a program, find your path, or talk to Techno Gurukul.",
+  primary: { label: "Explore Programs", href: "/programs" } satisfies NavLink,
+  secondary: CTA_LINK,
 } as const;
 
 export interface FooterGroup {
