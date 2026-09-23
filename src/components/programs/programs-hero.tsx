@@ -3,12 +3,21 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Boxes, Layers, PenTool } from "lucide-react";
 import { cn } from "cn";
 import { buttonVariants } from "@/components/ui/button";
 import { ACTIVE_PROGRAMS } from "@/data/active-programs";
 
 const SLIDE_DURATION = 5500;
+
+// Matches the tone/icon treatment the /programs catalogue cards already use for a course with no
+// photo yet, so a program without real imagery still looks intentional rather than broken.
+const FALLBACK_TONES = {
+  blue: "from-primary via-primary/70 to-brand-green/50",
+  green: "from-brand-green/80 via-primary/70 to-[#0b3d50]",
+  navy: "from-[#0d6386] to-[#0b3d50]",
+} as const;
+const FALLBACK_ICONS = { layers: Layers, "pen-tool": PenTool, boxes: Boxes } as const;
 
 function prefersReducedMotion() {
   return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -73,7 +82,7 @@ export function ProgramsHero() {
                   preload={i === 0 ? "auto" : "none"}
                   className="absolute inset-0 size-full object-cover"
                 />
-              ) : (
+              ) : program.image ? (
                 <Image
                   src={program.image}
                   alt={program.alt}
@@ -82,6 +91,19 @@ export function ProgramsHero() {
                   sizes="100vw"
                   className="object-cover"
                 />
+              ) : (
+                <div
+                  aria-hidden="true"
+                  className={cn(
+                    "absolute inset-0 flex items-center justify-center bg-gradient-to-br",
+                    FALLBACK_TONES[program.visual?.tone ?? "navy"]
+                  )}
+                >
+                  {(() => {
+                    const Icon = FALLBACK_ICONS[program.visual?.icon ?? "layers"];
+                    return <Icon className="size-28 text-background/20 sm:size-40 lg:size-56" />;
+                  })()}
+                </div>
               )}
               <div
                 aria-hidden="true"

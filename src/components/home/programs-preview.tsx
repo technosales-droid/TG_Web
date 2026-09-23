@@ -8,7 +8,13 @@ import { cn } from "cn";
 import { buttonVariants } from "@/components/ui/button";
 import { ACTIVE_PROGRAMS as ACTIVE_PROGRAMS_DATA } from "@/data/active-programs";
 
-const ACTIVE_PROGRAMS = ACTIVE_PROGRAMS_DATA.map((p) => ({ ...p, status: "active" as const }));
+// This marquee is photo-led and has no icon/gradient fallback, so it only shows active programs
+// that already have a real image (e.g. Game Design isn't here yet — no photo for it exists).
+const ACTIVE_PROGRAMS = ACTIVE_PROGRAMS_DATA.filter((p) => p.image).map((p) => ({
+  ...p,
+  image: p.image as string,
+  status: "active" as const,
+}));
 
 // Committed future directions, not yet enrollable — no routes, no fabricated details.
 const COMING_SOON_PROGRAMS = [
