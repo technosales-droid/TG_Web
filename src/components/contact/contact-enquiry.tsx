@@ -1,33 +1,77 @@
+import { Clock, Mail, MapPin, Phone, type LucideIcon } from "lucide-react";
+import { cn } from "cn";
+import { CONTACT, ENQUIRY_ID } from "./contact-data";
 import { ContactForm } from "./contact-form";
-import { ContactInfo } from "./contact-info";
-import { GRADIENT_TEXT } from "../learning/curriculum/section-header";
+import { Reveal } from "./contact-reveal";
+import { Eyebrow, FOCUS, INNER } from "./contact-ui";
 
-/** The main section: the form is the visual priority, on the right at desktop widths. */
-export function ContactEnquiry() {
+const LINK = cn("inline-flex min-h-11 items-center rounded text-base font-semibold break-all text-foreground hover:text-primary", FOCUS);
+const PENDING = <p className="text-base text-muted-foreground">Not listed yet &mdash; please email us.</p>;
+
+function Row({ label, Icon, children }: { label: string; Icon: LucideIcon; children: React.ReactNode }) {
   return (
-    <section aria-labelledby="ct-enquiry-heading" className="px-4 py-10 sm:px-6 sm:py-14 xl:py-20">
-      <div className="mx-auto max-w-[1800px] xl:px-8">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-12 xl:gap-16">
-          <div className="lg:sticky lg:top-28 lg:self-start">
-            <div className="flex items-center gap-2 text-sm font-medium text-primary">
-              <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
-              Get in Touch
-            </div>
-            <h2 id="ct-enquiry-heading" className="mt-4 text-3xl font-semibold tracking-tight text-balance text-foreground sm:text-4xl xl:text-[2.75rem] xl:leading-tight">
-              Tell Us What You <span className={GRADIENT_TEXT}>Need Help With.</span>
-            </h2>
-            <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
-              You do not need to have everything figured out before you enquire. Give us enough context to understand
-              what you are looking for.
-            </p>
+    <div className="border-b border-primary/15 py-5">
+      <p className="flex items-center gap-2 text-xs font-semibold tracking-[0.2em] text-muted-foreground uppercase">
+        <Icon className="size-4 text-primary" aria-hidden="true" />
+        {label}
+      </p>
+      <div className="mt-2">{children}</div>
+    </div>
+  );
+}
 
-            <div className="mt-8">
-              <ContactInfo />
-            </div>
+/** One section: a short introduction with the verified contact details on the left, the form on the right. */
+export function ContactEnquiry() {
+  const { email, phone, hours, location } = CONTACT;
+  return (
+    <section id={ENQUIRY_ID} aria-labelledby="ct-enquiry-heading" className="scroll-mt-20 bg-muted/50 px-4 py-14 sm:px-6 sm:py-20 xl:py-24">
+      <div className={cn(INNER, "grid gap-12 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] lg:gap-14 xl:gap-20")}>
+        <Reveal>
+          <Eyebrow index="02">Send an enquiry</Eyebrow>
+          <h2 id="ct-enquiry-heading" className="mt-5 text-3xl font-semibold tracking-tight text-balance text-foreground sm:text-4xl xl:text-5xl">
+            Tell Us What You Need.
+          </h2>
+          <p className="mt-5 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg">
+            Share a few details with us and we&rsquo;ll help you with the right next step.
+          </p>
+
+          <div className="mt-8 border-t border-primary/15">
+            <Row label="Email" Icon={Mail}>
+              {email ? (
+                <a href={`mailto:${email}`} className={LINK}>
+                  {email}
+                </a>
+              ) : (
+                PENDING
+              )}
+            </Row>
+            <Row label="Phone" Icon={Phone}>
+              {phone ? (
+                <a href={`tel:${phone.replace(/[^\d+]/g, "")}`} className={LINK}>
+                  {phone}
+                </a>
+              ) : (
+                PENDING
+              )}
+            </Row>
+            <Row label="Location" Icon={MapPin}>
+              <p className="text-base leading-relaxed text-foreground">{location.address ?? location.locality}</p>
+              {location.mapUrl && (
+                <a href={location.mapUrl} target="_blank" rel="noopener noreferrer" className={cn("mt-1 inline-flex min-h-11 items-center rounded text-sm font-semibold text-primary underline-offset-2 hover:underline", FOCUS)}>
+                  View on Google Maps
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              )}
+            </Row>
+            <Row label="Working hours" Icon={Clock}>
+              {hours ? <p className="text-base font-semibold text-foreground">{hours}</p> : PENDING}
+            </Row>
           </div>
+        </Reveal>
 
+        <Reveal delay={120}>
           <ContactForm />
-        </div>
+        </Reveal>
       </div>
     </section>
   );

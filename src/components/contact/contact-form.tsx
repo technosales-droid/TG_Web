@@ -1,290 +1,218 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { CheckCircle2, Mail } from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { cn } from "cn";
-import { buttonVariants } from "@/components/ui/button";
-import { footerContact } from "../layout/footer-data";
-
-const ENQUIRY_TYPES = ["Programs", "Learning", "Admissions", "Careers & Placement", "General Enquiry"] as const;
-
-// Only the two currently active programme directions, matching the rest of the site (About/Mission/
-// Approach/Why pages). Not a full catalogue dump, and no future/proposed catalogue items.
-const PROGRAM_OPTIONS = ["Not Sure Yet", "Digital Marketing", "Game Development & Design"] as const;
-
-interface FormState {
-  fullName: string;
-  email: string;
-  phone: string;
-  enquiryType: string;
-  programInterest: string;
-  message: string;
-  consent: boolean;
-}
-
-const INITIAL_STATE: FormState = {
-  fullName: "",
-  email: "",
-  phone: "",
-  enquiryType: "",
-  programInterest: "",
-  message: "",
-  consent: false,
-};
-
-type FieldErrors = Partial<Record<keyof FormState, string>>;
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-function validate(state: FormState): FieldErrors {
-  const errors: FieldErrors = {};
-  if (state.fullName.trim().length < 2) errors.fullName = "Enter your full name.";
-  if (!EMAIL_RE.test(state.email.trim())) errors.email = "Enter a valid email address.";
-  if (!state.enquiryType) errors.enquiryType = "Choose what you're enquiring about.";
-  if (state.message.trim().length < 10) errors.message = "Tell us a little more (at least 10 characters).";
-  if (!state.consent) errors.consent = "Check this box to continue.";
-  return errors;
-}
-
-function buildMailto(state: FormState): string {
-  const email = footerContact.email ?? "hello@technogurukul.com";
-  const subject = state.programInterest && state.programInterest !== "Not Sure Yet" ? `Enquiry: ${state.enquiryType} — ${state.programInterest}` : `Enquiry: ${state.enquiryType}`;
-  const lines = [
-    `Name: ${state.fullName.trim()}`,
-    `Email: ${state.email.trim()}`,
-    state.phone.trim() && `Phone: ${state.phone.trim()}`,
-    `Enquiring about: ${state.enquiryType}`,
-    state.programInterest && `Programme interest: ${state.programInterest}`,
-    "",
-    state.message.trim(),
-  ].filter(Boolean);
-  return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\n"))}`;
-}
+import {
+  CONTACT_METHODS,
+  EMPTY_ENQUIRY,
+  INTERESTS,
+  SOURCES,
+  STATUSES,
+  submitEnquiry,
+  validateEnquiry,
+  type EnquiryErrors,
+  type EnquiryValues,
+} from "./contact-submit";
+import { FOCUS } from "./contact-ui";
 
 const FIELD =
-  "w-full rounded-xl border border-primary/20 bg-background px-4 py-2.5 text-base text-foreground placeholder:text-muted-foreground outline-none focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-primary";
-const FIELD_INVALID = "border-destructive focus-visible:outline-destructive";
-const LABEL = "block text-sm font-semibold text-foreground";
+  "w-full rounded-xl border border-primary/15 bg-muted/50 px-4 py-3 text-base text-foreground placeholder:text-muted-foreground outline-none transition-colors focus-visible:border-primary focus-visible:bg-background focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none";
+const INVALID = "border-destructive focus-visible:border-destructive focus-visible:outline-destructive";
 
-/** The page's primary interaction. No server/API route exists in this project, so a real, working
- * `mailto:` link is the honest submission mechanism — it opens the visitor's own mail app with the
- * enquiry pre-filled. We never claim the message has been sent, only that it is ready to send. */
+type Key = Exclude<keyof EnquiryValues, "consent">;
+
+function Field({
+  n,
+  id,
+  label,
+  error,
+  required,
+  className,
+  children,
+}: {
+  n: string;
+  id: string;
+  label: string;
+  error?: string;
+  required?: boolean;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={className}>
+      <label htmlFor={id} className="mb-2 flex items-baseline gap-2 text-sm font-semibold text-foreground">
+        <span aria-hidden="true" className="text-xs font-semibold tracking-widest text-primary/70 tabular-nums">
+          {n}
+        </span>
+        <span>
+          {label}
+          {required ? <span aria-hidden="true" className="text-destructive"> *</span> : <span className="font-normal text-muted-foreground"> (optional)</span>}
+        </span>
+      </label>
+      {children}
+      {error && (
+        <p id={`${id}-error`} role="alert" className="mt-1.5 text-sm font-medium text-destructive">
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function Options({ items, placeholder }: { items: readonly string[]; placeholder: string }) {
+  return (
+    <>
+      <option value="">{placeholder}</option>
+      {items.map((i) => (
+        <option key={i} value={i}>
+          {i}
+        </option>
+      ))}
+    </>
+  );
+}
+
+/** No server route or email service exists yet, so a valid submission opens the visitor's email app
+ * with the enquiry pre-filled (see `submitEnquiry`). The confirmation says exactly that — it never
+ * claims the message was delivered. */
 export function ContactForm() {
-  const [state, setState] = useState<FormState>(INITIAL_STATE);
-  const [errors, setErrors] = useState<FieldErrors>({});
+  const [values, setValues] = useState<EnquiryValues>(EMPTY_ENQUIRY);
+  const [errors, setErrors] = useState<EnquiryErrors>({});
   const [ready, setReady] = useState<{ mailto: string; email: string } | null>(null);
-  const firstErrorRef = useRef<HTMLElement | null>(null);
 
-  const field = <K extends keyof FormState>(key: K) => (value: FormState[K]) => {
-    setState((s) => ({ ...s, [key]: value }));
+  const set = <K extends keyof EnquiryValues>(key: K, value: EnquiryValues[K]) => {
+    setValues((v) => ({ ...v, [key]: value }));
     if (errors[key]) setErrors((e) => ({ ...e, [key]: undefined }));
   };
 
-  function handleSubmit(e: React.FormEvent) {
+  const bind = (key: Key) => ({
+    id: `contact-${key}`,
+    value: values[key],
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => set(key, e.target.value),
+    "aria-invalid": !!errors[key],
+    "aria-describedby": errors[key] ? `contact-${key}-error` : undefined,
+    className: cn(FIELD, errors[key] && INVALID),
+  });
+
+  function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const nextErrors = validate(state);
-    setErrors(nextErrors);
-    const firstKey = Object.keys(nextErrors)[0] as keyof FormState | undefined;
-    if (firstKey) {
-      firstErrorRef.current = document.getElementById(`contact-${firstKey}`);
-      firstErrorRef.current?.focus();
+    const next = validateEnquiry(values);
+    setErrors(next);
+    const first = (Object.keys(next) as (keyof EnquiryValues)[])[0];
+    if (first) {
+      document.getElementById(`contact-${first}`)?.focus();
       return;
     }
-    const mailto = buildMailto(state);
-    window.location.href = mailto;
-    setReady({ mailto, email: footerContact.email ?? "hello@technogurukul.com" });
+    setReady(submitEnquiry(values));
   }
 
   if (ready) {
     return (
-      <div className="rounded-[2rem] border border-primary/15 bg-card p-6 sm:p-8">
+      <div role="status" className="rounded-[2rem] border border-primary/15 bg-card p-6 sm:p-10">
         <span aria-hidden="true" className="flex size-12 items-center justify-center rounded-full bg-brand-green/15 text-brand-green">
           <CheckCircle2 className="size-6" />
         </span>
-        <h3 className="mt-4 text-2xl font-semibold tracking-tight text-foreground">Your Enquiry Is Ready to Send.</h3>
-        <p className="mt-2 text-base leading-relaxed text-muted-foreground">
-          Your email app should have opened with your enquiry pre-filled. Press send there to reach Techno Gurukul.
+        <h3 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">Your enquiry is ready to send.</h3>
+        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+          Your email app should have opened with everything pre-filled. Press send there and it goes straight to the
+          Techno Gurukul team.
         </p>
-        <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-          If it didn&rsquo;t open, email us directly:{" "}
-          <a href={ready.mailto} className="font-semibold text-primary underline-offset-2 hover:underline">
+        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+          Nothing opened? Email us directly at{" "}
+          <a href={ready.mailto} className={cn("rounded font-semibold text-primary underline-offset-2 hover:underline", FOCUS)}>
             {ready.email}
           </a>
+          .
         </p>
         <button
           type="button"
-          onClick={() => setReady(null)}
-          className="mt-6 inline-flex min-h-11 items-center rounded-lg text-base font-semibold text-primary focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-primary"
+          onClick={() => {
+            setValues(EMPTY_ENQUIRY);
+            setReady(null);
+          }}
+          className={cn("mt-6 inline-flex min-h-11 items-center rounded text-base font-semibold text-primary", FOCUS)}
         >
-          Edit Your Enquiry
+          Send another enquiry
         </button>
       </div>
     );
   }
 
   return (
-    <form noValidate onSubmit={handleSubmit} className="rounded-[2rem] border border-primary/15 bg-card p-6 sm:p-8">
-      <div className="grid gap-5 sm:grid-cols-2">
-        <div>
-          <label htmlFor="contact-fullName" className={LABEL}>
-            Full Name <span aria-hidden="true" className="text-destructive">*</span>
-          </label>
-          <input
-            id="contact-fullName"
-            type="text"
-            required
-            aria-required="true"
-            aria-invalid={!!errors.fullName}
-            aria-describedby={errors.fullName ? "contact-fullName-error" : undefined}
-            value={state.fullName}
-            onChange={(e) => field("fullName")(e.target.value)}
-            className={cn(FIELD, "mt-1.5", errors.fullName && FIELD_INVALID)}
-          />
-          {errors.fullName && (
-            <p id="contact-fullName-error" role="alert" className="mt-1.5 text-sm font-medium text-destructive">
-              {errors.fullName}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="contact-email" className={LABEL}>
-            Email Address <span aria-hidden="true" className="text-destructive">*</span>
-          </label>
-          <input
-            id="contact-email"
-            type="email"
-            required
-            aria-required="true"
-            aria-invalid={!!errors.email}
-            aria-describedby={errors.email ? "contact-email-error" : undefined}
-            value={state.email}
-            onChange={(e) => field("email")(e.target.value)}
-            className={cn(FIELD, "mt-1.5", errors.email && FIELD_INVALID)}
-          />
-          {errors.email && (
-            <p id="contact-email-error" role="alert" className="mt-1.5 text-sm font-medium text-destructive">
-              {errors.email}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="contact-phone" className={LABEL}>
-            Phone Number <span className="font-normal text-muted-foreground">(optional)</span>
-          </label>
-          <input
-            id="contact-phone"
-            type="tel"
-            value={state.phone}
-            onChange={(e) => field("phone")(e.target.value)}
-            className={cn(FIELD, "mt-1.5")}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="contact-enquiryType" className={LABEL}>
-            What are you enquiring about? <span aria-hidden="true" className="text-destructive">*</span>
-          </label>
-          <select
-            id="contact-enquiryType"
-            required
-            aria-required="true"
-            aria-invalid={!!errors.enquiryType}
-            aria-describedby={errors.enquiryType ? "contact-enquiryType-error" : undefined}
-            value={state.enquiryType}
-            onChange={(e) => field("enquiryType")(e.target.value)}
-            className={cn(FIELD, "mt-1.5", errors.enquiryType && FIELD_INVALID)}
-          >
-            <option value="">Choose one</option>
-            {ENQUIRY_TYPES.map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
-            ))}
+    <form noValidate onSubmit={onSubmit} className="rounded-[2rem] border border-primary/15 bg-card p-6 shadow-[0_28px_56px_-40px_rgba(16,20,28,0.3)] sm:p-10">
+      <div className="grid gap-x-6 gap-y-6 sm:grid-cols-2">
+        <Field n="01" id="contact-fullName" label="Full name" required error={errors.fullName}>
+          <input type="text" autoComplete="name" required aria-required="true" placeholder="Your full name" {...bind("fullName")} />
+        </Field>
+        <Field n="02" id="contact-email" label="Email address" required error={errors.email}>
+          <input type="email" autoComplete="email" required aria-required="true" placeholder="you@example.com" {...bind("email")} />
+        </Field>
+        <Field n="03" id="contact-phone" label="Phone number" required error={errors.phone}>
+          <input type="tel" inputMode="tel" autoComplete="tel" required aria-required="true" placeholder="+91 XXXXX XXXXX" {...bind("phone")} />
+        </Field>
+        <Field n="04" id="contact-interest" label="I am interested in" required error={errors.interest}>
+          <select required aria-required="true" {...bind("interest")}>
+            <Options items={INTERESTS} placeholder="Choose one" />
           </select>
-          {errors.enquiryType && (
-            <p id="contact-enquiryType-error" role="alert" className="mt-1.5 text-sm font-medium text-destructive">
-              {errors.enquiryType}
-            </p>
-          )}
-        </div>
-
-        <div className="sm:col-span-2">
-          <label htmlFor="contact-programInterest" className={LABEL}>
-            Program / Area of Interest <span className="font-normal text-muted-foreground">(optional)</span>
-          </label>
-          <select
-            id="contact-programInterest"
-            value={state.programInterest}
-            onChange={(e) => field("programInterest")(e.target.value)}
-            className={cn(FIELD, "mt-1.5")}
-          >
-            <option value="">Not applicable</option>
-            {PROGRAM_OPTIONS.map((p) => (
-              <option key={p} value={p}>
-                {p}
-              </option>
-            ))}
+        </Field>
+        <Field n="05" id="contact-status" label="Current status" error={errors.status}>
+          <select {...bind("status")}>
+            <Options items={STATUSES} placeholder="Select" />
           </select>
-        </div>
-
-        <div className="sm:col-span-2">
-          <label htmlFor="contact-message" className={LABEL}>
-            Message <span aria-hidden="true" className="text-destructive">*</span>
-          </label>
-          <textarea
-            id="contact-message"
-            required
-            aria-required="true"
-            rows={5}
-            placeholder="Tell us what you'd like to know..."
-            aria-invalid={!!errors.message}
-            aria-describedby={errors.message ? "contact-message-error" : undefined}
-            value={state.message}
-            onChange={(e) => field("message")(e.target.value)}
-            className={cn(FIELD, "mt-1.5 resize-y", errors.message && FIELD_INVALID)}
-          />
-          {errors.message && (
-            <p id="contact-message-error" role="alert" className="mt-1.5 text-sm font-medium text-destructive">
-              {errors.message}
-            </p>
-          )}
-        </div>
+        </Field>
+        <Field n="06" id="contact-contactMethod" label="Preferred contact method" error={errors.contactMethod}>
+          <select {...bind("contactMethod")}>
+            <Options items={CONTACT_METHODS} placeholder="Select" />
+          </select>
+        </Field>
+        <Field n="07" id="contact-source" label="How did you hear about us?" error={errors.source}>
+          <select {...bind("source")}>
+            <Options items={SOURCES} placeholder="Select" />
+          </select>
+        </Field>
+        <Field n="08" id="contact-message" label="Message" required error={errors.message} className="sm:col-span-2">
+          <textarea rows={7} required aria-required="true" placeholder="Tell us what you'd like to know..." {...bind("message")} className={cn(FIELD, "min-h-40 resize-y", errors.message && INVALID)} />
+        </Field>
       </div>
 
-      <div className="mt-5 flex items-start gap-3">
-        <input
-          id="contact-consent"
-          type="checkbox"
-          required
-          aria-required="true"
-          aria-invalid={!!errors.consent}
-          aria-describedby={errors.consent ? "contact-consent-error" : undefined}
-          checked={state.consent}
-          onChange={(e) => field("consent")(e.target.checked)}
-          className="mt-1 size-4 shrink-0 rounded border-primary/30 text-primary outline-none focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-primary"
-        />
-        <label htmlFor="contact-consent" className="text-sm leading-relaxed text-muted-foreground">
-          I understand this will open my email app to send this message to Techno Gurukul.
-        </label>
-      </div>
-      {errors.consent && (
-        <p id="contact-consent-error" role="alert" className="mt-1.5 text-sm font-medium text-destructive">
-          {errors.consent}
-        </p>
-      )}
-
-      <button
-        type="submit"
-        className={cn(
-          buttonVariants({ variant: "default" }),
-          "group mt-6 h-12 w-full gap-1.5 rounded-full px-6 text-base transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:translate-y-0 focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-4 focus-visible:outline-primary sm:w-auto"
+      <div className="mt-7 border-t border-primary/15 pt-6">
+        <div className="flex items-start gap-3">
+          <input
+            id="contact-consent"
+            type="checkbox"
+            required
+            aria-required="true"
+            aria-invalid={!!errors.consent}
+            aria-describedby={errors.consent ? "contact-consent-error" : undefined}
+            checked={values.consent}
+            onChange={(e) => set("consent", e.target.checked)}
+            className={cn("mt-0.5 size-5 shrink-0 accent-primary", FOCUS)}
+          />
+          <label htmlFor="contact-consent" className="text-sm leading-relaxed text-foreground">
+            I agree to be contacted by Techno Gurukul regarding this enquiry.
+          </label>
+        </div>
+        {errors.consent && (
+          <p id="contact-consent-error" role="alert" className="mt-1.5 text-sm font-medium text-destructive">
+            {errors.consent}
+          </p>
         )}
-      >
-        <Mail className="size-4" aria-hidden="true" />
-        Send Enquiry
-      </button>
+
+        <button
+          type="submit"
+          className={cn(
+            "group mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-8 text-sm font-semibold tracking-widest text-primary-foreground uppercase transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-lg active:translate-y-0 motion-reduce:transition-none sm:w-auto",
+            FOCUS
+          )}
+        >
+          Send Enquiry
+          <ArrowRight className="size-4 transition-transform duration-200 motion-safe:group-hover:translate-x-1" aria-hidden="true" />
+        </button>
+        <p className="mt-4 text-sm text-muted-foreground">
+          This opens your email app with your enquiry pre-filled &mdash; there&rsquo;s no online form inbox yet.
+        </p>
+      </div>
     </form>
   );
 }
