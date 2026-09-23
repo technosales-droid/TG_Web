@@ -62,14 +62,27 @@ export function ProgramsHero() {
                 i === index ? "z-10 scale-100 opacity-100" : "z-0 scale-[1.04] opacity-0"
               )}
             >
-              <Image
-                src={program.image}
-                alt={program.alt}
-                fill
-                priority={i === 0}
-                sizes="100vw"
-                className="object-cover"
-              />
+              {program.video ? (
+                <video
+                  src={program.video}
+                  aria-label={program.alt}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload={i === 0 ? "auto" : "none"}
+                  className="absolute inset-0 size-full object-cover"
+                />
+              ) : (
+                <Image
+                  src={program.image}
+                  alt={program.alt}
+                  fill
+                  priority={i === 0}
+                  sizes="100vw"
+                  className="object-cover"
+                />
+              )}
               <div
                 aria-hidden="true"
                 className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/5 lg:bg-gradient-to-r lg:from-black/80 lg:via-black/40 lg:to-transparent"
