@@ -1,92 +1,222 @@
+"use client";
+
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "cn";
-import { GRADIENT_TEXT } from "../learning/curriculum/section-header";
+import { BlogCover } from "@/components/blogs/blog-cover";
+import type { BlogCardData } from "@/data/blogs";
 
-const TOPICS = ["Learning", "Programs", "Projects", "Careers"];
+export type BlogHeroPost = BlogCardData;
 
-// Abstract "articles in progress" workspace. Illustrative only: no fabricated post titles, authors or dates.
-function ArticlesWorkspace() {
+const SLIDE_MS = 7000;
+const MANUAL_PAUSE_MS = 10000;
+const SWIPE_PX = 50;
+
+const pad = (n: number) => String(n).padStart(2, "0");
+
+function BlogHeroContent({ post }: { post: BlogHeroPost }) {
   return (
-    <div className="relative mx-auto w-full max-w-xl">
-      <div className="rounded-[2rem] border border-primary/10 bg-card p-4 shadow-[0_28px_56px_-32px_rgba(16,20,28,0.35)] sm:p-6">
-        <div aria-hidden="true" className="flex items-center gap-2">
-          <span className="size-2.5 rounded-full bg-primary/25" />
-          <span className="size-2.5 rounded-full bg-brand-green/40" />
-          <span className="ml-2 h-2.5 w-28 rounded-full bg-primary/15" />
-        </div>
+    <div className="max-w-[850px]">
+      <p className="flex items-center gap-3 text-xs font-semibold tracking-[0.2em] text-white uppercase motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-700 sm:text-sm">
+        <span aria-hidden="true" className="h-px w-8 bg-brand-green" />
+        {post.category}
+      </p>
 
-        <div className="mt-5 grid gap-3">
-          {[0, 1, 2].map((i) => (
-            <div key={i} className="flex items-center gap-4 rounded-2xl border border-dashed border-primary/20 bg-muted/40 p-4">
-              <div aria-hidden="true" className="size-12 shrink-0 rounded-xl bg-primary/10" />
-              <div className="min-w-0 flex-1">
-                <span className="block h-2.5 w-3/5 rounded-full bg-primary/15" />
-                <span className="mt-2 block h-2 w-4/5 rounded-full bg-primary/10" />
-              </div>
-            </div>
-          ))}
-        </div>
+      <h1
+        className="mt-4 text-3xl leading-[1.08] font-semibold tracking-tight text-balance text-white motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-3 motion-safe:duration-700 sm:mt-5 sm:text-4xl lg:text-5xl xl:text-6xl"
+        style={{ animationDelay: "80ms" }}
+      >
+        {post.title}
+      </h1>
 
-        <ul aria-label="Learning, programs, projects, careers" className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
-          {TOPICS.map((t) => (
-            <li key={t} className="flex items-center justify-center rounded-xl border border-primary/10 bg-muted/60 px-3 py-2.5">
-              <span className="text-sm font-medium text-foreground">{t}</span>
-            </li>
-          ))}
-        </ul>
+      <p
+        className="mt-4 line-clamp-3 max-w-2xl text-base leading-relaxed text-white/85 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-3 motion-safe:duration-700 sm:mt-5 sm:line-clamp-none sm:text-lg"
+        style={{ animationDelay: "160ms" }}
+      >
+        {post.excerpt}
+      </p>
+
+      <div
+        className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-3 motion-safe:duration-700"
+        style={{ animationDelay: "240ms" }}
+      >
+        <Link
+          href={`/blogs/${post.slug}`}
+          className="group inline-flex items-center gap-2 border-b border-white/70 pb-1 text-sm font-semibold tracking-widest text-white uppercase transition-colors hover:border-brand-green hover:text-brand-green focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+        >
+          Read Article
+          <ArrowRight
+            className="size-4 transition-transform duration-300 motion-safe:group-hover:translate-x-1"
+            aria-hidden="true"
+          />
+        </Link>
+        <p className="text-sm text-white/75">
+          <time dateTime={post.isoDate}>{post.date}</time>
+          <span aria-hidden="true" className="mx-2">
+            &middot;
+          </span>
+          {post.readTime} min read
+        </p>
       </div>
     </div>
   );
 }
 
-export function BlogsHero() {
+function BlogHeroControls({
+  index,
+  total,
+  paused,
+  onPrev,
+  onNext,
+  onProgressEnd,
+}: {
+  index: number;
+  total: number;
+  paused: boolean;
+  onPrev: () => void;
+  onNext: () => void;
+  onProgressEnd: () => void;
+}) {
+  const btn =
+    "flex size-11 items-center justify-center rounded-full border border-white/40 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
   return (
-    <section className="px-4 pt-8 pb-10 sm:px-6 sm:pt-10 sm:pb-12">
-      <div className="mx-auto max-w-[1800px]">
-        <div className="relative overflow-hidden rounded-[2.5rem] border border-primary/10 bg-muted/50 px-5 py-10 sm:px-10 sm:py-12 xl:min-h-[520px] xl:px-16 xl:py-14">
-          <div aria-hidden="true" className="absolute inset-y-0 right-0 hidden w-[48%] xl:block">
-            <div className="absolute inset-0 bg-brand-green/10 [clip-path:polygon(14%_0%,100%_0%,100%_100%,0%_100%)]" />
-            <div className="absolute inset-0 bg-primary/8 [clip-path:polygon(0%_100%,55%_100%,100%_55%,100%_100%)]" />
-          </div>
-
-          <div className="relative grid items-center gap-10 xl:min-h-[400px] xl:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] xl:gap-16">
-            <div>
-              <div className="flex items-center gap-2 text-sm font-medium text-primary">
-                <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
-                Blogs
-              </div>
-              <h1 className="mt-4 max-w-3xl text-[1.75rem] leading-[1.12] font-semibold tracking-tight text-balance text-foreground min-[430px]:text-4xl sm:text-5xl xl:text-[3rem]">
-                Insights Are <span className={GRADIENT_TEXT}>on Their Way.</span>
-              </h1>
-              <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-                This is where Techno Gurukul will share articles, updates and practical insights about learning,
-                programs and the world of work. Nothing is published here yet.
-              </p>
-              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
-                <Link
-                  href="/programs"
-                  className={cn(
-                    buttonVariants({ variant: "default" }),
-                    "h-11 rounded-full px-6 text-base transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:translate-y-0 focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-4 focus-visible:outline-primary"
-                  )}
-                >
-                  Explore Programs
-                </Link>
-                <Link
-                  href="/learning"
-                  className="group flex min-h-11 items-center gap-1 rounded-full text-base font-medium text-foreground transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-4 focus-visible:outline-primary"
-                >
-                  Explore Learning
-                  <ChevronRight className="size-4 transition-transform duration-200 motion-safe:group-hover:translate-x-1" aria-hidden="true" />
-                </Link>
-              </div>
-            </div>
-
-            <ArticlesWorkspace />
-          </div>
+    <div className="flex w-full max-w-xs flex-col gap-4 lg:w-64 lg:max-w-none">
+      <div className="flex items-center justify-between">
+        <p className="text-sm font-semibold tracking-widest text-white tabular-nums" aria-live="polite">
+          <span className="sr-only">Article </span>
+          {pad(index + 1)} <span className="text-white/50">/ {pad(total)}</span>
+        </p>
+        <div className="flex items-center gap-2">
+          <button type="button" onClick={onPrev} aria-label="Previous article" className={btn}>
+            <ChevronLeft className="size-5" aria-hidden="true" />
+          </button>
+          <button type="button" onClick={onNext} aria-label="Next article" className={btn}>
+            <ChevronRight className="size-5" aria-hidden="true" />
+          </button>
         </div>
+      </div>
+      <div aria-hidden="true" className="h-[2px] w-full overflow-hidden bg-white/25">
+        <div
+          key={index}
+          onAnimationEnd={onProgressEnd}
+          className="blog-hero-progress h-full origin-left bg-white"
+          style={{
+            ["--blog-hero-duration" as string]: `${SLIDE_MS}ms`,
+            animationPlayState: paused ? "paused" : "running",
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+export function BlogsHero({ posts }: { posts: BlogHeroPost[] }) {
+  const total = posts.length;
+  const [index, setIndex] = useState(0);
+  const [hovered, setHovered] = useState(false);
+  const [manualPause, setManualPause] = useState(false);
+  const pauseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const touch = useRef<{ x: number; y: number } | null>(null);
+
+  const goTo = useCallback(
+    (next: number) => setIndex(((next % total) + total) % total),
+    [total]
+  );
+
+  const interact = useCallback(
+    (next: number) => {
+      goTo(next);
+      setManualPause(true);
+      if (pauseTimer.current) clearTimeout(pauseTimer.current);
+      pauseTimer.current = setTimeout(() => setManualPause(false), MANUAL_PAUSE_MS);
+    },
+    [goTo]
+  );
+
+  useEffect(
+    () => () => {
+      if (pauseTimer.current) clearTimeout(pauseTimer.current);
+    },
+    []
+  );
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      const t = e.target as HTMLElement | null;
+      if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+      if (e.key === "ArrowRight") interact(index + 1);
+      else if (e.key === "ArrowLeft") interact(index - 1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [index, interact]);
+
+  if (total === 0) return null;
+  const post = posts[index];
+  const paused = hovered || manualPause;
+  // Only the current slide and its neighbours are mounted, so ten large photos aren't all fetched up front.
+  const mounted = (i: number) => {
+    const d = Math.abs(i - index);
+    return d <= 1 || d === total - 1;
+  };
+
+  return (
+    <section
+      aria-roledescription="carousel"
+      aria-label="Featured articles"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocusCapture={() => setHovered(true)}
+      onBlurCapture={() => setHovered(false)}
+      onTouchStart={(e) => {
+        const t = e.touches[0];
+        touch.current = { x: t.clientX, y: t.clientY };
+      }}
+      onTouchEnd={(e) => {
+        const start = touch.current;
+        touch.current = null;
+        if (!start) return;
+        const t = e.changedTouches[0];
+        const dx = t.clientX - start.x;
+        if (Math.abs(dx) > SWIPE_PX && Math.abs(dx) > Math.abs(t.clientY - start.y)) interact(index + (dx < 0 ? 1 : -1));
+      }}
+      className="relative -mt-[5.25rem] flex min-h-[88svh] touch-pan-y flex-col justify-end overflow-hidden bg-black lg:min-h-[100svh]"
+    >
+      {posts.map((p, i) =>
+        mounted(i) ? (
+          <div
+            key={p.slug}
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`${i + 1} of ${total}`}
+            aria-hidden={i !== index}
+            className={cn(
+              "absolute inset-0 transition-[opacity,transform] duration-[800ms] ease-out motion-reduce:transition-none",
+              i === index ? "z-10 scale-100 opacity-100" : "z-0 scale-[1.06] opacity-0"
+            )}
+          >
+            <BlogCover post={p} sizes="100vw" priority={i === 0} />
+          </div>
+        ) : null
+      )}
+
+      <div aria-hidden="true" className="absolute inset-0 z-10 bg-gradient-to-t from-black/90 via-black/40 to-black/10" />
+      <div aria-hidden="true" className="absolute inset-0 z-10 hidden bg-gradient-to-r from-black/60 via-black/15 to-transparent lg:block" />
+
+      <div className="relative z-20 mx-auto flex w-full max-w-[1800px] flex-col gap-8 px-5 pt-32 pb-8 sm:px-10 sm:pb-10 lg:flex-row lg:items-end lg:justify-between lg:gap-12 lg:px-16 lg:pb-14">
+        <BlogHeroContent key={post.slug} post={post} />
+        <BlogHeroControls
+          index={index}
+          total={total}
+          paused={paused}
+          onPrev={() => interact(index - 1)}
+          onNext={() => interact(index + 1)}
+          onProgressEnd={() => {
+            if (total > 1) goTo(index + 1);
+          }}
+        />
       </div>
     </section>
   );
