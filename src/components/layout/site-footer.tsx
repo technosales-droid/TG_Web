@@ -20,7 +20,10 @@ function SocialLinks() {
 
   return (
     <div>
-      <p className="text-sm font-semibold text-background">Follow Techno Gurukul</p>
+      <p className="flex items-center gap-2 text-sm font-semibold text-background">
+        <span aria-hidden="true" className="h-px w-4 bg-brand-green" />
+        Follow Techno Gurukul
+      </p>
       <ul className="mt-3 flex flex-wrap gap-2.5">
         {footerSocials.map((s) => (
           <li key={s.id}>
@@ -30,7 +33,7 @@ function SocialLinks() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Techno Gurukul on ${s.label}`}
-                className="flex size-10 items-center justify-center rounded-full border border-background/25 text-background transition-colors duration-200 hover:bg-background/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                className="flex size-10 items-center justify-center rounded-full border border-background/25 text-background transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-green/70 hover:text-brand-green hover:shadow-[0_8px_20px_-8px_rgba(47,174,91,0.6)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
                 <SocialIcon id={s.id} className="size-[18px]" />
               </a>
@@ -146,8 +149,15 @@ export function SiteFooter() {
   const { name, type, locality, address, mapUrl } = footerLocation;
 
   return (
-    <footer className="bg-[#0b3d50] text-background">
-      <div className="mx-auto max-w-[1800px] px-4 pt-14 pb-8 sm:px-6 sm:pt-16">
+    <footer
+      className="relative overflow-hidden bg-[#0b3d50] text-background before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-gradient-to-r before:from-transparent before:via-brand-green/70 before:to-transparent"
+      style={{
+        backgroundImage:
+          "linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px)",
+        backgroundSize: "40px 40px",
+      }}
+    >
+      <div className="relative mx-auto max-w-[1800px] px-4 pt-14 pb-8 sm:px-6 sm:pt-16">
         {/* Layer 2 — brand, navigation, contact */}
         <div className="grid gap-12 xl:grid-cols-[minmax(0,1fr)_minmax(0,2.4fr)] xl:gap-x-16">
           <div className="order-1 max-w-sm xl:col-start-1 xl:row-start-1">
@@ -170,7 +180,10 @@ export function SiteFooter() {
           >
             {footerNavigation.map((group) => (
               <div key={group.title}>
-                <h3 className="text-sm font-semibold tracking-widest text-background/70 uppercase">{group.title}</h3>
+                <h3 className="flex items-center gap-2 text-sm font-semibold tracking-widest text-background/70 uppercase">
+                  <span aria-hidden="true" className="h-px w-4 bg-brand-green" />
+                  {group.title}
+                </h3>
                 <ul className="mt-3 flex flex-col">
                   {group.links.map((link) => (
                     <li key={`${group.title}-${link.href}`}>
@@ -190,10 +203,11 @@ export function SiteFooter() {
             ))}
           </nav>
 
-          <div className="order-2 grid gap-8 rounded-[2rem] border border-background/15 bg-background/5 p-5 sm:p-8 md:order-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] lg:gap-12 xl:col-span-2 xl:row-start-2">
+          <div className="order-2 grid gap-8 rounded-[2rem] border border-background/15 bg-gradient-to-br from-background/8 to-background/[0.02] p-5 sm:p-8 md:order-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] lg:gap-12 xl:col-span-2 xl:row-start-2">
             <div className="grid content-start gap-8">
               <div>
-                <h3 className="text-sm font-semibold tracking-widest text-background/70 uppercase">
+                <h3 className="flex items-center gap-2 text-sm font-semibold tracking-widest text-background/70 uppercase">
+                  <span aria-hidden="true" className="h-px w-4 bg-brand-green" />
                   Visit {name}
                 </h3>
                 <p className="mt-3 text-lg font-semibold text-background">{type}</p>
@@ -215,7 +229,10 @@ export function SiteFooter() {
               </div>
 
               <div>
-                <h3 className="text-sm font-semibold tracking-widest text-background/70 uppercase">Contact</h3>
+                <h3 className="flex items-center gap-2 text-sm font-semibold tracking-widest text-background/70 uppercase">
+                  <span aria-hidden="true" className="h-px w-4 bg-brand-green" />
+                  Contact
+                </h3>
                 <ul className="mt-3 flex flex-col gap-1">
                   {email && (
                     <li>
