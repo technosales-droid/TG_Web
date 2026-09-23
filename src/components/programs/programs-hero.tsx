@@ -142,7 +142,7 @@ export function ProgramsHero() {
             <div
               role="group"
               aria-label="Featured programs"
-              className="absolute inset-x-6 bottom-6 z-30 flex items-center gap-2 sm:inset-x-10 sm:bottom-7 lg:inset-x-auto lg:bottom-8 lg:left-14 lg:w-56"
+              className="absolute inset-x-0 bottom-6 z-30 flex items-center justify-center gap-2.5 sm:bottom-7 lg:bottom-8"
             >
               {ACTIVE_PROGRAMS.map((program, i) => (
                 <button
@@ -151,20 +151,11 @@ export function ProgramsHero() {
                   onClick={() => goTo(i)}
                   aria-label={`Show ${program.title}`}
                   aria-current={i === index}
-                  className="h-1.5 flex-1 overflow-hidden rounded-full bg-background/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-background"
-                >
-                  <span
-                    key={`${program.href}-${i === index ? index : "static"}`}
-                    className={cn(
-                      "block h-full origin-left rounded-full bg-background",
-                      i < index && "scale-x-100",
-                      i > index && "scale-x-0",
-                      i === index &&
-                        "scale-x-0 motion-safe:animate-[progress-fill_5500ms_linear_forwards] motion-reduce:scale-x-100",
-                      i === index && paused && "motion-safe:[animation-play-state:paused]"
-                    )}
-                  />
-                </button>
+                  className={cn(
+                    "h-2 rounded-full transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-background",
+                    i === index ? "w-6 bg-background" : "w-2 bg-background/40 hover:bg-background/70"
+                  )}
+                />
               ))}
             </div>
           )}
