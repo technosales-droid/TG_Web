@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { CatalogueSection } from "@/components/programs/catalogue/catalogue-section";
-import { RoadmapSection } from "@/components/programs/catalogue/roadmap-section";
+import { ProgramsDiscoverySection } from "@/components/programs/discovery/programs-discovery-section";
 import { ProgramsHero } from "@/components/programs/programs-hero";
 import { ProgramsPhilosophy } from "@/components/programs/programs-philosophy";
 
@@ -14,8 +13,7 @@ export default function Page() {
   return (
     <main>
       <ProgramsHero />
-      <CatalogueSection />
-      <RoadmapSection />
+      <ProgramsDiscoverySection />
       <ProgramsPhilosophy />
     </main>
   );

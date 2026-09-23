@@ -107,7 +107,8 @@ const GAME_COURSES: Course[] = [
     ["Unity", "Game Development", "Programming", "Animation", "Game AI"],
     ["c#", "gameplay", "physics", "ui", "optimization", "deployment", "mobile", "unity studio"],
     ["gamepad", "code", "cube"],
-    "navy"
+    "navy",
+    { status: "active", href: "/programs/tg-unity-studio" }
   ),
   game(
     "tg-unreal-studio",
@@ -119,7 +120,8 @@ const GAME_COURSES: Course[] = [
     ["Unreal Engine", "Game Development", "Programming", "VFX", "Cinematics"],
     ["blueprints", "c++", "gameplay", "materials", "lighting", "animation", "ai", "optimization", "unreal studio"],
     ["cube", "code", "gamepad"],
-    "blue"
+    "blue",
+    { status: "active", href: "/programs/tg-unreal-studio" }
   ),
   game(
     "tg-gameart-studio",
@@ -131,7 +133,8 @@ const GAME_COURSES: Course[] = [
     ["2D Art", "3D Art"],
     ["character design", "environment art", "props", "blender", "game assets", "game ui", "digital illustration", "gameart studio"],
     ["palette", "pen-tool", "cube"],
-    "green"
+    "green",
+    { status: "active", href: "/programs/tg-gameart-studio" }
   ),
   game(
     "tg-gamedesign-studio",
@@ -144,7 +147,7 @@ const GAME_COURSES: Course[] = [
     ["game mechanics", "game loops", "progression", "balancing", "narrative", "world building", "quest design", "prototyping", "gamedesign studio"],
     ["layers", "boxes", "pen-tool"],
     "navy",
-    { status: "active", href: "/programs/tg-gamedesign-studio", featured: true }
+    { status: "active", href: "/programs/tg-gamedesign-studio" }
   ),
   game(
     "tg-game-animation-vfx",
@@ -156,7 +159,8 @@ const GAME_COURSES: Course[] = [
     ["Animation", "VFX", "Cinematics"],
     ["rigging", "particles", "shaders", "lighting", "sequencing", "cutscenes"],
     ["clapperboard", "sparkles", "cube"],
-    "blue"
+    "blue",
+    { status: "active", href: "/programs/tg-game-animation-vfx" }
   ),
   game(
     "tg-ai-for-games",
@@ -168,7 +172,8 @@ const GAME_COURSES: Course[] = [
     ["Game AI", "AI"],
     ["npc behaviour", "state machines", "pathfinding", "procedural systems", "generative ai", "ai-assisted development", "enemy decision-making"],
     ["cpu", "sparkles", "gamepad"],
-    "green"
+    "green",
+    { status: "active", href: "/programs/tg-ai-for-games" }
   ),
 ];
 
