@@ -103,7 +103,7 @@ export function AccessProvider({ children }: { children: ReactNode }) {
           // Escape or the close button: closing is always possible.
           onClose={() => finish(false)}
           aria-labelledby="access-gate-title"
-          className="access-dialog m-auto max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-md overflow-y-auto overscroll-contain rounded-3xl border border-primary/10 bg-card p-5 text-foreground shadow-[0_24px_60px_-20px_rgba(16,20,28,0.5)] backdrop:bg-black/60 sm:p-7"
+          className="access-dialog m-auto max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto overscroll-contain rounded-3xl border border-primary/10 bg-card p-5 text-foreground shadow-[0_24px_60px_-20px_rgba(16,20,28,0.5)] backdrop:bg-black/60 sm:p-8"
         >
           <button
             type="button"
@@ -113,7 +113,7 @@ export function AccessProvider({ children }: { children: ReactNode }) {
           >
             <X className="size-5" aria-hidden="true" />
           </button>
-          <div className="pr-8">
+          <div className="pr-6">
             <AccessGate
               source={gate}
               onGranted={(g) => {
