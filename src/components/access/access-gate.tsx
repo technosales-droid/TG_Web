@@ -130,12 +130,12 @@ export function AccessGate({
         </div>
       </div>
 
-      <fieldset className="mt-4">
+      <fieldset className="mt-5">
         <legend className="mb-1.5 text-sm font-medium text-foreground">
           Your age<span aria-hidden="true" className="text-destructive"> *</span>
           <span className="sr-only"> (required)</span>
         </legend>
-        <div className="grid grid-cols-2 gap-2 rounded-xl bg-muted p-1 sm:max-w-sm">
+        <div className="grid grid-cols-2 gap-1 rounded-xl bg-muted p-1">
           {([["adult", "18 or older"], ["minor", "Under 18"]] as const).map(([val, label]) => (
             <label key={val} className={cn("flex min-h-10 cursor-pointer items-center justify-center rounded-lg px-3 text-[15px] transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary", v.ageGroup === val ? "bg-card font-semibold text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground")}>
               <input type="radio" name={`${uid}-age`} value={val} checked={v.ageGroup === val} onChange={() => set("ageGroup", val)} className="sr-only" />
@@ -156,7 +156,7 @@ export function AccessGate({
         </div>
       )}
 
-      <label className={cn("mt-4 flex items-start gap-3 rounded-xl border border-primary/15 bg-muted/50 p-3.5 text-sm leading-relaxed", minor ? "cursor-not-allowed opacity-60" : "cursor-pointer hover:border-primary/30")}>
+      <label className={cn("mt-5 flex items-start gap-3 rounded-xl border border-primary/15 bg-muted/50 p-3.5 text-sm leading-relaxed", minor ? "cursor-not-allowed opacity-60" : "cursor-pointer hover:border-primary/30")}>
         <input type="checkbox" checked={v.marketingConsent && !minor} disabled={minor} onChange={(e) => set("marketingConsent", e.target.checked)} className="mt-0.5 size-5 shrink-0 accent-[#0c709a]" />
         <span className="text-foreground/90">
           I agree to be contacted by Techno Gurukul regarding courses, admissions, programs, resources, career opportunities, or related services.
@@ -168,11 +168,11 @@ export function AccessGate({
 
       <p role="alert" className="mt-4 rounded-xl border border-destructive/40 bg-destructive/5 px-3.5 py-2.5 text-sm text-destructive empty:hidden">{errors.form}</p>
 
-      <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <button type="button" onClick={onCancel} className={cn("h-11 rounded-full px-5 text-sm font-medium text-muted-foreground hover:bg-muted", FOCUS)}>
+      <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+        <button type="button" onClick={onCancel} className={cn("h-12 rounded-full border border-primary/25 px-6 text-[15px] font-semibold text-foreground hover:bg-muted", FOCUS)}>
           Not now
         </button>
-        <button type="submit" disabled={busy} className={cn("flex h-12 items-center justify-center gap-2 rounded-full bg-primary px-8 text-base font-semibold text-primary-foreground shadow-[0_10px_24px_-12px_rgba(12,112,154,0.8)] transition-colors hover:bg-primary/90 disabled:opacity-70 sm:min-w-52", FOCUS)}>
+        <button type="submit" disabled={busy} className={cn("flex h-12 items-center justify-center gap-2 rounded-full bg-primary px-8 text-base font-semibold text-primary-foreground shadow-[0_10px_24px_-12px_rgba(12,112,154,0.8)] transition-colors hover:bg-primary/90 disabled:opacity-70 sm:min-w-56", FOCUS)}>
           {busy ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : null}
           {busy ? "Please wait" : "Continue"}
           {busy ? null : <ArrowRight className="size-4" aria-hidden="true" />}

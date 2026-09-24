@@ -575,6 +575,27 @@ const SEEDS: Omit<Project, "id" | "order">[] = [
   }),
 ];
 
+// TEST ENTRY: checks the access gate end to end. It holds no real work. Delete it (and its content in
+// src/server/gated-content.ts) before launch.
+SEEDS.push({
+  slug: "access-test-project",
+  title: "Access Gate Test Project",
+  shortDescription: "A test entry that checks the access gate. It holds no real student or faculty work and will be replaced by real projects.",
+  creatorType: "institute",
+  creatorName: "Techno Gurukul",
+  ...DM,
+  projectType: "Case Study",
+  topics: ["Testing"],
+  tools: [],
+  status: "showcased",
+  featured: true,
+  sample: false,
+  media: [{ type: "document", label: "Test document", url: null }],
+  ownership: "institute",
+  publicationStatus: "published",
+  attribution: "Techno Gurukul",
+});
+
 export const PROJECTS: Project[] = SEEDS.map((p, i) => ({ ...p, id: `prj-${String(i + 1).padStart(3, "0")}`, order: i + 1 }));
 
 // Fails the build/dev server loudly if the project data is malformed.

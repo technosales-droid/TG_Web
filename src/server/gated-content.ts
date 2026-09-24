@@ -23,15 +23,37 @@ export interface GatedProjectContent {
   relatedResources?: { label: string; href: string }[];
 }
 
-export interface GatedResourceContent {
-  /** A file under /public or an https URL. */
-  url: string;
-  /** "file" downloads; "external" opens another site. */
-  kind: "file" | "external";
-}
+/**
+ * A "file" lives in /private-content (never /public, which anyone can fetch) and is streamed by
+ * /api/content/resources/[slug]/file only to a visitor with an access session. An "external" resource is a link.
+ */
+export type GatedResourceContent =
+  | { kind: "file"; file: string; downloadName: string; contentType: string }
+  | { kind: "external"; url: string };
 
-const PROJECT_CONTENT: Record<string, GatedProjectContent> = {};
-const RESOURCE_CONTENT: Record<string, GatedResourceContent> = {};
+// TEST ENTRIES: the two entries below exist only to test the access gate end to end. Delete them, and their records in
+// src/data/projects.ts and resources.ts, and private-content/access-test-resource.pdf, before launch.
+const PROJECT_CONTENT: Record<string, GatedProjectContent> = {
+  "access-test-project": {
+    longDescription:
+      "If you can read this, your access profile works. This entry exists so the Techno Gurukul team can check that projects open only after a visitor creates an access profile.",
+    problem: "Gated content must not be readable by anyone who has not registered, including through the page source or the network.",
+    solution: "The public catalogue holds only a preview. The full project is sent by the server, and only when the request carries a valid signed access session.",
+    outcomes: [
+      "A visitor without a profile sees the access form instead of this text.",
+      "A visitor with a profile sees this text, and the team records which content they opened.",
+    ],
+    relatedProgram: { label: "Explore Techno Gurukul programs", href: "/programs" },
+  },
+};
+const RESOURCE_CONTENT: Record<string, GatedResourceContent> = {
+  "access-test-resource": {
+    kind: "file",
+    file: "access-test-resource.pdf",
+    downloadName: "techno-gurukul-access-test.pdf",
+    contentType: "application/pdf",
+  },
+};
 
 const isSafeUrl = (u: string) => /^(https:\/\/|\/)[^\s]+$/.test(u);
 // Images and videos are shown on this site, so they must be files it hosts (the Content Security Policy blocks others).
@@ -47,7 +69,8 @@ for (const slug of Object.keys(PROJECT_CONTENT)) {
 }
 for (const [slug, c] of Object.entries(RESOURCE_CONTENT)) {
   if (!RESOURCES.some((r) => r.slug === slug)) throw new Error(`[gated-content] no resource "${slug}"`);
-  if (!isSafeUrl(c.url)) throw new Error(`[gated-content] "${slug}" has an unsafe url`);
+  if (c.kind === "external" && !isSafeUrl(c.url)) throw new Error(`[gated-content] "${slug}" has an unsafe url`);
+  if (c.kind === "file" && !/^[a-z0-9][a-z0-9._-]*$/i.test(c.file)) throw new Error(`[gated-content] "${slug}" has an unsafe file name`);
 }
 
 export const projectSource = (p: Pick<Project, "creatorType">): SourceType => sourceTypeForCreator(p.creatorType);

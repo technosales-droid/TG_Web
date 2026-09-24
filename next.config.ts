@@ -31,6 +31,9 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
 
+  // Files behind the access gate live in /private-content (not /public) and are read by the file route.
+  outputFileTracingIncludes: { "/api/content/**": ["./private-content/**"] },
+
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

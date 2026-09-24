@@ -453,7 +453,7 @@ const SEEDS: (Seed & { featured?: boolean })[] = [
   },
 ];
 
-export const RESOURCES: Resource[] = SEEDS.map((s, i) => ({
+const SEEDED: Resource[] = SEEDS.map((s, i) => ({
   featured: false,
   status: "coming-soon" as const,
   sample: true,
@@ -461,6 +461,27 @@ export const RESOURCES: Resource[] = SEEDS.map((s, i) => ({
   id: `res-${String(i + 1).padStart(3, "0")}`,
   order: i + 1,
 }));
+
+// TEST ENTRY: checks the access gate end to end. It is not real learning material. Delete it (and its content in
+// src/server/gated-content.ts, and private-content/access-test-resource.pdf) before launch.
+const TEST_RESOURCE: Resource = {
+  id: "res-test-001",
+  order: SEEDED.length + 1,
+  slug: "access-test-resource",
+  title: "Access Gate Test Resource",
+  shortDescription: "A test file that checks the access gate. It is not real learning material and will be replaced.",
+  ...GENERAL,
+  resourceType: "Guide",
+  topics: ["Testing"],
+  difficulty: "beginner",
+  format: "PDF",
+  featured: true,
+  status: "available",
+  sample: false,
+  source: "Techno Gurukul",
+};
+
+export const RESOURCES: Resource[] = [...SEEDED, TEST_RESOURCE];
 
 // Fails the build/dev server loudly if the resource data is malformed.
 function validateResources(list: Resource[]) {
@@ -507,7 +528,7 @@ function validateResources(list: Resource[]) {
     for (const u of urls) if (!isUrl(u)) fail(`"${r.slug}" has an invalid url "${u}"`);
     if (r.externalUrl && !/^https?:\/\//.test(r.externalUrl)) fail(`"${r.slug}" externalUrl must be an absolute http(s) URL`);
   }
-  if (list.filter((r) => r.featured).length > 4) fail("at most four resources may be featured");
+  if (list.filter((r) => r.featured).length > 5) fail("at most five resources may be featured");
 }
 
 validateResources(RESOURCES);

@@ -59,3 +59,12 @@ pieces, production refuses to accept registrations.
 
 Analytics and advertising are not installed, so there is no analytics consent. Add one to the cookie preferences only
 if you add such a tool. There is no messaging, follower system, public profile or notification feature.
+
+## Test entries to delete before launch
+
+`access-test-project` (`src/data/projects.ts`, `src/server/gated-content.ts`) and `access-test-resource`
+(`src/data/resources.ts`, `src/server/gated-content.ts`, `private-content/access-test-resource.pdf`) exist only to test
+the gate. Delete them all before the site goes live.
+
+Files behind the gate live in `private-content/` (never `public/`, which anyone can download) and are streamed by
+`/api/content/resources/[slug]/file` after the session is checked.

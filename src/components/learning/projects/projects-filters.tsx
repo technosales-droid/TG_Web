@@ -89,7 +89,7 @@ function CheckGroup<T extends string>({
       </summary>
       <fieldset className="mt-2 min-w-0">
         <legend className="sr-only">{label}</legend>
-        <ul className="max-h-52 overflow-y-auto pr-1">
+        <ul>
           {options.map((o) => {
             const on = selected.includes(o.value);
             return (
@@ -243,7 +243,7 @@ export function FilterRail({
   return (
     <aside
       aria-label="Project filters"
-      className="hidden lg:sticky lg:top-24 lg:block lg:max-h-[calc(100dvh-7rem)] lg:w-64 lg:shrink-0 xl:w-72 lg:self-start lg:overflow-y-auto lg:pr-2"
+      className="hidden lg:sticky lg:top-28 lg:block lg:max-h-[calc(100dvh-8rem)] lg:w-64 lg:shrink-0 xl:w-72 lg:self-start lg:overflow-y-auto lg:pr-2"
     >
       <div className="mb-3 flex items-center justify-between">
         <h3 className="text-sm font-bold tracking-widest text-foreground uppercase">Filters</h3>

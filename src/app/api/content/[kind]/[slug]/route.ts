@@ -27,5 +27,8 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ kind: strin
   } catch {
     // Best effort.
   }
-  return json({ ok: true, content: found.content });
+  const c = found.content;
+  // A private file is reached through the file route, so its location on the server is never sent.
+  const content = "kind" in c ? (c.kind === "file" ? { kind: "file", url: `/api/content/resources/${encodeURIComponent(slug)}/file` } : { kind: "external", url: c.url }) : c;
+  return json({ ok: true, content });
 }
