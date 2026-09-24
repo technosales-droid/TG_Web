@@ -119,8 +119,8 @@ export const TERMS_SECTIONS: LegalSectionData[] = [
     body: (
       <p>
         The website does not currently offer an automated online application or checkout process. Enrollment in a
-        Techno Gurukul program is finalised through direct communication with us &mdash; typically following an
-        enquiry, call or in-person meeting &mdash; and specific enrollment terms, schedules and requirements for a
+        Techno Gurukul program is finalised through direct communication with us, typically following an
+        enquiry, call or in-person meeting, and specific enrollment terms, schedules and requirements for a
         program will be explained to you at that stage, separately from these website terms.
       </p>
     ),
@@ -156,8 +156,8 @@ export const TERMS_SECTIONS: LegalSectionData[] = [
     title: "Intellectual Property",
     body: (
       <p>
-        Unless otherwise indicated, the website&rsquo;s content &mdash; including text, graphics, layout, curriculum
-        materials, logos and branding &mdash; is owned by or licensed to Techno Gurukul and is protected by
+        Unless otherwise indicated, the website&rsquo;s content, including text, graphics, layout, curriculum
+        materials, logos and branding, is owned by or licensed to Techno Gurukul and is protected by
         applicable intellectual property laws. You may view and print pages of this website for your own personal,
         non-commercial use. You may not reproduce, republish, redistribute or otherwise commercially exploit any
         part of the website&rsquo;s content without our prior written permission.

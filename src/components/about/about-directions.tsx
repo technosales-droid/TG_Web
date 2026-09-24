@@ -24,12 +24,12 @@ export function AboutDirections() {
 
           <Reveal className="max-w-3xl">
             <div className="flex items-center gap-2 text-sm font-medium tracking-[0.2em] text-white/80 uppercase">
-              <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
+              <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
               Learning to career readiness
             </div>
             <h2 id="ab-readiness-heading" className="mt-4 text-3xl font-semibold tracking-tight text-balance sm:text-4xl xl:text-[2.75rem] xl:leading-tight">
               Learning Should Prepare You to{" "}
-              <span className="bg-gradient-to-r from-[#8fd3f0] to-brand-green bg-clip-text text-transparent">Show What You Can Do.</span>
+              <span className="bg-gradient-to-r from-[#8fd3f0] to-brand-sky bg-clip-text text-transparent">Show What You Can Do.</span>
             </h2>
             <p className="mt-5 text-base leading-relaxed text-white/75 sm:text-lg">
               Practical learning becomes more useful when learners can turn their work into evidence, organise that evidence
@@ -56,7 +56,7 @@ export function AboutDirections() {
                         className={cn(
                           "absolute inset-0 -z-10",
                           last
-                            ? "bg-gradient-to-t from-[#0a6a8f]/95 via-brand-green/55 to-primary/30"
+                            ? "bg-gradient-to-t from-[#0a6a8f]/95 via-brand-sky/55 to-primary/30"
                             : "bg-gradient-to-t from-[#062c3d]/95 via-[#0a4a66]/65 to-[#0a4a66]/25"
                         )}
                       />

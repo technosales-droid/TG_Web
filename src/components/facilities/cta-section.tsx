@@ -28,11 +28,11 @@ export function CtaSection({
         <div className="mx-auto grid max-w-[1800px] overflow-hidden rounded-[2.5rem] bg-[#0a6a8f] text-white lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]">
           <div className="px-6 py-14 sm:px-12 sm:py-20 xl:px-20 xl:py-24">
             <div className="flex items-center gap-2 text-sm font-medium tracking-[0.2em] text-white/80 uppercase">
-              <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
+              <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
               {eyebrow}
             </div>
             <h2 id="fc-cta-heading" className="mt-5 text-4xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-5xl xl:text-6xl">
-              {heading[0]}<span className="bg-gradient-to-r from-[#8fd3f0] to-brand-green bg-clip-text text-transparent">{heading[1]}</span>
+              {heading[0]}<span className="bg-gradient-to-r from-[#8fd3f0] to-brand-sky bg-clip-text text-transparent">{heading[1]}</span>
             </h2>
             <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
               {text}

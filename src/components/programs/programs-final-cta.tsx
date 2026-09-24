@@ -130,7 +130,7 @@ function TestimonialCarousel({ className }: { className?: string }) {
 
           <div className="flex flex-col items-start gap-3 sm:items-end">
             <span className={cn("inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-foreground", fade)} style={fadeStyle}>
-              <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
+              <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
               {t.program}
             </span>
             {TESTIMONIALS.length > 1 && (
@@ -158,7 +158,7 @@ function TestimonialCarousel({ className }: { className?: string }) {
 }
 
 // The emotional close of the Programs page: after browsing the catalogue above, this answers
-// "what happens next" — pick a direction, learn by doing, build something real.
+// "what happens next"; pick a direction, learn by doing, build something real.
 export function ProgramsFinalCta() {
   const { ref, visible } = useRevealOnView<HTMLElement>();
 
@@ -178,7 +178,7 @@ export function ProgramsFinalCta() {
         >
           <div className="max-w-xl">
             <div className="flex items-center gap-2 text-sm font-medium text-white/85">
-              <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
+              <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
               Your Next Step
             </div>
             <h2 className="mt-4 text-3xl font-semibold tracking-tight text-balance text-white sm:text-4xl lg:text-5xl">
@@ -186,7 +186,7 @@ export function ProgramsFinalCta() {
             </h2>
             <p className="mt-5 max-w-lg text-base leading-relaxed text-white/85 sm:text-lg">
               Explore practical programs in digital marketing, game development and game design
-              &mdash; built around learning by doing.
+             , built around learning by doing.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">

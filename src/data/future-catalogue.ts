@@ -105,7 +105,7 @@ export const FUTURE_COURSES: Course[] = [
     ["Business Analytics", "Applying data analysis to business questions and decisions.", ["Data Analytics", "Analytics"], ["business", "decisions", "kpis"]],
     ["Marketing Analytics", "Applying data analysis to marketing questions and performance.", ["Data Analytics", "Analytics", "Marketing"], ["marketing data", "campaign analysis", "reporting"]],
   ]),
-  ...courses("data-science", "green", ["brain", "database", "bar-chart"], [
+  ...courses("data-science", "sky", ["brain", "database", "bar-chart"], [
     ["Data Science Fundamentals", "An overview of the data science process and its methods.", ["Data Science"], ["basics", "workflow", "introduction"]],
     ["Python for Data Science", "Using Python for data science work.", ["Python", "Data Science"], ["python", "libraries", "notebooks"]],
     ["Statistics & Probability", "The statistics and probability behind data science.", ["Data Science"], ["statistics", "probability", "inference"]],
@@ -150,7 +150,7 @@ export const FUTURE_COURSES: Course[] = [
     ["Security Testing Labs", "Hands-on lab exercises in security testing.", ["Ethical Hacking"], ["labs", "practice", "ctf"]],
     ["Reporting & Documentation", "Writing clear findings and reports from security tests.", ["Ethical Hacking"], ["reporting", "documentation", "findings"]],
   ]),
-  ...courses("cloud-security", "green", ["cloud", "lock", "shield"], [
+  ...courses("cloud-security", "sky", ["cloud", "lock", "shield"], [
     ["Cloud Security Fundamentals", "The core concepts of securing cloud environments.", ["Cloud", "Cybersecurity"], ["cloud security", "shared responsibility"]],
     ["Identity in Cloud Environments", "Managing identities in cloud platforms.", ["Cloud", "Cybersecurity"], ["identity", "sso", "directory"]],
     ["Cloud Access Management", "Controlling access to cloud resources.", ["Cloud", "Cybersecurity"], ["access control", "roles", "permissions"]],
@@ -159,7 +159,7 @@ export const FUTURE_COURSES: Course[] = [
     ["Cloud Security Projects", "Practical projects that apply cloud security skills.", ["Cloud", "Cybersecurity"], ["projects", "labs", "portfolio"]],
   ]),
   // ---------------- Blockchain & Web3
-  ...courses("blockchain-development", "green", ["blocks", "link", "database"], [
+  ...courses("blockchain-development", "sky", ["blocks", "link", "database"], [
     ["Blockchain Fundamentals", "The core ideas behind blockchain technology.", ["Blockchain"], ["blockchain", "basics", "blocks", "consensus"]],
     ["Distributed Ledger Technology", "How distributed ledgers store and agree on data.", ["Blockchain"], ["dlt", "ledger", "distributed systems"]],
     ["Smart Contract Fundamentals", "The basics of self-executing contracts on a blockchain.", ["Blockchain"], ["smart contracts", "basics"]],
@@ -186,7 +186,7 @@ export const FUTURE_COURSES: Course[] = [
     ["React", "Building user interfaces with React.", ["Web Development"], ["react", "components", "frontend"]],
     ["Next.js", "Building web applications with Next.js.", ["Web Development"], ["nextjs", "react", "routing"]],
   ]),
-  ...courses("mobile-app-development", "green", ["smartphone", "code", "layers"], [
+  ...courses("mobile-app-development", "sky", ["smartphone", "code", "layers"], [
     ["Flutter Development", "Building mobile apps with Flutter.", ["Mobile Development"], ["flutter", "dart", "cross-platform"]],
     ["React Native", "Building mobile apps with React Native.", ["Mobile Development"], ["react native", "javascript", "cross-platform"]],
     ["Mobile UI", "Designing and building mobile interfaces.", ["Mobile Development", "UI/UX Design"], ["ui", "mobile design", "layouts"]],
@@ -206,7 +206,7 @@ export const FUTURE_COURSES: Course[] = [
     ["AWS Fundamentals", "An introduction to Amazon Web Services.", ["Cloud"], ["aws", "amazon web services"]],
     ["Azure Fundamentals", "An introduction to Microsoft Azure.", ["Cloud"], ["azure", "microsoft"]],
   ]),
-  ...courses("devops-engineering", "green", ["workflow", "terminal", "cloud"], [
+  ...courses("devops-engineering", "sky", ["workflow", "terminal", "cloud"], [
     ["Git & GitHub", "Version control and collaboration with Git and GitHub.", ["DevOps"], ["git", "github", "version control"]],
     ["CI/CD", "Automating how software is built, tested and released.", ["DevOps"], ["ci/cd", "pipelines", "automation"]],
     ["Docker", "Packaging applications in containers with Docker.", ["DevOps", "Cloud"], ["docker", "containers"]],
@@ -217,7 +217,7 @@ export const FUTURE_COURSES: Course[] = [
     ["Monitoring & Observability", "Monitoring systems and understanding their behaviour.", ["DevOps", "Cloud"], ["monitoring", "observability", "logs", "metrics"]],
   ]),
   // ---------------- UI/UX & Product Design (proposed)
-  ...courses("ui-ux-design", "green", ["pen-tool", "layout", "users"], [
+  ...courses("ui-ux-design", "sky", ["pen-tool", "layout", "users"], [
     ["Design Fundamentals", "The basic principles of visual and interface design.", ["UI/UX Design"], ["design", "layout", "typography", "colour"]],
     ["UX Research", "Learning about users and their needs.", ["UI/UX Design"], ["user research", "interviews", "surveys"]],
     ["Information Architecture", "Organising content so people can find their way.", ["UI/UX Design"], ["structure", "navigation", "sitemaps"]],

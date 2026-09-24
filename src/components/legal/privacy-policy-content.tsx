@@ -40,7 +40,7 @@ export const PRIVACY_SECTIONS: LegalSectionData[] = [
         <p>The website currently collects information in two general ways:</p>
         <ul className="list-disc space-y-2 pl-5">
           <li>
-            <strong className="text-foreground">Information you provide directly</strong> — for example, through the
+            <strong className="text-foreground">Information you provide directly</strong>: for example, through the
             enquiry form on our Contact page.
           </li>
           <li>
@@ -73,7 +73,7 @@ export const PRIVACY_SECTIONS: LegalSectionData[] = [
         </ul>
         <p>
           The form works by preparing a pre-filled email and opening it in your own email application. Sending the
-          enquiry is your action, sent from your own email account to {EMAIL} &mdash; the website itself does not
+          enquiry is your action, sent from your own email account to {EMAIL}; the website itself does not
           transmit your enquiry to a Techno Gurukul server or database. Once you send it, we receive it as an
           ordinary email, in the same way as if you had written to us directly.
         </p>
@@ -114,19 +114,19 @@ export const PRIVACY_SECTIONS: LegalSectionData[] = [
         <p>Certain pages embed third-party content, which may set their own cookies or use similar technologies under their own privacy policies once that content loads or you interact with it:</p>
         <ul className="list-disc space-y-2 pl-5">
           <li>
-            <strong className="text-foreground">Google Maps</strong> &mdash; embedded on location pages to show our
+            <strong className="text-foreground">Google Maps</strong>: embedded on location pages to show our
             office on a map.
           </li>
           <li>
-            <strong className="text-foreground">YouTube (privacy-enhanced mode)</strong> &mdash; used for some
+            <strong className="text-foreground">YouTube (privacy-enhanced mode)</strong>: used for some
             program-related videos in the Learning section, loaded via YouTube&rsquo;s &ldquo;nocookie&rdquo; embed
             mode, which limits cookie use until you interact with the player.
           </li>
         </ul>
         <p>
           These embeds are provided by Google and are governed by Google&rsquo;s own privacy and cookie practices,
-          which are outside Techno Gurukul&rsquo;s control. If this changes &mdash; for example, if analytics or
-          advertising tools are added in future &mdash; this section will be updated accordingly.
+          which are outside Techno Gurukul&rsquo;s control. If this changes, for example, if analytics or
+          advertising tools are added in future; this section will be updated accordingly.
         </p>
       </>
     ),
@@ -166,8 +166,8 @@ export const PRIVACY_SECTIONS: LegalSectionData[] = [
     body: (
       <p>
         The website does not currently include an online application or enrollment portal. Enrollment in a Techno
-        Gurukul program currently happens through direct communication &mdash; typically following an enquiry, call
-        or meeting &mdash; rather than an automated on-site process. Any personal information you share with us
+        Gurukul program currently happens through direct communication, typically following an enquiry, call
+        or meeting, rather than an automated on-site process. Any personal information you share with us
         during that process (for example, to confirm enrollment details) is handled with the same principles
         described in this policy. If an online application or enrollment system is introduced in the future, this
         Privacy Policy will be updated to describe it accurately before it goes live.
@@ -256,7 +256,7 @@ export const PRIVACY_SECTIONS: LegalSectionData[] = [
     body: (
       <p>
         We aim to keep personal information only for as long as reasonably necessary for the purpose it was
-        collected for &mdash; for example, to respond to and follow up on an enquiry. A formal, published data
+        collected for, for example, to respond to and follow up on an enquiry. A formal, published data
         retention schedule has not yet been finalised: <Tbc>DATA RETENTION PERIOD TO BE CONFIRMED</Tbc>. This section
         will be updated once specific retention periods are confirmed internally.
       </p>

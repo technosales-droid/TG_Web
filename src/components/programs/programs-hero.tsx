@@ -13,8 +13,8 @@ const SLIDE_DURATION = 5500;
 // Matches the tone/icon treatment the /programs catalogue cards already use for a course with no
 // photo yet, so a program without real imagery still looks intentional rather than broken.
 const FALLBACK_TONES = {
-  blue: "from-primary via-primary/70 to-brand-green/50",
-  green: "from-brand-green/80 via-primary/70 to-[#0b3d50]",
+  blue: "from-primary via-primary/70 to-brand-sky/50",
+  sky: "from-brand-sky/80 via-primary/70 to-[#0b3d50]",
   navy: "from-[#0d6386] to-[#0b3d50]",
 } as const;
 const FALLBACK_ICONS = { layers: Layers, "pen-tool": PenTool, boxes: Boxes } as const;
@@ -131,7 +131,7 @@ export function ProgramsHero() {
             </h1>
 
             <p
-              className="mt-2 text-sm font-semibold tracking-wide text-brand-green sm:text-base motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-500"
+              className="mt-2 text-sm font-semibold tracking-wide text-brand-sky sm:text-base motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-500"
               style={{ animationDelay: "160ms" }}
             >
               {ACTIVE_PROGRAMS[index].outcome}

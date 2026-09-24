@@ -19,7 +19,7 @@ function BlogHeroContent({ post }: { post: BlogHeroPost }) {
   return (
     <div className="max-w-[850px]">
       <p className="flex items-center gap-3 text-xs font-semibold tracking-[0.2em] text-white uppercase motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-700 sm:text-sm">
-        <span aria-hidden="true" className="h-px w-8 bg-brand-green" />
+        <span aria-hidden="true" className="h-px w-8 bg-brand-sky" />
         {post.category}
       </p>
 
@@ -43,7 +43,7 @@ function BlogHeroContent({ post }: { post: BlogHeroPost }) {
       >
         <Link
           href={`/blogs/${post.slug}`}
-          className="group inline-flex items-center gap-2 border-b border-white/70 pb-1 text-sm font-semibold tracking-widest text-white uppercase transition-colors hover:border-brand-green hover:text-brand-green focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+          className="group pointer-events-auto inline-flex items-center gap-2 border-b border-white/70 pb-1 text-sm font-semibold tracking-widest text-white uppercase transition-colors hover:border-brand-sky hover:text-brand-sky focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
         >
           Read Article
           <ArrowRight
@@ -81,7 +81,7 @@ function BlogHeroControls({
   const btn =
     "flex size-11 items-center justify-center rounded-full border border-white/40 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
   return (
-    <div className="flex w-full max-w-xs flex-col gap-4 lg:w-64 lg:max-w-none">
+    <div className="pointer-events-auto flex w-full max-w-xs flex-col gap-4 lg:w-64 lg:max-w-none">
       <div className="flex items-center justify-between">
         <p className="text-sm font-semibold tracking-widest text-white tabular-nums" aria-live="polite">
           <span className="sr-only">Article </span>
@@ -205,7 +205,10 @@ export function BlogsHero({ posts }: { posts: BlogHeroPost[] }) {
       <div aria-hidden="true" className="absolute inset-0 z-10 bg-gradient-to-t from-black/90 via-black/40 to-black/10" />
       <div aria-hidden="true" className="absolute inset-0 z-10 hidden bg-gradient-to-r from-black/60 via-black/15 to-transparent lg:block" />
 
-      <div className="relative z-20 mx-auto flex w-full max-w-[1800px] flex-col gap-8 px-5 pt-32 pb-8 sm:px-10 sm:pb-10 lg:flex-row lg:items-end lg:justify-between lg:gap-12 lg:px-16 lg:pb-14">
+      {/* The whole slide opens the article; the Read Article link and the controls stay separately focusable. */}
+      <Link href={`/blogs/${post.slug}`} aria-hidden="true" tabIndex={-1} className="absolute inset-0 z-[15]" />
+
+      <div className="pointer-events-none relative z-20 mx-auto flex w-full max-w-[1800px] flex-col gap-8 px-5 pt-32 pb-8 sm:px-10 sm:pb-10 lg:flex-row lg:items-end lg:justify-between lg:gap-12 lg:px-16 lg:pb-14">
         <BlogHeroContent key={post.slug} post={post} />
         <BlogHeroControls
           index={index}

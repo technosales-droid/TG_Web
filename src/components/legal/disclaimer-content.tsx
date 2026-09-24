@@ -64,7 +64,7 @@ export const DISCLAIMER_SECTIONS: LegalSectionData[] = [
         factors outside our control, including an individual&rsquo;s effort and performance, prior experience,
         market and hiring conditions, employer decisions, and broader economic conditions. Where this website refers
         to career paths, industry roles or placement-related support, it describes the guidance and opportunities
-        Techno Gurukul may make available &mdash; it is not a promise of a job offer or a particular result.
+        Techno Gurukul may make available; it is not a promise of a job offer or a particular result.
       </p>
     ),
   },
@@ -98,8 +98,8 @@ export const DISCLAIMER_SECTIONS: LegalSectionData[] = [
     title: "Third-Party Tools and Platforms",
     body: (
       <p>
-        Our programs may reference or make use of third-party software, platforms and tools &mdash; for example,
-        industry-standard design, development, marketing or game-engine tools &mdash; as part of the curriculum.
+        Our programs may reference or make use of third-party software, platforms and tools, for example,
+        industry-standard design, development, marketing or game-engine tools, as part of the curriculum.
         Techno Gurukul does not control these third-party tools, and their availability, pricing, features and terms
         of use are determined by their respective providers, not by us.
       </p>

@@ -9,14 +9,14 @@ import { buttonVariants } from "@/components/ui/button";
 import { ACTIVE_PROGRAMS as ACTIVE_PROGRAMS_DATA } from "@/data/active-programs";
 
 // This marquee is photo-led and has no icon/gradient fallback, so it only shows active programs
-// that already have a real image (e.g. Game Design isn't here yet — no photo for it exists).
+// that already have a real image (e.g. Game Design isn't here yet; no photo for it exists).
 const ACTIVE_PROGRAMS = ACTIVE_PROGRAMS_DATA.filter((p) => p.image).map((p) => ({
   ...p,
   image: p.image as string,
   status: "active" as const,
 }));
 
-// Committed future directions, not yet enrollable — no routes, no fabricated details.
+// Committed future directions, not yet enrollable; no routes, no fabricated details.
 const COMING_SOON_PROGRAMS = [
   {
     title: "Cybersecurity",
@@ -113,7 +113,7 @@ export function ProgramsPreview() {
             )}
           >
             <div className="flex items-center justify-center gap-2 text-sm font-medium text-primary">
-              <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
+              <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
               Explore Our Programs
             </div>
 

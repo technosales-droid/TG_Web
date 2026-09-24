@@ -17,7 +17,7 @@ function Header({ id, eyebrow, children, lead, center }: { id: string; eyebrow: 
   return (
     <Reveal className={cn("max-w-3xl", center && "mx-auto text-center")}>
       <div className={cn(EYEBROW, center && "justify-center")}>
-        <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
+        <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
         {eyebrow}
       </div>
       <h2 id={id} className={H2}>
@@ -77,7 +77,7 @@ export function AboutWho() {
           {SPLITS.map((sp, i) => (
             <Reveal key={sp.eyebrow}>
               <div className={cn("grid items-center gap-10 lg:gap-16", i % 2 === 0 ? "lg:grid-cols-[minmax(0,55fr)_minmax(0,45fr)]" : "lg:grid-cols-[minmax(0,45fr)_minmax(0,55fr)]")}>
-                <div className={cn("relative aspect-[5/4] overflow-hidden rounded-[2rem] bg-gradient-to-br from-primary/15 via-primary/5 to-brand-green/20", i % 2 === 1 && "lg:order-2")}>
+                <div className={cn("relative aspect-[5/4] overflow-hidden rounded-[2rem] bg-gradient-to-br from-primary/15 via-primary/5 to-brand-sky/20", i % 2 === 1 && "lg:order-2")}>
                   <Image
                     src={sp.image}
                     alt={sp.alt}
@@ -89,7 +89,7 @@ export function AboutWho() {
 
                 <div className={cn(i % 2 === 1 && "lg:order-1")}>
                   <div className={EYEBROW}>
-                    <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
+                    <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
                     {sp.eyebrow}
                   </div>
                   <h3 className="mt-4 text-2xl font-semibold tracking-tight text-balance text-foreground sm:text-3xl xl:text-4xl">{sp.title}</h3>
@@ -114,7 +114,7 @@ export function AboutWho() {
   );
 }
 
-// Four tiles of different size and treatment: two over photographs, one solid blue, one soft green.
+// Four tiles of different size and treatment: two over photographs, one solid blue, one soft sky blue.
 const TEACH: {
   title: string;
   text: string;
@@ -143,7 +143,7 @@ const TEACH: {
     text: "Skills come together in practical work that can be reviewed, refined and presented.",
     Icon: FolderOpen,
     span: "lg:col-span-5",
-    tone: "bg-brand-green/15 text-foreground",
+    tone: "bg-brand-sky/15 text-foreground",
   },
   {
     title: "Feedback and mentorship",
@@ -175,7 +175,7 @@ export function AboutTeach() {
                   )}
                   <span
                     aria-hidden="true"
-                    className={cn("flex size-12 items-center justify-center rounded-full", tone.includes("text-white") ? "bg-white/15 text-white ring-1 ring-white/25" : "bg-brand-green/25 text-brand-green")}
+                    className={cn("flex size-12 items-center justify-center rounded-full", tone.includes("text-white") ? "bg-white/15 text-white ring-1 ring-white/25" : "bg-primary/15 text-primary")}
                   >
                     <Icon className="size-5" />
                   </span>
@@ -254,12 +254,12 @@ export function AboutEnvironment() {
             <div className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-end">
               <div className="max-w-2xl">
                 <div className="flex items-center gap-2 text-sm font-medium tracking-[0.2em] text-white/80 uppercase">
-                  <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
+                  <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
                   The learning environment
                 </div>
                 <h2 id="ab-env-heading" className="mt-4 text-3xl font-semibold tracking-tight text-balance sm:text-4xl xl:text-5xl">
                   Where the Learning{" "}
-                  <span className="bg-gradient-to-r from-[#8fd3f0] to-brand-green bg-clip-text text-transparent">Happens.</span>
+                  <span className="bg-gradient-to-r from-[#8fd3f0] to-brand-sky bg-clip-text text-transparent">Happens.</span>
                 </h2>
                 <p className="mt-4 text-base leading-relaxed text-white/80 sm:text-lg">
                   Meet the people who guide the learning and see the space where learners practise, collaborate and build.

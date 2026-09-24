@@ -8,7 +8,7 @@ import { getBlogPosts, getLatestBlogPosts, toBlogCard } from "@/data/blogs";
 export const metadata: Metadata = {
   title: "Blogs | Techno Gurukul",
   description:
-    "Articles on game development, game design, digital marketing, education and careers from Techno Gurukul — practical explainers, comparisons and career insight.",
+    "Articles on game development, game design, digital marketing, education and careers from Techno Gurukul, practical explainers, comparisons and career insight.",
 };
 
 export default function Page() {

@@ -1,9 +1,9 @@
 // The site's currently enrollable programs, with the real routes, imagery and copy also used
 // in the homepage programs marquee and the Programs page hero. Single source of truth so both
-// stay in sync — do not duplicate this list elsewhere.
+// stay in sync; do not duplicate this list elsewhere.
 //
 // `video` is optional: the Programs page hero plays it (muted, looped, 16:9 source expected) in
-// place of `image` when set. `image` may be null for a program with no real photo/video yet — in
+// place of `image` when set. `image` may be null for a program with no real photo/video yet, in
 // that case the hero falls back to an icon + gradient treatment (`visual`) instead of a photo, the
 // same honest fallback the /programs catalogue cards already use for programs with no image.
 export interface ActiveProgram {
@@ -15,7 +15,7 @@ export interface ActiveProgram {
   image: string | null;
   video: string | null;
   alt: string;
-  visual?: { tone: "blue" | "green" | "navy"; icon: "layers" | "pen-tool" | "boxes" };
+  visual?: { tone: "blue" | "sky" | "navy"; icon: "layers" | "pen-tool" | "boxes" };
 }
 
 export const ACTIVE_PROGRAMS: ActiveProgram[] = [

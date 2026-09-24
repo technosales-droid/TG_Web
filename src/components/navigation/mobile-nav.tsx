@@ -87,7 +87,7 @@ export function MobileNav({
               onClick={onClose}
               className="block rounded-md py-2 text-sm font-medium text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
             >
-              {FLAGSHIP_PROGRAM.label} — {FLAGSHIP_PROGRAM.tagline}
+              {FLAGSHIP_PROGRAM.label}: {FLAGSHIP_PROGRAM.tagline}
             </Link>
           </li>
           {SPECIALIZED_PROGRAMS.map((program) => (

@@ -14,7 +14,7 @@ export function SectionHeader({
   return (
     <div className="max-w-3xl">
       <div className="flex items-center gap-2 text-sm font-medium text-primary">
-        <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
+        <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
         {eyebrow}
       </div>
       <h2
@@ -30,4 +30,4 @@ export function SectionHeader({
   );
 }
 
-export const GRADIENT_TEXT = "bg-gradient-to-r from-primary to-brand-green bg-clip-text text-transparent";
+export const GRADIENT_TEXT = "bg-gradient-to-r from-primary to-brand-sky bg-clip-text text-transparent";

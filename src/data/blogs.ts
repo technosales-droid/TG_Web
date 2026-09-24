@@ -1,12 +1,14 @@
-// Blog content. To publish a post, add an entry here — the hero carousel and article pages are
+// Blog content. To publish a post, add an entry here; the hero carousel and article pages are
 // driven entirely by this list, sorted by `publishedAt` (newest first), so ordering never needs
 // to be maintained by hand.
 //
 // DRAFT COPY: article bodies are general explainers written to make the reading experience
 // functional. They contain no statistics or company claims and should still go through editorial
 // review before launch. `heroImage` paths currently reuse existing Techno Gurukul brand imagery;
-// swap in article-specific photography (ideally 1920x1080+) by changing the path — nothing else.
+// swap in article-specific photography (ideally 1920x1080+) by changing the path; nothing else.
 
+import { ARTICLE_CONTENT } from "./blog-content";
+import type { Block } from "./blog-content/types";
 import { BODY_OVERRIDES, LIBRARY_POSTS } from "./blog-library";
 
 export type BlogCategory =
@@ -48,22 +50,30 @@ export interface BlogPost {
   heroFocus?: string;
   author: string;
   featured: boolean;
+  /** Short summary copy the article was seeded with; the article page renders `blocks`. */
   sections: BlogSection[];
+  /** The full article (data/blog-content). */
+  blocks: Block[];
+  takeaways: string[];
 }
 
-export type BlogInput = Omit<BlogPost, "readTime">;
+export type BlogInput = Omit<BlogPost, "readTime" | "blocks" | "takeaways">;
 
 const AUTHOR = "Techno Gurukul Editorial Team";
 
-const wordCount = (sections: BlogSection[]) =>
-  sections.reduce((n, s) => n + s.paragraphs.join(" ").split(/\s+/).filter(Boolean).length, 0);
+const blockWords = (blocks: Block[]) =>
+  blocks.reduce((n, b) => {
+    const text =
+      b.type === "ul" || b.type === "ol" ? b.items.join(" ") : b.type === "flow" ? b.steps.map((x) => `${x.label} ${x.text ?? ""}`).join(" ") : b.type === "table" ? [...b.head, ...b.rows.flat()].join(" ") : b.type === "image" ? "" : "text" in b ? b.text : "code" in b ? "" : "";
+    return n + text.split(/\s+/).filter(Boolean).length;
+  }, 0);
 
 const RAW_POSTS: BlogInput[] = [
   {
     slug: "how-ai-is-changing-game-development",
     title: "How AI Is Changing Game Development: From Procedural Worlds to Smarter NPCs",
     excerpt:
-      "AI is changing how games are designed, developed and tested — from procedural content generation to NPC behaviour and faster development workflows.",
+      "AI is changing how games are designed, developed and tested, from procedural content generation to NPC behaviour and faster development workflows.",
     category: "Game Development",
     publishedAt: "2026-09-22",
     heroImage: "/brand/course-tg-ai-for-games.png",
@@ -75,7 +85,7 @@ const RAW_POSTS: BlogInput[] = [
         heading: "Worlds that build themselves",
         paragraphs: [
           "Procedural generation lets a game create terrain, levels, items and quests from rules instead of hand-placing every element. Designers set the constraints and the system explores the possibilities, which makes large, varied worlds practical for small teams.",
-          "The craft has not disappeared — it has moved. Good procedural content depends on well-chosen rules, careful tuning and a designer who knows what a satisfying result looks like.",
+          "The craft has not disappeared; it has moved. Good procedural content depends on well-chosen rules, careful tuning and a designer who knows what a satisfying result looks like.",
         ],
       },
       {
@@ -89,7 +99,7 @@ const RAW_POSTS: BlogInput[] = [
         heading: "Faster pipelines",
         paragraphs: [
           "AI-assisted tools now help with prototyping, asset variation, animation clean-up and automated testing. They shorten repetitive work, leaving more time for design decisions and polish.",
-          "For students, the practical takeaway is to learn the fundamentals first — programming, design and art — and treat AI as another tool in the workflow.",
+          "For students, the practical takeaway is to learn the fundamentals first (programming, design and art) and treat AI as another tool in the workflow.",
         ],
       },
     ],
@@ -102,7 +112,7 @@ const RAW_POSTS: BlogInput[] = [
     category: "Digital Marketing",
     publishedAt: "2026-09-15",
     heroImage: "/brand/course-tg-digital-marketing.png",
-    heroImageAlt: "A phone held up surrounded by digital marketing icons — content, email, ads and analytics",
+    heroImageAlt: "A phone held up surrounded by digital marketing icons: content, email, ads and analytics",
     author: AUTHOR,
     featured: true,
     sections: [
@@ -141,7 +151,7 @@ const RAW_POSTS: BlogInput[] = [
       {
         heading: "Concept and pre-production",
         paragraphs: [
-          "Every game starts as an idea, but pre-production turns it into a plan: the core loop, the audience, the scope and a small prototype that proves the idea is fun. Most projects are shaped — or cancelled — here, which is cheaper than doing so later.",
+          "Every game starts as an idea, but pre-production turns it into a plan: the core loop, the audience, the scope and a small prototype that proves the idea is fun. Most projects are shaped, or cancelled, here, which is cheaper than doing so later.",
         ],
       },
       {
@@ -218,7 +228,7 @@ const RAW_POSTS: BlogInput[] = [
       {
         heading: "Which should you learn?",
         paragraphs: [
-          "Neither is the wrong choice. Pick the engine that fits the kind of games you want to make, then focus on transferable skills — game design, programming logic and problem solving — which carry across engines.",
+          "Neither is the wrong choice. Pick the engine that fits the kind of games you want to make, then focus on transferable skills (game design, programming logic and problem solving) which carry across engines.",
         ],
       },
     ],
@@ -270,7 +280,7 @@ const RAW_POSTS: BlogInput[] = [
       {
         heading: "Designing the experience",
         paragraphs: [
-          "A game designer decides what the player does and how it feels. That means defining mechanics, rules, goals and feedback — the systems that make a game work before any polish is applied.",
+          "A game designer decides what the player does and how it feels. That means defining mechanics, rules, goals and feedback; the systems that make a game work before any polish is applied.",
         ],
       },
       {
@@ -389,7 +399,14 @@ const RAW_POSTS: BlogInput[] = [
 
 const BY_NEWEST = [...RAW_POSTS, ...LIBRARY_POSTS]
   .map((post) => (BODY_OVERRIDES[post.slug] ? { ...post, sections: BODY_OVERRIDES[post.slug] } : post))
-  .map<BlogPost>((post) => ({ ...post, readTime: Math.max(1, Math.round(wordCount(post.sections) / 200)) }))
+  .map<BlogPost>((post) => {
+    const content = ARTICLE_CONTENT[post.slug];
+    const blocks: Block[] = content?.blocks ?? post.sections.flatMap((sec): Block[] => [
+      ...(sec.heading ? [{ type: "h2" as const, text: sec.heading }] : []),
+      ...sec.paragraphs.map((text) => ({ type: "p" as const, text })),
+    ]);
+    return { ...post, blocks, takeaways: content?.takeaways ?? [], readTime: Math.max(1, Math.round(blockWords(blocks) / 200)) };
+  })
   .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 
 export const getBlogPosts = () => BY_NEWEST;

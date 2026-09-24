@@ -124,7 +124,7 @@ export function ProjectsShowcase() {
               <div className="flex min-h-[26rem] flex-col justify-between rounded-3xl border border-dashed border-primary/30 bg-card p-8 sm:p-12">
                 <div>
                   <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3.5 py-1.5 text-xs font-semibold tracking-[0.2em] text-primary uppercase">
-                    <span aria-hidden="true" className="size-1.5 rounded-full bg-brand-green" />
+                    <span aria-hidden="true" className="size-1.5 rounded-full bg-brand-sky" />
                     Coming soon
                   </span>
                   <h3 className="mt-6 max-w-2xl text-3xl leading-tight font-semibold tracking-tight text-balance text-foreground sm:text-4xl">

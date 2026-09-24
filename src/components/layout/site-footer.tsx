@@ -30,7 +30,7 @@ function SocialLinks() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Techno Gurukul on ${s.label}`}
-                className="flex size-10 items-center justify-center rounded-full border border-background/25 text-background transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-green/70 hover:text-brand-green hover:shadow-[0_8px_20px_-8px_rgba(47,174,91,0.6)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                className="flex size-10 items-center justify-center rounded-full border border-background/25 text-background transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-sky/70 hover:text-brand-sky hover:shadow-[0_8px_20px_-8px_rgba(77,184,236,0.6)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
                 <SocialIcon id={s.id} className="size-[18px]" />
               </a>
@@ -69,7 +69,7 @@ function LocationCard() {
           href={mapUrl}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label={`${name} ${type}, ${address ?? locality} — view on Google Maps`}
+          aria-label={`${name} ${type}, ${address ?? locality}. View on Google Maps`}
           style={{ backgroundImage: "linear-gradient(to top, rgba(8,44,58,0.92) 0%, rgba(8,44,58,0) 55%)" }}
           className="group absolute inset-0 flex items-end justify-end gap-3 p-4 focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-white sm:justify-between sm:p-5"
         >
@@ -129,7 +129,7 @@ function LocationCard() {
       href={mapUrl}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={`${name} ${type}, ${address ?? locality} — view on Google Maps`}
+      aria-label={`${name} ${type}, ${address ?? locality}. View on Google Maps`}
       className={cn(shell, "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white")}
     >
       {body}
@@ -148,7 +148,7 @@ export function SiteFooter() {
   return (
     <footer className="bg-[#0b3d50] text-background">
       <div className="mx-auto max-w-[1800px] px-4 pt-14 pb-8 sm:px-6 sm:pt-16">
-        {/* Layer 2 — brand, navigation, contact */}
+        {/* Layer 2: brand, navigation, contact */}
         <div className="grid gap-12 xl:grid-cols-[minmax(0,1fr)_minmax(0,2.4fr)] xl:gap-x-16">
           <div className="order-1 max-w-sm xl:col-start-1 xl:row-start-1">
             <Link
@@ -253,7 +253,7 @@ export function SiteFooter() {
           </div>
         </div>
 
-        {/* Layer 4 — legal */}
+        {/* Layer 4: legal */}
         <div className="mt-12 flex flex-col gap-4 border-t border-background/15 pt-6 md:flex-row md:items-center md:justify-between">
           <p className="text-sm text-background/70">
             © {new Date().getFullYear()} {footerBrand.name}. All rights reserved.

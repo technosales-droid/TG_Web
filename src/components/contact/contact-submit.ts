@@ -65,7 +65,7 @@ export function validateEnquiry(v: EnquiryValues): EnquiryErrors {
 
 /** The only place a submission happens. There is no server route or email service in this project
  * yet, so this opens the visitor's email app with the enquiry pre-filled and returns the link.
- * Replace the body with a `fetch` to a real endpoint when one exists — the form needs no other change. */
+ * Replace the body with a `fetch` to a real endpoint when one exists; the form needs no other change. */
 export function submitEnquiry(v: EnquiryValues): { mailto: string; email: string } {
   const email = CONTACT.email ?? "hello@technogurukul.com";
   const lines = [`Name: ${v.fullName.trim()}`, `Email: ${v.email.trim()}`, `Phone: ${v.phone.trim()}`, `Interested in: ${v.interest}`];

@@ -1,6 +1,6 @@
 // Library articles that sit below the hero carousel. Paragraphs may use **bold** for emphasis.
 // Dates are seed dates (older than the hero set, so the carousel keeps showing the original ten).
-// `heroImage: null` renders a category-toned placeholder cover — drop a real photo path in when
+// `heroImage: null` renders a category-toned placeholder cover; drop a real photo path in when
 // one is available; nothing else needs to change.
 import type { BlogInput, BlogSection } from "./blogs";
 
@@ -168,7 +168,7 @@ export const LIBRARY_POSTS: BlogInput[] = [
     slug: "build-a-technology-portfolio-that-gets-noticed",
     title: "How to Build a Technology Portfolio That Actually Gets Noticed",
     excerpt:
-      "A portfolio should demonstrate how you think, build and solve problems—not simply display a collection of screenshots.",
+      "A portfolio should demonstrate how you think, build and solve problems, not simply display a collection of screenshots.",
     category: "Careers",
     publishedAt: "2026-06-02",
     heroImage: null,
@@ -308,7 +308,7 @@ export const LIBRARY_POSTS: BlogInput[] = [
       "A stronger approach is to use AI interactively.",
       "Ask for an explanation. Try the concept independently. Compare your solution with the AI's suggestion. Ask why something failed.",
       "The technology becomes most useful when it increases the amount of experimentation a student can do.",
-      "AI should reduce unnecessary friction—not remove the thinking process."
+      "AI should reduce unnecessary friction, not remove the thinking process."
     ),
   },
   {
@@ -329,7 +329,7 @@ export const LIBRARY_POSTS: BlogInput[] = [
       "These details create what designers often call game feel.",
       "Animation, sound, camera movement, visual effects and input response can all contribute.",
       "Even a mechanically simple game can feel excellent when these elements work together.",
-      "For aspiring game developers, learning to evaluate how something feels—not just whether it technically works—is an important design skill."
+      "For aspiring game developers, learning to evaluate how something feels, not just whether it technically works, is an important design skill."
     ),
   },
   {

@@ -47,7 +47,7 @@ function Tile({
       <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
 
       {flagship && (
-        <span className="absolute top-4 left-4 rounded-full bg-brand-green px-3 py-1 text-[11px] font-semibold tracking-wide text-white uppercase">
+        <span className="absolute top-4 left-4 rounded-full bg-brand-sky px-3 py-1 text-[11px] font-semibold tracking-wide text-white uppercase">
           Flagship
         </span>
       )}

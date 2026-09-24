@@ -104,7 +104,7 @@ function SelectField({
 }
 
 /** No server route or email service exists yet, so a valid submission opens the visitor's email app
- * with the enquiry pre-filled (see `submitEnquiry`). The confirmation says exactly that — it never
+ * with the enquiry pre-filled (see `submitEnquiry`). The confirmation says exactly that; it never
  * claims the message was delivered. */
 export function ContactForm() {
   const [values, setValues] = useState<EnquiryValues>(EMPTY_ENQUIRY);
@@ -141,7 +141,7 @@ export function ContactForm() {
   if (ready) {
     return (
       <div role="status" className="rounded-3xl border border-primary/10 bg-card p-6 shadow-sm sm:p-10">
-        <span aria-hidden="true" className="flex size-12 items-center justify-center rounded-full bg-brand-green/15 text-brand-green">
+        <span aria-hidden="true" className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
           <CheckCircle2 className="size-6" />
         </span>
         <h3 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">Your enquiry is ready to send.</h3>

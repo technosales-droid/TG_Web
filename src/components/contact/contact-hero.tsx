@@ -84,7 +84,7 @@ export function ContactHero() {
       onMouseLeave={() => setHovered(false)}
       className="relative -mt-[5.25rem] flex min-h-[82svh] flex-col overflow-hidden bg-black text-white lg:min-h-[92svh]"
     >
-      {/* Temporary photo — replace with a dedicated contact-page image. */}
+      {/* Temporary photo: replace with a dedicated contact-page image. */}
       <Image
         src="/brand/projects.jpg"
         alt="A group of learners gathered around a wall of notes during a planning workshop"
@@ -123,7 +123,7 @@ export function ContactHero() {
             href={`#${ENQUIRY_ID}`}
             onClick={scrollToForm}
             className={cn(
-              "group mt-9 inline-flex min-h-11 items-center gap-2 border-b border-white/70 pb-1 text-sm font-semibold tracking-[0.2em] text-white uppercase transition-colors hover:border-brand-green hover:text-brand-green focus-visible:outline-offset-4 focus-visible:outline-white",
+              "group mt-9 inline-flex min-h-11 items-center gap-2 border-b border-white/70 pb-1 text-sm font-semibold tracking-[0.2em] text-white uppercase transition-colors hover:border-brand-sky hover:text-brand-sky focus-visible:outline-offset-4 focus-visible:outline-white",
               "focus-visible:outline-2 focus-visible:outline-solid"
             )}
           >

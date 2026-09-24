@@ -15,14 +15,14 @@ const montserrat = Montserrat({
 });
 
 const description =
-  "Techno Gurukul is built around practical learning — helping students develop creative, technical and digital skills through hands-on education, real projects and industry-relevant tools.";
+  "Techno Gurukul is built around practical learning, helping students develop creative, technical and digital skills through hands-on education, real projects and industry-relevant tools.";
 
 // ponytail: canonical URL and og:url need the production domain via
 // metadataBase; add once it's known rather than guessing one here.
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   alternates: { canonical: "./" },
-  title: "Techno Gurukul — Learn. Create. Build What's Next.",
+  title: "Techno Gurukul | Learn. Create. Build What's Next.",
   description,
   openGraph: {
     title: "Techno Gurukul",

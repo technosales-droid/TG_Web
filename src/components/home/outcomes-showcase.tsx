@@ -110,7 +110,7 @@ export function OutcomesShowcase() {
           )}
         >
           <div className="flex items-center justify-center gap-2 text-sm font-medium text-primary">
-            <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
+            <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
             What You Can Build
           </div>
 
@@ -127,7 +127,7 @@ export function OutcomesShowcase() {
         </div>
 
         {/* Below lg: a static grid, every card fully readable (no hover on touch devices).
-            At lg+: a single accordion row — each card is narrow at rest and grows on hover
+            At lg+: a single accordion row: each card is narrow at rest and grows on hover
             to reveal the description + highlights, matching the reference layout. */}
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:mt-16 lg:flex lg:h-[540px] lg:gap-3">
           {OUTCOMES.map((outcome, index) => (
@@ -151,7 +151,7 @@ function OutcomeCard({
   const Icon = outcome.icon;
 
   return (
-    // ponytail: hover-only expand — fine here since the lg:grid-cols-2 fallback below already
+    // ponytail: hover-only expand; fine here since the lg:grid-cols-2 fallback below already
     // shows every card's full content unconditionally, so touch/keyboard users never lose access
     // to it; they just don't get the accordion animation.
     <div
@@ -169,7 +169,7 @@ function OutcomeCard({
         className="-z-10 object-cover"
       />
       {/* Base scrim: capped at 70% black (not solid), small bands top/bottom, most of the
-          photo left clear — sized for the short resting label. */}
+          photo left clear; sized for the short resting label. */}
       <div
         aria-hidden="true"
         className="absolute inset-0 -z-[5] bg-[linear-gradient(to_bottom,rgba(0,0,0,0.7)_0%,transparent_10%,transparent_85%,rgba(0,0,0,0.7)_100%)]"
@@ -193,7 +193,7 @@ function OutcomeCard({
         </span>
       </div>
 
-      {/* Collapsed state — lg+ only, rest state. Horizontal label (no rotation), hidden below
+      {/* Collapsed state: lg+ only, rest state. Horizontal label (no rotation), hidden below
           lg where the expanded content (next block) is always shown instead. */}
       <div
         aria-hidden="true"
@@ -202,14 +202,14 @@ function OutcomeCard({
         <span className="text-lg font-semibold text-white">{outcome.tag}</span>
       </div>
 
-      {/* Expanded content — always shown below lg; at lg+ it's the hover reveal. */}
+      {/* Expanded content: always shown below lg; at lg+ it's the hover reveal. */}
       <div className="relative lg:absolute lg:inset-x-0 lg:bottom-0 lg:p-6 lg:opacity-0 lg:transition-opacity lg:duration-300 lg:group-hover:opacity-100 lg:group-hover:delay-150">
         <h3 className="text-lg font-semibold text-white">{outcome.title}</h3>
         <p className="mt-2 text-sm leading-relaxed text-white/75">{outcome.description}</p>
         <ul className="mt-4 space-y-1.5">
           {outcome.highlights.map((highlight) => (
             <li key={highlight} className="flex items-center gap-1.5 text-xs text-white/70">
-              <Check className="size-3.5 shrink-0 text-brand-green" aria-hidden="true" />
+              <Check className="size-3.5 shrink-0 text-brand-sky" aria-hidden="true" />
               {highlight}
             </li>
           ))}

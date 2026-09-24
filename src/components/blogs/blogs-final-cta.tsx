@@ -53,7 +53,7 @@ const DRIFT = [
 
 const TONES = [
   "from-primary/25 to-primary/10",
-  "from-brand-green/30 to-brand-green/10",
+  "from-brand-sky/30 to-brand-sky/10",
   "from-[#0d6386]/25 to-[#0b3d50]/10",
 ] as const;
 

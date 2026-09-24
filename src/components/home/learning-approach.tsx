@@ -80,7 +80,7 @@ export function LearningApproach() {
             )}
           >
             <div className="flex items-center gap-2 text-sm font-medium text-primary">
-              <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
+              <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
               How We Learn
             </div>
 

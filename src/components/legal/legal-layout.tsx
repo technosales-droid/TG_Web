@@ -42,7 +42,7 @@ export function LegalLayout({
       <section className="px-4 pt-10 pb-6 sm:px-6 sm:pt-14 sm:pb-8">
         <div className="mx-auto max-w-3xl text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-accent px-3 py-1 text-sm font-medium text-primary">
-            <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
+            <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
             {eyebrow}
           </div>
           <h1 className="mt-4 text-3xl font-semibold tracking-tight text-balance text-foreground sm:text-4xl">

@@ -1,8 +1,8 @@
-// DEMO CONTENT — no verified student testimonials have been supplied yet.
+// DEMO CONTENT: no verified student testimonials have been supplied yet.
 // Every name, quote and rating below is made up purely to preview the carousel and must be
 // replaced with real, approved testimonials (quote, name, role, program, rating, avatar) before
 // this goes live in production. The rendering component reads this data as-is, so swapping in
-// real entries — or wiring this up to an admin panel later — needs no component changes.
+// real entries, or wiring this up to an admin panel later, needs no component changes.
 export interface Testimonial {
   id: string;
   quote: string;

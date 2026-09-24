@@ -50,7 +50,7 @@ export function ClosingCta() {
             )}
           >
             <span className="inline-flex w-fit shrink-0 items-center gap-2 self-start rounded-full bg-background/15 px-3 py-1.5 text-xs font-semibold text-background">
-              <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
+              <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
               Start Building
             </span>
 
@@ -58,7 +58,7 @@ export function ClosingCta() {
               Learn Skills.
               <br />
               Build Real Work.{" "}
-              <span className="text-brand-green">Move Forward.</span>
+              <span className="text-brand-sky">Move Forward.</span>
             </h2>
 
             <p className="mt-5 max-w-xl text-base leading-relaxed text-background/75 sm:text-lg">
@@ -90,7 +90,7 @@ export function ClosingCta() {
           </div>
 
           {/* Mobile/tablet (below lg): stacked below the text, full column width, intrinsic
-              aspect ratio — never cropped. */}
+              aspect ratio; never cropped. */}
           <div className="px-6 pb-14 sm:px-10 sm:pb-16 lg:hidden">
             <Image
               src="/brand/index-cta.png"

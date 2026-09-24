@@ -94,7 +94,7 @@ const GAME_COURSES: Course[] = [
     ["Game Development", "Game Design", "Programming", "2D Art", "3D Art", "Animation"],
     ["flagship", "vfx", "unity", "unreal", "ai", "multiplayer", "production", "publishing", "capstone", "game production", "ui/ux"],
     ["code", "pen-tool", "boxes"],
-    "green",
+    "sky",
     { status: "active", href: "/programs/tg-gameforge", featured: true, order: 2 }
   ),
   game(
@@ -133,7 +133,7 @@ const GAME_COURSES: Course[] = [
     ["2D Art", "3D Art"],
     ["character design", "environment art", "props", "blender", "game assets", "game ui", "digital illustration", "gameart studio"],
     ["palette", "pen-tool", "cube"],
-    "green",
+    "sky",
     { status: "active", href: "/programs/tg-gameart-studio" }
   ),
   game(
@@ -172,7 +172,7 @@ const GAME_COURSES: Course[] = [
     ["Game AI", "AI"],
     ["npc behaviour", "state machines", "pathfinding", "procedural systems", "generative ai", "ai-assisted development", "enemy decision-making"],
     ["cpu", "sparkles", "gamepad"],
-    "green",
+    "sky",
     { status: "active", href: "/programs/tg-ai-for-games" }
   ),
 ];

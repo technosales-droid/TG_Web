@@ -150,7 +150,7 @@ export function ResultsToolbar({
   return (
     <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
       <div>
-        <p className="text-xs font-bold tracking-widest text-brand-green uppercase">Projects</p>
+        <p className="text-xs font-bold tracking-widest text-primary uppercase">Projects</p>
         {/* Live region: the count is announced when a search or filter changes it. */}
         <p role="status" aria-live="polite" className="mt-1 text-base font-semibold text-foreground sm:text-lg">
           {countText}

@@ -13,13 +13,13 @@ type GroupKey = "dm" | "forge" | "unity" | "unreal" | "art" | "design" | "anim" 
 
 const GROUPS: Record<GroupKey, { industrySlug: string; programSlug: string; tone: ProgramTone }> = {
   dm: { industrySlug: "digital-marketing", programSlug: "digital-marketing", tone: "blue" },
-  forge: { industrySlug: "game-development", programSlug: "game-development-and-design", tone: "green" },
+  forge: { industrySlug: "game-development", programSlug: "game-development-and-design", tone: "sky" },
   unity: { industrySlug: "game-development", programSlug: "game-development-and-design", tone: "navy" },
   unreal: { industrySlug: "game-development", programSlug: "game-development-and-design", tone: "blue" },
-  art: { industrySlug: "game-development", programSlug: "game-development-and-design", tone: "green" },
+  art: { industrySlug: "game-development", programSlug: "game-development-and-design", tone: "sky" },
   design: { industrySlug: "game-development", programSlug: "game-development-and-design", tone: "navy" },
   anim: { industrySlug: "game-development", programSlug: "game-development-and-design", tone: "blue" },
-  ai: { industrySlug: "game-development", programSlug: "game-development-and-design", tone: "green" },
+  ai: { industrySlug: "game-development", programSlug: "game-development-and-design", tone: "sky" },
 };
 
 const toSlug = (s: string) =>

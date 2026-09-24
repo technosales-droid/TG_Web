@@ -7,7 +7,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-brand-green: var(--brand-green);
+  --color-brand-sky: var(--brand-sky);
   --font-sans: var(--font-montserrat);
   --font-heading: var(--font-montserrat);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -49,25 +49,25 @@
 }
 
 :root {
-  --background: #f3f4ef;
+  --background: #f6f3ec;
   --foreground: #10141c;
   --card: #ffffff;
   --card-foreground: #10141c;
   --popover: #ffffff;
   --popover-foreground: #10141c;
-  --primary: #0e7fa8;
+  --primary: #0c709a;
   --primary-foreground: #ffffff;
-  --secondary: #e7e6dd;
+  --secondary: #ebe6da;
   --secondary-foreground: #10141c;
-  --muted: #e9eae2;
-  --muted-foreground: #5b5f57;
+  --muted: #eee9df;
+  --muted-foreground: #5c574f;
   --accent: #e6f2f6;
-  --accent-foreground: #0e7fa8;
-  --brand-green: #2fae5b;
+  --accent-foreground: #0c709a;
+  --brand-sky: #4db8ec;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: #e0e1d7;
-  --input: #e0e1d7;
-  --ring: #0e7fa8;
+  --border: #e4dfd3;
+  --input: #e4dfd3;
+  --ring: #0c709a;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);

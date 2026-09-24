@@ -1,0 +1,472 @@
+// Game development and game design articles.
+import { code, example, flow, h2, h3, IMG, image, insight, lead, ol, p, quote, table, tip, ul, type ArticleContent } from "./types";
+
+export const GAME_ARTICLES: Record<string, ArticleContent> = {
+  "how-ai-is-changing-game-development": {
+    blocks: [
+      lead("Ask ten developers what “AI in games” means and you will hear ten different answers. Some mean the enemies that chase you down a corridor. Some mean tools that generate terrain, textures or test builds. Others mean the newest wave of generative models. All of them are real, and they change different parts of the job."),
+      p("This article separates those threads. It looks at where AI has always lived inside games, where newer techniques are changing the way games are built, and what that means for someone learning to make them today."),
+      h2("Two meanings of AI in games"),
+      p("Inside a game, “AI” has long meant the logic that controls non-player characters (NPCs): how a guard decides to patrol, how a driver in a racing game picks a line, how a shopkeeper responds when you walk in. This kind of AI is hand-designed. A programmer or designer writes the rules, and the character follows them."),
+      p("Around a game, AI increasingly means tools used by the people making it: systems that suggest code, generate variations of an asset, clean up animation data or play a build thousands of times to find problems. The player never sees these tools, but they change how quickly a team can try things."),
+      table(
+        ["Compare", "AI inside the game", "AI around the game"],
+        [
+          ["Who uses it", "The player meets it as characters and systems", "The development team uses it while building"],
+          ["Typical examples", "State machines, behaviour trees, pathfinding, procedural generation", "Code assistants, asset variation, automated playtesting, animation clean-up"],
+          ["Who controls it", "Designers and programmers write the rules", "Developers direct it and review the output"],
+        ],
+        "The same phrase covers two very different kinds of work.",
+      ),
+      h2("Worlds that build themselves"),
+      p("Procedural generation lets a game create terrain, levels, items or quests from rules rather than placing every element by hand. The designer defines the constraints, such as how steep a hill can be, how far apart towns sit and which rooms may connect, and the system explores what is possible inside them."),
+      p("This is why a small team can ship a game with far more variety than they could ever place manually. It is also why procedural content can feel bland when it is done carelessly. Rules that are too loose produce noise. Rules that are too tight produce the same level again and again."),
+      example("A dungeon generator might place rooms on a grid, connect them with corridors, then run a check that guarantees the exit can be reached from the entrance. The check is what makes the result playable. Everything else is variety."),
+      p("The craft has not disappeared. It has moved from placing objects to designing the rules that place them, and then judging whether the output is any good."),
+      h2("Characters that seem to think"),
+      p("For decades, NPC behaviour has been built from a small set of dependable ideas. A **state machine** moves a character between clear states such as idle, alert, chase and attack. A **behaviour tree** organises decisions into branches the character checks in order. **Pathfinding** works out how to get from one place to another without walking through walls."),
+      image(IMG.unreal, "Interactive scenes like this depend on characters that move, react and make believable decisions."),
+      p("Newer approaches add flexibility on top: characters that adapt to what the player has done, dialogue that varies rather than repeating one line, or systems that learn a good route from experience. These are powerful, but they also make behaviour harder to predict, and unpredictable characters are hard to balance."),
+      insight("The goal is not intelligence for its own sake. It is behaviour that supports the player’s experience. A guard who is slightly beatable is usually more fun than one who plays perfectly.", "What designers actually want"),
+      h2("Faster pipelines behind the scenes"),
+      p("On the production side, AI-assisted tools are being used for prototyping, generating variations of art, tidying motion capture data, suggesting code and running automated tests that play through levels to look for crashes or places where players get stuck."),
+      ul(
+        "**Prototyping:** getting a rough idea playable sooner, so it can be judged before real effort is spent.",
+        "**Asset variation:** producing alternatives of a prop or texture that an artist then chooses from and refines.",
+        "**Animation clean-up:** removing noise from captured movement so animators can focus on performance.",
+        "**Automated testing:** bots that run a build repeatedly and report where it breaks.",
+      ),
+      p("Each of these shortens repetitive work. None of them decides what the game should be. That still takes a person who understands players."),
+      h2("What this means if you want to make games"),
+      p("It is tempting to treat these tools as a shortcut around learning. That tends to backfire. Reviewing what an assistant produces requires the skills it appears to replace: you need to recognise a bug, a clumsy mechanic or an asset that does not fit the art direction."),
+      tip("Learn the fundamentals first: programming logic, design thinking and at least one art or audio discipline. Then bring AI tools in as assistants, and always be able to explain why something in your project works."),
+      p("A good exercise is to build a small enemy by hand with a state machine, then experiment with a more advanced approach and compare them. You will learn what each method is actually good for. If you want a deeper look at the design side of that question, read [what a game designer actually does](/blogs/what-does-a-game-designer-do)."),
+      h2("Questions worth asking"),
+      ul(
+        "Does this technique make the game more fun, or only cheaper to make?",
+        "Can I explain and adjust the behaviour it produces?",
+        "Who owns the result, and does it fit the style of the rest of the project?",
+      ),
+      p("Asking them early is part of working like a professional, whatever tools are in the pipeline."),
+    ],
+    takeaways: [
+      "“AI in games” covers both the characters players meet and the tools developers use to build.",
+      "Procedural generation moves the craft from placing objects to designing rules and judging results.",
+      "State machines, behaviour trees and pathfinding remain the backbone of NPC behaviour.",
+      "AI tools shorten repetitive production work but do not decide what makes a game enjoyable.",
+      "Learn fundamentals first; use AI as an assistant you can review, not a substitute for understanding.",
+    ],
+  },
+
+  "idea-to-playable-game-pipeline": {
+    blocks: [
+      lead("Nobody sits down and “makes a game” in one go. Games are built in stages, each one answering a different question, and most of the important decisions are made long before the final art exists. Understanding that sequence is one of the fastest ways to make sense of how the industry works."),
+      flow(
+        [
+          ["Concept", "What is the game and who is it for?"],
+          ["Pre-production", "Prove the core idea with a prototype"],
+          ["Production", "Build the full game across disciplines"],
+          ["Testing and polish", "Fix, balance and refine"],
+          ["Release and beyond", "Ship, listen and update"],
+        ],
+        "The pipeline at a glance",
+      ),
+      h2("Concept: deciding what the game is"),
+      p("A concept is more than an idea. It answers a handful of practical questions: what does the player do, who is the audience, what platform is it for and what makes it different from what already exists. A short pitch document or even a single page is enough. The point is to make the idea specific enough to argue with."),
+      p("Good concepts are also honest about limits. A small team with a few months cannot make a huge open world, so the concept has to fit the people and time available. That instinct, called **scope**, matters more than talent for finishing a first project."),
+      h2("Pre-production: proving the idea"),
+      p("Pre-production turns the concept into a plan and, importantly, a prototype. The prototype is deliberately rough: placeholder shapes, borrowed sounds, no polish. It exists to answer one question, which is whether the core mechanic is enjoyable to repeat."),
+      p("The team also defines the **core loop**, the small cycle the player repeats, and sketches the art direction, the technical approach and a schedule. This stage is where most projects are shaped, adjusted or cancelled, which is far cheaper than discovering a problem a year into production."),
+      tip("If your prototype is not fun with cubes and placeholder sounds, better art will not rescue it. Fix the loop first."),
+      h2("Production: building the game"),
+      p("Production is the long middle. Programmers build systems, artists create characters and environments, designers construct levels and tune progression, and audio designers add music and effects. Engines such as Unity and Unreal Engine give everyone a shared foundation to work in."),
+      image(IMG.art, "Character art is built alongside code and level design throughout production."),
+      p("The healthiest teams work in short cycles and keep the game playable throughout. Instead of waiting for everything to be finished, they produce regular builds that anyone can run. Problems appear early, and everyone stays aligned about what the game actually feels like."),
+      h3("Milestones"),
+      p("Many teams use milestones such as a first playable, a vertical slice (one small section built to final quality) and a feature-complete build. Each is a checkpoint to decide whether to continue, change direction or cut something."),
+      h2("Testing and polish"),
+      p("Testing looks for bugs, confusing moments, difficulty spikes and performance problems. It is not a single phase at the end but a habit throughout, with more formal testing as the game nears completion."),
+      p("Polish is what turns a working game into a good one: animation timing, camera behaviour, sound, visual effects, menus and small touches that make interactions feel responsive. It is easy to underestimate how much time this takes."),
+      h2("Release is not the finish line"),
+      p("When a game reaches players, a new kind of learning begins. Bugs that never appeared in testing show up. Players use features in unexpected ways. Feedback arrives. Many teams continue with patches, balance changes and content updates, so the pipeline loops back on itself."),
+      insight("Studios rarely move through these stages in a straight line. They revisit earlier ones whenever new information arrives. The order describes priorities, not a one-way street."),
+      h2("Using the pipeline as a learner"),
+      p("You can practise the same stages on a small scale. Choose a tiny idea, prototype it in a weekend, decide whether it is worth continuing, and only then invest in art and polish. Finishing several small projects teaches the pipeline better than abandoning one large one. For a closer look at the people involved, see [why game development is a team sport](/blogs/why-game-development-is-a-team-sport)."),
+    ],
+    takeaways: [
+      "A game moves through concept, pre-production, production, testing and release, and revisits earlier stages as it learns.",
+      "Pre-production is where ideas are proved or abandoned cheaply, through a rough prototype.",
+      "Scope, meaning what a team can realistically finish, matters more than ambition on a first project.",
+      "Playable builds throughout production keep problems visible early.",
+      "Polish and post-release updates take real time and are part of the job.",
+    ],
+  },
+
+  "unity-vs-unreal-engine": {
+    blocks: [
+      lead("Choosing a game engine can feel like choosing a career path, especially for a beginner. The internet is full of confident opinions, most of them about which engine is “better.” That is the wrong question. A more useful one is: what are you trying to build, and how do you like to work?"),
+      h2("The short version"),
+      table(
+        ["Compare", "Unity", "Unreal Engine"],
+        [
+          ["Main language", "C#", "C++ and Blueprints (visual scripting)"],
+          ["Often chosen for", "2D games, mobile titles, smaller teams, rapid prototyping", "High-fidelity 3D, cinematic scenes, large-scale environments"],
+          ["Getting started", "A gentler route into programming for many beginners", "Blueprints let you build logic before writing code"],
+          ["Editor feel", "Lightweight and flexible; a large ecosystem of assets and tutorials", "Feature-rich and visually striking out of the box"],
+        ],
+        "General tendencies, not rules. Both engines can do far more than the table suggests.",
+      ),
+      h2("Programming: C# versus C++ and Blueprints"),
+      p("Unity scripts are written in C#, a readable, widely used language. For many learners it is a comfortable way to pick up programming concepts such as variables, functions and objects while immediately seeing the result in a game."),
+      p("Unreal offers two routes. **Blueprints** is a node-based visual scripting system where you connect boxes to build behaviour, which lets designers and artists prototype gameplay without typing code. **C++** gives deeper control and performance, and is what programmers use for core systems. Most real Unreal projects use both."),
+      h2("Graphics and scope"),
+      p("Unreal is well known for strong 3D visuals with relatively little setup, which is why it is associated with realistic environments and cinematic work. Unity is flexible across many platforms and is a frequent choice for mobile, 2D and stylised games, and for smaller teams who need to move quickly."),
+      p("That said, plenty of beautiful games are made in Unity, and plenty of small, stylised games in Unreal. The engine limits you far less than your time, skills and scope do."),
+      h2("Learning curve"),
+      p("Both engines have a lot of surface area. Beginners commonly feel lost in either one because of the number of panels, settings and systems. The way through is the same: pick a very small project and learn only what it needs."),
+      ol(
+        "Follow a short tutorial to get a character moving.",
+        "Change something on your own: speed, jump height, camera angle.",
+        "Add one new mechanic without instructions.",
+        "Finish and share it, however small.",
+      ),
+      h2("How to choose"),
+      ul(
+        "Interested in mobile or 2D games, or want to learn programming alongside game development? **Unity** is a natural place to start.",
+        "Drawn to realistic 3D worlds, cinematic scenes or visual scripting? **Unreal Engine** may suit you.",
+        "Not sure? Try a small project in each. A weekend is enough to find out which one you enjoy working in.",
+      ),
+      image(IMG.unreal, "Unreal Engine is often associated with high-fidelity 3D experiences like this one."),
+      h2("What transfers between engines"),
+      p("The engine is a tool. The skills that make you employable and effective sit underneath it: game mechanics, level design, player experience, programming logic, testing and iteration. Someone who understands those can move from one engine to another far faster than someone who only memorised menus."),
+      quote("The engine is the tool. The ability to design and build experiences is the skill."),
+      p("Choose one, commit for a few months, and build things. You can always learn the other later, and the second one is much easier than the first."),
+    ],
+    takeaways: [
+      "There is no universally better engine; the right one depends on what you want to build.",
+      "Unity uses C#; Unreal combines C++ with Blueprint visual scripting.",
+      "Unity is a common choice for 2D, mobile and small teams; Unreal for high-fidelity 3D.",
+      "Scope, time and skill limit your games more than the engine does.",
+      "Design, programming logic and problem solving transfer across engines.",
+    ],
+  },
+
+  "what-does-a-game-designer-do": {
+    blocks: [
+      lead("A game designer asks questions such as: what should the player do? Why should they continue? How difficult should the next level be? What happens when they fail? How should the game reward progress? These questions sit at the heart of the discipline, and answering them well is harder than it sounds."),
+      h2("Designing the experience, not just the content"),
+      p("Designers are often imagined as the people who come up with characters and stories. That is one part of it. The core of the job is defining **how the game plays**: the mechanics, rules, goals and feedback that make it work, long before any polish is applied."),
+      p("A mechanic is something the player can do, like jumping, trading, building or aiming. A rule limits or shapes it, such as a cooldown or a resource cost. Goals give it purpose. Feedback tells the player what happened. Design is the craft of arranging these so they create interesting decisions."),
+      h2("What a designer actually works on"),
+      ul(
+        "**Mechanics and systems:** what the player can do and how those actions interact.",
+        "**Level design:** the spaces where the game happens and how they teach, challenge and reward the player.",
+        "**Progression and balance:** how difficulty, rewards and pacing change over time.",
+        "**Narrative and world:** the story, characters and setting, and how they fit the play.",
+        "**Documentation and communication:** writing down ideas so programmers and artists can build them.",
+      ),
+      image(IMG.workshop, "Designers spend much of their time in planning sessions and playtests with the rest of the team."),
+      h2("Balance and progression"),
+      p("Tuning a game is a constant negotiation. Make it too hard and players quit in frustration. Too easy and they lose interest. Designers adjust numbers such as damage, speed, cost and reward, and the order in which new abilities appear, so players stay challenged without feeling stuck."),
+      example("A designer notices that many playtesters give up at the third level. Instead of simply lowering enemy health, they check what the level asks the player to learn. The jump mechanic taught in level two is used in a new way with no warning. The fix is to add a safe practice space before the difficult section."),
+      p("Tuning is rarely a single decision. It is a cycle of change, playtest and observe."),
+      h2("Prototype early, test often"),
+      p("An idea that sounds exciting on paper can be dull, confusing or frustrating in play. A mechanic that seems simple can hide problems. Designers therefore build rough prototypes as soon as they can, sometimes with boxes and placeholder text, and put them in front of real people."),
+      p("Watching someone play is one of the most useful skills a designer can practise. Players do not do what you expect, and their confusion tells you what the game is failing to communicate. This is why iteration is central to the field, and why [prototyping](/blogs/from-player-idea-to-game-mechanic-prototyping) gets its own article."),
+      h2("Working with the rest of the team"),
+      p("Designers rarely build everything themselves. They work with programmers, who need clear specifications and a designer who understands technical limits, and with artists, who need direction on the look and feel. Good design documents are short, specific and easy to update."),
+      quote("Game design is ultimately the process of deliberately shaping how a player experiences a game."),
+      h2("Starting out"),
+      p("You do not need permission to begin designing. Take a game you know and change one rule, then play it with friends and see what happens. Make a small board or card game. Build a tiny level in any engine. Write down what you tried and what you learned."),
+      tip("Keep a playtest log: what you changed, what you expected, what actually happened. It is the beginning of a portfolio and a habit that will serve you throughout your career."),
+    ],
+    takeaways: [
+      "Game design defines how a game plays: mechanics, rules, goals and feedback.",
+      "Designers tune difficulty, rewards and pacing so players stay challenged but not stuck.",
+      "Prototypes and playtests turn assumptions into evidence.",
+      "Clear communication with programmers and artists is part of the job.",
+      "You can start practising design today with small games, level tweaks and a playtest log.",
+    ],
+  },
+
+  "skills-to-start-a-game-development-career": {
+    blocks: [
+      lead("If you ask what skills a game developer needs, the first answer is usually “programming.” It is part of the picture, but games are made by many kinds of specialists, and there are several ways in. This guide maps the main roles and what to build first for each."),
+      h2("Games need more than programmers"),
+      p("A finished game combines code, art, animation, design, audio and production. A team might include programmers, 3D and 2D artists, animators, level designers, technical artists, sound designers and producers. Small teams often share these roles between fewer people."),
+      table(
+        ["Area", "What you do", "Good first projects"],
+        [
+          ["Programming", "Build gameplay, tools and systems", "A small game with movement, scoring and a win or lose state"],
+          ["Game design", "Define mechanics, levels and progression", "A one-page design and a playable prototype with playtest notes"],
+          ["3D / 2D art", "Create characters, props and environments", "A small themed set of assets shown in an engine"],
+          ["Animation and VFX", "Bring characters and effects to life", "A character action set, or a short effect reel"],
+          ["Level design", "Shape the spaces the game happens in", "A single, well-tested level with a clear teaching moment"],
+        ],
+      ),
+      h2("Pick a lane, know the neighbours"),
+      p("Choose an area to go deep in, then learn enough about the others to work well with them. A programmer who understands how artists prepare assets makes better tools. An artist who understands performance limits makes assets that run smoothly. A designer who can read basic code communicates ideas precisely."),
+      image(IMG.vfx, "Animation and VFX are distinct specialisations, separate from programming, design and modelling."),
+      h2("Learn an engine"),
+      p("Working in Unity or Unreal Engine teaches how the pieces of a game fit together: scenes, assets, code, animation, lighting, audio and building for a platform. Building small, finished projects matters more than starting large ones you never complete."),
+      p("If you are unsure which to choose, [this comparison of Unity and Unreal](/blogs/unity-vs-unreal-engine) explains the trade-offs."),
+      h2("The skills that sit underneath"),
+      ul(
+        "**Problem solving:** breaking a difficult problem into smaller ones and trying things systematically.",
+        "**Iteration:** being willing to change or throw away work that is not good enough yet.",
+        "**Communication:** explaining ideas clearly and giving and receiving feedback well.",
+        "**Curiosity about players:** noticing what makes games enjoyable, frustrating or confusing.",
+      ),
+      h2("Show your work"),
+      p("A portfolio of playable projects, clear write-ups and evidence of teamwork is what most studios look at first. Start building it from your very first project. Include a short explanation of what you made, what your role was, what went wrong and what you would change."),
+      tip("Finish small projects and publish them, even simple ones. A completed game you can share is worth more than an impressive idea you never released."),
+      h2("A sensible first six months"),
+      ol(
+        "Choose one engine and complete a beginner project end to end.",
+        "Build a second, smaller project without following a tutorial.",
+        "Join a game jam or team project to practise working with others.",
+        "Write up your best work as a short case study.",
+        "Show it to people, listen to feedback and improve it.",
+      ),
+      p("None of this requires waiting for a job or a course to begin. It requires a computer, a project idea and regular practice."),
+    ],
+    takeaways: [
+      "Game development includes programming, design, art, animation, level design, audio and production.",
+      "Go deep in one area and learn enough about the others to collaborate.",
+      "Small, finished projects teach more than large unfinished ones.",
+      "Problem solving, iteration and communication matter in every role.",
+      "A portfolio of playable work with clear write-ups is the strongest starting point.",
+    ],
+  },
+
+  "how-a-game-actually-gets-made": {
+    blocks: [
+      lead("Game development is often imagined as one programmer typing code alone. In reality, a game is the meeting point of many skills, and the way those skills meet follows a repeating cycle: design, build, test, improve."),
+      flow([["Design", "Decide what the game is"], ["Build", "Create a playable version"], ["Test", "Watch what really happens"], ["Improve", "Change it and go around again"]], "The cycle behind every game"),
+      h2("It starts with a concept"),
+      p("Developers define what the game is, who it is for and what makes it interesting. That is followed by game design, where mechanics, rules, levels, characters and progression are planned. At this point almost everything is on paper: sketches, flow charts and short descriptions."),
+      h2("Prototype the idea"),
+      p("Once the core idea is clear, developers create a prototype. A prototype does not need polished graphics. Its purpose is to answer one important question: **is the game actually fun to play?**"),
+      p("Prototypes are usually built quickly and thrown away without regret. The value is in what you learn, not in the code."),
+      h2("Turn design into an interactive experience"),
+      p("Programming makes the design real: the player moves, the world responds, rules are enforced. Alongside, artists and designers create environments, characters, interfaces and animations, and sound designers build the audio experience. These strands progress in parallel and constantly affect each other."),
+      example("If an artist makes a character taller than planned, the programmer may need to adjust the collision shape, and the designer may need to rebalance the doorways in a level. Small changes ripple across disciplines."),
+      h2("Testing never really stops"),
+      p("Testing happens throughout development. Developers constantly identify bugs, confusing mechanics and frustrating experiences, and then make changes. Watching a new player try the game for the first time often reveals more than weeks of internal discussion."),
+      image(IMG.forge, "Code, sculpting and digital art come together in a single project."),
+      h2("A finished game is a team effort"),
+      p("The final game is not the result of one person’s work. It is the result of a continuous cycle of **design, build, test, improve**, repeated many times by people who each bring a different specialty."),
+      h2("What to take from this if you are learning"),
+      p("For students interested in game development, understanding this pipeline is often more important than immediately learning every tool. Tools change, but the process stays remarkably consistent. Practise it on small projects: design something tiny, prototype it, test it with a friend, improve it, and repeat."),
+      p("Curious about the longer version? [The full pipeline explained](/blogs/idea-to-playable-game-pipeline) covers each stage in more detail."),
+    ],
+    takeaways: [
+      "Game creation is multidisciplinary; code is only one part.",
+      "A prototype exists to answer whether the game is fun, not to look polished.",
+      "Design, art, programming and audio progress in parallel and affect each other.",
+      "Testing runs throughout development, not only at the end.",
+      "Practising the design-build-test-improve cycle on small projects teaches more than memorising tools.",
+    ],
+  },
+
+  "why-game-development-is-a-team-sport": {
+    blocks: [
+      lead("A game may look like one finished product, but behind it is a network of specialists who each hold a piece. The best games are rarely the work of the most talented individual. They come from teams that communicate well."),
+      h2("Who is on the team"),
+      ul(
+        "**Programmers** build the systems: movement, combat, menus, saving, tools and performance.",
+        "**Artists** create the visual assets, from characters and environments to interfaces.",
+        "**Designers** define mechanics, levels and the experience of playing.",
+        "**Animators** bring characters and objects to life.",
+        "**Sound designers and composers** create the audio environment.",
+        "**Writers** shape story, dialogue and world detail.",
+        "**Producers** keep the schedule, scope and communication on track.",
+      ),
+      image(IMG.workshop, "Planning sessions like this help teams agree on priorities before building."),
+      h2("Communication is the connective tissue"),
+      p("A programmer needs to understand exactly what the designer is asking for. A designer needs to understand technical constraints. Artists need to work within performance and visual requirements. Every hand-off between disciplines is a chance for misunderstanding."),
+      example("A designer asks for a “bigger explosion.” The artist makes a larger, more detailed effect. The programmer notices it drops the frame rate on lower-end devices. Nobody was wrong, but without a conversation the result is a delay. A short shared brief, including a performance budget, would have prevented it."),
+      h2("Skills that make you good to work with"),
+      ul(
+        "Explaining your work in plain language, without assuming others share your specialty.",
+        "Documenting decisions so people who join later understand them.",
+        "Giving feedback that is specific and kind, and receiving it without defensiveness.",
+        "Delivering what you promised, or saying early that you cannot.",
+      ),
+      h2("How work flows between people"),
+      p("Assets and features move through the team constantly. An artist exports a model, a programmer implements it, a designer places it in a level, and someone tests it. Version control, shared naming conventions and regular playable builds keep this from collapsing into chaos."),
+      tip("Even in a solo project, practise these habits: name files consistently, write short notes about what you changed, and keep a working version you can return to."),
+      h2("Why this matters when you are learning"),
+      p("Students who want to enter game development should learn more than their individual discipline. They should understand how their work fits into the larger production pipeline. Try joining a game jam, a class project or an online team, even a small one, to feel what collaboration is like before you need it professionally."),
+      p("It also helps to know the lifecycle your work is part of. [How a game actually gets made](/blogs/how-a-game-actually-gets-made) is a good place to see the whole picture."),
+    ],
+    takeaways: [
+      "Games are built by specialists across programming, art, design, animation, audio, writing and production.",
+      "Most problems in a team are communication problems at the hand-off between disciplines.",
+      "Clear briefs, documentation and shared conventions prevent avoidable delays.",
+      "Learn how your discipline fits into the pipeline, not only your own craft.",
+      "Team projects and game jams are the best way to practise collaboration early.",
+    ],
+  },
+
+  "the-psychology-behind-a-good-game-loop": {
+    blocks: [
+      lead("Many successful games are built around a simple repeated structure. The player acts, the game responds, something changes, and the player decides what to do next. Designers call this the core loop, and much of what makes a game compelling comes from how well it is built."),
+      h2("What a core loop is"),
+      p("The player performs an action, receives feedback, gains some form of reward or consequence, and then makes another decision. Around that cycle, everything else in the game is built."),
+      flow([["Explore"], ["Encounter"], ["Act"], ["Reward"], ["Upgrade"], ["Explore again"]], "A simple core loop"),
+      p("Consider a role-playing game: the player explores an area, encounters an enemy, chooses how to fight, earns a reward and spends it on an upgrade that changes how they explore next time."),
+      h2("Loop versus game loop"),
+      p("The term “game loop” is used in two different ways, and it helps to separate them. The **core loop** is a design idea: the repeating cycle of player behaviour described above. The **game loop** in programming is the technical cycle a game runs many times per second."),
+      code(
+        "text",
+        `while (gameIsRunning) {
+    input = readPlayerInput()      // what did the player do?
+    updateWorld(input, deltaTime)  // move things, apply rules
+    render()                       // draw the result
+}`,
+        "The technical loop runs every frame. The core loop is what the player experiences over minutes.",
+      ),
+      h2("Why loops work on people"),
+      p("Loops give players a reason to act, a meaningful response to that action and a reason to try again. Several ideas from psychology help explain why that combination is engaging."),
+      ul(
+        "**Clear goals:** people are more motivated when they know what they are trying to do next.",
+        "**Immediate feedback:** a fast response confirms that an action mattered.",
+        "**Progress you can see:** advancing towards something visible keeps effort feeling worthwhile.",
+        "**The right level of challenge:** tasks that are neither trivially easy nor overwhelmingly hard hold attention best.",
+      ),
+      h2("When loops go wrong"),
+      p("If the actions become repetitive without meaningful variation, players lose interest. If the system is too complicated, players become confused. If rewards are unrelated to what the player did, the loop feels arbitrary."),
+      insight("A loop should ask the player to make decisions, not just repeat inputs. If a task can be done without thinking, it is probably not doing enough work.", "A useful test"),
+      h2("Small details make a big difference"),
+      p("Sound feedback, visual effects, progression systems and increasingly complex challenges can all strengthen a loop. That is why designers pay close attention to how [a game feels to play](/blogs/what-makes-a-game-feel-good-to-play), not only what it does."),
+      h2("Design honestly"),
+      p("Loops can be built to respect players or to exploit them. Good designers ask whether the loop leaves people feeling satisfied and in control, or compelled and drained. It is worth deciding that early, because it shapes everything that follows."),
+      tip("Try describing your favourite game’s core loop in one line. Then find the place where the loop is at its strongest and the place where it is weakest. That is a design exercise you can do in ten minutes."),
+      p("Understanding game loops helps aspiring designers move beyond thinking about “features” and start thinking about **player behaviour**."),
+    ],
+    takeaways: [
+      "The core loop is the repeating cycle of action, feedback, reward and decision.",
+      "It is a design concept, distinct from the programming game loop that runs each frame.",
+      "Clear goals, fast feedback, visible progress and balanced challenge keep players engaged.",
+      "Loops fail when they become mindless repetition, are too complicated, or reward arbitrarily.",
+      "Design loops that respect the player’s time and choices.",
+    ],
+  },
+
+  "what-makes-a-game-feel-good-to-play": {
+    blocks: [
+      lead("Players do not experience a game as a list of technical features. They experience how it feels. A jump that responds instantly, an attack that lands with weight, a menu that reacts without lag: these details are hard to name, but easy to notice when they are missing."),
+      h2("Game feel, defined"),
+      p("Designers often call this quality **game feel**: the moment-to-moment sensation of controlling something in a game. It comes from how quickly and precisely the game responds to input, and how clearly it communicates what just happened."),
+      h2("The ingredients"),
+      table(
+        ["Ingredient", "What it does", "Example"],
+        [
+          ["Input response", "Makes controls feel immediate and precise", "A jump begins on the frame the button is pressed"],
+          ["Animation", "Communicates weight and intention", "A wind-up before a heavy swing"],
+          ["Sound", "Confirms impact and success", "A distinct sound when a coin is collected"],
+          ["Visual effects", "Emphasises important moments", "A brief flash or particles on a hit"],
+          ["Camera", "Frames action and adds impact", "A slight shake when something large lands"],
+          ["Feedback timing", "Ties cause to effect", "The reward appears exactly when the action succeeds"],
+        ],
+      ),
+      h2("A mechanically simple game can feel excellent"),
+      p("Even a very simple game can feel great when these elements work together. A basic platformer with responsive controls and satisfying sound can be more enjoyable than a complicated game where every input feels slightly delayed."),
+      image(IMG.vfx, "Effects and timing shape how impact is perceived, from a hit spark to a finished VFX shot."),
+      h2("Forgiveness makes controls feel fair"),
+      p("Many games quietly help the player. Two common techniques are **coyote time**, which lets a player still jump for a few moments after walking off a ledge, and **input buffering**, which remembers a button press slightly before it can take effect. Players rarely notice them, but the game feels responsive and fair without them."),
+      code(
+        "csharp",
+        `// Unity (C#) sketch: forgiving jump timing
+[SerializeField] float coyoteTime = 0.12f;   // seconds after leaving the ground
+[SerializeField] float jumpBuffer = 0.12f;   // seconds a press is remembered
+float lastGrounded = -10f, lastJumpPressed = -10f;
+
+void Update()
+{
+    if (isGrounded) lastGrounded = Time.time;
+    if (Input.GetButtonDown("Jump")) lastJumpPressed = Time.time;
+
+    bool canJump  = Time.time - lastGrounded    <= coyoteTime;
+    bool wantsJump = Time.time - lastJumpPressed <= jumpBuffer;
+
+    if (canJump && wantsJump)
+    {
+        Jump();                        // your own jump method
+        lastGrounded = lastJumpPressed = -10f;
+    }
+}`,
+        "Times are starting points. Tune them by playing.",
+      ),
+      h2("How to evaluate feel"),
+      p("Feel cannot be judged from a design document. It has to be played. A useful habit is to record what you notice while playing and describe it precisely."),
+      ol(
+        "Press a button and watch: how long before something happens on screen?",
+        "Perform a successful action and ask whether the game clearly says so.",
+        "Fail on purpose and ask whether the failure feels fair or cheap.",
+        "Turn off the sound or effects and notice what disappears.",
+      ),
+      tip("Change one feel parameter at a time, such as jump speed, and play for a minute before changing another. Small adjustments are easier to judge than many at once."),
+      h2("Why it matters for aspiring developers"),
+      p("For aspiring game developers, learning to evaluate how something feels, not just whether it technically works, is an important design skill. It connects to the [loop that keeps players coming back](/blogs/the-psychology-behind-a-good-game-loop): a satisfying moment repeated well becomes a great game."),
+    ],
+    takeaways: [
+      "Game feel is the moment-to-moment sensation of controlling something in a game.",
+      "Input response, animation, sound, effects, camera and timing all contribute.",
+      "Simple games can feel excellent when those elements work together.",
+      "Techniques like coyote time and input buffering make controls feel fair without being noticed.",
+      "Feel must be played and tuned, not only specified.",
+    ],
+  },
+
+  "from-player-idea-to-game-mechanic-prototyping": {
+    blocks: [
+      lead("Before a team spends weeks building a feature, designers can test the underlying idea in an afternoon. That is what a prototype is for. It is not a small version of the final game. It is a tool for answering questions cheaply."),
+      h2("What a prototype is for"),
+      p("A prototype might contain simple shapes, temporary graphics and basic mechanics. It does not need to look beautiful. The purpose is to answer specific questions:"),
+      ul(
+        "Is the mechanic understandable without explanation?",
+        "Is it enjoyable to do repeatedly?",
+        "Does it create interesting decisions?",
+        "Does it become repetitive?",
+      ),
+      h2("From idea to testable mechanic"),
+      flow(
+        [
+          ["Idea", "A player-focused hunch"],
+          ["Question", "What exactly do we need to learn?"],
+          ["Rough build", "The smallest thing that tests it"],
+          ["Playtest", "Watch people use it"],
+          ["Decide", "Keep, change or drop"],
+        ],
+        "A prototyping loop",
+      ),
+      h2("Start with a question, not a feature"),
+      p("A common mistake is to prototype a feature. A better approach is to prototype a question. “Add grappling hook” is a feature. “Is swinging across gaps more fun than jumping across them?” is a question a prototype can answer."),
+      example("A designer wonders whether a stealth game would be more tense if guards could hear the player. The prototype: a grey box level, two guards and a footstep radius shown as a circle. In an hour they learn that the radius must be visible to the player, or the game feels unfair."),
+      h2("Keep it disposable"),
+      p("Prototype code and assets are meant to be thrown away. Building them carefully defeats the point, because the more you invest, the harder it is to abandon a bad idea. Use placeholder art, borrowed sounds and quick scripts."),
+      image(IMG.workshop, "Whiteboards, notes and quick tests: prototyping is as much about thinking as building."),
+      tip("Set a time limit before you start, for example one evening. If the idea is not testable by then, it probably needs to be smaller."),
+      h2("Paper counts"),
+      p("Not every prototype needs a computer. Card games, board games and paper maps can test rules, resources and pacing surprisingly well, and they let people with no programming knowledge join in immediately."),
+      h2("Watching people play"),
+      p("The most valuable part of a prototype is watching someone else use it. Stay quiet. Note where they hesitate, misunderstand or get frustrated. If you have to explain something, the game has not communicated it yet."),
+      ul(
+        "Ask what they thought was happening rather than what they liked.",
+        "Note what they tried that you did not expect.",
+        "Look for moments of visible enjoyment and find what caused them.",
+      ),
+      h2("Iteration is the point"),
+      p("The first version of an idea is rarely the final version. Rapid prototypes let teams discover problems before investing significant production time, which is one reason game development is so iterative. It also connects directly to the daily work of [a game designer](/blogs/what-does-a-game-designer-do)."),
+    ],
+    takeaways: [
+      "A prototype is a tool for answering questions, not a miniature finished game.",
+      "Prototype a question, such as “is this more fun?”, rather than a feature.",
+      "Keep prototypes disposable, with placeholder art and quick code.",
+      "Paper and board-game prototypes can test rules and pacing without any programming.",
+      "Watch players quietly; confusion shows what the game has not yet communicated.",
+    ],
+  },
+};

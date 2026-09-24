@@ -4,7 +4,7 @@ import { cn } from "cn";
 import { Reveal } from "@/components/ui/reveal";
 import { Eyebrow, GRADIENT, H2, INNER, LEAD, SECTION } from "./overview-ui";
 
-// Temporary photos from /public/brand — swap for dedicated editorial photography per stage.
+// Temporary photos from /public/brand: swap for dedicated editorial photography per stage.
 const STAGES = [
   { title: "Learn", tag: "Build the fundamentals.", text: "Start with the concepts, tools and ways of thinking that create a strong foundation for learning.", image: "/brand/learn.jpg" },
   { title: "Practice", tag: "Learn by doing.", text: "Turn understanding into action through exercises, experimentation, guided practice and hands-on work.", image: "/brand/practise.jpg" },

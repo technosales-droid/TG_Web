@@ -66,7 +66,7 @@ export function CurriculumAccordion({ modules }: { modules: CourseModule[] }) {
                         <span className="flex items-start gap-3">
                           <PlayCircle className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
                           <span>
-                            <span className="text-muted-foreground">Lesson {String(li + 1).padStart(2, "0")} — </span>
+                            <span className="text-muted-foreground">Lesson {String(li + 1).padStart(2, "0")}: </span>
                             {l.title}
                             {l.preview && <span className="ml-2 text-sm font-semibold text-primary underline">Preview</span>}
                           </span>

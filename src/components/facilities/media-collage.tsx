@@ -11,7 +11,7 @@ export function MediaCollage() {
       <div className="mx-auto max-w-[1800px] xl:px-8">
         <Reveal className="max-w-3xl">
           <div className="flex items-center gap-2 text-sm font-medium tracking-[0.2em] text-primary uppercase">
-            <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
+            <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
             The Techno Gurukul experience
           </div>
           <h2 id="fc-experience-heading" className="mt-4 text-3xl font-semibold tracking-tight text-balance text-foreground sm:text-4xl xl:text-5xl">

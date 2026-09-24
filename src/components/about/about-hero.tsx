@@ -17,7 +17,7 @@ function Collage() {
         </div>
 
         {/* Main image */}
-        <div className="absolute top-0 left-[45%] h-[59.4%] w-[45%] overflow-hidden rounded-[max(16px,4.4cqw)] bg-gradient-to-b from-primary/25 to-brand-green/25">
+        <div className="absolute top-0 left-[45%] h-[59.4%] w-[45%] overflow-hidden rounded-[max(16px,4.4cqw)] bg-gradient-to-b from-primary/25 to-brand-sky/25">
           <Image src="/hero/students.png" alt="Two learners with their notebooks" fill priority sizes="(min-width: 1280px) 22vw, 45vw" className="object-cover object-[74%_top]" />
         </div>
 
@@ -37,7 +37,7 @@ function Collage() {
         </div>
 
         {/* Small accent card */}
-        <div className="absolute top-[41.5%] left-[8%] flex h-[18%] w-[35%] items-end justify-between overflow-hidden rounded-[max(14px,3.8cqw)] bg-brand-green pl-[max(14px,7cqw)] text-white transition-transform duration-300 motion-safe:hover:-translate-y-1">
+        <div className="absolute top-[41.5%] left-[8%] flex h-[18%] w-[35%] items-end justify-between overflow-hidden rounded-[max(14px,3.8cqw)] bg-brand-sky pl-[max(14px,7cqw)] text-white transition-transform duration-300 motion-safe:hover:-translate-y-1">
           <p className="self-center pr-2 text-[max(11px,2.9cqw)] leading-tight font-semibold">
             Built Through
             <br />
@@ -60,7 +60,7 @@ function Collage() {
               <textPath href="#emblem-path" textLength="232" lengthAdjust="spacing">PRACTISE · BUILD · SHOW · </textPath>
             </text>
           </svg>
-          <BookOpen className="size-[34%] text-brand-green" aria-hidden="true" />
+          <BookOpen className="size-[34%] text-brand-sky" aria-hidden="true" />
         </div>
       </div>
     </div>
@@ -73,21 +73,21 @@ export function AboutHero() {
       <div className="mx-auto max-w-[1800px]">
         <div className="relative overflow-hidden rounded-[2.5rem] border border-primary/10 bg-muted/50 px-5 py-10 sm:px-10 sm:py-12 xl:min-h-[600px] xl:px-16 xl:py-14">
           <div aria-hidden="true" className="absolute inset-y-0 right-0 hidden w-[48%] xl:block">
-            <div className="absolute inset-0 bg-brand-green/10 [clip-path:polygon(14%_0%,100%_0%,100%_100%,0%_100%)]" />
+            <div className="absolute inset-0 bg-brand-sky/10 [clip-path:polygon(14%_0%,100%_0%,100%_100%,0%_100%)]" />
             <div className="absolute inset-0 bg-primary/8 [clip-path:polygon(0%_100%,55%_100%,100%_55%,100%_100%)]" />
           </div>
 
           <div className="relative grid items-center gap-10 xl:min-h-[480px] xl:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] xl:gap-16">
             <div>
               <div className="flex items-center gap-2 text-sm font-medium text-primary">
-                <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
+                <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
                 About Techno Gurukul
               </div>
               <h1 className="mt-4 max-w-3xl text-[1.75rem] leading-[1.12] font-semibold tracking-tight text-balance text-foreground min-[430px]:text-4xl sm:text-5xl xl:text-[3rem]">
                 Learning Should Lead to <span className={GRADIENT_TEXT}>Something You Can Build.</span>
               </h1>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-                Techno Gurukul is built around practical learning &mdash; helping learners understand concepts, practise
+                Techno Gurukul is built around practical learning, helping learners understand concepts, practise
                 skills, build projects and develop the confidence to apply what they know.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">

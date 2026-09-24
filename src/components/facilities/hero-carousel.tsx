@@ -59,7 +59,7 @@ export function HeroCarousel() {
           <div className="flex min-h-[inherit] flex-col justify-between p-6 sm:p-10 xl:p-14">
             <div className="flex items-center justify-between text-xs font-semibold tracking-[0.2em] uppercase">
               <span className="flex items-center gap-2">
-                <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
+                <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
                 Techno Gurukul
               </span>
               <span aria-live="off" className="tabular-nums">
@@ -70,7 +70,7 @@ export function HeroCarousel() {
             <div className="max-w-3xl pt-24 pb-4">
               <h1 className="text-4xl leading-[1.05] font-semibold tracking-tight text-balance sm:text-5xl xl:text-7xl">
                 Where Learning Happens{" "}
-                <span className="bg-gradient-to-r from-[#8fd3f0] to-brand-green bg-clip-text text-transparent">by Doing.</span>
+                <span className="bg-gradient-to-r from-[#8fd3f0] to-brand-sky bg-clip-text text-transparent">by Doing.</span>
               </h1>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-white/85 sm:text-lg">
                 Explore the spaces, people and experiences that make learning at Techno Gurukul practical, collaborative and hands-on.
@@ -79,7 +79,7 @@ export function HeroCarousel() {
                 <Link href="#experience" className={cn(buttonVariants({ variant: "default" }), "h-12 rounded-full bg-white px-7 text-base font-semibold text-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-lg motion-reduce:transition-none")}>
                   Explore Our Institute
                 </Link>
-                <Link href="#faculty" className="flex min-h-12 items-center border-b border-white/60 text-base font-medium text-white transition-colors hover:border-brand-green hover:text-brand-green focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+                <Link href="#faculty" className="flex min-h-12 items-center border-b border-white/60 text-base font-medium text-white transition-colors hover:border-brand-sky hover:text-brand-sky focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
                   Meet Our Faculty
                 </Link>
               </div>

@@ -9,7 +9,7 @@ import { SORT_OPTIONS, activeChips, activeFilterCount, type ProgramState, type S
 
 const FOCUS = "focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-primary";
 
-/** Program category as a quick-browse row — the primary way to split the catalogue. */
+/** Program category as a quick-browse row: the primary way to split the catalogue. */
 export function QuickBrowse({ state, onChange }: { state: ProgramState; onChange: (p: Partial<ProgramState>) => void }) {
   return (
     <div className="flex flex-wrap items-center gap-x-5 gap-y-0">
@@ -123,7 +123,7 @@ export function ResultsToolbar({
   return (
     <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
       <div>
-        <p className="text-xs font-bold tracking-widest text-brand-green uppercase">Programs</p>
+        <p className="text-xs font-bold tracking-widest text-primary uppercase">Programs</p>
         <p role="status" aria-live="polite" className="mt-1 text-base font-semibold text-foreground sm:text-lg">
           {countText}
         </p>

@@ -6,8 +6,8 @@ import type { Offering } from "@/data/programs";
 import type { ViewMode } from "./program-utils";
 
 const CATEGORY_VISUAL: Record<string, { tone: string; icon: LucideIcon }> = {
-  "digital-marketing": { tone: "from-primary via-primary/70 to-brand-green/50", icon: Megaphone },
-  "game-development": { tone: "from-brand-green/80 via-primary/70 to-[#0b3d50]", icon: Gamepad2 },
+  "digital-marketing": { tone: "from-primary via-primary/70 to-brand-sky/50", icon: Megaphone },
+  "game-development": { tone: "from-brand-sky/80 via-primary/70 to-[#0b3d50]", icon: Gamepad2 },
   "game-design": { tone: "from-[#0d6386] to-[#0b3d50]", icon: Layers },
 };
 
@@ -67,7 +67,7 @@ export function OfferingCard({
         <div className="flex min-w-0 flex-1 flex-col gap-2 p-4 sm:p-5">
           <div className="flex flex-wrap items-center gap-2">
             <p className="text-sm font-medium text-primary">{category}</p>
-            {flagship && <span className="rounded-full bg-brand-green px-2.5 py-0.5 text-[11px] font-semibold tracking-wide text-white uppercase">Flagship</span>}
+            {flagship && <span className="rounded-full bg-[#0b3d50] px-2.5 py-0.5 text-[11px] font-semibold tracking-wide text-white uppercase">Flagship</span>}
           </div>
           <h3 className="text-lg leading-snug font-semibold tracking-tight text-foreground sm:text-xl">{title}</h3>
           {subtitle && <p className="text-sm font-medium text-foreground/70">{subtitle}</p>}
@@ -98,7 +98,7 @@ export function OfferingCard({
     <article className={cn(frame, "flex h-full flex-col")}>
       <OfferingImage src={image.src} alt={image.alt} categorySlug={categorySlug} className="aspect-video">
         {flagship && (
-          <span className="absolute top-4 right-4 rounded-full bg-brand-green px-3 py-1.5 text-xs font-semibold tracking-wide text-white uppercase">Flagship</span>
+          <span className="absolute top-4 right-4 rounded-full bg-[#0b3d50] px-3 py-1.5 text-xs font-semibold tracking-wide text-white uppercase">Flagship</span>
         )}
       </OfferingImage>
 

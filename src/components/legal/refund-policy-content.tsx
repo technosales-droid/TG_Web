@@ -21,8 +21,7 @@ export const REFUND_SECTIONS: LegalSectionData[] = [
           that payment is handled.
         </p>
         <LegalNote>
-          The specific commercial terms below &mdash; refund windows, percentages and processing timelines &mdash;
-          are shown as clearly marked placeholders where Techno Gurukul has not yet published a finalised
+          The specific commercial terms below, refund windows, percentages and processing timelines, are shown as clearly marked placeholders where Techno Gurukul has not yet published a finalised
           schedule. This page will be updated with exact figures once they are confirmed by the business, rather
           than showing invented numbers.
         </LegalNote>
@@ -72,8 +71,8 @@ export const REFUND_SECTIONS: LegalSectionData[] = [
     body: (
       <p>
         Once a program has started, any refund for the unused or remaining portion is subject to{" "}
-        <Tbc>PROGRAM CANCELLATION TERMS TO BE CONFIRMED</Tbc>. Costs already incurred on your behalf &mdash; such as
-        instruction already delivered or materials already provided &mdash; may not be refundable, in line with the
+        <Tbc>PROGRAM CANCELLATION TERMS TO BE CONFIRMED</Tbc>. Costs already incurred on your behalf, such as
+        instruction already delivered or materials already provided, may not be refundable, in line with the
         &ldquo;Non-Refundable Charges&rdquo; section below.
       </p>
     ),
@@ -105,8 +104,8 @@ export const REFUND_SECTIONS: LegalSectionData[] = [
     title: "Cancellation or Rescheduling by Techno Gurukul",
     body: (
       <p>
-        If Techno Gurukul needs to cancel, postpone or reschedule a program or batch &mdash; for example, due to
-        insufficient enrollment, instructor availability, or circumstances beyond our control &mdash; we will inform
+        If Techno Gurukul needs to cancel, postpone or reschedule a program or batch, for example, due to
+        insufficient enrollment, instructor availability, or circumstances beyond our control, we will inform
         enrolled students as early as reasonably possible. In this situation, students will typically be offered the
         choice of transferring to another available batch or receiving a refund of fees paid for that specific
         program, in line with <Tbc>PROGRAM CANCELLATION TERMS TO BE CONFIRMED</Tbc>.
@@ -130,7 +129,7 @@ export const REFUND_SECTIONS: LegalSectionData[] = [
     title: "Non-Refundable Charges",
     body: (
       <p>
-        Certain charges may not be refundable regardless of when a cancellation is requested &mdash; for example, a
+        Certain charges may not be refundable regardless of when a cancellation is requested, for example, a
         registration or application fee (if any), the cost of materials already delivered, or transaction charges
         described below. The full, confirmed list of non-refundable charges is{" "}
         <Tbc>NON-REFUNDABLE CHARGES TO BE CONFIRMED</Tbc>.

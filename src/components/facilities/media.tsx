@@ -3,11 +3,11 @@ import { Film, ImageIcon, Play, Sparkles } from "lucide-react";
 import { cn } from "cn";
 import type { MediaItem } from "@/data/institute";
 
-// Three soft blue/green tones, picked from the label so neighbouring placeholders differ.
+// Three soft blue tones, picked from the label so neighbouring placeholders differ.
 const TONES = [
   "from-[#0b3d50] via-[#0d5674] to-[#0a6a8f]",
   "from-[#0d5674] via-[#0a6a8f] to-primary/80",
-  "from-[#0a4a66] via-[#0a6a8f] to-brand-green/50",
+  "from-[#0a4a66] via-[#0a6a8f] to-brand-sky/50",
 ];
 const toneOf = (label: string) => TONES[[...label].reduce((n, c) => n + c.charCodeAt(0), 0) % TONES.length];
 

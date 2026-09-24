@@ -69,7 +69,7 @@ export type ProgramIcon =
   | "blocks"
   | "server";
 
-export type ProgramTone = "blue" | "green" | "navy";
+export type ProgramTone = "blue" | "sky" | "navy";
 
 /**
  * "active"       = live, has a detail page.

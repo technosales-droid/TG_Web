@@ -1,6 +1,6 @@
 // The Programs page discovery model: exactly the three real top-level programs Techno Gurukul
 // currently offers, each with its real offerings. This does not replace `catalogue.ts` (still the
-// validated source of truth for course content, used elsewhere) — it's a purpose-built, admin-panel-
+// validated source of truth for course content, used elsewhere); it's a purpose-built, admin-panel-
 // ready shape for this one page: Program -> Offering[], with no "coming soon" concept surfaced.
 //
 // Game Development offerings are pulled live from COURSE_CATALOGUE by slug, so this page always
@@ -71,7 +71,7 @@ const DIGITAL_MARKETING_OFFERING: Offering = {
   location: "Nashik, Maharashtra",
   tags: ["Marketing", "SEO", "Social Media", "Performance Marketing", "AI"],
   href: "/programs/tg-digital-marketing",
-  image: { src: "/brand/course-tg-digital-marketing.png", alt: "A phone held up surrounded by digital marketing icons — content, email, ads and analytics" },
+  image: { src: "/brand/course-tg-digital-marketing.png", alt: "A phone held up surrounded by digital marketing icons: content, email, ads and analytics" },
   status: "active",
   flagship: true,
 };

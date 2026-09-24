@@ -107,7 +107,7 @@ export function LearningHero() {
               )}
             >
               {lead}
-              <span className="text-brand-green">{accent}</span>
+              <span className="text-brand-sky">{accent}</span>
             </h1>
           </div>
 
@@ -118,7 +118,7 @@ export function LearningHero() {
           <a
             href="#learning-process"
             onClick={scrollToProcess}
-            className="group mt-8 inline-flex min-h-11 items-center gap-2 border-b border-white/70 pb-1 text-sm font-semibold tracking-[0.2em] text-white uppercase transition-colors hover:border-brand-green hover:text-brand-green focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-4 focus-visible:outline-white"
+            className="group mt-8 inline-flex min-h-11 items-center gap-2 border-b border-white/70 pb-1 text-sm font-semibold tracking-[0.2em] text-white uppercase transition-colors hover:border-brand-sky hover:text-brand-sky focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-4 focus-visible:outline-white"
           >
             Explore the learning process
             <ArrowDown className="size-4 transition-transform duration-300 motion-safe:group-hover:translate-y-1" aria-hidden="true" />

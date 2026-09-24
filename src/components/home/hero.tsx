@@ -40,7 +40,7 @@ export function Hero() {
 
           <div className="relative max-w-4xl">
             <div className="flex items-center gap-2 text-sm font-medium text-white/80">
-              <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
+              <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
               Techno Gurukul
             </div>
 
@@ -48,7 +48,7 @@ export function Hero() {
               Learn. Create.
               <br />
               Build{" "}
-              <span className="bg-gradient-to-r from-[#8fd3f0] to-brand-green bg-clip-text text-transparent">What&rsquo;s Next.</span>
+              <span className="bg-gradient-to-r from-[#8fd3f0] to-brand-sky bg-clip-text text-transparent">What&rsquo;s Next.</span>
             </h1>
 
             <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">

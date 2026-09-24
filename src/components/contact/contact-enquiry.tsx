@@ -5,7 +5,7 @@ import { Reveal } from "./contact-reveal";
 import { Eyebrow, FOCUS, INNER } from "./contact-ui";
 
 const LINK = cn("inline-flex min-h-11 items-center rounded text-base font-medium break-all text-foreground hover:text-primary", FOCUS);
-const PENDING = <p className="text-base text-muted-foreground">Not listed yet &mdash; please email us.</p>;
+const PENDING = <p className="text-base text-muted-foreground">Not listed yet, please email us.</p>;
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (

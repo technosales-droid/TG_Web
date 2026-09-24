@@ -99,7 +99,7 @@ export function CoursePromotionPopup() {
 
       <div className={cn("p-4 sm:p-6 lg:p-8", !promo.image && "pr-14")}>
         <div className="flex items-center gap-2 text-xs font-medium tracking-[0.2em] lg:text-sm text-primary uppercase">
-          <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
+          <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
           {promo.category}
         </div>
         <p className="mt-2 text-lg leading-snug sm:mt-3 sm:text-xl lg:text-2xl xl:text-3xl font-semibold tracking-tight text-balance text-foreground">{headline}</p>
