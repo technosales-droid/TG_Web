@@ -1,352 +1,281 @@
 import Link from "next/link";
-import { Tbc, type LegalSectionData } from "./legal-layout";
+import { PRIVACY_POLICY_VERSION } from "@/lib/legal-versions";
+import { LegalNote, Tbc, type LegalSectionData } from "./legal-layout";
 
 export const HEADING = "Privacy Policy";
 export const DESCRIPTION =
-  "Learn how Techno Gurukul collects, uses, protects and manages information when you interact with our website and services.";
-export const LAST_UPDATED = "23 September 2026";
+  "How Techno Gurukul collects, uses and protects your personal information, and the choices and rights you have.";
+export const LAST_UPDATED = "24 September 2026";
 
 const EMAIL = "hello@technogurukul.com";
+const A = "font-medium text-primary underline-offset-2 hover:underline";
+const UL = "list-disc space-y-2 pl-5";
 
 export const PRIVACY_SECTIONS: LegalSectionData[] = [
   {
-    id: "introduction",
-    title: "Introduction",
+    id: "who-we-are",
+    title: "Who we are",
     body: (
       <>
+        <LegalNote>
+          Draft for legal review. Text in <Tbc>square brackets</Tbc> is information the business still has to supply.
+          Policy version: {PRIVACY_POLICY_VERSION}.
+        </LegalNote>
         <p>
-          This Privacy Policy explains how Techno Gurukul (&ldquo;Techno Gurukul&rdquo;, &ldquo;we&rdquo;,
-          &ldquo;us&rdquo; or &ldquo;our&rdquo;) collects, uses, shares and protects information in connection with
-          this website and the educational programs and services we describe on it.
+          This website is run by Techno Gurukul, a learning institute in Nashik, Maharashtra, India. For the personal
+          information described here, the organisation responsible is <Tbc>LEGAL ENTITY NAME</Tbc>, registered at{" "}
+          <Tbc>REGISTERED ADDRESS</Tbc>. In data-protection terms it decides why and how your information is used
+          (the &ldquo;data fiduciary&rdquo; under India&rsquo;s Digital Personal Data Protection Act, 2023).
         </p>
         <p>
-          This policy applies to visitors who browse the website, submit an enquiry, or otherwise interact with the
-          content, forms and features described here. It does not apply to information collected offline (for
-          example, during in-person conversations, phone calls or physical enrollment paperwork), which is handled
-          separately and in the same spirit of care described in this policy.
-        </p>
-        <p>
-          By using this website, you agree to the collection and use of information as described in this policy. If
-          you do not agree, please do not use the website or submit information through it.
+          This policy is written with reference to that Act and the rules made under it. It is not a statement that the
+          organisation is compliant with any law. Different provisions come into force on dates the Government notifies,
+          and this policy will be reviewed as they do.
         </p>
       </>
     ),
   },
   {
-    id: "information-we-collect",
-    title: "Information We Collect",
+    id: "what-we-collect",
+    title: "What information we collect",
     body: (
       <>
-        <p>The website currently collects information in two general ways:</p>
-        <ul className="list-disc space-y-2 pl-5">
+        <p>We collect only what is needed for each purpose below.</p>
+        <p className="font-semibold text-foreground">When you create an access profile (to open a project or resource, or to comment or review):</p>
+        <ul className={UL}>
+          <li>Your full name, email address and phone number.</li>
+          <li>Optionally, the area you are interested in (for example Courses or Game Development).</li>
+          <li>Whether you are 18 or older, and, if you are under 18, that a parent or guardian has agreed.</li>
+          <li>Whether you agreed to be contacted by us. This is a separate choice and is never pre-selected.</li>
+          <li>When you agreed, and which version of this policy and the Terms applied.</li>
+          <li>Which page or content led you to register, and the content you later open with your access profile.</li>
+        </ul>
+        <p className="font-semibold text-foreground">When you use the community features:</p>
+        <ul className={UL}>
+          <li>The comments and reviews you write, your first name and the time you wrote them.</li>
+          <li>At present, comments and reviews are saved only in your own browser. Other visitors cannot see them. We will update this policy before that changes.</li>
+        </ul>
+        <p className="font-semibold text-foreground">When you contact us:</p>
+        <ul className={UL}>
           <li>
-            <strong className="text-foreground">Information you provide directly</strong>: for example, through the
-            enquiry form on our Contact page.
+            The <Link href="/contact" className={A}>enquiry form</Link> prepares an email in your own email program.
+            Nothing is sent until you send it, and the website does not receive the details you type.
           </li>
           <li>
-            <strong className="text-foreground">Limited technical information</strong> that may be processed
-            automatically by the infrastructure that serves this website, and by third-party content that is
-            embedded on certain pages (such as a map or a video).
+            A <Link href="/privacy-requests" className={A}>privacy request</Link> sends the request type, your name and
+            email and any message you write.
+          </li>
+        </ul>
+        <p className="font-semibold text-foreground">Collected automatically:</p>
+        <ul className={UL}>
+          <li>
+            Technical records such as IP address, browser type and pages requested, kept by the hosting service that
+            serves the website (<Tbc>HOSTING PROVIDER</Tbc>) for security and reliability.
           </li>
         </ul>
         <p>
-          We do not currently collect payment card details, government identity numbers, or sensitive personal data
-          through this website. We only ask for information that is reasonably relevant to responding to an enquiry
-          or, in future, processing an application.
+          We do not ask for your address, date of birth, gender, government ID numbers, payment details or any sensitive
+          personal data.
         </p>
       </>
     ),
   },
   {
-    id: "information-you-provide",
-    title: "Information You Provide Directly",
+    id: "why-we-collect",
+    title: "Why we collect it",
+    body: (
+      <ul className={UL}>
+        <li><strong className="text-foreground">To give you access</strong> to selected projects, resources and community features.</li>
+        <li><strong className="text-foreground">To run the community</strong> features: showing your first name beside your comments and reviews, and moderating them.</li>
+        <li><strong className="text-foreground">To understand interest</strong> in our programs, so we know which content is useful.</li>
+        <li><strong className="text-foreground">To contact you about courses, admissions, programs, resources and career opportunities, only if you agreed</strong> to that separately.</li>
+        <li><strong className="text-foreground">To respond to your requests</strong>, including privacy requests.</li>
+        <li><strong className="text-foreground">To keep the website secure</strong> and prevent spam and abuse.</li>
+        <li><strong className="text-foreground">To meet legal obligations</strong>, where they apply.</li>
+      </ul>
+    ),
+  },
+  {
+    id: "how-we-use-it",
+    title: "How we use it, and what we do not do",
     body: (
       <>
-        <p>The main way information reaches us through the website today is the enquiry form on our Contact page. That form asks for:</p>
-        <ul className="list-disc space-y-2 pl-5">
-          <li>Full name</li>
-          <li>Email address</li>
-          <li>Phone number (optional)</li>
-          <li>What you are enquiring about (programs, learning, admissions, careers &amp; placement, or a general enquiry)</li>
-          <li>Program or area of interest (optional)</li>
-          <li>Your message</li>
+        <p>
+          Your access profile lets you open gated content without filling in the form again on this device. Your contact
+          details are used by our team to identify people who may want to hear about our programs. Being registered does
+          not mean we will call or email you, and we do not treat you as agreeing to promotion unless you ticked that
+          box.
+        </p>
+        <ul className={UL}>
+          <li>We do not sell your personal information.</li>
+          <li>We do not use it for advertising profiles or behavioural tracking.</li>
+          <li>We do not carry out tracking, behavioural monitoring or targeted advertising directed at children.</li>
+          <li>We do not send promotional messages to visitors who told us they are under 18.</li>
+        </ul>
+      </>
+    ),
+  },
+  {
+    id: "consent",
+    title: "Your consent, and withdrawing it",
+    body: (
+      <>
+        <p>
+          Continuing with the access form means you acknowledge this policy and agree to the use of your details to give
+          you access, as described here. Agreeing to be contacted is a separate, optional tick box. You can use the
+          website and open gated content without ticking it.
+        </p>
+        <p>
+          You can withdraw either consent at any time, as easily as you gave it, from the{" "}
+          <Link href="/privacy-requests" className={A}>Privacy Requests</Link> page or by emailing{" "}
+          <Tbc>PRIVACY CONTACT EMAIL</Tbc>. Withdrawing consent does not affect what was done before you withdrew it.
+          If you withdraw the access consent, we will stop your access profile, which means the gated content and community
+          features will need a new profile to use.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: "sharing",
+    title: "Who we share it with",
+    body: (
+      <>
+        <p>Your information is shared only with those who need it to run the service for us:</p>
+        <ul className={UL}>
+          <li><strong className="text-foreground">Hosting</strong>: <Tbc>HOSTING PROVIDER</Tbc>, which serves the website.</li>
+          <li><strong className="text-foreground">Lead and record storage</strong>: <Tbc>LEAD STORAGE / CRM PROVIDER</Tbc>, where access profiles and privacy requests are kept.</li>
+          <li><strong className="text-foreground">Authorities</strong>, where the law requires it.</li>
+        </ul>
+        <p>These providers may only use your information to provide their service to us. We do not share it for their own marketing.</p>
+      </>
+    ),
+  },
+  {
+    id: "storage-security",
+    title: "Where it is kept, and how it is protected",
+    body: (
+      <>
+        <p>Information is stored in <Tbc>STORAGE LOCATION AND COUNTRY</Tbc>. We use these measures:</p>
+        <ul className={UL}>
+          <li>Details are sent over an encrypted connection (HTTPS).</li>
+          <li>Your access session is a signed, HttpOnly cookie. Page scripts cannot read it, and it contains no email or phone number.</li>
+          <li>Forms are checked on the server as well as in your browser, and are limited to reduce spam and abuse.</li>
+          <li>Your email address and phone number are never put in web addresses or kept in your browser&rsquo;s storage.</li>
+          <li>Access to stored records is restricted to authorised staff: <Tbc>ACCESS CONTROL AND STAFF ROLES</Tbc>.</li>
+        </ul>
+        <p>No system is perfectly secure. If a breach affects your personal data, we will tell you and the authorities as the law requires.</p>
+      </>
+    ),
+  },
+  {
+    id: "retention",
+    title: "How long we keep it",
+    body: (
+      <>
+        <p>
+          We keep access profiles and consent records for <Tbc>RETENTION PERIOD</Tbc>, or until you withdraw consent or ask
+          for deletion, whichever is earlier, unless the law requires us to keep something longer. Privacy requests are
+          kept for <Tbc>RETENTION PERIOD FOR REQUESTS</Tbc> so we can show how they were handled.
+        </p>
+        <p>Your access session on a device lasts up to 30 days, or until you sign out.</p>
+      </>
+    ),
+  },
+  {
+    id: "your-rights",
+    title: "Your rights",
+    body: (
+      <>
+        <p>You have the right to:</p>
+        <ul className={UL}>
+          <li>Ask for a summary of the personal information we process and who we shared it with.</li>
+          <li>Ask us to correct information that is wrong, incomplete or out of date.</li>
+          <li>Ask us to erase your information, where we are not required to keep it.</li>
+          <li>Withdraw consent.</li>
+          <li>Have a grievance answered, and nominate another person to exercise these rights for you if you die or cannot act.</li>
         </ul>
         <p>
-          The form works by preparing a pre-filled email and opening it in your own email application. Sending the
-          enquiry is your action, sent from your own email account to {EMAIL}; the website itself does not
-          transmit your enquiry to a Techno Gurukul server or database. Once you send it, we receive it as an
-          ordinary email, in the same way as if you had written to us directly.
-        </p>
-        <p>
-          If you contact us by email, phone or in person outside of this form, the information you choose to share
-          in that conversation is handled with the same care described in this policy.
+          Use the <Link href="/privacy-requests" className={A}>Privacy Requests</Link> page. We may ask you to confirm
+          who you are before acting, so that we do not give one person&rsquo;s information to another. We will respond within{" "}
+          <Tbc>RESPONSE TIME</Tbc>.
         </p>
       </>
     ),
   },
   {
-    id: "information-collected-automatically",
-    title: "Information Collected Automatically",
+    id: "complaints",
+    title: "Complaints",
     body: (
       <>
         <p>
-          This website does not currently use analytics, advertising or visitor-tracking scripts. We do not build
-          browsing profiles of visitors and do not track you across other websites.
+          If you are unhappy with how we handled your information, contact our grievance contact first:{" "}
+          <Tbc>GRIEVANCE CONTACT NAME, EMAIL AND ADDRESS</Tbc>. If you are not satisfied with the response, you can
+          complain to the Data Protection Board of India once it is operating, as the Act provides.
         </p>
+      </>
+    ),
+  },
+  {
+    id: "children",
+    title: "Children",
+    body: (
+      <>
         <p>
-          As with most websites, the hosting and content-delivery infrastructure that serves these pages to your
-          browser may automatically process a limited amount of technical information (for example, IP address,
-          browser type, device type, or the pages requested) purely as part of delivering the website and keeping it
-          secure. Techno Gurukul does not currently access, analyse or use this information for marketing purposes.
+          A person under 18 is a child under the Act. The access form asks whether you are 18 or older. If you are not, we
+          ask you to confirm that a parent or guardian has agreed, and we do not send you promotional messages or use
+          your information for tracking or targeted advertising.
         </p>
+        <LegalNote>
+          At present the parent or guardian confirmation is a tick box. It does not verify the parent or guardian. Before
+          launch, <Tbc>VERIFIABLE PARENTAL CONSENT METHOD</Tbc> must be put in place, as the Rules require for children&rsquo;s
+          data. Until then, we ask parents and guardians to supervise use of the access form, and to contact us to remove
+          a profile.
+        </LegalNote>
       </>
     ),
   },
   {
     id: "cookies",
-    title: "Cookies and Similar Technologies",
-    body: (
-      <>
-        <p>
-          Techno Gurukul does not currently set its own analytics, advertising or marketing cookies on this website,
-          and there is no cookie-consent mechanism because no non-essential first-party tracking is in place.
-        </p>
-        <p>Certain pages embed third-party content, which may set their own cookies or use similar technologies under their own privacy policies once that content loads or you interact with it:</p>
-        <ul className="list-disc space-y-2 pl-5">
-          <li>
-            <strong className="text-foreground">Google Maps</strong>: embedded on location pages to show our
-            office on a map.
-          </li>
-          <li>
-            <strong className="text-foreground">YouTube (privacy-enhanced mode)</strong>: used for some
-            program-related videos in the Learning section, loaded via YouTube&rsquo;s &ldquo;nocookie&rdquo; embed
-            mode, which limits cookie use until you interact with the player.
-          </li>
-        </ul>
-        <p>
-          These embeds are provided by Google and are governed by Google&rsquo;s own privacy and cookie practices,
-          which are outside Techno Gurukul&rsquo;s control. If this changes, for example, if analytics or
-          advertising tools are added in future; this section will be updated accordingly.
-        </p>
-      </>
-    ),
-  },
-  {
-    id: "how-we-use-information",
-    title: "How We Use Information",
-    body: (
-      <>
-        <p>We use the information described above to:</p>
-        <ul className="list-disc space-y-2 pl-5">
-          <li>Respond to enquiries and questions about our programs and services</li>
-          <li>Understand what programs or information a visitor is interested in, so we can respond usefully</li>
-          <li>Communicate with prospective and enrolled students about programs, schedules and related matters</li>
-          <li>Maintain, secure and improve the website and the accuracy of its content</li>
-          <li>Meet legal, regulatory or administrative obligations that apply to us</li>
-        </ul>
-        <p>We do not use the information you send us to make automated decisions that produce legal or similarly significant effects about you.</p>
-      </>
-    ),
-  },
-  {
-    id: "communication-and-enquiry-data",
-    title: "Communication and Enquiry Data",
+    title: "Cookies and similar technologies",
     body: (
       <p>
-        When you send an enquiry through the website (or by email, phone or in person), we use the details you
-        provide to understand and respond to your question, discuss the relevant program or service, and follow up
-        as reasonably necessary. We do not use enquiry information for unrelated marketing without a proper basis to
-        do so, and we do not sell or rent it to third parties.
+        The website sets one cookie, an access session cookie, and only after you create an access profile. It also uses
+        your browser&rsquo;s storage for a few settings. The{" "}
+        <Link href="/cookie-policy" className={A}>Cookie Policy</Link> lists each one and how to manage them. We do not use
+        analytics or advertising cookies.
       </p>
     ),
   },
   {
-    id: "application-enrollment-data",
-    title: "Application / Enrollment Data",
+    id: "third-parties",
+    title: "Third-party services and links",
     body: (
       <p>
-        The website does not currently include an online application or enrollment portal. Enrollment in a Techno
-        Gurukul program currently happens through direct communication, typically following an enquiry, call
-        or meeting, rather than an automated on-site process. Any personal information you share with us
-        during that process (for example, to confirm enrollment details) is handled with the same principles
-        described in this policy. If an online application or enrollment system is introduced in the future, this
-        Privacy Policy will be updated to describe it accurately before it goes live.
+        Pages may link to other sites, such as social media profiles, and can show an embedded Google Map if you choose to
+        load it. Those services have their own privacy practices, which we do not control. We load the map only after you
+        agree to it.
       </p>
     ),
   },
   {
-    id: "payment-information",
-    title: "Payment Information",
+    id: "changes",
+    title: "Changes to this policy",
     body: (
       <p>
-        This website does not currently process online payments, and we do not collect or store card, UPI or other
-        payment credentials through it. Where program fees are currently collected, that happens outside the
-        website, through arrangements communicated to you directly by Techno Gurukul. If online payment
-        functionality is introduced in the future, payment details at that time would be handled by the applicable
-        third-party payment provider under its own security and privacy practices, and this policy will be updated
-        to name that provider and explain what it does with your payment information.
+        We will update this page when our practices change and change the date and version at the top. If a change
+        affects how we use information you have already given us, we will ask for your agreement again where the law
+        requires it.
       </p>
     ),
   },
   {
-    id: "how-we-share-information",
-    title: "How We Share Information",
-    body: (
-      <>
-        <p>
-          Techno Gurukul does not sell, rent or trade your personal information. We may share information in the
-          following limited circumstances:
-        </p>
-        <ul className="list-disc space-y-2 pl-5">
-          <li>With service providers who help us operate the website (see &ldquo;Service Providers and Technology Partners&rdquo; below)</li>
-          <li>Where required to comply with applicable law, regulation, legal process or a valid governmental request</li>
-          <li>To protect the rights, property or safety of Techno Gurukul, our students, or the public, where appropriate</li>
-          <li>With your consent, or at your direction</li>
-        </ul>
-      </>
-    ),
-  },
-  {
-    id: "service-providers",
-    title: "Service Providers and Technology Partners",
+    id: "contact",
+    title: "Contact",
     body: (
       <p>
-        The website is built and delivered using standard web hosting and content-delivery infrastructure, and
-        embeds Google Maps (for our location) and YouTube (for select program videos, in privacy-enhanced mode), as
-        described under &ldquo;Cookies and Similar Technologies&rdquo; above. We do not currently integrate a CRM,
-        marketing automation platform, analytics service or advertising network, so enquiry information is not
-        shared with any such tool today. If that changes, this section will be updated to name the relevant
-        provider and explain its role.
-      </p>
-    ),
-  },
-  {
-    id: "legal-regulatory-disclosures",
-    title: "Legal / Regulatory Disclosures",
-    body: (
-      <p>
-        We may disclose information where we believe in good faith that disclosure is reasonably necessary to comply
-        with applicable law, regulation, court order or other legal process, or to respond to a lawful request from
-        a public or government authority.
-      </p>
-    ),
-  },
-  {
-    id: "data-security",
-    title: "Data Security",
-    body: (
-      <>
-        <p>
-          We take reasonable, common-sense steps to protect information shared with us, such as limiting who can
-          access enquiry correspondence and keeping the software behind the website reasonably up to date. Because
-          the enquiry form sends information as an ordinary email from your own device, its security in transit also
-          depends on your own email provider&rsquo;s security practices.
-        </p>
-        <p>
-          No method of transmission over the internet or method of electronic storage is completely secure, and we
-          cannot guarantee absolute security. We do not currently hold any specific third-party security
-          certification for this website, and we will not claim one unless it has actually been obtained.
-        </p>
-      </>
-    ),
-  },
-  {
-    id: "data-retention",
-    title: "Data Retention",
-    body: (
-      <p>
-        We aim to keep personal information only for as long as reasonably necessary for the purpose it was
-        collected for, for example, to respond to and follow up on an enquiry. A formal, published data
-        retention schedule has not yet been finalised: <Tbc>DATA RETENTION PERIOD TO BE CONFIRMED</Tbc>. This section
-        will be updated once specific retention periods are confirmed internally.
-      </p>
-    ),
-  },
-  {
-    id: "your-rights-and-choices",
-    title: "Your Rights and Choices",
-    body: (
-      <p>
-        You may ask us what information we hold about you, request that we correct inaccurate information, or ask us
-        to delete information you have previously shared with us, subject to any legitimate need we may have to keep
-        it (for example, to respond to an ongoing enquiry or meet a legal obligation). To make a request, contact us
-        using the details in &ldquo;Contact / Privacy Queries&rdquo; below.
-      </p>
-    ),
-  },
-  {
-    id: "correction-of-information",
-    title: "Correction / Updating of Information",
-    body: (
-      <p>
-        If any information you have given us (such as your contact details or program interest) changes or was
-        entered incorrectly, let us know at {EMAIL} and we will update our records accordingly.
-      </p>
-    ),
-  },
-  {
-    id: "withdrawal-of-consent",
-    title: "Withdrawal of Consent",
-    body: (
-      <p>
-        Where we rely on your consent (for example, submitting the enquiry form, which requires you to confirm you
-        understand how it works before it can be sent), you may withdraw that consent at any time by contacting us.
-        Withdrawing consent will not affect anything already sent to us, and may limit our ability to respond to an
-        enquiry that is still open.
-      </p>
-    ),
-  },
-  {
-    id: "childrens-privacy",
-    title: "Children’s / Minor’s Privacy",
-    body: (
-      <p>
-        Some of Techno Gurukul&rsquo;s programs may be relevant to students who are minors. Where the website or its
-        enquiry form is used to ask about a program on behalf of, or together with, a minor, we expect a parent or
-        guardian to be involved in that enquiry and in any subsequent enrollment decision. We have not set a specific
-        minimum age for using this website, and we do not knowingly seek to collect personal information directly
-        from a minor without appropriate parental or guardian involvement. If you believe a minor has submitted
-        personal information to us without appropriate involvement of a parent or guardian, please contact us at{" "}
-        {EMAIL} so we can address it.
-      </p>
-    ),
-  },
-  {
-    id: "third-party-websites",
-    title: "Third-Party Websites and Services",
-    body: (
-      <p>
-        This website links to third-party services, including our social media pages (Instagram, Facebook, Threads,
-        Pinterest and others as listed in our footer) and, in places, Google Maps and YouTube. Once you leave this
-        website or interact with embedded third-party content, that third party&rsquo;s own privacy policy applies
-        to whatever information it collects. We encourage you to review the privacy practices of any third-party
-        site or service you visit.
-      </p>
-    ),
-  },
-  {
-    id: "changes-to-this-policy",
-    title: "Changes to This Privacy Policy",
-    body: (
-      <p>
-        We may update this Privacy Policy from time to time, for example as the website&rsquo;s features change or
-        as we are able to confirm details currently marked as pending. The &ldquo;Last updated&rdquo; date at the
-        top of this page reflects the most recent revision. We encourage you to review this page periodically.
-      </p>
-    ),
-  },
-  {
-    id: "contact-privacy-queries",
-    title: "Contact / Privacy Queries",
-    body: (
-      <p>
-        If you have questions about this Privacy Policy or how your information is handled, contact us at{" "}
-        <a href={`mailto:${EMAIL}`} className="font-medium text-primary underline-offset-2 hover:underline">
-          {EMAIL}
-        </a>
-        , or by post at our office: Office No. 305, Platinum Plaza, opp. Ramayan Bungalow, next to Jain Oswal
-        Boarding, Tilak Wadi, Police Staff Colony, Nashik, Maharashtra 422002, India. You can also reach us through
-        the form on our <Link href="/contact" className="font-medium text-primary underline-offset-2 hover:underline">Contact page</Link>.
+        Privacy questions: <Tbc>PRIVACY CONTACT EMAIL</Tbc>. General contact:{" "}
+        <a href={`mailto:${EMAIL}`} className={A}>{EMAIL}</a>. Office: Office No. 305, Platinum Plaza, opp. Ramayan
+        Bungalow, next to Jain Oswal Boarding, Tilak Wadi, Police Staff Colony, Nashik, Maharashtra 422002, India.
       </p>
     ),
   },

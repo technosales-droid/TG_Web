@@ -5,9 +5,14 @@
 // "Faculty Showcase"), no dates or results are given, and no media file exists yet (`url` is null,
 // so the UI shows "Preview coming soon" and never links to a file).
 //
-// To replace a sample with real work: set `sample: false`, add the real `creatorName`, and give each
-// media item a real `url` (and optional `thumbnail`). Nothing else needs to change. Filters, search,
-// counts and the URL state are all derived from this list.
+// To replace a sample with real work: set `sample: false`, add the real `creatorName`, then record who owns
+// the work and that its creator agreed to it being shown (`ownership`, `creatorPermission`, `publicationStatus`;
+// see `isProjectPublic`). Nothing is shown publicly until all of that is confirmed.
+//
+// This file is sent to every visitor's browser, so it holds only what may be seen without registering: title,
+// short description, category and other browse details. Anything behind the access gate (long description, problem,
+// solution, outcomes, files, videos, links) lives in src/server/gated-content.ts and is only sent to a visitor with
+// an access session. Never put a real media URL in this file; the check at the bottom fails the build if you do.
 //
 // Industry, program and course names must match the catalogue (src/data/catalogue.ts). That is checked
 // at the bottom of this file, so a typo fails the build instead of showing a wrong filter option.
@@ -17,7 +22,10 @@
 
 import { COURSE_CATALOGUE, INDUSTRIES, PROGRAMS } from "./catalogue";
 
-export const CREATOR_TYPES = ["student", "faculty"] as const;
+export const CREATOR_TYPES = ["student", "faculty", "institute", "other"] as const;
+export const OWNERSHIPS = ["student", "faculty", "institute", "third-party"] as const;
+export const PUBLICATION_STATUSES = ["draft", "pending-permission", "published", "withdrawn"] as const;
+export const PERMISSION_STATUSES = ["not-requested", "requested", "granted", "declined"] as const;
 export const PROJECT_STATUSES = ["completed", "in-progress", "showcased"] as const;
 export const MEDIA_TYPES = [
   "image",
@@ -51,6 +59,9 @@ export const PROJECT_TYPES = [
 ] as const;
 
 export type ProjectCreator = (typeof CREATOR_TYPES)[number];
+export type Ownership = (typeof OWNERSHIPS)[number];
+export type PublicationStatus = (typeof PUBLICATION_STATUSES)[number];
+export type PermissionStatus = (typeof PERMISSION_STATUSES)[number];
 export type ProjectStatus = (typeof PROJECT_STATUSES)[number];
 export type MediaType = (typeof MEDIA_TYPES)[number];
 export type ProjectType = (typeof PROJECT_TYPES)[number];
@@ -99,6 +110,28 @@ export interface Project {
   media: ProjectMedia[];
   externalLinks?: { label: string; url: string }[];
   order: number;
+
+  // Rights and permission. A project is shown only when isProjectPublic() says so.
+  /** Who owns the work. */
+  ownership?: Ownership;
+  /** Defaults to "draft". */
+  publicationStatus?: PublicationStatus;
+  /** The creator (or their guardian, for a minor) agreed to the work being shown. Required for student work. */
+  creatorPermission?: PermissionStatus;
+  /** Separate agreement to feature the work (homepage, promotion). */
+  featuredPermission?: PermissionStatus;
+  /** How the creator asked to be credited, if at all. */
+  attribution?: string;
+}
+
+/**
+ * Whether a project may appear on the site. Existing in this file is not enough: it must be real work (not a sample),
+ * marked published, and, for student work, the creator's permission must be on record.
+ */
+export function isProjectPublic(p: Project): boolean {
+  if (p.sample || p.publicationStatus !== "published") return false;
+  if (p.creatorType === "student" || p.ownership === "student") return p.creatorPermission === "granted";
+  return true;
 }
 
 export const PROJECT_PAGE_SIZE = 12;
@@ -575,12 +608,18 @@ function validateProjects(list: Project[]) {
     if (p.course && !COURSE_CATALOGUE.some((c) => c.title === p.course && c.programName === p.program))
       fail(`"${p.slug}" course "${p.course}" is not in "${p.program}"`);
 
+    if (!p.sample && p.longDescription) fail(`"${p.slug}": the long description belongs in src/server/gated-content.ts, not in this public file`);
+    if (p.publicationStatus === "published" && p.sample) fail(`sample project "${p.slug}" cannot be published`);
+    if (p.publicationStatus === "published" && (p.creatorType === "student" || p.ownership === "student") && p.creatorPermission !== "granted")
+      fail(`"${p.slug}" is student work and cannot be published without the creator's permission`);
     for (const m of p.media) {
+      if (!p.sample && m.url) fail(`"${p.slug}": real media URLs belong in src/server/gated-content.ts, not in this public file`);
       if (!MEDIA_TYPES.includes(m.type)) fail(`"${p.slug}" has an unknown media type "${m.type}"`);
       // Media URLs are optional (null = "Preview coming soon"), but a URL that is given must be usable.
       if (m.url !== null && !isUrl(m.url)) fail(`"${p.slug}" has an invalid media url "${m.url}"`);
     }
     for (const l of p.externalLinks ?? []) {
+      if (!p.sample) fail(`"${p.slug}": external links belong in src/server/gated-content.ts, not in this public file`);
       if (!/^https?:\/\/[^\s]+$/.test(l.url)) fail(`"${p.slug}" has an external link without a valid URL`);
     }
   }

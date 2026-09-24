@@ -1,0 +1,189 @@
+"use client";
+
+import Link from "next/link";
+import { useId, useState, type FormEvent } from "react";
+import { ArrowRight, Loader2, ShieldCheck } from "lucide-react";
+import {
+  INTERESTS,
+  LIMITS,
+  validateAccessFields,
+  type AccessRequest,
+  type AccessSource,
+  type AgeGroup,
+  type FieldErrors,
+  type SourceType,
+} from "@/lib/access";
+import { cn } from "cn";
+import { ErrorText, FIELD, FOCUS, Honeypot, INVALID, Label } from "./form-ui";
+
+export interface GrantedSession {
+  displayName: string;
+  ageGroup: AgeGroup;
+}
+
+const COPY: Record<SourceType, { title: string; text: string }> = {
+  blog: { title: "Access this content", text: "Create your access profile to continue." },
+  comment: { title: "Join the discussion", text: "Create your access profile to comment on articles." },
+  review: { title: "Share your experience", text: "Create your access profile to post a review." },
+  resource: { title: "Access this resource", text: "Create your access profile to open and download this resource." },
+  "student-project": { title: "Access this project", text: "Create your access profile to view the full project." },
+  "faculty-project": { title: "Access this project", text: "Create your access profile to view the full project." },
+  "institute-project": { title: "Access this project", text: "Create your access profile to view the full project." },
+  "other-project": { title: "Access this project", text: "Create your access profile to view the full project." },
+};
+
+const LINK = "font-medium text-primary underline underline-offset-2 hover:text-primary/80";
+
+/**
+ * The one access form used everywhere content or a community feature is gated. It asks for the minimum (name, email,
+ * phone and an optional area of interest), keeps the marketing choice separate and unticked, and treats visitors under
+ * 18 differently. Submitting starts an access session on the server; nothing personal is stored in the browser.
+ */
+export function AccessGate({
+  source,
+  onGranted,
+  onCancel,
+}: {
+  source: AccessSource;
+  onGranted: (s: GrantedSession) => void;
+  onCancel: () => void;
+}) {
+  const uid = useId();
+  const [openedAt] = useState(() => Date.now());
+  const [v, setV] = useState({ name: "", email: "", phone: "", interest: "", ageGroup: "adult" as AgeGroup, guardianConsent: false, marketingConsent: false, website: "" });
+  const [errors, setErrors] = useState<FieldErrors>({});
+  const [busy, setBusy] = useState(false);
+  const set = <K extends keyof typeof v>(k: K, val: (typeof v)[K]) => {
+    setV((p) => ({ ...p, [k]: val }));
+    setErrors((p) => ({ ...p, [k]: undefined, form: undefined }));
+  };
+  const minor = v.ageGroup === "minor";
+  const copy = COPY[source.sourceType];
+
+  const submit = async (e: FormEvent) => {
+    e.preventDefault();
+    const found = validateAccessFields({ ...v, interest: v.interest as AccessRequest["interest"] });
+    if (Object.keys(found).length) {
+      setErrors(found);
+      const first = (["name", "email", "phone", "interest", "guardianConsent"] as const).find((k) => found[k]);
+      if (first) document.getElementById(`${uid}-${first}`)?.focus();
+      return;
+    }
+    setBusy(true);
+    try {
+      const res = await fetch("/api/access", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...v, marketingConsent: v.marketingConsent && !minor, source, elapsedMs: Date.now() - openedAt }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.ok) return onGranted({ displayName: data.displayName, ageGroup: data.ageGroup });
+      setErrors({ ...(data.errors ?? {}), form: data.error ?? "Something went wrong. Please try again." });
+    } catch {
+      setErrors({ form: "We could not reach the server. Check your connection and try again." });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const desc = (k: keyof FieldErrors) => (errors[k] ? `${uid}-${k}-error` : undefined);
+
+  return (
+    <form onSubmit={submit} noValidate className="relative">
+      <div className="flex items-start gap-3">
+        <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary" aria-hidden="true">
+          <ShieldCheck className="size-5" />
+        </span>
+        <div>
+          <h2 id="access-gate-title" className="text-xl leading-tight font-semibold tracking-tight text-foreground sm:text-2xl">{copy.title}</h2>
+          <p className="mt-1 text-[15px] leading-relaxed text-muted-foreground">{copy.text}</p>
+        </div>
+      </div>
+      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+        Your details help us provide access to selected Techno Gurukul resources, projects and community features.
+      </p>
+
+      <div className="mt-5 space-y-4">
+        <div>
+          <Label htmlFor={`${uid}-name`} required>Full name</Label>
+          <input id={`${uid}-name`} value={v.name} onChange={(e) => set("name", e.target.value)} maxLength={LIMITS.name} autoComplete="name" aria-invalid={!!errors.name} aria-describedby={desc("name")} className={cn(FIELD, errors.name && INVALID)} />
+          <ErrorText id={`${uid}-name-error`}>{errors.name}</ErrorText>
+        </div>
+        <div>
+          <Label htmlFor={`${uid}-email`} required>Email address</Label>
+          <input id={`${uid}-email`} type="email" inputMode="email" value={v.email} onChange={(e) => set("email", e.target.value)} maxLength={LIMITS.email} autoComplete="email" aria-invalid={!!errors.email} aria-describedby={desc("email")} className={cn(FIELD, errors.email && INVALID)} />
+          <ErrorText id={`${uid}-email-error`}>{errors.email}</ErrorText>
+        </div>
+        <div>
+          <Label htmlFor={`${uid}-phone`} required>Phone number</Label>
+          <input id={`${uid}-phone`} type="tel" inputMode="tel" value={v.phone} onChange={(e) => set("phone", e.target.value)} maxLength={20} autoComplete="tel" aria-invalid={!!errors.phone} aria-describedby={desc("phone")} className={cn(FIELD, errors.phone && INVALID)} />
+          <ErrorText id={`${uid}-phone-error`}>{errors.phone}</ErrorText>
+        </div>
+        <div>
+          <Label htmlFor={`${uid}-interest`}>I&rsquo;m interested in</Label>
+          <select id={`${uid}-interest`} value={v.interest} onChange={(e) => set("interest", e.target.value)} aria-invalid={!!errors.interest} aria-describedby={desc("interest")} className={cn(FIELD, "appearance-auto", errors.interest && INVALID)}>
+            <option value="">Select an option</option>
+            {INTERESTS.map((i) => (
+              <option key={i} value={i}>{i}</option>
+            ))}
+          </select>
+          <ErrorText id={`${uid}-interest-error`}>{errors.interest}</ErrorText>
+        </div>
+
+        <fieldset>
+          <legend className="mb-1.5 text-sm font-medium text-foreground">
+            Your age<span aria-hidden="true" className="text-destructive"> *</span>
+            <span className="sr-only"> (required)</span>
+          </legend>
+          <div className="flex flex-wrap gap-2">
+            {([["adult", "18 or older"], ["minor", "Under 18"]] as const).map(([val, label]) => (
+              <label key={val} className={cn("flex min-h-11 cursor-pointer items-center gap-2 rounded-xl border px-4 text-[15px] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary", v.ageGroup === val ? "border-primary bg-primary/10 font-medium text-foreground" : "border-primary/25 text-muted-foreground hover:border-primary/45")}>
+                <input type="radio" name={`${uid}-age`} value={val} checked={v.ageGroup === val} onChange={() => set("ageGroup", val)} className="size-4 accent-[#0c709a]" />
+                {label}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        {minor && (
+          <div className="rounded-xl border border-primary/20 bg-accent/70 p-4 text-sm leading-relaxed text-foreground/90">
+            <p>If you are under 18, a parent or guardian needs to agree to you sharing these details. We do not send promotional messages to visitors under 18.</p>
+            <label className="mt-3 flex cursor-pointer items-start gap-3">
+              <input id={`${uid}-guardianConsent`} type="checkbox" checked={v.guardianConsent} onChange={(e) => set("guardianConsent", e.target.checked)} aria-invalid={!!errors.guardianConsent} aria-describedby={desc("guardianConsent")} className="mt-0.5 size-5 shrink-0 accent-[#0c709a]" />
+              <span>My parent or guardian has agreed to me sharing these details with Techno Gurukul.</span>
+            </label>
+            <ErrorText id={`${uid}-guardianConsent-error`}>{errors.guardianConsent}</ErrorText>
+          </div>
+        )}
+
+        <label className={cn("flex items-start gap-3 text-sm leading-relaxed", minor ? "cursor-not-allowed opacity-60" : "cursor-pointer")}>
+          <input type="checkbox" checked={v.marketingConsent && !minor} disabled={minor} onChange={(e) => set("marketingConsent", e.target.checked)} className="mt-0.5 size-5 shrink-0 accent-[#0c709a]" />
+          <span className="text-foreground/90">
+            I agree to be contacted by Techno Gurukul regarding courses, admissions, programs, resources, career opportunities, or related services.
+            <span className="block text-muted-foreground">Optional. You can still continue without ticking this, and change your mind at any time.</span>
+          </span>
+        </label>
+      </div>
+
+      <Honeypot value={v.website} onChange={(x) => set("website", x)} />
+
+      <p role="alert" className="mt-4 empty:hidden rounded-xl border border-destructive/40 bg-destructive/5 px-3.5 py-2.5 text-sm text-destructive">{errors.form}</p>
+
+      <button type="submit" disabled={busy} className={cn("mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary text-base font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-70", FOCUS)}>
+        {busy ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : null}
+        {busy ? "Please wait" : "Continue"}
+        {busy ? null : <ArrowRight className="size-4" aria-hidden="true" />}
+      </button>
+      <button type="button" onClick={onCancel} className={cn("mt-2 flex h-11 w-full items-center justify-center rounded-full text-sm font-medium text-muted-foreground hover:bg-muted", FOCUS)}>
+        Not now
+      </button>
+
+      <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
+        By continuing, you acknowledge the{" "}
+        <Link href="/privacy-policy" target="_blank" className={LINK}>Privacy Policy</Link> and consent to the processing described for providing this access. See also the{" "}
+        <Link href="/terms" target="_blank" className={LINK}>Terms of Use</Link>. Access is kept on this device with a cookie, described in the{" "}
+        <Link href="/cookie-policy" target="_blank" className={LINK}>Cookie Policy</Link>.
+      </p>
+    </form>
+  );
+}

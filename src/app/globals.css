@@ -220,3 +220,13 @@
     animation: none;
   }
 }
+
+.access-dialog {
+  animation: course-promo-in 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .access-dialog {
+    animation: none;
+  }
+}

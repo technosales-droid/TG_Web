@@ -42,6 +42,9 @@ const nextConfig: NextConfig = {
       // Faculty are shown on the Faculty & Facilities page; there are no per-member pages.
       { source: "/faculty", destination: "/about/facilities#faculty", permanent: true },
       { source: "/faculty/:slug", destination: "/about/facilities#faculty", permanent: true },
+      // The Privacy Policy and Terms moved out of /legal.
+      { source: "/legal/privacy-policy", destination: "/privacy-policy", permanent: true },
+      { source: "/legal/terms-conditions", destination: "/terms", permanent: true },
       // Career Paths was retired and replaced by Blogs.
       { source: "/career-paths", destination: "/blogs", permanent: true },
       { source: "/career-paths/:slug", destination: "/blogs", permanent: true },

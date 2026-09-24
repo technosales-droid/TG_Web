@@ -56,7 +56,7 @@ export const SORT_OPTIONS: { value: SortKey; label: string }[] = [
   { value: "za", label: "Z–A" },
 ];
 
-export const CREATOR_LABEL = { student: "Student Work", faculty: "Faculty Work" } as const;
+export const CREATOR_LABEL = { student: "Student Work", faculty: "Faculty Work", institute: "Techno Gurukul Work", other: "Project" } as const;
 
 /** "Sample Student Project" while the record is a sample, otherwise the creator name. */
 export const sampleLabel = (p: Project) =>

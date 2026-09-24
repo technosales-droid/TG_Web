@@ -35,10 +35,14 @@ export const footerNavigation: FooterGroup[] = [
 ];
 
 export const footerLegal: NavLink[] = [
-  { label: "Privacy Policy", href: "/legal/privacy-policy" },
-  { label: "Terms & Conditions", href: "/legal/terms-conditions" },
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Cookie Policy", href: "/cookie-policy" },
+  { label: "Terms of Use", href: "/terms" },
+  { label: "Community Guidelines", href: "/community-guidelines" },
+  { label: "Privacy Requests", href: "/privacy-requests" },
   { label: "Refund Policy", href: "/legal/refund-policy" },
   { label: "Disclaimer", href: "/legal/disclaimer" },
+  { label: "Contact", href: "/contact" },
 ];
 
 // Set `href` to the verified profile URL to activate an icon. Still unverified profiles stay `null`.

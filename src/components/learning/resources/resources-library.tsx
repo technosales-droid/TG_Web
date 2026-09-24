@@ -3,15 +3,19 @@
 import { useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { cn } from "cn";
 import { FileText, Layers, ListChecks, Presentation, Video } from "lucide-react";
-import { RESOURCES } from "@/data/resources";
+import { ResourceCards } from "@/components/learning/gated/gated-cards";
+import { RESOURCES, isResourcePublic } from "@/data/resources";
 import { FilterRail, FilterSheet } from "./resources-filters";
 import { ActiveFilters, QuickBrowse, ResultsToolbar, SearchField } from "./resources-toolbar";
 import {
   EMPTY_STATE,
   applyPatch,
   buildFacets,
+  filterResources,
   isFiltering,
   parseSearch,
+  resourceSearchText,
+  sortResources,
   toSearch,
   type ResourceState,
 } from "./resource-utils";
@@ -20,6 +24,10 @@ const FOCUS = "focus-visible:outline-2 focus-visible:outline-solid focus-visible
 
 // The filter options come from the data. The library itself is empty until real resources are published.
 const FACETS = buildFacets(RESOURCES);
+
+// Only real, published resources are listed. Cards show the public preview; the file opens through the access gate.
+const PUBLIC = RESOURCES.filter(isResourcePublic);
+const INDEX = PUBLIC.map((resource) => ({ resource, haystack: resourceSearchText(resource) }));
 
 // The URL is the single source of truth for search, filters, sort and view, so a refresh restores them.
 // The server snapshot is "" so the first render matches the server; the real query string follows on the client.
@@ -62,6 +70,7 @@ export function ResourcesLibrary() {
   const opener = useRef<HTMLElement | null>(null);
 
   const filtering = isFiltering(state);
+  const results = useMemo(() => sortResources(filterResources(INDEX, state), state.sort), [state]);
 
   const commit = (next: ResourceState) => writeSearch(toSearch(next));
   // Reads the URL at call time, so two changes in quick succession never overwrite each other.
@@ -83,7 +92,7 @@ export function ResourcesLibrary() {
           <div className="mt-6">
             <ResultsToolbar
               state={state}
-              countText="The library opens soon."
+              countText={PUBLIC.length === 0 ? "The library opens soon." : `${results.length} ${results.length === 1 ? "resource" : "resources"}`}
               onChange={update}
               onOpenFilters={(el) => {
                 opener.current = el;
@@ -102,6 +111,7 @@ export function ResourcesLibrary() {
                 </div>
               )}
 
+              {PUBLIC.length === 0 ? (
               <div className="flex min-h-[26rem] flex-col justify-between rounded-3xl border border-dashed border-primary/30 bg-card p-8 sm:p-12">
                 <div>
                   <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3.5 py-1.5 text-xs font-semibold tracking-[0.2em] text-primary uppercase">
@@ -134,6 +144,13 @@ export function ResourcesLibrary() {
                   ))}
                 </ul>
               </div>
+              ) : results.length > 0 ? (
+                <ResourceCards resources={results} />
+              ) : (
+                <p role="status" className="rounded-3xl border border-dashed border-primary/30 bg-card p-8 text-center text-muted-foreground">
+                  No resources match these filters.
+                </p>
+              )}
             </div>
           </div>
         </div>

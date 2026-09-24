@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { SiteHeader } from "@/components/navigation/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { AccessProvider } from "@/components/access/access-provider";
+import { CookieSettings } from "@/components/access/cookie-settings";
 import { CoursePromotionPopup } from "@/components/promotions/course-promotion-popup";
 import { JsonLd } from "@/components/seo/json-ld";
 import { footerSocials } from "@/components/layout/footer-data";
@@ -53,21 +55,24 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${montserrat.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
-        {SCHEMA.map((d) => (
-          <JsonLd key={d["@type"]} data={d} />
-        ))}
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
-        >
-          Skip to content
-        </a>
-        <SiteHeader />
-        <div id="main-content" tabIndex={-1} className="flex flex-1 flex-col outline-none">
-          {children}
-        </div>
-        <SiteFooter />
-        <CoursePromotionPopup />
+        <AccessProvider>
+          {SCHEMA.map((d) => (
+            <JsonLd key={d["@type"]} data={d} />
+          ))}
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
+          >
+            Skip to content
+          </a>
+          <SiteHeader />
+          <div id="main-content" tabIndex={-1} className="flex flex-1 flex-col outline-none">
+            {children}
+          </div>
+          <SiteFooter />
+          <CoursePromotionPopup />
+          <CookieSettings />
+        </AccessProvider>
       </body>
     </html>
   );

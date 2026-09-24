@@ -8,8 +8,10 @@
 // "Resource Preview Coming Soon", and nothing is downloadable. There are no authors, no dates and no
 // invented sources.
 //
-// To publish a real resource: set `sample: false`, give `media.url` (or `externalUrl`) a real path or URL
-// and set `status: "available"`. Filters, search, counts and the URL state all derive from this list.
+// To publish a real resource: set `sample: false` and `status: "available"`, and put the file or link in
+// src/server/gated-content.ts. This file is sent to every visitor's browser, so it holds only the public preview
+// (title, description, type, thumbnail). The file itself is only sent to a visitor with an access session, so a real
+// URL must never be written here; the check at the bottom fails the build if it is.
 //
 // Industry, program and course names must match the catalogue (src/data/catalogue.ts); a resource that is
 // not tied to one keeps them null ("General"). That is checked at the bottom of this file.
@@ -500,12 +502,15 @@ function validateResources(list: Resource[]) {
     }
 
     // URLs are optional for sample resources, but any URL given must be usable, and "available" needs a real asset.
+    if (!r.sample && (r.media?.url || r.externalUrl)) fail(`"${r.slug}": the file or link belongs in src/server/gated-content.ts, not in this public file`);
     const urls = [r.media?.url, r.externalUrl, r.thumbnail].filter((u): u is string => typeof u === "string");
     for (const u of urls) if (!isUrl(u)) fail(`"${r.slug}" has an invalid url "${u}"`);
     if (r.externalUrl && !/^https?:\/\//.test(r.externalUrl)) fail(`"${r.slug}" externalUrl must be an absolute http(s) URL`);
-    if (r.status === "available" && !(r.media?.url || r.externalUrl)) fail(`"${r.slug}" is available but has no url`);
   }
   if (list.filter((r) => r.featured).length > 4) fail("at most four resources may be featured");
 }
 
 validateResources(RESOURCES);
+
+/** Whether a resource may appear on the site: real (not a sample) and marked available. */
+export const isResourcePublic = (r: Resource) => !r.sample && r.status === "available";

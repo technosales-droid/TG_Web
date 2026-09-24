@@ -15,8 +15,11 @@ const STATIC_PATHS = [
   "/learning/resources",
   "/blogs",
   "/contact",
-  "/legal/privacy-policy",
-  "/legal/terms-conditions",
+  "/privacy-policy",
+  "/cookie-policy",
+  "/terms",
+  "/community-guidelines",
+  "/privacy-requests",
   "/legal/refund-policy",
   "/legal/disclaimer",
 ];

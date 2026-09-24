@@ -4,11 +4,10 @@ import { DESCRIPTION, HEADING, LAST_UPDATED, PRIVACY_SECTIONS } from "@/componen
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Techno Gurukul",
-  description: "Read the Techno Gurukul Privacy Policy to understand how information is collected, used, protected and managed.",
+  description: "Read how Techno Gurukul collects, uses and protects personal information, and how to exercise your rights.",
+  alternates: { canonical: "/privacy-policy" },
 };
 
 export default function Page() {
-  return (
-    <LegalLayout heading={HEADING} description={DESCRIPTION} lastUpdated={LAST_UPDATED} sections={PRIVACY_SECTIONS} />
-  );
+  return <LegalLayout heading={HEADING} description={DESCRIPTION} lastUpdated={LAST_UPDATED} sections={PRIVACY_SECTIONS} />;
 }

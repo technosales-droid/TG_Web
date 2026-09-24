@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { Tbc, type LegalSectionData } from "./legal-layout";
 
-export const HEADING = "Terms & Conditions";
+export const HEADING = "Terms of Use";
 export const DESCRIPTION =
   "These terms explain the rules that apply when you access and use the Techno Gurukul website and services.";
-export const LAST_UPDATED = "23 September 2026";
+export const LAST_UPDATED = "24 September 2026";
 
 const EMAIL = "hello@technogurukul.com";
 
@@ -14,7 +14,7 @@ export const TERMS_SECTIONS: LegalSectionData[] = [
     title: "Acceptance of Terms",
     body: (
       <p>
-        By accessing or using this website, you agree to these Terms &amp; Conditions. If you do not agree with any
+        By accessing or using this website, you agree to these Terms of Use. If you do not agree with any
         part of these terms, please do not use the website. These terms apply to all visitors, prospective students
         and enrolled students who interact with the website.
       </p>
@@ -147,7 +147,7 @@ export const TERMS_SECTIONS: LegalSectionData[] = [
         <Link href="/legal/refund-policy" className="font-medium text-primary underline-offset-2 hover:underline">
           Refund &amp; Cancellation Policy
         </Link>
-        , which forms part of these Terms &amp; Conditions.
+        , which forms part of these Terms of Use.
       </p>
     ),
   },
@@ -165,17 +165,64 @@ export const TERMS_SECTIONS: LegalSectionData[] = [
     ),
   },
   {
-    id: "user-submitted-information",
-    title: "User-Submitted Information",
+    id: "access-profile",
+    title: "Access Profiles and Restricted Content",
     body: (
-      <p>
-        Information you submit to us through the enquiry form or otherwise is used as described in our{" "}
-        <Link href="/legal/privacy-policy" className="font-medium text-primary underline-offset-2 hover:underline">
-          Privacy Policy
-        </Link>
-        . Please do not submit information that is false or misleading, that you are not authorised to share, or
-        that infringes the rights of a third party.
-      </p>
+      <>
+        <p>
+          Some projects, resources and community features are available only after you create an access profile with your
+          name, email address and phone number. Please give accurate details and keep them up to date. Your access is
+          personal to you: do not share it or use another person&rsquo;s details.
+        </p>
+        <p>
+          We use your details as described in our{" "}
+          <Link href="/privacy-policy" className="font-medium text-primary underline-offset-2 hover:underline">
+            Privacy Policy
+          </Link>
+          . If you are under 18, a parent or guardian must agree before you create a profile. We may restrict or end
+          access if these terms or the Community Guidelines are broken, or if details are found to be false.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: "user-content",
+    title: "Comments, Reviews and Other Content You Post",
+    body: (
+      <>
+        <p>
+          You are responsible for what you post. Keep to the{" "}
+          <Link href="/community-guidelines" className="font-medium text-primary underline-offset-2 hover:underline">
+            Community Guidelines
+          </Link>
+          , and only post content you have the right to share. You keep ownership of it, and you give Techno Gurukul
+          permission to display it on the website for as long as it is published, and to remove or edit it for
+          moderation.
+        </p>
+        <p>
+          We may review, hide or remove content at our discretion, for example if it is abusive, spam, unlawful, or
+          contains someone else&rsquo;s personal information. Opinions in comments and reviews are those of the people who
+          wrote them, not of Techno Gurukul.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: "project-and-student-work",
+    title: "Projects and Student and Faculty Work",
+    body: (
+      <>
+        <p>
+          Projects shown on the website may belong to students, faculty or Techno Gurukul. Student work is shown only
+          with its creator&rsquo;s permission (and their parent&rsquo;s or guardian&rsquo;s, for a minor), and the creator can
+          ask for it to be credited differently or removed by contacting us.
+        </p>
+        <p>
+          Unless a project says otherwise, it is shared for your own learning. You may not copy, republish, sell or
+          present it as your own, and you must respect any attribution shown. Trademarks, tools and third-party material
+          shown in a project belong to their owners.
+        </p>
+      </>
     ),
   },
   {
@@ -270,7 +317,7 @@ export const TERMS_SECTIONS: LegalSectionData[] = [
     title: "Changes to These Terms",
     body: (
       <p>
-        We may update these Terms &amp; Conditions from time to time, for example as the website&rsquo;s features
+        We may update these Terms of Use from time to time, for example as the website&rsquo;s features
         change. Continued use of the website after an update means you accept the revised terms. The &ldquo;Last
         updated&rdquo; date at the top of this page reflects the most recent revision.
       </p>
@@ -305,7 +352,7 @@ export const TERMS_SECTIONS: LegalSectionData[] = [
     title: "Contact Information",
     body: (
       <p>
-        Questions about these Terms &amp; Conditions can be sent to{" "}
+        Questions about these Terms of Use can be sent to{" "}
         <a href={`mailto:${EMAIL}`} className="font-medium text-primary underline-offset-2 hover:underline">
           {EMAIL}
         </a>

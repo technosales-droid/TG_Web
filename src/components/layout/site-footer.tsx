@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 import { cn } from "cn";
+import { CookieSettingsButton } from "@/components/access/cookie-settings";
+import { ConsentIframe } from "./consent-iframe";
 import {
   footerBrand,
   footerContact,
@@ -56,15 +58,7 @@ function LocationCard() {
   if (mapUrl && mapEmbedUrl) {
     return (
       <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[1.5rem] border border-background/15 sm:aspect-[2/1] xl:aspect-[21/9]">
-        <iframe
-          src={mapEmbedUrl}
-          title={`Map showing ${name} ${type}`}
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          tabIndex={-1}
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 size-full border-0"
-        />
+        <ConsentIframe src={mapEmbedUrl} title={`Map showing ${name} ${type}`} />
         <a
           href={mapUrl}
           target="_blank"
@@ -273,6 +267,11 @@ export function SiteFooter() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <CookieSettingsButton
+                  className={cn("block py-1.5 text-sm text-background/75 transition-colors duration-200 hover:text-background", focusRing)}
+                />
+              </li>
             </ul>
           </nav>
         </div>

@@ -2,6 +2,7 @@
 
 import { useId, useState, type FormEvent } from "react";
 import { MessageCircle, Star } from "lucide-react";
+import { useAccess } from "@/components/access/access-provider";
 import { addComment, addReview, LIMITS, useBlogFeedback, type Comment } from "@/lib/blog-feedback";
 import { cn } from "cn";
 
@@ -48,6 +49,9 @@ function Composer({
   submitLabel,
   rating,
   autoFocus,
+  author,
+  beforeOpen,
+  onSignOut,
   onSubmit,
   onCancel,
 }: {
@@ -56,19 +60,22 @@ function Composer({
   submitLabel: string;
   rating?: boolean;
   autoFocus?: boolean;
+  /** First name of the signed-in visitor. Posting always uses it; there is no name field. */
+  author: string;
+  /** Runs before the composer opens: sends a visitor without an access profile through the AccessGate. */
+  beforeOpen?: () => Promise<boolean>;
+  onSignOut?: () => void;
   onSubmit: (v: { name: string; text: string; rating: number }) => void;
   onCancel?: () => void;
 }) {
   const uid = useId();
   const [open, setOpen] = useState(Boolean(autoFocus));
-  const [name, setName] = useState("");
   const [text, setText] = useState("");
   const [stars, setStars] = useState(0);
   const [error, setError] = useState("");
 
   const reset = () => {
     setOpen(false);
-    setName("");
     setText("");
     setStars(0);
     setError("");
@@ -77,10 +84,10 @@ function Composer({
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) return setError("Please add your name.");
+    if (!author) return setError("Please continue with your access profile to post.");
     if (rating && !stars) return setError("Please choose a star rating.");
     if (text.trim().length < 5) return setError("Please write a little more.");
-    onSubmit({ name: name.trim(), text: text.trim(), rating: stars });
+    onSubmit({ name: author, text: text.trim(), rating: stars });
     reset();
   };
 
@@ -88,7 +95,9 @@ function Composer({
     return (
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={async () => {
+          if (!beforeOpen || (await beforeOpen())) setOpen(true);
+        }}
         className={cn("flex w-full items-center gap-3 rounded-2xl border border-primary/15 bg-card p-3 text-left transition-colors hover:bg-muted", FOCUS)}
       >
         <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-muted text-primary" aria-hidden="true">
@@ -101,9 +110,17 @@ function Composer({
 
   return (
     <form onSubmit={submit} className="space-y-3 rounded-2xl border border-primary/20 bg-card p-4 sm:p-5" noValidate>
-      <div className="flex flex-wrap items-center gap-3">
-        <label htmlFor={`${uid}-name`} className="sr-only">Your name</label>
-        <input id={`${uid}-name`} value={name} onChange={(e) => setName(e.target.value)} maxLength={LIMITS.name} placeholder="Your name" autoComplete="name" className={cn(FIELD, "sm:max-w-xs")} />
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="text-sm text-muted-foreground">
+          Posting as <span className="font-semibold text-foreground">{author}</span>
+          {onSignOut && (
+            <>
+              {" "}
+              &middot;{" "}
+              <button type="button" onClick={onSignOut} className={cn("rounded font-medium text-primary underline underline-offset-2", FOCUS)}>Not you?</button>
+            </>
+          )}
+        </p>
         {rating && (
           <fieldset className="flex items-center gap-1">
             <legend className="sr-only">Your rating</legend>
@@ -130,10 +147,11 @@ function Composer({
   );
 }
 
-function CommentItem({ c, replies, onReply, replying, onDone, slug }: {
+function CommentItem({ c, replies, onReply, replying, onDone, slug, author }: {
+  author: string;
   c: Comment;
   replies: Comment[];
-  onReply: () => void;
+  onReply: () => void | Promise<void>;
   replying: boolean;
   onDone: () => void;
   slug: string;
@@ -167,6 +185,7 @@ function CommentItem({ c, replies, onReply, replying, onDone, slug }: {
             {replying && (
               <Composer
                 autoFocus
+                author={author}
                 placeholder={`Reply to ${c.name}...`}
                 limit={LIMITS.comment}
                 submitLabel="Reply"
@@ -183,6 +202,8 @@ function CommentItem({ c, replies, onReply, replying, onDone, slug }: {
 
 export function ArticleFeedback({ slug }: { slug: string }) {
   const { reviews, comments } = useBlogFeedback(slug);
+  const { session, requireAccess, signOut } = useAccess({ load: true });
+  const author = session.status === "granted" ? session.displayName : "";
   const [replyTo, setReplyTo] = useState<string | null>(null);
   const top = comments.filter((c) => !c.parentId);
   const repliesOf = (id: string) => comments.filter((c) => c.parentId === id);
@@ -195,6 +216,9 @@ export function ArticleFeedback({ slug }: { slug: string }) {
         <div className="mt-5 space-y-4">
           <Composer
             rating
+            author={author}
+            beforeOpen={() => requireAccess({ sourceType: "review", sourceId: slug })}
+            onSignOut={author ? signOut : undefined}
             placeholder="Share your thoughts about this article..."
             limit={LIMITS.review}
             submitLabel="Post review"
@@ -226,6 +250,9 @@ export function ArticleFeedback({ slug }: { slug: string }) {
         <h2 id="discussion-heading" className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">Discussion</h2>
         <div className="mt-5 space-y-5">
           <Composer
+            author={author}
+            beforeOpen={() => requireAccess({ sourceType: "comment", sourceId: slug })}
+            onSignOut={author ? signOut : undefined}
             placeholder="Add a comment..."
             limit={LIMITS.comment}
             submitLabel="Comment"
@@ -240,9 +267,12 @@ export function ArticleFeedback({ slug }: { slug: string }) {
                   key={c.id}
                   c={c}
                   slug={slug}
+                  author={author}
                   replies={repliesOf(c.id)}
                   replying={replyTo === c.id}
-                  onReply={() => setReplyTo(c.id)}
+                  onReply={async () => {
+                    if (await requireAccess({ sourceType: "comment", sourceId: slug })) setReplyTo(c.id);
+                  }}
                   onDone={() => setReplyTo(null)}
                 />
               ))}

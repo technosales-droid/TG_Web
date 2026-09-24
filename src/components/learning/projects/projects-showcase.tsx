@@ -3,15 +3,19 @@
 import { useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { cn } from "cn";
 import { FileText, Image as ImageIcon, Layers, Presentation, Wrench } from "lucide-react";
-import { PROJECTS } from "@/data/projects";
+import { ProjectCards } from "@/components/learning/gated/gated-cards";
+import { PROJECTS, isProjectPublic } from "@/data/projects";
 import { FilterRail, FilterSheet, type FilterGroup } from "./projects-filters";
 import { ActiveFilters, BrowseBy, QuickModes, ResultsToolbar, SearchField } from "./projects-toolbar";
 import {
   EMPTY_STATE,
   applyPatch,
   buildFacets,
+  filterProjects,
   isFiltering,
   parseSearch,
+  projectSearchText,
+  sortProjects,
   toSearch,
   type LibraryState,
 } from "./project-utils";
@@ -20,6 +24,11 @@ const FOCUS = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visi
 
 // The filter options come from the data. The catalogue itself is empty until real work is added.
 const FACETS = buildFacets(PROJECTS);
+
+// Only real, published work with the creator's permission is listed (see isProjectPublic). Cards show the public preview;
+// the full project opens through the access gate.
+const PUBLIC = PROJECTS.filter(isProjectPublic);
+const INDEX = PUBLIC.map((project) => ({ project, haystack: projectSearchText(project) }));
 
 // The URL is the single source of truth for filters, search, sort and view, so a refresh restores them.
 // The server snapshot is "" so the first render matches the server; the real query string follows on the client.
@@ -71,6 +80,7 @@ export function ProjectsShowcase() {
   const opener = useRef<HTMLElement | null>(null);
 
   const filtering = isFiltering(state);
+  const results = useMemo(() => sortProjects(filterProjects(INDEX, state), state.sort), [state]);
 
   const commit = (next: LibraryState) => writeSearch(toSearch(next));
   // Reads the URL at call time, so two changes in quick succession never overwrite each other.
@@ -102,7 +112,7 @@ export function ProjectsShowcase() {
           <div className="mt-6">
             <ResultsToolbar
               state={state}
-              countText="The catalogue opens soon."
+              countText={PUBLIC.length === 0 ? "The catalogue opens soon." : `${results.length} ${results.length === 1 ? "project" : "projects"}`}
               onChange={update}
               onOpenFilters={(el) => {
                 opener.current = el;
@@ -121,6 +131,7 @@ export function ProjectsShowcase() {
                 </div>
               )}
 
+              {PUBLIC.length === 0 ? (
               <div className="flex min-h-[26rem] flex-col justify-between rounded-3xl border border-dashed border-primary/30 bg-card p-8 sm:p-12">
                 <div>
                   <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3.5 py-1.5 text-xs font-semibold tracking-[0.2em] text-primary uppercase">
@@ -154,6 +165,13 @@ export function ProjectsShowcase() {
                   ))}
                 </ul>
               </div>
+              ) : results.length > 0 ? (
+                <ProjectCards projects={results} />
+              ) : (
+                <p role="status" className="rounded-3xl border border-dashed border-primary/30 bg-card p-8 text-center text-muted-foreground">
+                  No projects match these filters.
+                </p>
+              )}
             </div>
           </div>
         </div>
