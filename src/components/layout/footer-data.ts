@@ -30,7 +30,7 @@ export const footerNavigation: FooterGroup[] = [
   },
   {
     title: "Company",
-    links: [{ label: "About Us", href: "/about" }, ...ABOUT_LINKS],
+    links: ABOUT_LINKS,
   },
 ];
 

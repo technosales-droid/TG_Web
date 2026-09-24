@@ -74,9 +74,7 @@ export const LEARNING_LINKS: NavLink[] = [
 
 
 export const ABOUT_LINKS: NavLink[] = [
-  { label: "Mission", href: "/about/mission" },
-  { label: "Why Techno Gurukul", href: "/about/why-technogurukul" },
-  { label: "Our Approach", href: "/about/approach" },
+  { label: "About Techno Gurukul", href: "/about" },
   { label: "Facilities & Faculty", href: "/about/facilities" },
 ];
 

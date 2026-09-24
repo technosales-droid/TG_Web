@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-// Faculty is now covered by the combined About destination; no per-member pages exist.
+// Faculty are shown as cards on the Faculty & Facilities page; there are no per-member pages.
 export default function FacultyMemberPage() {
   redirect("/about/facilities");
 }

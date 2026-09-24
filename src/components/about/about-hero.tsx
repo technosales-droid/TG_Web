@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronRight, Hammer } from "lucide-react";
+import { BookOpen, ChevronRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
 import { GRADIENT_TEXT } from "@/components/ui/section-header";
@@ -52,7 +52,7 @@ function Collage() {
 
         {/* Circular emblem between the two halves of the collage */}
         <div className="absolute top-[32%] left-[1%] hidden aspect-square w-[13%] items-center justify-center rounded-full bg-[#141b33] ring-[length:max(3px,0.9cqw)] ring-white sm:flex">
-          <svg aria-hidden="true" viewBox="0 0 100 100" className="absolute inset-0 size-full">
+          <svg aria-hidden="true" viewBox="0 0 100 100" className="absolute inset-0 size-full motion-safe:animate-[spin_18s_linear_infinite]">
             <defs>
               <path id="emblem-path" d="M50 50 m-38 0 a38 38 0 1 1 76 0 a38 38 0 1 1 -76 0" />
             </defs>
@@ -60,7 +60,7 @@ function Collage() {
               <textPath href="#emblem-path" textLength="232" lengthAdjust="spacing">PRACTISE · BUILD · SHOW · </textPath>
             </text>
           </svg>
-          <Hammer className="size-[34%] text-brand-green" aria-hidden="true" />
+          <BookOpen className="size-[34%] text-brand-green" aria-hidden="true" />
         </div>
       </div>
     </div>

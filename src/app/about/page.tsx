@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
+import { AboutEnvironment, AboutTeach, AboutWho, AboutWhy } from "@/components/about/about-sections";
+import { AboutStages } from "@/components/about/about-stages";
 import { AboutDirections } from "@/components/about/about-directions";
-import { AboutFinalCta } from "@/components/about/about-final-cta";
+import { LearningCta } from "@/components/learning/overview/learning-cta";
 import { AboutHero } from "@/components/about/about-hero";
-import { AboutLearning } from "@/components/about/about-learning";
-import { AboutPhilosophy } from "@/components/about/about-philosophy";
 
 export const metadata: Metadata = {
   title: "About Techno Gurukul | Practical Learning & Career Readiness",
@@ -15,10 +15,17 @@ export default function Page() {
   return (
     <main>
       <AboutHero />
-      <AboutPhilosophy />
-      <AboutLearning />
+      <AboutWho />
+      <AboutStages />
+      <AboutTeach />
       <AboutDirections />
-      <AboutFinalCta />
+      <AboutWhy />
+      <AboutEnvironment />
+      <LearningCta
+        eyebrow="Ready to begin?"
+        headline={["Start Your", "Learning Journey."]}
+        text="Explore the programs and learning experience available at Techno Gurukul, and choose where to start building."
+      />
     </main>
   );
 }
