@@ -188,3 +188,35 @@
     animation: none;
   }
 }
+
+@keyframes course-promo-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.course-promo {
+  animation: course-promo-in 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.course-promo::backdrop {
+  animation: course-promo-fade 260ms ease-out both;
+}
+
+@keyframes course-promo-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .course-promo,
+  .course-promo::backdrop {
+    animation: none;
+  }
+}

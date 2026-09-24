@@ -15,7 +15,7 @@ export interface Testimonial {
   avatar: string | null;
 }
 
-export const TESTIMONIALS: Testimonial[] = [
+const DEMO_TESTIMONIALS: Testimonial[] = [
   {
     id: "demo-1",
     quote: "The hands-on sessions made every topic click. I stopped memorising and started actually building campaigns.",
@@ -62,3 +62,6 @@ export const TESTIMONIALS: Testimonial[] = [
     avatar: null,
   },
 ];
+
+// Made-up quotes and ratings are shown in development only, so they can never appear on the live site.
+export const TESTIMONIALS: Testimonial[] = process.env.NODE_ENV === "production" ? [] : DEMO_TESTIMONIALS;

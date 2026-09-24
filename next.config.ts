@@ -1,13 +1,51 @@
 import type { NextConfig } from "next";
 
+// Security headers. The CSP allows what the site actually uses: its own scripts, styles (Next inlines both), images,
+// video and self-hosted fonts, plus the single Google Maps embed in the footer and contact page. It is applied to
+// production builds only, because the dev server needs eval and websockets for hot reload.
+const csp = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob:",
+  "media-src 'self'",
+  "font-src 'self' data:",
+  "connect-src 'self'",
+  "frame-src https://www.google.com",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  "upgrade-insecure-requests",
+].join("; ");
+
+const securityHeaders = [
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), usb=()" },
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "Strict-Transport-Security", value: "max-age=31536000" },
+  ...(process.env.NODE_ENV === "production" ? [{ key: "Content-Security-Policy", value: csp }] : []),
+];
+
 const nextConfig: NextConfig = {
-  // The Mission, Why and Approach pages are folded into /about.
+  poweredByHeader: false,
+
+  async headers() {
+    return [{ source: "/:path*", headers: securityHeaders }];
+  },
+
   async redirects() {
-    return ["mission", "why-technogurukul", "approach"].map((slug) => ({
-      source: `/about/${slug}`,
-      destination: "/about",
-      permanent: true,
-    }));
+    return [
+      // The Mission, Why and Approach pages are folded into /about.
+      ...["mission", "why-technogurukul", "approach"].map((slug) => ({ source: `/about/${slug}`, destination: "/about", permanent: true })),
+      // Faculty are shown on the Faculty & Facilities page; there are no per-member pages.
+      { source: "/faculty", destination: "/about/facilities#faculty", permanent: true },
+      { source: "/faculty/:slug", destination: "/about/facilities#faculty", permanent: true },
+      // Career Paths was retired and replaced by Blogs.
+      { source: "/career-paths", destination: "/blogs", permanent: true },
+      { source: "/career-paths/:slug", destination: "/blogs", permanent: true },
+    ];
   },
 };
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Pause, Play } from "lucide-react";
 import { cn } from "cn";
 import { buttonVariants } from "@/components/ui/button";
 import { HERO_SLIDES } from "@/data/institute";
@@ -18,15 +18,16 @@ const ARROW =
 export function HeroCarousel() {
   const [index, setIndex] = useState(0);
   const [hovered, setHovered] = useState(false);
+  const [playing, setPlaying] = useState(true);
   const startX = useRef<number | null>(null);
   const total = HERO_SLIDES.length;
   const go = (n: number) => setIndex((n + total) % total);
 
   useEffect(() => {
-    if (hovered || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!playing || hovered || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const id = setTimeout(() => setIndex((i) => (i + 1) % total), HOLD_MS);
     return () => clearTimeout(id);
-  }, [index, hovered, total]);
+  }, [index, hovered, playing, total]);
 
   return (
     <section
@@ -93,6 +94,9 @@ export function HeroCarousel() {
                 ))}
               </div>
               <div className="flex items-center gap-2">
+                <button type="button" onClick={() => setPlaying((v) => !v)} aria-label={playing ? "Pause slideshow" : "Play slideshow"} className={ARROW}>
+                  {playing ? <Pause className="size-4" aria-hidden="true" /> : <Play className="size-4" aria-hidden="true" />}
+                </button>
                 <button type="button" onClick={() => go(index - 1)} aria-label="Previous slide" className={ARROW}>
                   <ArrowLeft className="size-4" aria-hidden="true" />
                 </button>

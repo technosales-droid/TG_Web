@@ -87,6 +87,13 @@ export interface FacultyPlaceholder {
   role: string;
   designation: string;
   media: MediaItem;
+  /** Optional profile details, shown on course pages when present. Never invented. */
+  expertise?: string;
+  experience?: string;
+  bio?: string;
+  projects?: string[];
+  certifications?: string[];
+  links?: { label: string; href: string }[];
 }
 
 // Placeholders only: no real people, roles or credentials. Replace each record when a verified profile exists.
