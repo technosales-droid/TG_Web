@@ -1,56 +1,67 @@
+import Image from "next/image";
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Hammer } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
 import { GRADIENT_TEXT } from "@/components/ui/section-header";
 
-const STAGES = [
-  { step: "Learn", label: "Concepts", indent: "" },
-  { step: "Practise", label: "Practice", indent: "sm:ml-6" },
-  { step: "Build", label: "Projects", indent: "sm:ml-12" },
-  { step: "Show", label: "Portfolio", indent: "sm:ml-[4.5rem]" },
-  { step: "Prepare", label: "Career Readiness", indent: "sm:ml-24" },
-];
-
-// Abstract learning-system staircase. Illustrative only: no statistics, dashboard, campus or student data.
-function LearningSystem() {
+// One layered collage, laid out in percentages of its own box and sized in container units so it scales as a
+// whole at every width. Every piece is absolutely positioned and overlaps its neighbours.
+function Collage() {
   return (
-    <div className="relative mx-auto w-full max-w-xl">
-      <div className="rounded-[2rem] border border-primary/10 bg-card p-4 shadow-[0_28px_56px_-32px_rgba(16,20,28,0.35)] sm:p-6">
-        <div aria-hidden="true" className="flex items-center gap-2">
-          <span className="size-2.5 rounded-full bg-primary/25" />
-          <span className="size-2.5 rounded-full bg-brand-green/40" />
-          <span className="ml-2 h-2.5 w-28 rounded-full bg-primary/15" />
+    <div className="mx-auto w-full max-w-[760px] @container">
+      <div className="relative aspect-[1.15] w-full">
+        {/* Secondary image, under everything */}
+        <div className="absolute top-[62%] left-[8%] h-[38%] w-[82%] overflow-hidden rounded-[max(14px,3.6cqw)] bg-muted">
+          <Image src="/brand/projects.jpg" alt="Learners collaborating on a practical project" fill sizes="(min-width: 1280px) 30vw, 90vw" className="object-cover object-[50%_40%]" />
         </div>
 
-        <p className="mt-5 text-sm font-semibold tracking-widest text-primary uppercase">The Learning System</p>
-        <ol aria-label="Learn, practise, build, show, prepare" className="mt-4 grid gap-2.5">
-          {STAGES.map((s, i) => {
-            const last = i === STAGES.length - 1;
-            return (
-              <li
-                key={s.step}
-                className={cn(
-                  "flex items-center justify-between gap-3 rounded-xl border px-4 py-3",
-                  s.indent,
-                  last ? "border-transparent bg-gradient-to-r from-primary to-brand-green text-white" : "border-primary/15 bg-background"
-                )}
-              >
-                <span className="flex items-center gap-3">
-                  <span
-                    aria-hidden="true"
-                    className={cn(
-                      "flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-bold",
-                      last ? "bg-white/25 text-white" : "bg-primary/10 text-primary"
-                    )}
-                   />
-                  <span className={cn("text-lg font-semibold tracking-tight", last ? "text-white" : "text-foreground")}>{s.step}</span>
-                </span>
-                <span className={cn("text-sm font-medium", last ? "text-white/85" : "text-muted-foreground")}>{s.label}</span>
-              </li>
-            );
-          })}
-        </ol>
+        {/* Main image */}
+        <div className="absolute top-0 left-[45%] h-[59.4%] w-[45%] overflow-hidden rounded-[max(16px,4.4cqw)] bg-gradient-to-b from-primary/25 to-brand-green/25">
+          <Image src="/hero/students.png" alt="Two learners with their notebooks" fill priority sizes="(min-width: 1280px) 22vw, 45vw" className="object-cover object-[74%_top]" />
+        </div>
+
+        {/* Large accent card */}
+        <div className="absolute top-0 left-[8%] group flex h-[38.5%] w-[34.4%] flex-col justify-between rounded-[max(16px,4.4cqw)] bg-primary py-[max(10px,3.2cqw)] pr-[max(10px,3cqw)] pl-[max(14px,7cqw)] text-white transition-transform duration-300 motion-safe:hover:-translate-y-1">
+          <div aria-hidden="true" className="flex -space-x-[1.6cqw]">
+            {[1, 4, 9].map((n) => (
+              <span key={n} className="relative size-[max(20px,6.4cqw)] overflow-hidden rounded-full bg-white ring-2 ring-primary">
+                <Image src={`/community/avatar-${String(n).padStart(2, "0")}.png`} alt="" fill sizes="64px" className="object-cover" />
+              </span>
+            ))}
+          </div>
+          <div>
+            <p className="text-[max(1rem,5.4cqw)] leading-[1.05] font-bold tracking-tight text-balance">Learn by Doing</p>
+            <p className="mt-[1.2cqw] text-[max(10px,2.2cqw)] leading-snug text-white/85">Practical learning at every stage.</p>
+          </div>
+        </div>
+
+        {/* Small accent card */}
+        <div className="absolute top-[41.5%] left-[8%] flex h-[18%] w-[35%] items-end justify-between overflow-hidden rounded-[max(14px,3.8cqw)] bg-brand-green pl-[max(14px,7cqw)] text-white transition-transform duration-300 motion-safe:hover:-translate-y-1">
+          <p className="self-center pr-2 text-[max(11px,2.9cqw)] leading-tight font-semibold">
+            Built Through
+            <br />
+            Practice
+          </p>
+          <div aria-hidden="true" className="flex h-[70%] items-end gap-[1cqw] pr-[3cqw]">
+            <span className="h-[35%] w-[3.6cqw] rounded-t-md bg-white/35" />
+            <span className="h-[60%] w-[3.6cqw] rounded-t-md bg-white/55" />
+            <span className="h-[85%] w-[3.6cqw] rounded-t-md bg-white/85" />
+          </div>
+        </div>
+
+        {/* Circular emblem between the two halves of the collage */}
+        <div className="absolute top-[32%] left-[1%] hidden aspect-square w-[13%] items-center justify-center rounded-full bg-[#141b33] ring-[length:max(3px,0.9cqw)] ring-white sm:flex">
+          <svg aria-hidden="true" viewBox="0 0 100 100" className="absolute inset-0 size-full">
+            <defs>
+              <path id="emblem-path" d="M50 50 m-38 0 a38 38 0 1 1 76 0 a38 38 0 1 1 -76 0" />
+            </defs>
+            <text fill="#ffffff" fontSize="9" fontWeight="600">
+              <textPath href="#emblem-path" textLength="232" lengthAdjust="spacing">PRACTISE · BUILD · SHOW · </textPath>
+            </text>
+          </svg>
+          <Hammer className="size-[34%] text-brand-green" aria-hidden="true" />
+        </div>
       </div>
     </div>
   );
@@ -99,7 +110,7 @@ export function AboutHero() {
               </div>
             </div>
 
-            <LearningSystem />
+            <Collage />
           </div>
         </div>
       </div>
