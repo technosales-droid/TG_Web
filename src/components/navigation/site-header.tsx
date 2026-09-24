@@ -17,7 +17,6 @@ import { DropdownNavItem } from "@/components/navigation/dropdown-nav-item";
 import { MobileNav } from "@/components/navigation/mobile-nav";
 import {
   ABOUT_LINKS,
-  CAREERS_LINKS,
   CTA_LINK,
   LEARNING_LINKS,
 } from "@/components/navigation/nav-data";
@@ -82,7 +81,6 @@ export function SiteHeader() {
               </NavigationMenuItem>
 
               <DropdownNavItem label="Learning" href="/learning" items={LEARNING_LINKS} />
-              <DropdownNavItem label="Careers" href="/careers-placement" items={CAREERS_LINKS} />
               <DropdownNavItem label="About" href="/about" items={ABOUT_LINKS} />
             </NavigationMenuList>
           </NavigationMenu>

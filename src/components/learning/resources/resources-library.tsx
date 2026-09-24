@@ -1,35 +1,25 @@
 "use client";
 
-import { useDeferredValue, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { cn } from "cn";
-import { RESOURCES, RESOURCE_PAGE_SIZE, type Resource } from "@/data/resources";
-import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
-import { FeaturedResource } from "./resource-card";
-import { ResourceEmptyState } from "./resource-empty-state";
-import { ResourcePreviewDrawer } from "./resource-preview";
+import { FileText, Layers, ListChecks, Presentation, Video } from "lucide-react";
+import { RESOURCES } from "@/data/resources";
 import { FilterRail, FilterSheet } from "./resources-filters";
-import { ResourcesGrid } from "./resources-grid";
 import { ActiveFilters, QuickBrowse, ResultsToolbar, SearchField } from "./resources-toolbar";
 import {
   EMPTY_STATE,
   applyPatch,
   buildFacets,
-  filterResources,
   isFiltering,
   parseSearch,
-  resourceSearchText,
-  sortResources,
   toSearch,
   type ResourceState,
 } from "./resource-utils";
 
 const FOCUS = "focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-primary";
 
-// Everything the UI offers is derived from the data, once.
+// The filter options come from the data. The library itself is empty until real resources are published.
 const FACETS = buildFacets(RESOURCES);
-const INDEX = RESOURCES.map((resource) => ({ resource, haystack: resourceSearchText(resource) }));
-const FEATURED = RESOURCES.find((r) => r.featured);
-const anySample = RESOURCES.some((r) => r.sample);
 
 // The URL is the single source of truth for search, filters, sort and view, so a refresh restores them.
 // The server snapshot is "" so the first render matches the server; the real query string follows on the client.
@@ -54,79 +44,32 @@ function writeSearch(qs: string) {
   listeners.forEach((l) => l());
 }
 
+const FORMATS = [
+  { label: "Guides & references", Icon: FileText },
+  { label: "Templates", Icon: Layers },
+  { label: "Checklists & worksheets", Icon: ListChecks },
+  { label: "Videos", Icon: Video },
+  { label: "Presentations", Icon: Presentation },
+];
+
+// A library with nothing in it yet: the whole browse interface is in place, and the results area holds one
+// "coming soon" panel. No resource, file or count is invented.
 export function ResourcesLibrary() {
   const search = useSyncExternalStore(subscribe, readSearch, readServerSearch);
   const state = useMemo(() => parseSearch(search, FACETS), [search]);
 
-  const [visible, setVisible] = useState(RESOURCE_PAGE_SIZE);
-  const [selected, setSelected] = useState<Resource | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   const opener = useRef<HTMLElement | null>(null);
 
-  const deferredQ = useDeferredValue(state.q);
-  const results = useMemo(
-    () => sortResources(filterResources(INDEX, { ...state, q: deferredQ }), state.sort),
-    [state, deferredQ]
-  );
-
-  // The featured resource leads the default view. Once you search or filter, only matches are listed.
   const filtering = isFiltering(state);
-  const featured = !filtering ? FEATURED : undefined;
-  const list = featured ? results.filter((r) => r.slug !== featured.slug) : results;
-  const shown = list.slice(0, visible);
-  const shownCount = shown.length + (featured ? 1 : 0);
-  const remaining = list.length - shown.length;
-  const countText =
-    results.length === 0 ? "No resources found." : `Showing ${shownCount} of ${results.length} resource${results.length === 1 ? "" : "s"}`;
 
-  const commit = (next: ResourceState, resetPage = true) => {
-    writeSearch(toSearch(next));
-    if (resetPage) setVisible(RESOURCE_PAGE_SIZE);
-  };
+  const commit = (next: ResourceState) => writeSearch(toSearch(next));
   // Reads the URL at call time, so two changes in quick succession never overwrite each other.
-  const update = (patch: Partial<ResourceState>) =>
-    commit(applyPatch(parseSearch(readSearch(), FACETS), patch, FACETS), !("view" in patch));
+  const update = (patch: Partial<ResourceState>) => commit(applyPatch(parseSearch(readSearch(), FACETS), patch, FACETS));
   const reset = () => commit(EMPTY_STATE);
 
-  const open = (r: Resource, el: HTMLElement) => {
-    opener.current = el;
-    setSelected(r);
-  };
-  const restoreFocus = () => opener.current?.focus();
-
   return (
-    <section id="resource-library" aria-labelledby="resource-library-heading" className="scroll-mt-28 pt-8 pb-14 sm:pt-12 sm:pb-20">
-      <div className="px-4 sm:px-6">
-        <div className="mx-auto max-w-[1800px]">
-          <SectionHeader
-            id="resource-library-heading"
-            eyebrow="Resources Library"
-            title={
-              <>
-                <span className="block">Find Something Useful.</span>
-                <span className={cn("block", GRADIENT_TEXT)}>Keep Learning.</span>
-              </>
-            }
-          >
-            Explore guides, references, templates, practice material and other resources that can help you understand
-            concepts, practise skills and continue learning.
-          </SectionHeader>
-
-          {anySample && (
-            <p className="mt-6 max-w-3xl border-l-2 border-primary/40 pl-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
-              The resources below are sample records that show how learning resources will be presented. Real
-              resources and files will replace them as they are published.
-            </p>
-          )}
-
-          {featured && (
-            <div className="mt-8 lg:mt-10">
-              <FeaturedResource resource={featured} onOpen={open} />
-            </div>
-          )}
-        </div>
-      </div>
-
+    <section id="resource-library" aria-label="Resource library" className="scroll-mt-28 pb-14 sm:pb-20">
       <div className="mt-10 border-y border-primary/10 bg-muted/50 px-4 py-8 sm:mt-14 sm:px-6 sm:py-12">
         <div className="mx-auto max-w-[1800px]">
           <div className="border-b border-primary/10">
@@ -140,7 +83,7 @@ export function ResourcesLibrary() {
           <div className="mt-6">
             <ResultsToolbar
               state={state}
-              countText={countText}
+              countText="The library opens soon."
               onChange={update}
               onOpenFilters={(el) => {
                 opener.current = el;
@@ -159,28 +102,38 @@ export function ResourcesLibrary() {
                 </div>
               )}
 
-              {results.length > 0 ? (
-                <>
-                  <ResourcesGrid resources={shown} view={state.view} onOpen={open} />
-                  {remaining > 0 && (
-                    <div className="mt-8 flex justify-center">
-                      <button
-                        type="button"
-                        onClick={() => setVisible((n) => n + RESOURCE_PAGE_SIZE)}
-                        className={cn(
-                          "h-12 rounded-lg border border-primary/30 bg-card px-8 text-base font-semibold text-foreground transition-colors hover:bg-muted",
-                          FOCUS
-                        )}
-                      >
-                        Load More
-                        <span className="ml-2 font-normal text-muted-foreground">({Math.min(RESOURCE_PAGE_SIZE, remaining)} more)</span>
-                      </button>
-                    </div>
+              <div className="flex min-h-[26rem] flex-col justify-between rounded-3xl border border-dashed border-primary/30 bg-card p-8 sm:p-12">
+                <div>
+                  <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3.5 py-1.5 text-xs font-semibold tracking-[0.2em] text-primary uppercase">
+                    <span aria-hidden="true" className="size-1.5 rounded-full bg-brand-green" />
+                    Coming soon
+                  </span>
+                  <h3 className="mt-6 max-w-2xl text-3xl leading-tight font-semibold tracking-tight text-balance text-foreground sm:text-4xl">
+                    {filtering ? "Nothing to show for these filters yet." : "Learning resources will appear here as they are published."}
+                  </h3>
+                  <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+                    Guides, references, templates and practice material will be added once they are ready to be shared.
+                  </p>
+                  {filtering && (
+                    <button
+                      type="button"
+                      onClick={reset}
+                      className={cn("mt-6 h-11 rounded-lg border border-primary/30 px-6 text-base font-semibold text-foreground transition-colors hover:bg-muted", FOCUS)}
+                    >
+                      Clear filters
+                    </button>
                   )}
-                </>
-              ) : (
-                <ResourceEmptyState onClear={reset} />
-              )}
+                </div>
+
+                <ul aria-label="Kinds of resource the library will hold" className="mt-10 flex flex-wrap gap-3">
+                  {FORMATS.map(({ label, Icon }) => (
+                    <li key={label} className="flex items-center gap-2 rounded-full border border-primary/15 bg-muted/50 px-4 py-2 text-sm font-medium text-foreground">
+                      <Icon className="size-4 text-primary" aria-hidden="true" />
+                      {label}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -190,17 +143,10 @@ export function ResourcesLibrary() {
         open={sheetOpen}
         state={state}
         facets={FACETS}
-        onApply={(s) => commit(s)}
+        onApply={commit}
         onClose={() => {
           setSheetOpen(false);
-          restoreFocus();
-        }}
-      />
-      <ResourcePreviewDrawer
-        resource={selected}
-        onClose={() => {
-          setSelected(null);
-          restoreFocus();
+          opener.current?.focus();
         }}
       />
     </section>

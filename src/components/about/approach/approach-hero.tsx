@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { ArrowLeft, Check, ChevronRight } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
 import { GRADIENT_TEXT } from "@/components/ui/section-header";
 
@@ -82,15 +81,6 @@ export function ApproachHero() {
                 move from understanding concepts to applying them with increasing independence.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
-                <Link
-                  href="/learning/how-we-teach"
-                  className={cn(
-                    buttonVariants({ variant: "default" }),
-                    "h-11 rounded-full px-6 text-base transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:translate-y-0 focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-4 focus-visible:outline-primary"
-                  )}
-                >
-                  Explore How We Teach
-                </Link>
                 <Link
                   href="/learning/projects"
                   className="group flex min-h-11 items-center gap-1 rounded-full text-base font-medium text-foreground transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-4 focus-visible:outline-primary"

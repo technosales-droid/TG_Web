@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { AboutClose } from "@/components/about/about-close";
 import { AboutDirections } from "@/components/about/about-directions";
 import { AboutFinalCta } from "@/components/about/about-final-cta";
 import { AboutHero } from "@/components/about/about-hero";
@@ -19,7 +18,6 @@ export default function Page() {
       <AboutPhilosophy />
       <AboutLearning />
       <AboutDirections />
-      <AboutClose />
       <AboutFinalCta />
     </main>
   );

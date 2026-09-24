@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowUpRight, ChevronRight } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
+import { ArrowLeft, ChevronRight } from "lucide-react";
 import { cn } from "cn";
 
 // `outline-solid` matters: the shared button style sets `outline-none`, which would otherwise cancel the ring.
@@ -62,17 +61,6 @@ export function ApproachFinalCta() {
             <div className="flex flex-col gap-8 xl:flex-row xl:items-center xl:gap-8">
               <div className="xl:w-72 xl:shrink-0">
                 <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center xl:flex-col xl:items-stretch">
-                  <Link
-                    href="/learning/how-we-teach"
-                    className={cn(
-                      buttonVariants({ variant: "default" }),
-                      "group h-12 w-full rounded-full bg-background px-6 text-base text-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-background/90 hover:shadow-lg active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:w-auto xl:w-full",
-                      FOCUS
-                    )}
-                  >
-                    Explore How We Teach
-                    <ArrowUpRight className="ml-1 size-4 transition-transform duration-200 motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5" aria-hidden="true" />
-                  </Link>
                   <Link
                     href="/learning/projects"
                     className={cn(

@@ -68,18 +68,10 @@ export const SPECIALIZED_PROGRAMS: ProgramLink[] = [
 ];
 
 export const LEARNING_LINKS: NavLink[] = [
-  { label: "How We Teach", href: "/learning/how-we-teach" },
   { label: "Projects", href: "/learning/projects" },
   { label: "Resources", href: "/learning/resources" },
 ];
 
-export const CAREERS_LINKS: NavLink[] = [
-  { label: "Placement", href: "/careers-placement/placement" },
-  { label: "Internships", href: "/careers-placement/internships" },
-  { label: "Portfolio & Resume", href: "/careers-placement/portfolio-resume" },
-  { label: "Interview Preparation", href: "/careers-placement/interview-prep" },
-  { label: "Industry Connections", href: "/careers-placement/industry-connections" },
-];
 
 export const ABOUT_LINKS: NavLink[] = [
   { label: "Mission", href: "/about/mission" },

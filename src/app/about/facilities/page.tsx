@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { FacilitiesClose } from "@/components/about/facilities/facilities-close";
 import { FacilitiesFaculty } from "@/components/about/facilities/facilities-faculty";
 import { FacilitiesFinalCta } from "@/components/about/facilities/facilities-final-cta";
 import { FacilitiesGallery } from "@/components/about/facilities/facilities-gallery";
@@ -21,7 +20,6 @@ export default function Page() {
       <FacilitiesGallery />
       <FacilitiesLocation />
       <FacilitiesTogether />
-      <FacilitiesClose />
       <FacilitiesFinalCta />
     </main>
   );

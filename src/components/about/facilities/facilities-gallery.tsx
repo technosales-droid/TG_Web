@@ -6,12 +6,6 @@ import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 // of which depicts an actual Techno Gurukul room. So this stays an honest placeholder gallery
 // rather than reusing unrelated imagery or inventing photos. No facility categories are named below
 // because none are verified; they will be introduced once real, captioned photography exists.
-const TILES = [
-  { size: "sm:row-span-2", label: "Photos Coming Soon" },
-  { size: "", label: "Photos Coming Soon" },
-  { size: "", label: "Photos Coming Soon" },
-];
-
 /** Section: Facilities (#facilities). Honest empty-state gallery — no stock or fabricated photos. */
 export function FacilitiesGallery() {
   return (
@@ -29,22 +23,15 @@ export function FacilitiesGallery() {
           Photography of the learning space will be published here as verified images become available.
         </SectionHeader>
 
-        <ul className="mt-10 grid gap-4 sm:grid-cols-2 sm:grid-rows-2 xl:grid-cols-3">
-          {TILES.map((t, i) => (
-            <li
-              key={i}
-              className={
-                "flex min-h-40 flex-col items-center justify-center gap-3 rounded-[2rem] border border-dashed border-primary/25 bg-muted/40 px-6 py-10 text-center sm:min-h-0 " +
-                t.size
-              }
-            >
-              <span aria-hidden="true" className="flex size-14 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <ImageOff className="size-6" />
-              </span>
-              <p className="text-base font-semibold tracking-tight text-foreground">{t.label}</p>
-            </li>
-          ))}
-        </ul>
+        <div className="mt-10 flex min-h-64 flex-col items-center justify-center gap-3 rounded-[2rem] border border-dashed border-primary/25 bg-muted/40 px-6 py-12 text-center">
+          <span aria-hidden="true" className="flex size-14 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <ImageOff className="size-6" />
+          </span>
+          <p className="text-base font-semibold tracking-tight text-foreground">Photos coming soon</p>
+          <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
+            A space designed for practical work, collaboration and project-based learning.
+          </p>
+        </div>
       </div>
     </section>
   );

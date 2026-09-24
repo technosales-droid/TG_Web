@@ -4,7 +4,7 @@ import type { LucideIcon } from "lucide-react";
 import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
 const AREAS: { title: string; text: string; href?: string; linkText?: string; Icon: LucideIcon }[] = [
-  { title: "Practice", text: "Learners should have opportunities to apply concepts.", href: "/learning/how-we-teach", linkText: "Explore How We Teach", Icon: GraduationCap },
+  { title: "Practice", text: "Learners should have opportunities to apply concepts.", Icon: GraduationCap },
   { title: "Projects", text: "Learning should produce practical work.", href: "/learning/projects", linkText: "Explore Projects", Icon: FolderOpen },
   { title: "Feedback", text: "Improvement should be part of the process.", Icon: MessageSquare },
   { title: "Career Context", text: "Learners should understand where their skills can be applied.", Icon: Briefcase },
@@ -50,13 +50,6 @@ export function MissionPractice() {
         <p className="mt-6 max-w-3xl text-base leading-relaxed text-muted-foreground">
           Career context is about understanding possible directions, not a promise of a particular job or outcome.
         </p>
-        <Link
-          href="/careers-placement"
-          className="group mt-2 inline-flex min-h-11 items-center gap-1.5 rounded-lg text-base font-semibold text-primary focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-primary"
-        >
-          Explore Careers &amp; Placement
-          <ArrowRight className="size-4 transition-transform duration-200 motion-safe:group-hover:translate-x-1" aria-hidden="true" />
-        </Link>
       </div>
     </section>
   );

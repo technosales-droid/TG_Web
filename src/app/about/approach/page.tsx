@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { ApproachClose } from "@/components/about/approach/approach-close";
-import { ApproachDirections } from "@/components/about/approach/approach-directions";
 import { ApproachDoing } from "@/components/about/approach/approach-doing";
 import { ApproachEvidence } from "@/components/about/approach/approach-evidence";
 import { ApproachFeedback } from "@/components/about/approach/approach-feedback";
@@ -28,7 +27,6 @@ export default function Page() {
       <ApproachProjects />
       <ApproachFeedback />
       <ApproachDoing />
-      <ApproachDirections />
       <ApproachEvidence />
       <ApproachProgression />
       <ApproachClose />

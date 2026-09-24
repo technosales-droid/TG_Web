@@ -1,4 +1,4 @@
-import { ABOUT_LINKS, CAREERS_LINKS, LEARNING_LINKS, type NavLink } from "@/components/navigation/nav-data";
+import { ABOUT_LINKS, LEARNING_LINKS, type NavLink } from "@/components/navigation/nav-data";
 
 // Single source of truth for the global footer. Every value that is not yet verified is `null`;
 // the footer only renders a value once it is filled in here.
@@ -21,13 +21,8 @@ export const footerNavigation: FooterGroup[] = [
       { label: "Programs", href: "/programs" },
       { label: "Blogs", href: "/blogs" },
       { label: "Learning", href: "/learning" },
-      { label: "Careers", href: "/careers-placement" },
       { label: "Contact", href: "/contact" },
     ],
-  },
-  {
-    title: "Careers",
-    links: CAREERS_LINKS,
   },
   {
     title: "Learning",

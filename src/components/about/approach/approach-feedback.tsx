@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { cn } from "cn";
 import { GRADIENT_TEXT } from "@/components/ui/section-header";
 
@@ -14,7 +13,7 @@ const HELPS = [
   "Develop self-review habits",
 ];
 
-/** Section 7: feedback and refinement, as a loop connected to /learning/how-we-teach. */
+/** Section 7: feedback and refinement, as a loop. */
 export function ApproachFeedback() {
   return (
     <section aria-labelledby="ap-feedback-heading" className="px-4 py-10 sm:px-6 sm:py-14 xl:py-20">
@@ -58,10 +57,6 @@ export function ApproachFeedback() {
             ))}
           </ol>
 
-          <Link href="/learning/how-we-teach" className="group mt-6 inline-flex min-h-11 items-center gap-1.5 rounded-lg text-base font-semibold text-primary focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-primary">
-            Explore How We Teach
-            <ArrowRight className="size-4 transition-transform duration-200 motion-safe:group-hover:translate-x-1" aria-hidden="true" />
-          </Link>
         </div>
       </div>
     </section>

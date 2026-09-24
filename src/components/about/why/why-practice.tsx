@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { cn } from "cn";
 import { GRADIENT_TEXT, SectionHeader } from "@/components/ui/section-header";
 
@@ -77,13 +76,6 @@ export function WhyPractice() {
               ))}
             </ol>
 
-            <Link
-              href="/learning/how-we-teach"
-              className="group mt-8 inline-flex min-h-11 items-center gap-1.5 rounded-full text-base font-semibold text-background focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-4 focus-visible:outline-background"
-            >
-              See How We Teach
-              <ArrowRight className="size-4 transition-transform duration-200 motion-safe:group-hover:translate-x-1" aria-hidden="true" />
-            </Link>
           </div>
         </div>
       </section>

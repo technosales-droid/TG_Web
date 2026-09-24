@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, ChevronRight } from "lucide-react";
+import { ArrowUpRight, ChevronRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
 
@@ -85,13 +85,6 @@ export function AboutFinalCta() {
                     <ChevronRight className="size-4 transition-transform duration-200 motion-safe:group-hover:translate-x-1" aria-hidden="true" />
                   </Link>
                 </div>
-                <Link
-                  href="/careers-placement"
-                  className={cn("group mt-3 inline-flex min-h-11 items-center gap-1.5 rounded-full text-sm font-medium text-background/80 transition-colors hover:text-background", FOCUS)}
-                >
-                  Explore Careers &amp; Placement
-                  <ArrowRight className="size-4 transition-transform duration-200 motion-safe:group-hover:translate-x-1" aria-hidden="true" />
-                </Link>
               </div>
               <PathVisual />
             </div>

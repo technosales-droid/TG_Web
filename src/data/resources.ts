@@ -131,6 +131,7 @@ const SEEDS: (Seed & { featured?: boolean })[] = [
     topics: ["Game Design", "Game Development"],
     difficulty: "beginner",
     format: "PDF",
+    featured: true,
     media: { url: null, mimeType: "application/pdf" },
   },
   {
@@ -141,6 +142,7 @@ const SEEDS: (Seed & { featured?: boolean })[] = [
     resourceType: "Template",
     topics: ["Planning", "Documentation"],
     format: "DOCX",
+    featured: true,
     media: { url: null },
   },
   {
@@ -260,6 +262,7 @@ const SEEDS: (Seed & { featured?: boolean })[] = [
     topics: ["Strategy", "Marketing", "Performance Marketing"],
     difficulty: "intermediate",
     format: "PDF",
+    featured: true,
     media: { url: null, mimeType: "application/pdf" },
   },
   {
@@ -502,7 +505,7 @@ function validateResources(list: Resource[]) {
     if (r.externalUrl && !/^https?:\/\//.test(r.externalUrl)) fail(`"${r.slug}" externalUrl must be an absolute http(s) URL`);
     if (r.status === "available" && !(r.media?.url || r.externalUrl)) fail(`"${r.slug}" is available but has no url`);
   }
-  if (list.filter((r) => r.featured).length > 1) fail("only one resource may be featured");
+  if (list.filter((r) => r.featured).length > 4) fail("at most four resources may be featured");
 }
 
 validateResources(RESOURCES);

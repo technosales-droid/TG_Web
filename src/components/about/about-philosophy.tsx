@@ -15,15 +15,7 @@ const BELIEFS = [
   { title: "Learn by Reflecting", text: "Use feedback, mistakes and experience to improve." },
 ];
 
-const STAGES = [
-  { name: "Understand", text: "Know the concepts and why they matter." },
-  { name: "Practise", text: "Work with the concepts repeatedly." },
-  { name: "Apply", text: "Use them in practical situations." },
-  { name: "Create", text: "Build something of your own." },
-  { name: "Improve", text: "Review, refine and learn from the process." },
-];
-
-/** Sections 2, 3 and 4: who we are, what we believe, and knowledge-to-action (dark panel). */
+/** Who we are and what we believe. */
 export function AboutPhilosophy() {
   return (
     <>
@@ -92,40 +84,6 @@ export function AboutPhilosophy() {
                 <li key={b.title} className="border-t-2 border-primary/25 pt-5 xl:border-t-0 xl:border-l-2 xl:pt-0 xl:pl-6">
                   <h3 className="mt-1 text-xl font-semibold tracking-tight text-foreground">{b.title}</h3>
                   <p className="mt-1.5 text-base leading-relaxed text-muted-foreground">{b.text}</p>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </div>
-      </section>
-
-      <section aria-labelledby="ab-action-heading" className="px-4 py-10 sm:px-6 sm:py-14 xl:py-20">
-        <div className="mx-auto max-w-[1800px] xl:px-8">
-          <div className="rounded-[2rem] bg-gradient-to-br from-[#0b3d50] via-[#0d5674] to-primary px-6 py-10 sm:px-10 sm:py-12 xl:px-14 xl:py-16">
-            <div className="flex items-center gap-2 text-sm font-medium text-background">
-              <span className="size-1.5 rounded-full bg-brand-green" aria-hidden="true" />
-              How We Think About Education
-            </div>
-            <h2 id="ab-action-heading" className="mt-4 max-w-3xl text-3xl font-semibold tracking-tight text-balance text-background sm:text-4xl xl:text-5xl">
-              Education Should Connect{" "}
-              <span className="bg-gradient-to-r from-[#8fd3f0] to-brand-green bg-clip-text text-transparent">Knowledge With Action.</span>
-            </h2>
-
-            <ol aria-label="Understand, practise, apply, create, improve" className="relative mt-10 grid gap-6 xl:grid-cols-5 xl:gap-5">
-              <span aria-hidden="true" className="absolute top-2 bottom-2 left-[15px] w-px bg-background/25 xl:top-[15px] xl:right-[10%] xl:bottom-auto xl:left-[10%] xl:h-px xl:w-auto" />
-              {STAGES.map((s, i) => (
-                <li key={s.name} className="relative grid grid-cols-[auto_1fr] gap-x-4 xl:block">
-                  <span
-                    aria-hidden="true"
-                    className={
-                      "relative z-10 flex size-8 items-center justify-center rounded-full border-2 text-xs font-bold xl:mx-auto " +
-                      (i === STAGES.length - 1 ? "border-brand-green bg-brand-green text-white" : "border-background/60 bg-[#0d5674] text-background")
-                    }
-                   />
-                  <div className="xl:mt-4 xl:text-center">
-                    <h3 className="text-xl font-semibold tracking-tight text-background">{s.name}</h3>
-                    <p className="mt-1.5 text-base leading-relaxed text-background/75 xl:mx-auto xl:max-w-[14rem]">{s.text}</p>
-                  </div>
                 </li>
               ))}
             </ol>

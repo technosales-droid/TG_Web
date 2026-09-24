@@ -3,7 +3,6 @@
 import Link from "next/link";
 import {
   ABOUT_LINKS,
-  CAREERS_LINKS,
   CTA_LINK,
   DIGITAL_MARKETING_PROGRAMS,
   FLAGSHIP_PROGRAM,
@@ -129,8 +128,6 @@ export function MobileNav({
       <div className="h-px bg-border" />
 
       <MobileSection title="Learning" href="/learning" links={LEARNING_LINKS} onNavigate={onClose} />
-      <div className="h-px bg-border" />
-      <MobileSection title="Careers" href="/careers-placement" links={CAREERS_LINKS} onNavigate={onClose} />
       <div className="h-px bg-border" />
       <MobileSection title="About" href="/about" links={ABOUT_LINKS} onNavigate={onClose} />
 
