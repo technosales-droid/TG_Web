@@ -41,9 +41,9 @@ export function AboutDirections() {
             {READINESS.map(({ step, text, Icon, image }, i) => {
               const last = i === READINESS.length - 1;
               return (
-                <li key={step} style={{ "--step": `${58 + i * 10.5}%` } as React.CSSProperties} className="lg:h-[var(--step)]">
+                <li key={step} style={{ "--step": `${68 + i * 8}%` } as React.CSSProperties} className="lg:h-[var(--step)] lg:self-end">
                   <Reveal delay={i * 90} className="h-full">
-                    <div className="group relative isolate flex h-full min-h-64 flex-col justify-between gap-6 overflow-hidden rounded-3xl border border-white/15 p-6 transition-transform duration-300 motion-safe:hover:-translate-y-1 motion-reduce:transition-none">
+                    <div className="group relative isolate flex h-full min-h-64 flex-col justify-between gap-5 overflow-hidden rounded-3xl border border-white/15 p-6 lg:min-h-0 transition-transform duration-300 motion-safe:hover:-translate-y-1 motion-reduce:transition-none">
                       <Image
                         src={image}
                         alt=""
