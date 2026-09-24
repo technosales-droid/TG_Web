@@ -108,9 +108,6 @@ export function DigitalMarketingPractical() {
                   </span>
                   <div className="min-w-0 pt-0.5">
                     <h3 className="text-xl font-semibold tracking-tight text-foreground">
-                      <span className="mr-2 text-sm font-semibold tracking-widest text-primary/60">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
                       {step.verb}
                     </h3>
                     <p className="mt-1 text-base leading-relaxed text-muted-foreground">{step.text}</p>

@@ -38,9 +38,7 @@ export function ApproachProjects() {
                   "flex size-8 items-center justify-center rounded-full border-2 text-xs font-bold " +
                   (i === CYCLE.length - 1 ? "border-brand-green bg-brand-green text-white" : "border-primary/40 bg-muted/60 text-primary")
                 }
-              >
-                {i + 1}
-              </span>
+               />
               <h3 className="mt-3 text-lg font-semibold tracking-tight text-foreground">{s.name}</h3>
               <p className="mt-1 text-base leading-relaxed text-muted-foreground">{s.text}</p>
             </li>

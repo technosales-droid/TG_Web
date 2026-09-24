@@ -40,11 +40,8 @@ export function MissionLearner() {
             </div>
 
             <ul className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
-              {DIMENSIONS.map((d, i) => (
+              {DIMENSIONS.map((d) => (
                 <li key={d.title} className="border-t-2 border-primary/25 py-5">
-                  <span aria-hidden="true" className="text-sm font-semibold tracking-widest text-brand-green">
-                    0{i + 1}
-                  </span>
                   <h3 className="mt-1 text-xl font-semibold tracking-tight text-foreground">{d.title}</h3>
                   <p className="mt-1.5 text-base leading-relaxed text-muted-foreground">{d.text}</p>
                 </li>

@@ -32,13 +32,12 @@ export function CareerReadiness() {
         </SectionHeader>
 
         <ol className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4 xl:gap-5">
-          {CARDS.map(({ title, text, Icon }, i) => (
+          {CARDS.map(({ title, text, Icon }) => (
             <li key={title} className="relative flex flex-col rounded-2xl border border-primary/15 bg-card p-6 xl:p-7">
               <div className="flex items-center justify-between">
                 <span aria-hidden="true" className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <Icon className="size-5" />
                 </span>
-                <span className="text-sm font-semibold tracking-widest text-muted-foreground">0{i + 1}</span>
               </div>
               <h3 className="mt-5 text-xl font-semibold tracking-tight text-foreground">{title}</h3>
               <p className="mt-2 text-base leading-relaxed text-muted-foreground">{text}</p>

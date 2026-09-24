@@ -33,9 +33,7 @@ export function ApproachIndependence() {
                   "relative z-10 flex size-8 items-center justify-center rounded-full border-2 text-xs font-bold xl:mx-auto " +
                   (i === STAGES.length - 1 ? "border-brand-green bg-brand-green text-white" : "border-primary/40 bg-card text-primary")
                 }
-              >
-                {i + 1}
-              </span>
+               />
               <div className="xl:mt-4 xl:text-center">
                 <h3 className="text-lg font-semibold tracking-tight text-foreground">{s.name}</h3>
                 <p className="mt-1.5 text-base leading-relaxed text-muted-foreground xl:mx-auto xl:max-w-[13rem]">{s.text}</p>

@@ -24,7 +24,7 @@ export function ContactEnquiry() {
     <section id={ENQUIRY_ID} aria-labelledby="ct-enquiry-heading" className="scroll-mt-20 bg-muted/50 px-4 py-14 sm:px-6 sm:py-20 xl:py-24">
       <div className={cn(INNER, "grid gap-12 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] lg:gap-16 xl:gap-24")}>
         <Reveal className="lg:sticky lg:top-28 lg:self-start">
-          <Eyebrow index="02">Send an enquiry</Eyebrow>
+          <Eyebrow>Send an enquiry</Eyebrow>
           <h2 id="ct-enquiry-heading" className="mt-5 text-3xl font-semibold tracking-tight text-balance text-foreground sm:text-4xl xl:text-5xl">
             Tell Us What You Need.
           </h2>

@@ -38,9 +38,6 @@ export function ProjectLearning() {
                   "lg:-ml-[6px] lg:first:ml-0"
                 )}
               >
-                <span aria-hidden="true" className="text-xs tracking-widest opacity-70">
-                  0{i + 1}
-                </span>
                 {step}
               </li>
             );
@@ -49,10 +46,7 @@ export function ProjectLearning() {
 
         <ul className="mt-10 grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:mt-14 lg:grid-cols-4">
           {PROJECT_PRINCIPLES.map((p) => (
-            <li key={p.number} className="group min-w-0 border-t-2 border-primary/15 pt-5 transition-colors duration-300 hover:border-primary">
-              <span aria-hidden="true" className="text-sm font-semibold tracking-widest text-muted-foreground">
-                {p.number}
-              </span>
+            <li key={p.title} className="group min-w-0 border-t-2 border-primary/15 pt-5 transition-colors duration-300 hover:border-primary">
               <h3 className="mt-2 text-xl font-semibold tracking-tight text-foreground">{p.title}</h3>
               <p className="mt-2 text-base leading-relaxed text-muted-foreground">{p.description}</p>
             </li>

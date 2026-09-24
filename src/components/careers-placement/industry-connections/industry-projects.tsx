@@ -51,9 +51,7 @@ function ProjectFlow() {
                 "relative z-10 flex size-8 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold " +
                 (i === PROJECT_STEPS.length - 1 ? "border-brand-green bg-brand-green text-white" : "border-primary/40 bg-card text-primary")
               }
-            >
-              {i + 1}
-            </span>
+             />
             <div className="min-w-0 flex-1 rounded-xl border border-primary/10 bg-muted/60 px-4 py-3">
               <h3 className="text-lg font-semibold tracking-tight text-foreground">{s.name}</h3>
               <p className="mt-0.5 text-base leading-relaxed text-muted-foreground">{s.text}</p>

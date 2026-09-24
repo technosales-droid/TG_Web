@@ -27,7 +27,7 @@ export function TeachingModel() {
           {TEACHING_MODEL.map((s, i) => {
             const last = i === TEACHING_MODEL.length - 1;
             return (
-              <li key={s.number} className="group relative min-w-0 pl-12 lg:pt-12 lg:pl-0">
+              <li key={s.title} className="group relative min-w-0 pl-12 lg:pt-12 lg:pl-0">
                 {!last && (
                   <span aria-hidden="true" className="absolute top-8 -bottom-8 left-[0.95rem] w-1 rounded-full bg-gradient-to-b from-primary/30 to-primary/10 lg:hidden" />
                 )}
@@ -37,9 +37,7 @@ export function TeachingModel() {
                     "absolute top-0 left-0 flex size-8 items-center justify-center rounded-full text-xs font-semibold ring-4 ring-background transition-transform duration-300 motion-safe:group-hover:scale-110",
                     last ? "bg-brand-green text-white" : "bg-primary text-primary-foreground"
                   )}
-                >
-                  {s.number}
-                </span>
+                 />
                 <h3 className="text-2xl font-semibold tracking-tight text-foreground">{s.title}</h3>
                 <p className="mt-2 text-base leading-relaxed text-muted-foreground">{s.description}</p>
               </li>

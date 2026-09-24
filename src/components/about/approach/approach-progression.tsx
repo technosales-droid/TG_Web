@@ -39,9 +39,7 @@ export function ApproachProgression() {
                     "relative z-10 flex size-8 items-center justify-center rounded-full border-2 text-xs font-bold " +
                     (i === PROGRESSION.length - 1 ? "border-brand-green bg-brand-green text-white" : "border-primary/40 bg-card text-primary")
                   }
-                >
-                  {i + 1}
-                </span>
+                 />
                 <h3 className="mt-4 text-xl font-semibold tracking-tight text-foreground">{p.title}</h3>
                 <p className="mt-1.5 text-base leading-relaxed text-muted-foreground">{p.text}</p>
               </li>

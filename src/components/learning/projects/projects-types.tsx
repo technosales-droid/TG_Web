@@ -9,7 +9,6 @@ type VisualKey = "digital" | "creative" | "technical" | "portfolio";
 
 const PROJECT_TYPES: {
   key: VisualKey;
-  number: string;
   icon: LucideIcon;
   title: string;
   description: string;
@@ -17,7 +16,6 @@ const PROJECT_TYPES: {
 }[] = [
   {
     key: "digital",
-    number: "01",
     icon: TrendingUp,
     title: "Digital Projects",
     description:
@@ -26,7 +24,6 @@ const PROJECT_TYPES: {
   },
   {
     key: "creative",
-    number: "02",
     icon: Palette,
     title: "Creative Projects",
     description:
@@ -35,7 +32,6 @@ const PROJECT_TYPES: {
   },
   {
     key: "technical",
-    number: "03",
     icon: Code2,
     title: "Technical Projects",
     description: "Apply technical skills to create functional experiences, interactive projects and digital products.",
@@ -43,7 +39,6 @@ const PROJECT_TYPES: {
   },
   {
     key: "portfolio",
-    number: "04",
     icon: Presentation,
     title: "Portfolio Projects",
     description:
@@ -177,9 +172,6 @@ export function ProjectsTypes() {
                         <Icon className="size-5" aria-hidden="true" />
                       </span>
                       <h3 className="min-w-0 text-2xl font-semibold tracking-tight text-foreground">
-                        <span aria-hidden="true" className="mr-2 text-sm font-semibold tracking-widest text-muted-foreground">
-                          {t.number}
-                        </span>
                         {t.title}
                       </h3>
                     </div>

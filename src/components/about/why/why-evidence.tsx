@@ -50,9 +50,7 @@ export function WhyEvidence() {
                       "relative z-10 flex size-8 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold " +
                       (i === LAYERS.length - 1 ? "border-brand-green bg-brand-green text-white" : "border-primary/40 bg-card text-primary")
                     }
-                  >
-                    {i + 1}
-                  </span>
+                   />
                   <div>
                     <h3 className="text-xl font-semibold tracking-tight text-foreground">{l.name}</h3>
                     <p className="mt-0.5 text-base leading-relaxed text-muted-foreground">{l.text}</p>

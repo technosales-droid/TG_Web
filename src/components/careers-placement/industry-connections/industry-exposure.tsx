@@ -89,9 +89,7 @@ export function IndustryExposure() {
                       "flex size-8 items-center justify-center rounded-full border-2 text-xs font-bold",
                       i === PROGRESSION.length - 1 ? "border-brand-green bg-brand-green text-white" : "border-background/60 text-background"
                     )}
-                  >
-                    {i + 1}
-                  </span>
+                   />
                   <h3 className="mt-3 text-xl font-semibold tracking-tight text-background">{s.name}</h3>
                   <p className="mt-1.5 text-base leading-relaxed text-background/75">{s.text}</p>
                   {i < PROGRESSION.length - 1 && (

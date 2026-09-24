@@ -29,9 +29,7 @@ export function LearningExperience() {
             <ol aria-label="Passive learning steps" className="mt-5 grid gap-2.5">
               {PASSIVE_STEPS.map((s, i) => (
                 <li key={s} className="flex items-center gap-3 text-base text-muted-foreground">
-                  <span aria-hidden="true" className="flex size-7 shrink-0 items-center justify-center rounded-full border border-primary/20 text-xs font-semibold">
-                    {i + 1}
-                  </span>
+                  <span aria-hidden="true" className="flex size-7 shrink-0 items-center justify-center rounded-full border border-primary/20 text-xs font-semibold" />
                   {s}
                   {i < PASSIVE_STEPS.length - 1 && <ArrowDown className="ml-auto size-4 text-primary/30" aria-hidden="true" />}
                 </li>

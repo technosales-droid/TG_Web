@@ -16,17 +16,17 @@ const STAGES = [
 ] as const;
 
 const DETAILS = [
-  { n: "01", label: "Duration", value: "4.5–5 Months", icon: Clock },
-  { n: "02", label: "Mode", value: "Offline / In-Person", icon: Building2 },
-  { n: "03", label: "Location", value: "Nashik, Maharashtra", icon: MapPin },
-  { n: "04", label: "Learning Model", value: (
+  { label: "Duration", value: "4.5–5 Months", icon: Clock },
+  { label: "Mode", value: "Offline / In-Person", icon: Building2 },
+  { label: "Location", value: "Nashik, Maharashtra", icon: MapPin },
+  { label: "Learning Model", value: (
       <>
         Practical + <span className="whitespace-nowrap">Industry-Oriented</span>
       </>
     ),
     icon: Briefcase,
   },
-  { n: "05", label: "Batch Size", value: "Limited", icon: Users },
+  { label: "Batch Size", value: "Limited", icon: Users },
 ] as const;
 
 function prefersReducedMotion() {
@@ -134,7 +134,7 @@ export function DigitalMarketingOverview() {
                         last ? "text-white/80" : "text-primary"
                       )}
                     >
-                      {String(index + 1).padStart(2, "0")} — {stage.label}
+                      {stage.label}
                     </p>
                     <p className={cn("mt-1 text-base leading-snug", last ? "text-white" : "text-foreground")}>
                       {stage.note}
@@ -164,12 +164,6 @@ export function DigitalMarketingOverview() {
                 <div className="flex items-center justify-between sm:w-full">
                   <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-transform duration-300 motion-safe:group-hover:scale-110 motion-safe:group-hover:-rotate-6">
                     <Icon className="size-6" aria-hidden="true" />
-                  </span>
-                  <span
-                    aria-hidden="true"
-                    className="hidden text-sm font-semibold tracking-widest text-primary/60 sm:block"
-                  >
-                    {d.n}
                   </span>
                 </div>
                 <div className="min-w-0">

@@ -25,13 +25,10 @@ export function GuidedToIndependent() {
           <ol aria-label="From guided learning to project ownership" className="mt-10 grid gap-4 lg:mt-12">
             {INDEPENDENCE_STAGES.map((s) => (
               <li
-                key={s.number}
+                key={s.title}
                 className="group grid gap-4 rounded-3xl border border-primary/10 bg-card p-5 transition-all duration-300 hover:shadow-[0_18px_36px_-22px_rgba(16,20,28,0.35)] motion-safe:hover:-translate-y-0.5 sm:p-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:items-center lg:gap-10"
               >
                 <div className="flex flex-col items-start gap-1 sm:flex-row sm:gap-4">
-                  <span aria-hidden="true" className="shrink-0 text-3xl leading-none sm:w-10 font-semibold tracking-tight text-primary/30 transition-colors duration-300 group-hover:text-primary">
-                    {s.number}
-                  </span>
                   <div className="min-w-0">
                     <h3 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">{s.title}</h3>
                     <p className="mt-1.5 text-base leading-relaxed text-muted-foreground">{s.description}</p>

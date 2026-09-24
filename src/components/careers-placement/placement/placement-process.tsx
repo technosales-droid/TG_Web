@@ -36,11 +36,8 @@ export function PlacementProcess() {
 
           {/* Editorial list: ruled rows rather than boxed cards */}
           <ol className="mt-10 grid gap-x-12 gap-y-8 sm:grid-cols-2">
-            {PILLARS.map((p, i) => (
+            {PILLARS.map((p) => (
               <li key={p.title} className="flex gap-5 border-t-2 border-primary/25 pt-5">
-                <span aria-hidden="true" className="text-3xl font-semibold tracking-tight text-primary/40 sm:text-4xl">
-                  0{i + 1}
-                </span>
                 <div>
                   <h3 className="text-xl font-semibold tracking-tight text-foreground">{p.title}</h3>
                   <p className="mt-1.5 text-base leading-relaxed text-muted-foreground">{p.text}</p>
@@ -76,9 +73,7 @@ export function PlacementProcess() {
                       "relative z-10 flex size-8 items-center justify-center rounded-full border-2 text-xs font-bold xl:mx-auto " +
                       (i === CHAIN.length - 1 ? "border-brand-green bg-brand-green text-white" : "border-primary/40 bg-card text-primary")
                     }
-                  >
-                    {i + 1}
-                  </span>
+                   />
                   <div className="xl:mt-4 xl:text-center">
                     <h3 className="text-xl font-semibold tracking-tight text-foreground">{c.name}</h3>
                     <p className="mt-1.5 text-base leading-relaxed text-muted-foreground xl:mx-auto xl:max-w-[14rem]">{c.question}</p>

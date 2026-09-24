@@ -24,10 +24,6 @@ export function LegalNote({ children }: { children: ReactNode }) {
   );
 }
 
-function pad(n: number) {
-  return String(n).padStart(2, "0");
-}
-
 export function LegalLayout({
   eyebrow = "Legal",
   heading,
@@ -68,13 +64,12 @@ export function LegalLayout({
           >
             <p className="text-sm font-semibold tracking-widest text-muted-foreground uppercase">On this page</p>
             <ol className="mt-4 space-y-1 border-l border-border">
-              {sections.map((s, i) => (
+              {sections.map((s) => (
                 <li key={s.id}>
                   <a
                     href={`#${s.id}`}
                     className="-ml-px flex gap-3 border-l-2 border-transparent py-1.5 pl-4 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground focus-visible:border-primary focus-visible:text-foreground focus-visible:outline-none"
                   >
-                    <span className="tabular-nums text-muted-foreground/60">{pad(i + 1)}</span>
                     <span className="leading-snug">{s.title}</span>
                   </a>
                 </li>
@@ -84,10 +79,9 @@ export function LegalLayout({
 
           <article className="min-w-0 max-w-[820px] flex-1">
             <div className="space-y-10">
-              {sections.map((s, i) => (
+              {sections.map((s) => (
                 <section key={s.id} id={s.id} className="scroll-mt-28 border-t border-border pt-10 first:border-t-0 first:pt-0">
                   <h2 className="flex items-baseline gap-3 text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
-                    <span className="tabular-nums text-base font-semibold text-primary/45">{pad(i + 1)}</span>
                     {s.title}
                   </h2>
                   <div className="mt-4 space-y-4 text-[15px] leading-relaxed text-muted-foreground sm:text-base">

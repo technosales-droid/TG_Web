@@ -42,9 +42,7 @@ function LearningThatMoves() {
                   "relative z-10 flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-bold",
                   i === CURRENT ? "bg-white/25 text-white" : "bg-primary/10 text-primary"
                 )}
-              >
-                {i + 1}
-              </span>
+               />
               <span className={cn("text-base font-medium", i === CURRENT ? "text-white" : "text-foreground")}>{step}</span>
             </li>
           ))}

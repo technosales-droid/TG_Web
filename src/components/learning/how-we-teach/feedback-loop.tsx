@@ -42,9 +42,6 @@ export function FeedbackLoop() {
                           last ? "border-brand-green bg-brand-green/25" : "border-background/25 bg-background/10"
                         )}
                       >
-                        <span aria-hidden="true" className="mr-2 text-xs tracking-widest text-background/60">
-                          0{i + 1}
-                        </span>
                         {step}
                       </span>
                       {!last && (

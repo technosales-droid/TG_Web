@@ -56,11 +56,8 @@ export function InterviewConversation() {
             </div>
 
             <ol className="grid gap-x-8 sm:grid-cols-2">
-              {AREAS.map((a, i) => (
+              {AREAS.map((a) => (
                 <li key={a.title} className="border-t-2 border-primary/25 py-5">
-                  <span aria-hidden="true" className="text-sm font-semibold tracking-widest text-brand-green">
-                    0{i + 1}
-                  </span>
                   <h3 className="mt-1 text-xl font-semibold tracking-tight text-foreground">{a.title}</h3>
                   <p className="mt-1.5 text-base leading-relaxed text-muted-foreground">{a.text}</p>
                 </li>
@@ -97,9 +94,7 @@ export function InterviewConversation() {
                       "relative z-10 flex size-8 items-center justify-center rounded-full border-2 text-xs font-bold xl:mx-auto " +
                       (i === STORY.length - 1 ? "border-brand-green bg-brand-green text-white" : "border-primary/40 bg-card text-primary")
                     }
-                  >
-                    {i + 1}
-                  </span>
+                   />
                   <div className="xl:mt-4 xl:text-center">
                     <h3 className="text-xl font-semibold tracking-tight text-foreground">{s.name}</h3>
                     <p className="mt-1.5 text-base leading-relaxed text-muted-foreground xl:mx-auto xl:max-w-[14rem]">{s.text}</p>

@@ -24,12 +24,9 @@ const INVALID = "border-destructive hover:border-destructive focus-visible:borde
 
 type Key = keyof EnquiryValues;
 
-function Label({ n, htmlFor, required, children }: { n: string; htmlFor?: string; required?: boolean; children: React.ReactNode }) {
+function Label({ htmlFor, required, children }: { htmlFor?: string; required?: boolean; children: React.ReactNode }) {
   const inner = (
     <>
-      <span aria-hidden="true" className="mr-2 text-xs font-medium text-muted-foreground tabular-nums">
-        {n}
-      </span>
       {children}
       {required ? (
         <>
@@ -179,7 +176,7 @@ export function ContactForm() {
     <form noValidate onSubmit={onSubmit} className="@container rounded-3xl border border-primary/10 bg-card p-6 shadow-sm sm:p-10">
       <div className="grid gap-x-6 gap-y-6 @xl:grid-cols-2 @3xl:grid-cols-6">
         <div className="@3xl:col-span-3">
-          <Label n="01" htmlFor="contact-fullName" required>
+          <Label htmlFor="contact-fullName" required>
             Full name
           </Label>
           <input type="text" autoComplete="name" required aria-required="true" placeholder="Your full name" {...text("fullName")} />
@@ -187,7 +184,7 @@ export function ContactForm() {
         </div>
 
         <div className="@3xl:col-span-3">
-          <Label n="02" htmlFor="contact-email" required>
+          <Label htmlFor="contact-email" required>
             Email address
           </Label>
           <input type="email" autoComplete="email" required aria-required="true" placeholder="you@example.com" {...text("email")} />
@@ -195,7 +192,7 @@ export function ContactForm() {
         </div>
 
         <div className="@3xl:col-span-3">
-          <Label n="03" htmlFor="contact-phone" required>
+          <Label htmlFor="contact-phone" required>
             Phone number
           </Label>
           <input
@@ -212,7 +209,7 @@ export function ContactForm() {
         </div>
 
         <div className="@3xl:col-span-3">
-          <Label n="04" htmlFor="contact-interest" required>
+          <Label htmlFor="contact-interest" required>
             I am interested in
           </Label>
           <SelectField
@@ -230,7 +227,7 @@ export function ContactForm() {
         </div>
 
         <div className="@3xl:col-span-2">
-          <Label n="05" htmlFor="contact-status">
+          <Label htmlFor="contact-status">
             Current status
           </Label>
           <SelectField id="contact-status" value={values.status} onChange={(v) => set("status", v)} options={STATUSES} placeholder="Select an option" />
@@ -238,7 +235,7 @@ export function ContactForm() {
 
         <fieldset className="min-w-0 @3xl:col-span-2">
           <legend className="contents">
-            <Label n="06">Preferred contact method</Label>
+            <Label>Preferred contact method</Label>
           </legend>
           <div className="grid h-12 grid-cols-3 gap-1 rounded-xl border border-primary/20 bg-muted/50 p-1">
             {CONTACT_METHODS.map((m) => (
@@ -265,14 +262,14 @@ export function ContactForm() {
         </fieldset>
 
         <div className="@xl:col-span-2">
-          <Label n="07" htmlFor="contact-source">
+          <Label htmlFor="contact-source">
             How did you hear about us?
           </Label>
           <SelectField id="contact-source" value={values.source} onChange={(v) => set("source", v)} options={SOURCES} placeholder="Select an option" />
         </div>
 
         <div className="@xl:col-span-2 @3xl:col-span-6">
-          <Label n="08" htmlFor="contact-message" required>
+          <Label htmlFor="contact-message" required>
             Message
           </Label>
           <textarea

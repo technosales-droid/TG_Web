@@ -33,9 +33,7 @@ function WorkflowVisual() {
                     "flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold transition-transform duration-300 motion-safe:group-hover:scale-110",
                     last ? "bg-brand-green text-white" : "bg-primary text-primary-foreground"
                   )}
-                >
-                  {i + 1}
-                </span>
+                 />
                 <span className="min-w-0 flex-1">
                   <span className="block text-base font-semibold text-foreground">{step}</span>
                   <span aria-hidden="true" className={cn("mt-1.5 block h-1.5 rounded-full", last ? "w-3/4 bg-brand-green/40" : "bg-primary/15")} style={last ? undefined : { width: `${35 + i * 8}%` }} />

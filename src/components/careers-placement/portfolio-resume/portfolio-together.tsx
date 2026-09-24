@@ -51,9 +51,6 @@ export function PortfolioTogether() {
               {LAYERS.map((l, i) => (
                 <li key={l.name} className="flex flex-1 flex-col items-stretch lg:flex-row lg:items-center">
                   <div className="flex-1 rounded-2xl border border-background/20 bg-background/10 p-6">
-                    <span aria-hidden="true" className="text-sm font-semibold tracking-widest text-brand-green">
-                      0{i + 1}
-                    </span>
                     <h3 className="mt-1 text-2xl font-semibold tracking-tight text-background">{l.name}</h3>
                     <p className="mt-1.5 text-base leading-relaxed text-background/75">{l.text}</p>
                   </div>

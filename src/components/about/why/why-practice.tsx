@@ -29,14 +29,12 @@ export function WhyPractice() {
           />
 
           <ol aria-label="Learn, repeat, apply, refine" className="mt-10 grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
-            {STAGES.map((s, i) => (
+            {STAGES.map((s) => (
               <li
                 key={s.name}
                 className="relative xl:after:absolute xl:after:top-6 xl:after:-right-6 xl:after:left-16 xl:after:h-px xl:after:border-t xl:after:border-dashed xl:after:border-primary/30 xl:last:after:hidden"
               >
-                <span aria-hidden="true" className="relative z-10 flex size-12 items-center justify-center rounded-full border-2 border-primary/30 bg-card text-lg font-bold text-primary">
-                  {i + 1}
-                </span>
+                <span aria-hidden="true" className="relative z-10 flex size-12 items-center justify-center rounded-full border-2 border-primary/30 bg-card text-lg font-bold text-primary" />
                 <h3 className="mt-4 text-xl font-semibold tracking-tight text-foreground">{s.name}</h3>
                 <p className="mt-1.5 text-base leading-relaxed text-muted-foreground">{s.text}</p>
               </li>

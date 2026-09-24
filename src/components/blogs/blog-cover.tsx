@@ -31,7 +31,6 @@ export function BlogCover({
         fill
         priority={priority}
         sizes={sizes}
-        quality={80}
         className={className ?? "object-cover"}
         style={{ objectPosition: post.heroFocus ?? "center" }}
       />

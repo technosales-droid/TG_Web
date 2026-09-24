@@ -28,9 +28,7 @@ export function CareerJourney() {
                       ? "border-brand-green bg-brand-green text-white"
                       : "border-primary/40 bg-card text-primary")
                   }
-                >
-                  {i + 1}
-                </span>
+                 />
                 <div className="xl:mt-4 xl:text-center">
                   <h3 className="text-xl font-semibold tracking-tight text-foreground">{s.name}</h3>
                   <p className="mt-1.5 text-base leading-relaxed text-muted-foreground xl:mx-auto xl:max-w-[16rem]">{s.text}</p>

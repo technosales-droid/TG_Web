@@ -41,9 +41,6 @@ export function InterviewConnect() {
                     (i === LAYERS.length - 1 ? "border-transparent bg-gradient-to-r from-primary to-brand-green text-white" : "border-primary/15 bg-card")
                   }
                 >
-                  <span aria-hidden="true" className={"text-sm font-semibold tracking-widest " + (i === LAYERS.length - 1 ? "text-white/80" : "text-brand-green")}>
-                    0{i + 1}
-                  </span>
                   <h3 className={"mt-1 text-2xl font-semibold tracking-tight " + (i === LAYERS.length - 1 ? "text-white" : "text-foreground")}>{l.name}</h3>
                   <p className={"mt-1.5 text-base leading-relaxed " + (i === LAYERS.length - 1 ? "text-white/85" : "text-muted-foreground")}>{l.text}</p>
                 </div>

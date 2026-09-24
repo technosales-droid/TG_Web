@@ -40,11 +40,8 @@ export function MissionFramework() {
             </div>
 
             <ul className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
-              {DIMENSIONS.map((d, i) => (
+              {DIMENSIONS.map((d) => (
                 <li key={d.title} className="border-t-2 border-primary/25 py-5">
-                  <span aria-hidden="true" className="text-sm font-semibold tracking-widest text-brand-green">
-                    0{i + 1}
-                  </span>
                   <h3 className="mt-1 text-xl font-semibold tracking-tight text-foreground">{d.title}</h3>
                   <p className="mt-1.5 text-base leading-relaxed text-muted-foreground">{d.text}</p>
                 </li>
@@ -76,9 +73,7 @@ export function MissionFramework() {
                       "relative z-10 flex size-8 items-center justify-center rounded-full border-2 text-xs font-bold xl:mx-auto " +
                       (i === STAGES.length - 1 ? "border-brand-green bg-brand-green text-white" : "border-background/60 bg-[#0d5674] text-background")
                     }
-                  >
-                    {i + 1}
-                  </span>
+                   />
                   <div className="xl:mt-4 xl:text-center">
                     <h3 className="text-xl font-semibold tracking-tight text-background">{s.name}</h3>
                     <p className="mt-1.5 text-base leading-relaxed text-background/75 xl:mx-auto xl:max-w-[14rem]">{s.text}</p>

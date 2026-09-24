@@ -40,9 +40,6 @@ export function InternshipsProjects() {
             {FLOW.map((step, i) => (
               <li key={step} className="flex flex-1 flex-col items-stretch lg:flex-row lg:items-center">
                 <span className="flex min-h-14 flex-1 items-center justify-center rounded-2xl border border-primary/20 bg-card px-4 py-3 text-center text-lg font-semibold tracking-tight text-foreground">
-                  <span aria-hidden="true" className="mr-2 text-sm font-semibold text-brand-green">
-                    0{i + 1}
-                  </span>
                   {step}
                 </span>
                 {i < FLOW.length - 1 && (

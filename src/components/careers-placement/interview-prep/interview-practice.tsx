@@ -79,11 +79,9 @@ export function InterviewPractice() {
             </SectionHeader>
 
             <ol className="mt-10 grid gap-x-8 gap-y-6 sm:grid-cols-2 xl:grid-cols-4">
-              {PRACTICE.map((p, i) => (
+              {PRACTICE.map((p) => (
                 <li key={p.title} className="flex gap-4 xl:block">
-                  <span aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
-                    {i + 1}
-                  </span>
+                  <span aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground" />
                   <div className="xl:mt-4">
                     <h3 className="text-xl font-semibold tracking-tight text-foreground">{p.title}</h3>
                     <p className="mt-1 text-base leading-relaxed text-muted-foreground">{p.text}</p>

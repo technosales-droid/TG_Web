@@ -31,11 +31,8 @@ export function PlacementInterview() {
           </SectionHeader>
 
           <ul className="mt-10 grid gap-x-10 gap-y-8 lg:grid-cols-3">
-            {AREAS.map((a, i) => (
+            {AREAS.map((a) => (
               <li key={a.title} className="border-l-2 border-brand-green pl-5">
-                <span aria-hidden="true" className="text-sm font-semibold tracking-widest text-muted-foreground">
-                  0{i + 1}
-                </span>
                 <h3 className="mt-1 text-xl font-semibold tracking-tight text-foreground">{a.title}</h3>
                 <p className="mt-1.5 text-base leading-relaxed text-muted-foreground">{a.text}</p>
               </li>

@@ -45,9 +45,7 @@ export function WhyReasoning() {
                     "relative z-10 flex size-8 items-center justify-center rounded-full border-2 text-xs font-bold xl:mx-auto " +
                     (i === STAGES.length - 1 ? "border-brand-green bg-brand-green text-white" : "border-primary/40 bg-card text-primary")
                   }
-                >
-                  {i + 1}
-                </span>
+                 />
                 <div className="xl:mt-4 xl:text-center">
                   <h3 className="text-xl font-semibold tracking-tight text-foreground">{s.name}</h3>
                   <p className="mt-1.5 text-base leading-relaxed text-muted-foreground xl:mx-auto xl:max-w-[14rem]">{s.text}</p>
@@ -74,11 +72,8 @@ export function WhyReasoning() {
             </h2>
 
             <ol className="mt-10 grid gap-x-8 gap-y-6 sm:grid-cols-2 xl:grid-cols-4">
-              {PRACTICAL.map((p, i) => (
+              {PRACTICAL.map((p) => (
                 <li key={p.title} className="border-t-2 border-primary/25 pt-5 xl:border-t-0 xl:border-l-2 xl:pt-0 xl:pl-6">
-                  <span aria-hidden="true" className="text-sm font-semibold tracking-widest text-brand-green">
-                    0{i + 1}
-                  </span>
                   <h3 className="mt-1 text-xl font-semibold tracking-tight text-foreground">{p.title}</h3>
                   <p className="mt-1.5 text-base leading-relaxed text-muted-foreground">{p.text}</p>
                 </li>

@@ -7,7 +7,6 @@ import { cn } from "cn";
 
 const OUTCOMES = [
   {
-    number: "01",
     tag: "Practice Work",
     title: "Start Small. Build Confidence.",
     description:
@@ -18,7 +17,6 @@ const OUTCOMES = [
     alt: "A desk by a window overlooking a lake, with a laptop, papers and books",
   },
   {
-    number: "02",
     tag: "Projects",
     title: "Bring Skills Together.",
     description:
@@ -29,7 +27,6 @@ const OUTCOMES = [
     alt: "A group reviewing notes and sketches pinned to a wall in a studio",
   },
   {
-    number: "03",
     tag: "Experiments",
     title: "Try. Test. Improve.",
     description:
@@ -40,7 +37,6 @@ const OUTCOMES = [
     alt: "A person reviewing printed charts and wireframes on a glass wall",
   },
   {
-    number: "04",
     tag: "Problem Solving",
     title: "Think Through Real Problems.",
     description:
@@ -51,7 +47,6 @@ const OUTCOMES = [
     alt: "An illustration of a person thinking through a problem toward an idea",
   },
   {
-    number: "05",
     tag: "Documentation",
     title: "Make Your Work Understandable.",
     description:
@@ -62,7 +57,6 @@ const OUTCOMES = [
     alt: "A person writing goals and notes on a whiteboard",
   },
   {
-    number: "06",
     tag: "Portfolio Work",
     title: "Turn Your Work Into Evidence.",
     description:
@@ -192,8 +186,6 @@ function OutcomeCard({
           truncates gracefully instead of running under the icon on narrower (shrunk) cards. */}
       <div className="absolute inset-x-5 top-5 flex h-10 items-center justify-between gap-2">
         <div className="flex h-10 min-w-0 items-center gap-1.5 rounded-full bg-white/15 px-3 text-xs font-medium text-white backdrop-blur-sm">
-          <span aria-hidden="true" className="shrink-0">{outcome.number}</span>
-          <span aria-hidden="true" className="shrink-0 text-white/50">/</span>
           <span className="truncate">{outcome.tag}</span>
         </div>
         <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">

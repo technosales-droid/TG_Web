@@ -3,25 +3,21 @@
 
 export const HERO_STEPS = ["Understand", "Practise", "Apply", "Build", "Refine", "Present"];
 
-export const TEACHING_MODEL: { number: string; title: string; description: string }[] = [
-  { number: "01", title: "Understand", description: "Learn the concepts, principles and foundations behind the skill." },
+export const TEACHING_MODEL: { title: string; description: string }[] = [
+  { title: "Understand", description: "Learn the concepts, principles and foundations behind the skill." },
   {
-    number: "02",
     title: "Demonstrate",
     description: "See how the concept is applied through examples, explanation and guided instruction.",
   },
   {
-    number: "03",
     title: "Practise",
     description: "Try the skill through exercises and increasingly practical tasks.",
   },
   {
-    number: "04",
     title: "Build",
     description: "Combine what you have learned into a project or meaningful piece of work.",
   },
   {
-    number: "05",
     title: "Refine",
     description: "Review the result, identify what can improve and apply feedback.",
   },
@@ -29,27 +25,23 @@ export const TEACHING_MODEL: { number: string; title: string; description: strin
 
 // `guided` is the share of the bar drawn as guidance; the rest is student-led. Visual only, never a
 // label or a claim. Guidance never reaches zero: support stays available at every stage.
-export const INDEPENDENCE_STAGES: { number: string; title: string; description: string; guided: number }[] = [
+export const INDEPENDENCE_STAGES: { title: string; description: string; guided: number }[] = [
   {
-    number: "01",
     title: "Guided Learning",
     description: "Instructor-led explanations, demonstrations and structured examples.",
     guided: 85,
   },
   {
-    number: "02",
     title: "Supported Practice",
     description: "Students work through exercises while receiving direction and clarification.",
     guided: 60,
   },
   {
-    number: "03",
     title: "Independent Application",
     description: "Students make more decisions about how to approach the task and solve problems.",
     guided: 35,
   },
   {
-    number: "04",
     title: "Project Ownership",
     description: "Students plan, create, refine and present their own work.",
     guided: 15,
@@ -69,24 +61,20 @@ export const FEEDBACK_AREAS = [
 
 export const PROJECT_LIFECYCLE = ["Idea", "Plan", "Create", "Test", "Refine", "Present"];
 
-export const PROJECT_PRINCIPLES: { number: string; title: string; description: string }[] = [
+export const PROJECT_PRINCIPLES: { title: string; description: string }[] = [
   {
-    number: "01",
     title: "Apply Multiple Skills",
     description: "Combine concepts rather than practising them in isolation.",
   },
   {
-    number: "02",
     title: "Solve Problems",
     description: "Make decisions, test approaches and work through challenges.",
   },
   {
-    number: "03",
     title: "Document the Work",
     description: "Keep evidence of the process, decisions and outcome.",
   },
   {
-    number: "04",
     title: "Present the Result",
     description: "Turn completed work into something clear and understandable.",
   },

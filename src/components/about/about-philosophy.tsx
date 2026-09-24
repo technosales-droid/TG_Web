@@ -58,9 +58,7 @@ export function AboutPhilosophy() {
                       "relative z-10 flex size-8 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold " +
                       (i === WHO.length - 1 ? "border-brand-green bg-brand-green text-white" : "border-primary/40 bg-card text-primary")
                     }
-                  >
-                    {i + 1}
-                  </span>
+                   />
                   <div>
                     <h3 className="text-xl font-semibold tracking-tight text-foreground">{w.name}</h3>
                     <p className="mt-0.5 text-base leading-relaxed text-muted-foreground">{w.text}</p>
@@ -90,11 +88,8 @@ export function AboutPhilosophy() {
             </div>
 
             <ol className="mt-10 grid gap-x-8 gap-y-6 sm:grid-cols-2 xl:grid-cols-4">
-              {BELIEFS.map((b, i) => (
+              {BELIEFS.map((b) => (
                 <li key={b.title} className="border-t-2 border-primary/25 pt-5 xl:border-t-0 xl:border-l-2 xl:pt-0 xl:pl-6">
-                  <span aria-hidden="true" className="text-sm font-semibold tracking-widest text-brand-green">
-                    0{i + 1}
-                  </span>
                   <h3 className="mt-1 text-xl font-semibold tracking-tight text-foreground">{b.title}</h3>
                   <p className="mt-1.5 text-base leading-relaxed text-muted-foreground">{b.text}</p>
                 </li>
@@ -126,9 +121,7 @@ export function AboutPhilosophy() {
                       "relative z-10 flex size-8 items-center justify-center rounded-full border-2 text-xs font-bold xl:mx-auto " +
                       (i === STAGES.length - 1 ? "border-brand-green bg-brand-green text-white" : "border-background/60 bg-[#0d5674] text-background")
                     }
-                  >
-                    {i + 1}
-                  </span>
+                   />
                   <div className="xl:mt-4 xl:text-center">
                     <h3 className="text-xl font-semibold tracking-tight text-background">{s.name}</h3>
                     <p className="mt-1.5 text-base leading-relaxed text-background/75 xl:mx-auto xl:max-w-[14rem]">{s.text}</p>

@@ -47,9 +47,7 @@ export function ApproachModel() {
                     "relative z-10 flex size-8 items-center justify-center rounded-full border-2 text-xs font-bold xl:mx-auto " +
                     (i === STAGES.length - 1 ? "border-brand-green bg-brand-green text-white" : "border-primary/40 bg-card text-primary")
                   }
-                >
-                  0{i + 1}
-                </span>
+                 />
                 <div className="xl:mt-4 xl:text-center">
                   <h3 className="text-xl font-semibold tracking-tight text-foreground">{s.name}</h3>
                   <p className="mt-1.5 text-base leading-relaxed text-muted-foreground xl:mx-auto xl:max-w-[14rem]">{s.text}</p>
@@ -84,9 +82,7 @@ export function ApproachModel() {
                       "flex size-8 items-center justify-center rounded-full border-2 text-xs font-bold " +
                       (i === CYCLE.length - 1 ? "border-brand-green bg-brand-green text-white" : "border-background/60 text-background")
                     }
-                  >
-                    {i + 1}
-                  </span>
+                   />
                   <h3 className="mt-3 text-xl font-semibold tracking-tight text-background">{s.name}</h3>
                   <p className="mt-1.5 text-base leading-relaxed text-background/75">{s.text}</p>
                 </li>

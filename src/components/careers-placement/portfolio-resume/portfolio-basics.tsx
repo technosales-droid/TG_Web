@@ -95,11 +95,8 @@ export function PortfolioBasics() {
             }
           />
           <ul className="mt-10 grid gap-x-10 gap-y-7 sm:grid-cols-2 xl:grid-cols-3">
-            {PRINCIPLES.map((p, i) => (
+            {PRINCIPLES.map((p) => (
               <li key={p.title} className="border-t-2 border-primary/25 pt-4">
-                <span aria-hidden="true" className="text-sm font-semibold tracking-widest text-brand-green">
-                  0{i + 1}
-                </span>
                 <h3 className="mt-1 text-xl font-semibold tracking-tight text-foreground">{p.title}</h3>
                 <p className="mt-1.5 text-base leading-relaxed text-muted-foreground">{p.text}</p>
               </li>
@@ -126,13 +123,10 @@ export function PortfolioBasics() {
 
             {/* A resume-like page: sections as ruled rows down a document */}
             <ol className="rounded-[2rem] border border-primary/15 bg-card p-5 sm:p-8">
-              {STRUCTURE.map((s, i) => (
-                <li key={s.name} className="grid grid-cols-[auto_1fr] gap-x-4 border-t border-primary/10 py-4 first:border-t-0 first:pt-0 last:pb-0 sm:grid-cols-[2rem_11rem_1fr]">
-                  <span aria-hidden="true" className="text-sm font-semibold tracking-widest text-brand-green">
-                    0{i + 1}
-                  </span>
+              {STRUCTURE.map((s) => (
+                <li key={s.name} className="grid gap-x-4 border-t border-primary/10 py-4 first:border-t-0 first:pt-0 last:pb-0 sm:grid-cols-[11rem_1fr]">
                   <h3 className="text-lg font-semibold tracking-tight text-foreground">{s.name}</h3>
-                  <p className="col-start-2 mt-1 text-base leading-relaxed text-muted-foreground sm:col-start-3 sm:mt-0">{s.text}</p>
+                  <p className="mt-1 text-base leading-relaxed text-muted-foreground sm:mt-0">{s.text}</p>
                 </li>
               ))}
             </ol>

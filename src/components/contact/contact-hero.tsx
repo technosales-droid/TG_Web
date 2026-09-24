@@ -23,7 +23,6 @@ const CONTACT_MESSAGES = [
 const HOLD_MS = 4000;
 const FADE_MS = 300;
 
-const pad = (n: number) => String(n).padStart(2, "0");
 const prefersReducedMotion = () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 // Darkest in the middle, letting the photograph show toward the edges.
@@ -92,7 +91,6 @@ export function ContactHero() {
         fill
         priority
         sizes="100vw"
-        quality={80}
         className="object-cover object-center"
       />
       <div aria-hidden="true" className="absolute inset-0" style={OVERLAY} />
@@ -140,10 +138,6 @@ export function ContactHero() {
       <div className="relative z-10 flex items-center justify-between gap-4 px-6 pb-6 text-[11px] font-semibold tracking-[0.2em] text-white/70 uppercase sm:px-10">
         <span className="hidden sm:inline">Techno Gurukul &middot; Get in touch</span>
         <div className="ml-auto flex items-center gap-4">
-          <span className="tabular-nums">
-            <span className="sr-only">Question </span>
-            {pad(index + 1)} / {pad(CONTACT_MESSAGES.length)}
-          </span>
           <button
             type="button"
             onClick={() => setPlaying((p) => !p)}

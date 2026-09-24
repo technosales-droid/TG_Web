@@ -40,9 +40,7 @@ export function WhySystem() {
                       "relative z-10 flex size-8 items-center justify-center rounded-full border-2 text-xs font-bold xl:mx-auto " +
                       (i === STAGES.length - 1 ? "border-brand-green bg-brand-green text-white" : "border-background/60 bg-[#0d5674] text-background")
                     }
-                  >
-                    {i + 1}
-                  </span>
+                   />
                   <div className="xl:mt-4 xl:text-center">
                     <h3 className="text-xl font-semibold tracking-tight text-background">{s.name}</h3>
                     <p className="mt-1.5 text-base leading-relaxed text-background/75 xl:mx-auto xl:max-w-[14rem]">{s.text}</p>
@@ -71,14 +69,12 @@ export function WhySystem() {
           </div>
 
           <ol aria-label="Curiosity, exploration, evaluation, adaptation" className="mt-10 grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
-            {CONTINUOUS.map((c, i) => (
+            {CONTINUOUS.map((c) => (
               <li
                 key={c.title}
                 className="relative xl:after:absolute xl:after:top-6 xl:after:-right-6 xl:after:left-16 xl:after:h-px xl:after:border-t xl:after:border-dashed xl:after:border-primary/30 xl:last:after:hidden"
               >
-                <span aria-hidden="true" className="relative z-10 flex size-12 items-center justify-center rounded-full border-2 border-primary/30 bg-card text-lg font-bold text-primary">
-                  {i + 1}
-                </span>
+                <span aria-hidden="true" className="relative z-10 flex size-12 items-center justify-center rounded-full border-2 border-primary/30 bg-card text-lg font-bold text-primary" />
                 <h3 className="mt-4 text-xl font-semibold tracking-tight text-foreground">{c.title}</h3>
                 <p className="mt-1.5 text-base leading-relaxed text-muted-foreground">{c.text}</p>
               </li>

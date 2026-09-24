@@ -43,9 +43,7 @@ function LearningSystem() {
                       "flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-bold",
                       last ? "bg-white/25 text-white" : "bg-primary/10 text-primary"
                     )}
-                  >
-                    {i + 1}
-                  </span>
+                   />
                   <span className={cn("text-lg font-semibold tracking-tight", last ? "text-white" : "text-foreground")}>{s.step}</span>
                 </span>
                 <span className={cn("text-sm font-medium", last ? "text-white/85" : "text-muted-foreground")}>{s.label}</span>

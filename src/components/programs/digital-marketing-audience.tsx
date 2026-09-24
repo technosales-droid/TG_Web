@@ -100,7 +100,7 @@ export function DigitalMarketingAudience() {
             visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
           )}
         >
-          {PROFILES.map((p, index) => {
+          {PROFILES.map((p) => {
             const Icon = p.icon;
             return (
               <li
@@ -114,12 +114,6 @@ export function DigitalMarketingAudience() {
                 <p className="col-span-2 text-base leading-relaxed text-muted-foreground sm:col-span-1 sm:col-start-2">
                   {p.text}
                 </p>
-                <span
-                  aria-hidden="true"
-                  className="hidden text-3xl font-semibold tracking-tight text-primary/30 sm:col-start-3 sm:row-span-2 sm:row-start-1 sm:block"
-                >
-                  {String(index + 1).padStart(2, "0")}
-                </span>
               </li>
             );
           })}

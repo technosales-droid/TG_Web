@@ -45,9 +45,6 @@ export function PlacementPortfolio() {
             {FLOW.map((s, i) => (
               <li key={s.name} className="relative">
                 <div className="h-full rounded-2xl border border-primary/15 bg-card p-6 xl:rounded-none xl:first:rounded-l-2xl xl:last:rounded-r-2xl xl:[&:not(:first-child)]:border-l-0">
-                  <span aria-hidden="true" className="text-sm font-semibold tracking-widest text-brand-green">
-                    0{i + 1}
-                  </span>
                   <h3 className="mt-2 text-xl font-semibold tracking-tight text-foreground">{s.name}</h3>
                   <p className="mt-1.5 text-base leading-relaxed text-muted-foreground">{s.text}</p>
                 </div>
