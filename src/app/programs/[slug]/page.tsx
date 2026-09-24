@@ -1,19 +1,37 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { PageShell } from "@/components/page-shell";
-import { getCourse, getCourses } from "@/lib/content";
+import { CourseBody } from "@/components/course/course-content";
+import { CourseExtras } from "@/components/course/course-extras";
+import { CourseHero, CourseSnapshot } from "@/components/course/course-hero";
+import { COURSE_DETAILS, getCourseDetail } from "@/data/course-details";
+
+type Props = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
-  return getCourses().map((course) => ({ slug: course.slug }));
+  return COURSE_DETAILS.map((c) => ({ slug: c.slug }));
 }
 
-export default async function CoursePage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
-  const course = getCourse(slug);
-  if (!course) notFound();
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const course = getCourseDetail((await params).slug);
+  if (!course) return {};
+  const title = `${course.title} | Techno Gurukul`;
+  return {
+    title,
+    description: course.description,
+    openGraph: { title, description: course.description, type: "website", ...(course.heroImage ? { images: [{ url: course.heroImage, alt: course.heroAlt }] } : {}) },
+  };
+}
 
-  return <PageShell title={course.title} />;
+// Every course renders through this one template; the content comes from data/course-details.ts.
+export default async function Page({ params }: Props) {
+  const course = getCourseDetail((await params).slug);
+  if (!course) notFound();
+  return (
+    <main>
+      <CourseHero course={course} />
+      <CourseSnapshot course={course} />
+      <CourseBody course={course} />
+      <CourseExtras course={course} />
+    </main>
+  );
 }

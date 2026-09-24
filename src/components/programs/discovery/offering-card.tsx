@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Gamepad2, Layers, Megaphone, type LucideIcon } from "lucide-react";
+import { ArrowUpRight, Gamepad2, Layers, Megaphone, Sparkles, type LucideIcon } from "lucide-react";
 import { cn } from "cn";
 import type { Offering } from "@/data/programs";
 import type { ViewMode } from "./program-utils";
@@ -126,6 +126,40 @@ export function OfferingCard({
           <ArrowUpRight className="size-4 transition-transform duration-300 motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5" aria-hidden="true" />
         </Link>
       </div>
+    </article>
+  );
+}
+
+/** The last tile in the grid: same frame as the program cards, but not a link. */
+export function ComingSoonCard({ view = "grid" }: { view?: ViewMode }) {
+  const frame = "relative overflow-hidden rounded-[1.75rem] border border-primary/10 bg-card";
+  const art = (
+    <div aria-hidden="true" className="relative flex size-full items-center justify-center overflow-hidden bg-gradient-to-br from-[#0b3d50] via-[#0d5674] to-primary/80">
+      <span className="absolute -top-1/4 -right-1/6 size-3/4 rounded-full border border-white/10" />
+      <span className="absolute -bottom-1/3 -left-1/6 size-2/3 rounded-full border border-white/10" />
+      <Sparkles className="size-16 text-white/30" strokeWidth={1.25} />
+    </div>
+  );
+  const text = (
+    <>
+      <p className="text-sm font-medium text-primary">More programs</p>
+      <h3 className="mt-2 text-xl font-semibold tracking-tight text-foreground">More Courses Coming Soon</h3>
+      <p className="mt-2 text-base leading-relaxed text-muted-foreground">New programs are on the way. Check back soon.</p>
+    </>
+  );
+
+  if (view === "list") {
+    return (
+      <article className={cn(frame, "flex")}>
+        <div className="w-28 shrink-0 sm:w-52">{art}</div>
+        <div className="min-w-0 flex-1 p-4 sm:p-5">{text}</div>
+      </article>
+    );
+  }
+  return (
+    <article className={cn(frame, "flex h-full flex-col")}>
+      <div className="aspect-video">{art}</div>
+      <div className="flex-1 p-5 sm:p-6">{text}</div>
     </article>
   );
 }

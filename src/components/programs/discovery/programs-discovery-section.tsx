@@ -114,7 +114,7 @@ export function ProgramsDiscoverySection() {
               )}
 
               {results.length > 0 ? (
-                <ProgramsGrid offerings={results} view={state.view} />
+                <ProgramsGrid offerings={results} view={state.view} showComingSoon={!filtering} />
               ) : (
                 <div className="flex flex-col items-center rounded-[2rem] border border-dashed border-primary/25 bg-card px-6 py-14 text-center">
                   <h3 className="text-2xl font-semibold tracking-tight text-foreground">No programs found.</h3>
