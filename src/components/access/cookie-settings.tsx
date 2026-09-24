@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { useModal } from "@/components/learning/projects/use-modal";
-import { OPEN_SETTINGS_EVENT, openCookieSettings, setConsent, useConsent } from "@/lib/consent";
+import { OPEN_SETTINGS_EVENT, openCookieSettings, setConsent, useConsent, type ConsentChoice } from "@/lib/consent";
 import { cn } from "cn";
 import { FOCUS } from "./form-ui";
 
@@ -67,8 +67,8 @@ export function CookieSettings() {
   }, [consent.embeds]);
 
   if (!open) return null;
-  const save = (value: boolean) => {
-    setConsent({ embeds: value });
+  const save = (value: boolean, choice: ConsentChoice) => {
+    setConsent({ embeds: value, choice });
     setOpen(false);
   };
 
@@ -93,9 +93,9 @@ export function CookieSettings() {
         <Row title="Marketing" text="This site does not use advertising or marketing cookies." control={<Fixed text="Not used" />} />
       </ul>
       <div className="mt-2 flex flex-col gap-2 sm:flex-row-reverse">
-        <button type="button" onClick={() => save(true)} className={cn("h-11 flex-1 rounded-full bg-primary px-5 text-[15px] font-semibold text-primary-foreground hover:bg-primary/90", FOCUS)}>Allow all</button>
-        <button type="button" onClick={() => save(embeds)} className={cn("h-11 flex-1 rounded-full border border-primary/30 px-5 text-[15px] font-semibold hover:bg-muted", FOCUS)}>Save choices</button>
-        <button type="button" onClick={() => save(false)} className={cn("h-11 flex-1 rounded-full border border-primary/30 px-5 text-[15px] font-semibold hover:bg-muted", FOCUS)}>Reject optional</button>
+        <button type="button" onClick={() => save(true, "all")} className={cn("h-11 flex-1 rounded-full bg-primary px-5 text-[15px] font-semibold text-primary-foreground hover:bg-primary/90", FOCUS)}>Allow all</button>
+        <button type="button" onClick={() => save(embeds, "custom")} className={cn("h-11 flex-1 rounded-full border border-primary/30 px-5 text-[15px] font-semibold hover:bg-muted", FOCUS)}>Save choices</button>
+        <button type="button" onClick={() => save(false, "rejected")} className={cn("h-11 flex-1 rounded-full border border-primary/30 px-5 text-[15px] font-semibold hover:bg-muted", FOCUS)}>Reject optional</button>
       </div>
     </dialog>
   );

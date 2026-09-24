@@ -99,7 +99,9 @@ export const COOKIE_SECTIONS: LegalSectionData[] = [
     title: "Managing your preferences",
     body: (
       <>
-        <p>You can change your choice about third-party embeds at any time:</p>
+        <p>
+          When you first visit, a notice lets you reject all optional items, accept only the necessary ones, or accept all. You can change your choice about third-party embeds at any time:
+        </p>
         <p>
           <CookieSettingsButton className="h-11 rounded-full bg-primary px-6 text-[15px] font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
             Open cookie preferences

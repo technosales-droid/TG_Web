@@ -6,15 +6,18 @@ import { useSyncExternalStore } from "react";
 // third-party embedded content (the Google Map). It is not loaded until the visitor allows it, and this record of
 // their choice is kept in the browser's local storage (a "necessary" item: without it the choice could not be kept).
 
+export type ConsentChoice = "all" | "necessary" | "rejected" | "custom";
+
 export interface Consent {
   /** Allow third-party embedded content (Google Maps). */
   embeds: boolean;
-  /** When the choice was made; null until the visitor chooses. */
+  /** When the choice was made; null until the visitor chooses, which is when the cookie notice is shown. */
   at: string | null;
+  choice: ConsentChoice | null;
 }
 
 const KEY = "tg-cookie-preferences";
-const DEFAULT: Consent = { embeds: false, at: null };
+const DEFAULT: Consent = { embeds: false, at: null, choice: null };
 const listeners = new Set<() => void>();
 let cache: { raw: string | null; value: Consent } | null = null;
 
@@ -28,15 +31,16 @@ function read(): Consent {
   if (raw) {
     try {
       const v = JSON.parse(raw);
-      if (typeof v.embeds === "boolean") value = { embeds: v.embeds, at: typeof v.at === "string" ? v.at : null };
+      if (typeof v.embeds === "boolean")
+        value = { embeds: v.embeds, at: typeof v.at === "string" ? v.at : null, choice: ["all", "necessary", "rejected", "custom"].includes(v.choice) ? v.choice : null };
     } catch {}
   }
   cache = { raw, value };
   return value;
 }
 
-export function setConsent(next: { embeds: boolean }) {
-  const value: Consent = { embeds: next.embeds, at: new Date().toISOString() };
+export function setConsent(next: { embeds: boolean; choice?: ConsentChoice }) {
+  const value: Consent = { embeds: next.embeds, at: new Date().toISOString(), choice: next.choice ?? (next.embeds ? "all" : "necessary") };
   try {
     localStorage.setItem(KEY, JSON.stringify(value));
   } catch {}

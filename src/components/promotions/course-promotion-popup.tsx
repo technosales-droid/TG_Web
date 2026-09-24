@@ -33,7 +33,7 @@ const writeShown = (shown: string[]) => {
 function isBusy() {
   const el = document.activeElement;
   return Boolean(
-    document.querySelector('dialog[open], header [aria-expanded="true"], header [data-popup-open]') ||
+    document.querySelector('dialog[open], [data-cookie-banner], header [aria-expanded="true"], header [data-popup-open]') ||
       document.body.style.overflow === "hidden" ||
       el?.closest("form, input, textarea, select, [contenteditable='true']"),
   );

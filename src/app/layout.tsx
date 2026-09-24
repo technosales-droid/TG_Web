@@ -3,6 +3,7 @@ import { Montserrat } from "next/font/google";
 import { SiteHeader } from "@/components/navigation/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { AccessProvider } from "@/components/access/access-provider";
+import { CookieBanner } from "@/components/access/cookie-banner";
 import { CookieSettings } from "@/components/access/cookie-settings";
 import { CoursePromotionPopup } from "@/components/promotions/course-promotion-popup";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -72,6 +73,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <SiteFooter />
           <CoursePromotionPopup />
           <CookieSettings />
+          <CookieBanner />
         </AccessProvider>
       </body>
     </html>

@@ -28,7 +28,7 @@ export function ConsentIframe({ src, title }: { src: string; title: string }) {
       <p className="max-w-xs text-sm text-white/85">The map is a Google service and is not loaded until you allow it.</p>
       <button
         type="button"
-        onClick={() => setConsent({ embeds: true })}
+        onClick={() => setConsent({ embeds: true, choice: "custom" })}
         className="relative z-10 inline-flex h-10 items-center rounded-full bg-white px-5 text-sm font-semibold text-[#0b3d50] hover:bg-white/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
       >
         Load map
