@@ -18,10 +18,10 @@ export function CookieSettingsButton({ className, children = "Cookie settings" }
 
 function Row({ title, text, control }: { title: string; text: string; control: React.ReactNode }) {
   return (
-    <li className="flex items-start justify-between gap-4 border-t border-primary/10 py-4 first:border-t-0">
+    <li className="flex items-start justify-between gap-6 border-t border-primary/10 py-5 first:border-t-0">
       <div>
         <p className="font-semibold text-foreground">{title}</p>
-        <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{text}</p>
+        <p className="mt-1 max-w-xl text-[15px] leading-relaxed text-muted-foreground">{text}</p>
       </div>
       <div className="shrink-0 pt-0.5">{control}</div>
     </li>
@@ -77,25 +77,25 @@ export function CookieSettings() {
       ref={ref}
       onClose={() => setOpen(false)}
       aria-labelledby="cookie-settings-title"
-      className="access-dialog m-auto max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-lg overflow-y-auto overscroll-contain rounded-3xl border border-primary/10 bg-card p-5 text-foreground shadow-[0_24px_60px_-20px_rgba(16,20,28,0.5)] backdrop:bg-black/60 sm:p-7"
+      className="access-dialog m-auto max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-3xl overflow-y-auto overscroll-contain rounded-3xl border border-primary/10 bg-card p-6 text-foreground shadow-[0_24px_60px_-20px_rgba(16,20,28,0.5)] backdrop:bg-black/60 sm:p-9"
     >
       <button type="button" onClick={() => setOpen(false)} aria-label="Close" className={cn("absolute top-3 right-3 inline-flex size-10 items-center justify-center rounded-full text-muted-foreground hover:bg-muted", FOCUS)}>
         <X className="size-5" aria-hidden="true" />
       </button>
-      <h2 id="cookie-settings-title" className="pr-8 text-xl font-semibold tracking-tight sm:text-2xl">Cookie preferences</h2>
-      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+      <h2 id="cookie-settings-title" className="pr-10 text-2xl font-semibold tracking-tight sm:text-3xl">Cookie preferences</h2>
+      <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
         Nothing optional is loaded unless you allow it. Read the <a href="/cookie-policy" className="font-medium text-primary underline underline-offset-2">Cookie Policy</a> for the full list.
       </p>
-      <ul className="mt-4">
+      <ul className="mt-6">
         <Row title="Necessary" text="Keeps your access session and remembers these choices. The website cannot work as described without them." control={<Fixed text="Always on" />} />
         <Row title="Third-party embeds" text="Loads the Google Map in the footer. Google may set its own cookies when it loads." control={<Switch checked={embeds} onChange={setEmbeds} label="Allow third-party embeds" />} />
         <Row title="Analytics" text="This site does not use analytics." control={<Fixed text="Not used" />} />
         <Row title="Marketing" text="This site does not use advertising or marketing cookies." control={<Fixed text="Not used" />} />
       </ul>
-      <div className="mt-2 flex flex-col gap-2 sm:flex-row-reverse">
-        <button type="button" onClick={() => save(true, "all")} className={cn("h-11 flex-1 rounded-full bg-primary px-5 text-[15px] font-semibold text-primary-foreground hover:bg-primary/90", FOCUS)}>Allow all</button>
-        <button type="button" onClick={() => save(embeds, "custom")} className={cn("h-11 flex-1 rounded-full border border-primary/30 px-5 text-[15px] font-semibold hover:bg-muted", FOCUS)}>Save choices</button>
-        <button type="button" onClick={() => save(false, "rejected")} className={cn("h-11 flex-1 rounded-full border border-primary/30 px-5 text-[15px] font-semibold hover:bg-muted", FOCUS)}>Reject optional</button>
+      <div className="mt-4 flex flex-col gap-3 border-t border-primary/10 pt-6 sm:flex-row sm:justify-end">
+        <button type="button" onClick={() => save(false, "rejected")} className={cn("h-11 whitespace-nowrap rounded-full px-6 text-[15px] font-semibold border border-primary/30 hover:bg-muted", FOCUS)}>Reject optional</button>
+        <button type="button" onClick={() => save(embeds, "custom")} className={cn("h-11 whitespace-nowrap rounded-full px-6 text-[15px] font-semibold border border-primary/30 hover:bg-muted", FOCUS)}>Save choices</button>
+        <button type="button" onClick={() => save(true, "all")} className={cn("h-11 whitespace-nowrap rounded-full px-6 text-[15px] font-semibold bg-primary text-primary-foreground hover:bg-primary/90", FOCUS)}>Allow all</button>
       </div>
     </dialog>
   );

@@ -240,3 +240,8 @@
     animation: none;
   }
 }
+
+/* The cookie notice steps aside while any dialog (such as the preferences) is open. */
+body:has(dialog[open]) [data-cookie-banner] {
+  display: none;
+}
