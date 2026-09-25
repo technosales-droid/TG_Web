@@ -11,7 +11,7 @@
  *   healthCheck()  Tells you if the secret is set and every tab exists.
  */
 
-const VERSION = "2";
+const VERSION = "3";
 const TIMEZONE = "Asia/Kolkata";
 const ROOM = 2000; // rows prepared in each tab; more are added automatically
 
@@ -204,6 +204,11 @@ function doGet() {
   return out({ ok: true, service: "Techno Gurukul lead receiver", version: VERSION });
 }
 
+/**
+ * The website sends either one record { kind, sentAt, data, secret } or a batch { kind: "batch", records: [...], secret }.
+ * A batch is written in one go, which is what lets many visitors at once be saved in a few seconds instead of one by one.
+ * The answer to a batch is { ok: true, results: [{ ok }, ...] } with one result per record, in the same order.
+ */
 function doPost(e) {
   let body;
   try { body = JSON.parse(e.postData.contents); } catch (err) { return out({ ok: false, error: "bad request" }); }
@@ -213,45 +218,99 @@ function doPost(e) {
   const lock = LockService.getScriptLock();
   try {
     lock.waitLock(30000);
-    const d = body.data || {};
-    const at = ist(body.sentAt);
-    const kind = String(body.kind);
-    const id = d.id ? String(d.id) : "";
-
-    if (kind === "lead") {
-      const src = d.source || {};
-      const row = leadRow(at, d, src);
-      const tab = leadTab(src.sourceType);
-      writeOnce(tab, id, row);
-      writeOnce("All Leads", id, row);
-    } else if (kind === "enquiry") {
-      writeOnce("Enquiries", id, [
-        at, d.name, d.phone, d.email, d.preferredContact || "Any", d.interest, d.currentStatus, d.message, d.heardVia,
-        "New", "", ist(d.consentTimestamp), d.privacyPolicyVersion, d.page, id,
-      ]);
-    } else if (kind === "lead-activity") {
-      const lead = findLead(d.leadId);
-      const src = d.source || {};
-      writeOnce("Activity", id, [
-        ist(d.at || body.sentAt), lead.name, lead.email, d.sourceLabel || src.sourceId, SOURCE_TYPE_LABEL[src.sourceType] || src.sourceType,
-        d.action || "opened", src.sourceId, d.leadId,
-      ]);
-    } else if (kind === "privacy-request") {
-      writeOnce("Privacy Requests", id, [
-        at, REQUEST_LABEL[d.type] || d.type, d.name, d.email, d.message, recordsFor(d.email), "New", "", d.privacyPolicyVersion, id,
-      ]);
-    } else if (kind === "content-report") {
-      const lead = findLead(d.reporterId);
-      writeOnce("Reports", id, [ist(d.at || body.sentAt), lead.name, lead.email, d.slug, d.itemId, d.reason, "New", "", d.reporterId, id]);
-    } else {
-      return out({ ok: false, error: "unknown kind" });
-    }
-    return out({ ok: true });
+    if (body.kind === "batch") return out({ ok: true, results: processBatch(body.records || []) });
+    const items = [];
+    collect(String(body.kind), body.data || {}, body.sentAt, function (tab, id, row) { items.push({ i: 0, tab: tab, id: id, row: row }); });
+    const results = [{ ok: true }];
+    writeItems(items, results);
+    return out(results[0]);
   } catch (err) {
     return out({ ok: false, error: String(err) });
   } finally {
     try { lock.releaseLock(); } catch (ignore) {}
   }
+}
+
+/** Works out which tab(s) and which row(s) a record becomes, and hands each to `sink(tab, id, row)`. Writes nothing. */
+function collect(kind, d, sentAt, sink) {
+  const at = ist(sentAt);
+  const id = d.id ? String(d.id) : "";
+  if (kind === "lead") {
+    const src = d.source || {};
+    const row = leadRow(at, d, src);
+    sink(leadTab(src.sourceType), id, row);
+    sink("All Leads", id, row);
+  } else if (kind === "enquiry") {
+    sink("Enquiries", id, [
+      at, d.name, d.phone, d.email, d.preferredContact || "Any", d.interest, d.currentStatus, d.message, d.heardVia,
+      "New", "", ist(d.consentTimestamp), d.privacyPolicyVersion, d.page, id,
+    ]);
+  } else if (kind === "lead-activity") {
+    const lead = findLead(d.leadId);
+    const src = d.source || {};
+    sink("Activity", id, [
+      ist(d.at || sentAt), lead.name, lead.email, d.sourceLabel || src.sourceId, SOURCE_TYPE_LABEL[src.sourceType] || src.sourceType,
+      d.action || "opened", src.sourceId, d.leadId,
+    ]);
+  } else if (kind === "privacy-request") {
+    sink("Privacy Requests", id, [
+      at, REQUEST_LABEL[d.type] || d.type, d.name, d.email, d.message, recordsFor(d.email), "New", "", d.privacyPolicyVersion, id,
+    ]);
+  } else if (kind === "content-report") {
+    const lead = findLead(d.reporterId);
+    sink("Reports", id, [ist(d.at || sentAt), lead.name, lead.email, d.slug, d.itemId, d.reason, "New", "", d.reporterId, id]);
+  } else {
+    throw new Error("unknown kind");
+  }
+}
+
+/** Writes a batch. New sign-ups and enquiries go first, so activity and privacy lookups in the same batch can find them. */
+function processBatch(records) {
+  const results = records.map(function () { return { ok: true }; });
+  [true, false].forEach(function (firstPass) {
+    const items = [];
+    records.forEach(function (rec, i) {
+      const isFirst = rec.kind === "lead" || rec.kind === "enquiry";
+      if (isFirst !== firstPass) return;
+      try {
+        collect(String(rec.kind), rec.data || {}, rec.sentAt, function (tab, id, row) { items.push({ i: i, tab: tab, id: id, row: row }); });
+      } catch (err) {
+        results[i] = { ok: false, error: String(err) };
+      }
+    });
+    writeItems(items, results);
+  });
+  return results;
+}
+
+/**
+ * Writes collected rows, one write per tab. A record id that was already written (the website retried a slow request) is
+ * skipped, never written twice. A failed tab marks its records as failed so the website can tell the visitor.
+ */
+function writeItems(items, results) {
+  if (!items.length) return;
+  const cache = CacheService.getScriptCache();
+  const keyOf = function (it) { return it.id ? it.tab + "|" + it.id : ""; };
+  const keys = items.map(keyOf).filter(function (k) { return k; });
+  const known = keys.length ? cache.getAll(keys) : {};
+  const local = {};
+  const groups = {};
+  items.forEach(function (it) {
+    const key = keyOf(it);
+    if (key && (known[key] || local[key])) return;
+    if (key) local[key] = true;
+    (groups[it.tab] = groups[it.tab] || []).push(it);
+  });
+  Object.keys(groups).forEach(function (tab) {
+    try {
+      appendMany(tab, groups[tab].map(function (x) { return x.row; }));
+      const done = {};
+      groups[tab].forEach(function (x) { if (x.id) done[tab + "|" + x.id] = "1"; });
+      if (Object.keys(done).length) cache.putAll(done, 21600);
+    } catch (err) {
+      groups[tab].forEach(function (x) { results[x.i] = { ok: false, error: String(err) }; });
+    }
+  });
 }
 
 function leadRow(at, d, src) {
@@ -275,32 +334,27 @@ function ist(iso) {
   try { return Utilities.formatDate(new Date(iso), TIMEZONE, "yyyy-MM-dd HH:mm:ss"); } catch (err) { return String(iso); }
 }
 
-/** The website retries a slow request, so a record id that was already written is skipped, never written twice. */
-function writeOnce(tab, id, row) {
-  const cache = CacheService.getScriptCache();
-  const key = id ? tab + "|" + id : "";
-  if (key && cache.get(key)) return;
-  append(tab, row);
-  if (key) cache.put(key, "1", 21600);
-}
-
 function getTab(name) {
   return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(name) || prepareTab(name);
 }
 
-/** Adds a row at the bottom, and more rows when the tab is full. Cells are already plain text (see setup). */
-function append(name, row) {
+/** Adds rows at the bottom in one write, and more sheet rows when the tab is full. Cells are already plain text (see setup). */
+function appendMany(name, rows) {
   const sheet = getTab(name);
   const n = TABS[name].cols.length;
   const at = sheet.getLastRow() + 1;
+  const need = at + rows.length - 1;
   const max = sheet.getMaxRows();
-  if (at > max) {
-    sheet.insertRowsAfter(max, 1000);
-    const from = sheet.getRange(2, 1, 1, n), to = sheet.getRange(max + 1, 1, 1000, n);
+  if (need > max) {
+    const add = Math.max(1000, need - max);
+    sheet.insertRowsAfter(max, add);
+    const from = sheet.getRange(2, 1, 1, n), to = sheet.getRange(max + 1, 1, add, n);
     from.copyTo(to, SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
     from.copyTo(to, SpreadsheetApp.CopyPasteType.PASTE_DATA_VALIDATION, false);
   }
-  sheet.getRange(at, 1, 1, n).setValues([row.map(function (v) { return v == null ? "" : String(v); })]);
+  sheet.getRange(at, 1, rows.length, n).setValues(rows.map(function (row) {
+    return row.map(function (v) { return v == null ? "" : String(v); });
+  }));
 }
 
 /** Looks a lead up by id in "All Leads", so Activity and Reports show a name and email. */

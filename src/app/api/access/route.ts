@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import {
@@ -6,6 +7,7 @@ import {
   cellSafe,
   clean,
   firstName,
+  isSubmissionId,
   normalizePhone,
   validateAccessFields,
   type AccessRequest,
@@ -15,7 +17,7 @@ import {
 } from "@/lib/access";
 import { PRIVACY_POLICY_VERSION, TERMS_VERSION } from "@/lib/legal-versions";
 import { DeliveryUnavailable, deliver } from "@/server/delivery";
-import { fail, guardPost, json } from "@/server/guard";
+import { fail, guardPost, json, limited } from "@/server/guard";
 import { sourceLabel } from "@/server/source-label";
 import { SessionNotConfigured, clearSessionCookie, newSessionId, sessionFrom, setSessionCookie } from "@/server/session";
 
@@ -34,7 +36,7 @@ export async function GET(req: NextRequest) {
 
 /** Registers a visitor: validates, records the lead through the delivery boundary, then starts a session. */
 export async function POST(req: NextRequest) {
-  const g = await guardPost(req, "access", 30, 10 * 60_000);
+  const g = await guardPost(req, "access", 30, 10 * 60_000, 240);
   if (g.res) return g.res;
   const b = g.body;
 
@@ -45,6 +47,9 @@ export async function POST(req: NextRequest) {
   const sourceType = b.source && typeof b.source === "object" ? (b.source as Record<string, unknown>).sourceType : null;
   const sourceId = clean(b.source && typeof b.source === "object" ? (b.source as Record<string, unknown>).sourceId : "", 120);
   if (!(SOURCE_TYPES as readonly string[]).includes(sourceType as string) || !sourceId) return fail(400, "Invalid request.");
+
+  const label = sourceLabel(sourceType as SourceType, sourceId);
+  if (label === null) return fail(400, "Invalid request.");
 
   const interestRaw = typeof b.interest === "string" ? b.interest : "";
   const v: AccessRequest = {
@@ -64,8 +69,12 @@ export async function POST(req: NextRequest) {
   const errors = validateAccessFields(v);
   if (Object.keys(errors).length) return json({ ok: false, error: "Please check the highlighted fields.", errors }, 400);
 
+  // One email cannot be registered over and over (for example to fill the Sheet with someone else's details).
+  if (limited(`access-email:${v.email}`, 6, 60 * 60_000)) return fail(429, "This email has been used several times already. Please try again later.");
+
   const now = new Date().toISOString();
-  const id = newSessionId();
+  // A retry of the same form (double tap, slow answer) keeps the same id, so the receiver stores the lead once.
+  const id = isSubmissionId(b.submissionId) ? createHash("sha256").update(`lead:${b.submissionId.toLowerCase()}`).digest("hex").slice(0, 32) : newSessionId();
   const lead: LeadRecord = {
     id,
     name: cellSafe(v.name),
@@ -81,7 +90,7 @@ export async function POST(req: NextRequest) {
     privacyPolicyVersion: PRIVACY_POLICY_VERSION,
     termsVersion: TERMS_VERSION,
     source: v.source,
-    sourceLabel: sourceLabel(v.source.sourceType, v.source.sourceId),
+    sourceLabel: label,
     firstAccessedAt: now,
     lastAccessedAt: now,
     createdAt: now,

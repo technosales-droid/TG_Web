@@ -6,6 +6,7 @@ import { ArrowRight, ChevronDown, Loader2, ShieldCheck } from "lucide-react";
 import {
   INTERESTS,
   LIMITS,
+  newSubmissionId,
   validateAccessFields,
   type AccessRequest,
   type AccessSource,
@@ -50,6 +51,7 @@ export function AccessGate({
 }) {
   const uid = useId();
   const [openedAt] = useState(() => Date.now());
+  const [submissionId] = useState(newSubmissionId);
   const [v, setV] = useState({ name: "", email: "", phone: "", interest: "", ageGroup: "adult" as AgeGroup, guardianConsent: false, marketingConsent: false, website: "" });
   const [errors, setErrors] = useState<FieldErrors>({});
   const [busy, setBusy] = useState(false);
@@ -74,7 +76,7 @@ export function AccessGate({
       const res = await fetch("/api/access", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...v, marketingConsent: v.marketingConsent && !minor, source, elapsedMs: Date.now() - openedAt }),
+        body: JSON.stringify({ ...v, marketingConsent: v.marketingConsent && !minor, source, submissionId, elapsedMs: Date.now() - openedAt }),
       });
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.ok) return onGranted({ displayName: data.displayName, ageGroup: data.ageGroup });

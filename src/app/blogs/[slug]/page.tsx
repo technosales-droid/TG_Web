@@ -10,6 +10,8 @@ import { getBlogPost, getBlogPosts, toBlogCard, type BlogPost } from "@/data/blo
 import { headingIds, RELATED_CATEGORIES, TAIL_TOC } from "@/lib/blog-article";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return getBlogPosts().map((post) => ({ slug: post.slug }));
 }

@@ -4,7 +4,7 @@ import { LIMITS, clean, cellSafe, cellSafeText, validateAccessFields } from "@/l
 import { PRIVACY_POLICY_VERSION } from "@/lib/legal-versions";
 import { PRIVACY_REQUEST_TYPES } from "@/lib/privacy-requests";
 import { DeliveryUnavailable, deliver } from "@/server/delivery";
-import { fail, guardPost, json } from "@/server/guard";
+import { fail, guardPost, json, limited } from "@/server/guard";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
  * the response says so.
  */
 export async function POST(req: NextRequest) {
-  const g = await guardPost(req, "privacy-request", 10, 60 * 60_000);
+  const g = await guardPost(req, "privacy-request", 10, 60 * 60_000, 30);
   if (g.res) return g.res;
   const b = g.body;
   if (typeof b.website === "string" && b.website !== "") return fail(400, "Invalid request.");
@@ -27,6 +27,8 @@ export async function POST(req: NextRequest) {
   const errors = validateAccessFields({ name, email, phone: "0000000", interest: "", ageGroup: "adult", guardianConsent: false });
   if (errors.name || errors.email) return json({ ok: false, error: "Please check the highlighted fields.", errors: { name: errors.name, email: errors.email } }, 400);
   if (type === "question" && message.length < 5) return json({ ok: false, error: "Please tell us what you would like to ask.", errors: { message: "Please write your question." } }, 400);
+
+  if (limited(`privacy-email:${email}`, 5, 24 * 60 * 60_000)) return fail(429, "You have already sent several requests today. We will reply to them; please wait.");
 
   try {
     await deliver("privacy-request", {

@@ -8,6 +8,8 @@ import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 type Props = { params: Promise<{ slug: string }> };
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return COURSE_DETAILS.map((c) => ({ slug: c.slug }));
 }

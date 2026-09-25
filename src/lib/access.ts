@@ -96,13 +96,17 @@ export interface LeadRecord {
 
 export const LIMITS = { name: 80, email: 254, phone: 15, text: 2000 } as const;
 
-export const EMAIL_RE = /^[^\s@<>()[\]\,;:"]+@[^\s@<>()[\]\,;:"]+\.[^\s@<>()[\]\,;:"]{2,}$/;
+export const EMAIL_RE = /^(?![=+\-@])[^\s@<>()[\]\,;:"]+@[^\s@<>()[\]\,;:"]+\.[^\s@<>()[\]\,;:"]{2,}$/;
 
 export type FieldErrors = Partial<Record<"name" | "email" | "phone" | "interest" | "guardianConsent" | "form", string>>;
+
+// Zero-width characters and text-direction overrides let a name look like something else in a Sheet.
+const INVISIBLE = /[\u200b-\u200f\u202a-\u202e\u2060-\u2064\u2066-\u2069\ufeff]/g;
 
 /** Removes control characters and collapses whitespace. Output is always rendered as text, never as HTML. */
 export const clean = (s: unknown, max: number) =>
   (typeof s === "string" ? s : "")
+    .replace(INVISIBLE, "")
     .replace(/[\u0000-\u001f\u007f]/g, " ")
     .replace(/\s+/g, " ")
     .trim()
@@ -111,6 +115,7 @@ export const clean = (s: unknown, max: number) =>
 /** Like clean() but keeps line breaks, for messages. */
 export const cleanText = (s: unknown, max: number) =>
   (typeof s === "string" ? s : "")
+    .replace(INVISIBLE, "")
     .replace(/\r\n?/g, "\n")
     .replace(/[\u0000-\u0009\u000b-\u001f\u007f]/g, " ")
     .trim()
@@ -176,3 +181,8 @@ export function validateAccessFields(v: Pick<AccessRequest, "name" | "email" | "
 /** Maps who made a project to the access source recorded for it. */
 export const sourceTypeForCreator = (c: "student" | "faculty" | "institute" | "other"): SourceType =>
   c === "student" ? "student-project" : c === "faculty" ? "faculty-project" : c === "institute" ? "institute-project" : "other-project";
+
+/** A random id for one form submission. Sent with the form so that pressing Send twice, or retrying after a slow
+ * answer, is stored once. Empty where the browser cannot make one; the server then makes its own. */
+export const newSubmissionId = () => (typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : "");
+export const isSubmissionId = (v: unknown): v is string => typeof v === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);

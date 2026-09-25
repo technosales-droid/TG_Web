@@ -69,12 +69,12 @@ export function buildMailto(v: EnquiryValues): { mailto: string; email: string }
 }
 
 /** Sends the enquiry to the server, which stores it. Resolves to an error message when it could not be sent. */
-export async function sendEnquiry(v: EnquiryValues, openedAt: number, website: string): Promise<{ ok: true } | { ok: false; error: string }> {
+export async function sendEnquiry(v: EnquiryValues, openedAt: number, website: string, submissionId: string): Promise<{ ok: true } | { ok: false; error: string }> {
   try {
     const res = await fetch("/api/enquiry", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...v, website, elapsedMs: Date.now() - openedAt }),
+      body: JSON.stringify({ ...v, website, submissionId, elapsedMs: Date.now() - openedAt }),
     });
     const data = await res.json().catch(() => ({}));
     if (res.ok && data.ok) return { ok: true };

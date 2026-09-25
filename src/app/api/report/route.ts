@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server";
 import { clean } from "@/lib/access";
 import { DeliveryUnavailable, deliver } from "@/server/delivery";
 import { fail, guardPost, json } from "@/server/guard";
+import { sourceLabel } from "@/server/source-label";
 import { SessionNotConfigured, sessionFrom } from "@/server/session";
 
 export const dynamic = "force-dynamic";
@@ -12,7 +13,7 @@ export const dynamic = "force-dynamic";
  * Removing content is done by an authorised admin against the backend that stores comments (see docs/backend-requirements.md).
  */
 export async function POST(req: NextRequest) {
-  const g = await guardPost(req, "report", 10, 60 * 60_000);
+  const g = await guardPost(req, "report", 10, 60 * 60_000, 60);
   if (g.res) return g.res;
   let session;
   try {
@@ -25,7 +26,7 @@ export async function POST(req: NextRequest) {
   const slug = clean(g.body.slug, 120);
   const itemId = clean(g.body.itemId, 60);
   const reason = clean(g.body.reason, 500);
-  if (!slug || !itemId) return fail(400, "Invalid request.");
+  if (!slug || !/^[\w-]{1,60}$/.test(itemId) || sourceLabel("blog", slug) === null) return fail(400, "Invalid request.");
   try {
     await deliver("content-report", { id: randomUUID(), reporterId: session.sid, slug, itemId, reason, at: new Date().toISOString() });
     return json({ ok: true });

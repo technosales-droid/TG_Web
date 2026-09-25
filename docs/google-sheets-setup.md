@@ -38,9 +38,10 @@ The columns you use every day are on the left. Grey headers on the right are tec
    long random value) and `NEXT_PUBLIC_SITE_URL`. Restart or redeploy.
 7. **Check.** Run `healthCheck` in the editor. Then send an enquiry on `/contact` and try to comment on a blog article.
 
-## Upgrade from the first version
+## Upgrade from an earlier version
 
-1. Replace the script with the new `docs/google-apps-script.gs`.
+1. Replace the script with the new `docs/google-apps-script.gs` (version 3, which saves many visitors in one go). The website
+   still works with an older script, only slower, so upgrade the script whenever you can.
 2. Run `setup`. Your old tabs are kept and renamed `Old ...`; the new ones are created. Delete the old ones when sure.
 3. *Deploy > Manage deployments*, pencil, *New version*, *Deploy*. The URL does not change.
 
@@ -62,8 +63,16 @@ The columns you use every day are on the left. Grey headers on the right are tec
 - The site waits for the Sheet to confirm before telling a visitor it was received (about 2 to 3 seconds). If the Sheet is
   slow the site retries once; the script ignores a record it already wrote, so a retry never creates a duplicate row. If the
   Sheet is down the visitor sees a clear message, plus an email fallback for enquiries.
-- The Sheet handles one record at a time. Roughly 20 to 25 registrations a minute is its ceiling; a larger burst queues and
-  every one still lands, just slower. For bigger events use a proper database.
+- Records that arrive together are saved together. In a test with a stand-in Sheet, 40 visitors at once were all saved in
+  about 6 seconds and 100 in about 14. Measure the real Sheet with a few test sign-ups; Google's speed varies. Google also
+  caps how much script time an account gets per day (see Apps Script quotas), so the site limits how much any one visitor,
+  or the whole site, can send.
+- Limits, so a bot cannot fill the Sheet or use up the daily quota: 15 enquiries and 30 registrations per address per 10
+  minutes; 120 enquiries and 240 registrations per minute for the whole site; 3 enquiries and 6 registrations per email per
+  hour. During an attack these limits can also turn away real visitors for a minute; that is the deliberate trade.
+- Only the first time a person opens a project or resource is recorded in Activity.
+- A failed or unclear answer from Google (including a Google error page) is never treated as saved: the visitor is told to
+  try again. Each form carries a submission id, so trying again after a slow answer never creates a second row.
 - Everything is stored as plain text, so a name that starts with `=` cannot run as a formula. Names starting with `=`, `+`,
   `-` or `@` get a leading `'`, and messages starting with `=` or `@` do, in case the Sheet is exported to CSV.
 - Phone numbers are stored in one format: `+91 98765 43210` for India, `+971501234567` for other countries.

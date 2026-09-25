@@ -19,6 +19,7 @@ import {
 } from "./contact-submit";
 import { FOCUS } from "./contact-ui";
 import { Honeypot } from "@/components/access/form-ui";
+import { newSubmissionId } from "@/lib/access";
 
 const FIELD =
   "block h-12 w-full rounded-xl border border-primary/20 bg-background px-4 text-base text-foreground placeholder:text-muted-foreground outline-none transition-[border-color,box-shadow] duration-150 hover:border-primary/40 focus-visible:border-primary focus-visible:ring-4 focus-visible:ring-primary/15 motion-reduce:transition-none";
@@ -116,6 +117,8 @@ export function ContactForm() {
   const [failure, setFailure] = useState<string | null>(null);
   const [website, setWebsite] = useState("");
   const [openedAt] = useState(() => Date.now());
+  // Sent with the form so pressing Send twice, or retrying after a slow answer, is stored once.
+  const [submissionId, setSubmissionId] = useState(newSubmissionId);
 
   const errors = useMemo(() => validateEnquiry(values), [values]);
   const err = (k: Key) => (submitted || touched[k] ? errors[k] : undefined);
@@ -142,7 +145,7 @@ export function ContactForm() {
       return;
     }
     setSending(true);
-    const result = await sendEnquiry(values, openedAt, website);
+    const result = await sendEnquiry(values, openedAt, website, submissionId);
     setSending(false);
     if (result.ok) setSent(true);
     else setFailure(result.error);
@@ -166,6 +169,7 @@ export function ContactForm() {
             setTouched({});
             setSubmitted(false);
             setSent(false);
+            setSubmissionId(newSubmissionId());
           }}
           className={cn("mt-6 inline-flex min-h-11 items-center rounded text-base font-semibold text-primary", FOCUS)}
         >
