@@ -8,10 +8,11 @@
  *
  * Functions you can run from the editor (choose it in the dropdown, then Run):
  *   setup()        Creates or upgrades every tab, dropdowns, colours and the Dashboard. Safe to run again.
- *   healthCheck()  Tells you if the secret is set and every tab exists.
+ *   healthCheck()  Tells you if the secret is set and every tab exists with the right columns.
+ *   deleteAllDataAndStartFresh()  Deletes every tab and all data, then builds clean empty tabs. Asks first.
  */
 
-const VERSION = "3";
+const VERSION = "4";
 const TIMEZONE = "Asia/Kolkata";
 const ROOM = 2000; // rows prepared in each tab; more are added automatically
 
@@ -75,20 +76,56 @@ function leadTab(sourceType) {
 function setup() {
   const book = SpreadsheetApp.getActiveSpreadsheet();
   book.setSpreadsheetTimeZone(TIMEZONE);
-  Object.keys(TABS).forEach(function (name) { prepareTab(name); });
-  buildDashboard();
-  book.toast("Done. Your tabs are ready. Old tabs from an earlier version were renamed 'Old ...'; delete them when you are sure.", "Techno Gurukul", 12);
+  const problems = [];
+  Object.keys(TABS).forEach(function (name) {
+    try { prepareTab(name); } catch (err) { problems.push(name + ": " + err); }
+  });
+  try { buildDashboard(); } catch (err) { problems.push("Dashboard: " + err); }
+  tell(problems.length
+    ? "Some tabs could not be set up. Send this message to whoever maintains the website: " + problems.join(" | ")
+    : "Done. Every tab is ready. Tabs from an earlier version were renamed 'Old ...'; delete them when you are sure.");
+}
+
+/** Deletes every tab and all data, then builds clean empty tabs. Use it to wipe test data before going live. */
+function deleteAllDataAndStartFresh() {
+  const ui = SpreadsheetApp.getUi();
+  const answer = ui.alert("Delete everything?",
+    "This deletes EVERY tab and every lead, enquiry and request in this Sheet, then builds fresh empty tabs. It cannot be undone. Continue?",
+    ui.ButtonSet.YES_NO);
+  if (answer !== ui.Button.YES) return;
+  const book = SpreadsheetApp.getActiveSpreadsheet();
+  const keep = book.insertSheet("temporary " + Date.now()); // a Sheet cannot have zero tabs while the others are deleted
+  book.getSheets().forEach(function (sh) { if (sh.getSheetId() !== keep.getSheetId()) book.deleteSheet(sh); });
+  setup();
+  if (book.getSheets().length > 1) book.deleteSheet(keep);
+}
+
+/** Shows a message box when run from the editor, and always logs it. */
+function tell(msg) {
+  Logger.log(msg);
+  try { SpreadsheetApp.getUi().alert("Techno Gurukul", msg, SpreadsheetApp.getUi().ButtonSet.OK); } catch (err) { /* no screen to show it on */ }
 }
 
 function healthCheck() {
   const book = SpreadsheetApp.getActiveSpreadsheet();
   const problems = [];
   if (!PropertiesService.getScriptProperties().getProperty("WEBHOOK_SECRET")) problems.push("WEBHOOK_SECRET is not set (Project Settings > Script properties).");
-  Object.keys(TABS).concat(["Dashboard"]).forEach(function (n) { if (!book.getSheetByName(n)) problems.push("Tab missing: " + n + " (run setup)."); });
+  Object.keys(TABS).forEach(function (n) {
+    const sh = book.getSheetByName(n);
+    if (!sh) problems.push("Tab missing: " + n + " (run setup).");
+    else if (!headerMatches(sh, TABS[n])) problems.push("Tab '" + n + "' has old or changed column headings (run setup).");
+  });
+  if (!book.getSheetByName("Dashboard")) problems.push("Tab missing: Dashboard (run setup).");
   const msg = problems.length ? "Problems: " + problems.join(" ") : "All good. Version " + VERSION + ". Deploy a New version if you changed this code.";
-  book.toast(msg, "Health check", 15);
-  Logger.log(msg);
+  tell(msg);
   return msg;
+}
+
+/** True when the first columns of the tab are exactly the expected headings. Columns you add to the right are fine. */
+function headerMatches(sheet, spec) {
+  const n = spec.cols.length;
+  if (sheet.getLastColumn() < n) return false;
+  return sheet.getRange(1, 1, 1, n).getValues()[0].join("|") === spec.cols.join("|");
 }
 
 function colOf(name, header) { return TABS[name].cols.indexOf(header) + 1; }
@@ -101,8 +138,7 @@ function prepareTab(name) {
   const n = spec.cols.length;
   let sheet = book.getSheetByName(name);
   if (sheet) {
-    const have = sheet.getLastColumn() ? sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0].join("|") : "";
-    if (have === spec.cols.join("|")) { formatTab(sheet, spec, n); return sheet; }
+    if (headerMatches(sheet, spec)) { formatTab(sheet, spec, n); return sheet; }
     sheet.setName(("Old " + name + " " + Utilities.formatDate(new Date(), TIMEZONE, "MMdd-HHmm")).slice(0, 99));
   }
   sheet = book.insertSheet(name);
@@ -122,7 +158,7 @@ function formatTab(sheet, spec, n) {
   sheet.setFrozenRows(1);
   sheet.setFrozenColumns(2);
   // Plain text everywhere, so nothing a visitor typed can turn into a formula and phone numbers keep their +.
-  sheet.getRange(2, 1, max - 1, n).setNumberFormat("@").setVerticalAlignment("top");
+  sheet.getRange(2, 1, max - 1, n).setNumberFormat("@").setVerticalAlignment("top").setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
   spec.cols.forEach(function (c, i) {
     sheet.setColumnWidth(i + 1, WIDTH[c] || (i + 1 >= spec.tech ? 150 : 130));
     if (c === "Message" || c === "Notes" || c === "Reason") sheet.getRange(2, i + 1, max - 1, 1).setWrap(true);
@@ -337,8 +373,18 @@ function ist(iso) {
   try { return Utilities.formatDate(new Date(iso), TIMEZONE, "yyyy-MM-dd HH:mm:ss"); } catch (err) { return String(iso); }
 }
 
+const checkedTabs = {}; // tabs whose headings were verified during this request
+
+/**
+ * The tab to write to. If it is missing, or was laid out by an older version (different columns), the old one is kept
+ * and renamed "Old ..." and a correct one is created, so a row can never land under the wrong heading.
+ */
 function getTab(name) {
-  return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(name) || prepareTab(name);
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(name);
+  if (sheet && checkedTabs[name]) return sheet;
+  const ready = sheet && headerMatches(sheet, TABS[name]) ? sheet : prepareTab(name);
+  checkedTabs[name] = true;
+  return ready;
 }
 
 /** Adds rows at the bottom in one write, and more sheet rows when the tab is full. Cells are already plain text (see setup). */

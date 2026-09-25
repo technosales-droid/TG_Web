@@ -46,9 +46,19 @@ and publish a new version, the Sheet keeps its old layout (the website still sav
 one record at a time). Version 3 also fixes a lost-sign-up bug in version 1: two sign-ups arriving together could write
 over each other's row in All Leads.
 
+## Wipe the test data and start clean
+
+Do this before going live, or any time the tabs look wrong. In the Apps Script editor choose
+`deleteAllDataAndStartFresh` in the function dropdown and click *Run*. It asks first, then deletes every tab and all data
+and builds clean tabs with a Dashboard. It cannot be undone. Nothing on the website needs to change.
+
+If you ever paste a newer script and forget to run `setup`, the script now notices a tab with old headings, keeps it as
+`Old <name>` and writes into a correct new tab, so a row never lands under the wrong heading. Run `healthCheck` to see the
+state of every tab. Columns you add to the right of the standard ones are left alone; do not rename the standard headings.
+
 ## Upgrade from an earlier version
 
-1. Replace the script with the new `docs/google-apps-script.gs` (version 3, which saves many visitors in one go). The website
+1. Replace the script with the new `docs/google-apps-script.gs` (which saves many visitors in one go). The website
    still works with an older script, only slower, so upgrade the script whenever you can.
 2. Run `setup`. Your old tabs are kept and renamed `Old ...`; the new ones are created. Delete the old ones when sure.
 3. *Deploy > Manage deployments*, pencil, *New version*, *Deploy*. The URL does not change.
