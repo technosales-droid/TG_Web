@@ -56,6 +56,9 @@ If you ever paste a newer script and forget to run `setup`, the script now notic
 `Old <name>` and writes into a correct new tab, so a row never lands under the wrong heading. Run `healthCheck` to see the
 state of every tab. Columns you add to the right of the standard ones are left alone; do not rename the standard headings.
 
+Run `audit` in the editor at any time. It reports, for every tab, the number of rows and whether any record was written
+twice, is missing its id, or sits under the wrong heading. Anything other than plain row counts needs a look.
+
 ## Upgrade from an earlier version
 
 1. Replace the script with the new `docs/google-apps-script.gs` (which saves many visitors in one go). The website

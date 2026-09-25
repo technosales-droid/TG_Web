@@ -9,10 +9,11 @@
  * Functions you can run from the editor (choose it in the dropdown, then Run):
  *   setup()        Creates or upgrades every tab, dropdowns, colours and the Dashboard. Safe to run again.
  *   healthCheck()  Tells you if the secret is set and every tab exists with the right columns.
+ *   audit()        Checks every tab for lost, duplicated or misplaced rows and shows the result.
  *   deleteAllDataAndStartFresh()  Deletes every tab and all data, then builds clean empty tabs. Asks first.
  */
 
-const VERSION = "4";
+const VERSION = "5";
 const TIMEZONE = "Asia/Kolkata";
 const ROOM = 2000; // rows prepared in each tab; more are added automatically
 
@@ -251,9 +252,12 @@ function doPost(e) {
   const expected = PropertiesService.getScriptProperties().getProperty("WEBHOOK_SECRET");
   if (!expected || body.secret !== expected) return out({ ok: false, error: "unauthorised" });
 
+  // Each request starts with nothing remembered, so it never trusts a lookup made before the last write.
+  leadMap = null; emailCounts = null; checkedTabs = {};
   const lock = LockService.getScriptLock();
   try {
     lock.waitLock(30000);
+    if (body.kind === "audit") return out({ ok: true, version: VERSION, tabs: auditTabs(!!body.withIds) });
     if (body.kind === "batch") return out({ ok: true, results: processBatch(body.records || []) });
     const items = [];
     collect(String(body.kind), body.data || {}, body.sentAt, function (tab, id, row) { items.push({ i: 0, tab: tab, id: id, row: row }); });
@@ -373,7 +377,7 @@ function ist(iso) {
   try { return Utilities.formatDate(new Date(iso), TIMEZONE, "yyyy-MM-dd HH:mm:ss"); } catch (err) { return String(iso); }
 }
 
-const checkedTabs = {}; // tabs whose headings were verified during this request
+let checkedTabs = {}; // tabs whose headings were verified during this request
 
 /**
  * The tab to write to. If it is missing, or was laid out by an older version (different columns), the old one is kept
@@ -406,28 +410,86 @@ function appendMany(name, rows) {
   }));
 }
 
+// Reading a tab once per request and looking records up in memory keeps a batch of 40 fast even when the tab holds
+// thousands of rows. (Searching the tab for each record would take seconds each.)
+let leadMap = null;
+let emailCounts = null;
+
 /** Looks a lead up by id in "All Leads", so Activity and Reports show a name and email. */
 function findLead(id) {
   const none = { name: "(not found)", email: "" };
   if (!id) return none;
-  const sheet = getTab("All Leads");
-  const idCol = colOf("All Leads", "Lead ID");
-  const cell = sheet.getRange(1, idCol, Math.max(sheet.getLastRow(), 1), 1).createTextFinder(String(id)).matchEntireCell(true).findNext();
-  if (!cell) return none;
-  const row = sheet.getRange(cell.getRow(), 1, 1, idCol).getValues()[0];
-  return { name: row[colOf("All Leads", "Name") - 1], email: row[colOf("All Leads", "Email") - 1] };
+  if (!leadMap) {
+    leadMap = {};
+    const sheet = getTab("All Leads"), last = sheet.getLastRow();
+    if (last > 1) {
+      const idCol = colOf("All Leads", "Lead ID"), nameCol = colOf("All Leads", "Name") - 1, emailCol = colOf("All Leads", "Email") - 1;
+      sheet.getRange(2, 1, last - 1, idCol).getValues().forEach(function (row) { leadMap[String(row[idCol - 1])] = { name: row[nameCol], email: row[emailCol] }; });
+    }
+  }
+  return leadMap[String(id)] || none;
 }
 
 /** How many records we hold for an email, so a deletion or access request shows what to look for. */
 function recordsFor(email) {
   if (!email) return "";
-  const parts = [];
-  ["All Leads", "Enquiries"].forEach(function (name) {
-    const sheet = getTab(name);
-    const last = sheet.getLastRow();
-    if (last < 2) return;
-    const found = sheet.getRange(2, colOf(name, "Email"), last - 1, 1).createTextFinder(String(email)).matchEntireCell(true).matchCase(false).findAll().length;
-    if (found) parts.push((name === "All Leads" ? "Sign-ups: " : "Enquiries: ") + found);
-  });
+  if (!emailCounts) {
+    emailCounts = {};
+    ["All Leads", "Enquiries"].forEach(function (name) {
+      const sheet = getTab(name), last = sheet.getLastRow();
+      const counts = emailCounts[name] = {};
+      if (last < 2) return;
+      sheet.getRange(2, colOf(name, "Email"), last - 1, 1).getValues().forEach(function (row) {
+        const e = String(row[0]).toLowerCase();
+        if (e) counts[e] = (counts[e] || 0) + 1;
+      });
+    });
+  }
+  const key = String(email).toLowerCase(), parts = [];
+  if (emailCounts["All Leads"][key]) parts.push("Sign-ups: " + emailCounts["All Leads"][key]);
+  if (emailCounts["Enquiries"][key]) parts.push("Enquiries: " + emailCounts["Enquiries"][key]);
   return parts.length ? parts.join(", ") : "None found";
+}
+
+const ID_COLUMN = { "Enquiries": "Enquiry ID", "Blog Comments": "Lead ID", "Projects": "Lead ID", "Resources": "Lead ID", "All Leads": "Lead ID", "Privacy Requests": "Request ID", "Reports": "Report ID" };
+
+/**
+ * Checks every tab: are the headings right, how many rows, any repeated ids (a record written twice), any row without an
+ * id or with a misplaced time (a sign of columns out of line). With `withIds` the ids are returned too, so the website's
+ * test tool can prove that every record it sent is present.
+ */
+function auditTabs(withIds) {
+  const book = SpreadsheetApp.getActiveSpreadsheet();
+  const result = {};
+  Object.keys(TABS).forEach(function (name) {
+    const spec = TABS[name], sheet = book.getSheetByName(name);
+    if (!sheet) { result[name] = { missing: true }; return; }
+    const last = sheet.getLastRow(), n = spec.cols.length;
+    const info = { headerOk: headerMatches(sheet, spec), rows: Math.max(0, last - 1), repeatedIds: 0, blankIds: 0, badTimes: 0 };
+    const idAt = ID_COLUMN[name] ? spec.cols.indexOf(ID_COLUMN[name]) : -1;
+    if (last > 1) {
+      const seen = {}, ids = [];
+      sheet.getRange(2, 1, last - 1, n).getValues().forEach(function (row) {
+        if (!/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(String(row[0]))) info.badTimes++;
+        if (idAt < 0) return;
+        const id = String(row[idAt]);
+        if (!id) info.blankIds++;
+        else if (seen[id]) info.repeatedIds++;
+        else { seen[id] = true; ids.push(id); }
+      });
+      if (withIds && idAt >= 0) info.ids = ids;
+    }
+    result[name] = info;
+  });
+  return result;
+}
+
+/** The audit, shown in a message box. */
+function audit() {
+  const r = auditTabs(false), lines = [];
+  Object.keys(r).forEach(function (name) {
+    const t = r[name];
+    lines.push(t.missing ? name + ": MISSING" : name + ": " + t.rows + " rows" + (t.headerOk ? "" : ", HEADINGS WRONG") + (t.repeatedIds ? ", " + t.repeatedIds + " REPEATED" : "") + (t.blankIds ? ", " + t.blankIds + " WITHOUT ID" : "") + (t.badTimes ? ", " + t.badTimes + " BAD TIME" : ""));
+  });
+  tell(lines.join("\n"));
 }
