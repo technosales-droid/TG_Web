@@ -58,7 +58,7 @@ export function ResourcesHero() {
             {FEATURED.map((f, i) => (
               <Image
                 key={f.slug}
-                src={IMAGES[f.slug]}
+                src={IMAGES[f.slug] ?? "/brand/documentation.jpg"}
                 alt=""
                 fill
                 priority={i === 0}

@@ -13,7 +13,7 @@
  *   deleteAllDataAndStartFresh()  Deletes every tab and all data, then builds clean empty tabs. Asks first.
  */
 
-const VERSION = "6";
+const VERSION = "7";
 const TIMEZONE = "Asia/Kolkata";
 const ROOM = 2000; // rows prepared in each tab; more are added automatically
 
@@ -51,7 +51,7 @@ const TABS = {
 };
 
 const WIDTH = { "Received at": 150, "Time": 150, "Name": 170, "Phone": 140, "Email": 230, "Message": 380, "Notes": 240, "Content": 260,
-  "Opened": 260, "Follow-up OK?": 210, "Reason": 300, "Article": 220, "Request": 160, "Records found": 190, "Reporter": 170 };
+  "Opened": 260, "Follow-up OK?": 290, "Reason": 300, "Article": 220, "Request": 160, "Records found": 190, "Reporter": 170 };
 
 const SOURCE_TYPE_LABEL = {
   "blog": "Blog article", "comment": "Blog comment", "review": "Blog review", "resource": "Resource",
@@ -385,7 +385,7 @@ function recentIds(tab) {
 
 function leadRow(at, d, src) {
   const minor = d.ageGroup === "minor";
-  const followUp = minor ? "No: under 18" : d.marketingConsent ? "Yes: agreed to marketing" : "No: has not agreed to marketing";
+  const followUp = minor ? "No: under 18" : d.marketingConsent ? "Yes: agreed to marketing (email not confirmed)" : "No: has not agreed to marketing";
   return [
     at, d.name, d.phone, d.email, d.interest || "", SOURCE_TYPE_LABEL[src.sourceType] || src.sourceType, d.sourceLabel || src.sourceId,
     followUp, "New", "",

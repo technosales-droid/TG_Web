@@ -15,7 +15,7 @@ into the right tab. No CRM is needed. Allow about 30 minutes the first time, 5 m
 | All Leads | Every registration, from any of the three | The access form |
 | Activity | Each time a registered person opens a project or resource | Gated content |
 | Privacy Requests | Access, correction, deletion, consent withdrawal and questions | The Privacy Requests page |
-| Reports | Reported comments (for when public comments exist) | Not used yet |
+| Reports | Reported comments | Not used: the report route is switched off until comments are saved on the server |
 
 The columns you use every day are on the left. Grey headers on the right are technical details (ids, versions).
 
@@ -103,7 +103,9 @@ twice, is missing its id, or sits under the wrong heading. Anything other than p
 - Everything is stored as plain text, so a name that starts with `=` cannot run as a formula. Names starting with `=`, `+`,
   `-` or `@` get a leading `'`, and messages starting with `=` or `@` do, in case the Sheet is exported to CSV.
 - Phone numbers are stored in one format: `+91 98765 43210` for India, `+971501234567` for other countries.
-- Only follow up leads whose **Follow-up OK?** starts with `Yes`.
+- Only follow up leads whose **Follow-up OK?** starts with `Yes`. Nobody confirms an email address at sign-up, so a `Yes` means
+  the form was ticked, not that the owner of that email did it. Say who you are and how to opt out in the first message.
+- Visitors under 18 cannot create an access profile (a parent's agreement cannot be verified yet), so there is no under-18 row.
 - A Google Sheet is not a secured database. Keep sharing tight, turn on two-step verification for the owning account, and
   export a backup regularly.
 - If the site sits behind a proxy that hides the visitor's address (some cPanel setups), spam limits fall back to one shared

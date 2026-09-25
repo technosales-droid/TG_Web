@@ -45,7 +45,7 @@ export const PRIVACY_SECTIONS: LegalSectionData[] = [
         <ul className={UL}>
           <li>Your full name, email address and phone number.</li>
           <li>Optionally, the area you are interested in (for example Courses or Game Development).</li>
-          <li>Whether you are 18 or older, and, if you are under 18, that a parent or guardian has agreed.</li>
+          <li>Whether you are 18 or older. Access profiles are not available to visitors under 18 at this time.</li>
           <li>Whether you agreed to be contacted by us. This is a separate choice and is never pre-selected.</li>
           <li>When you agreed, and which version of this policy and the Terms applied.</li>
           <li>Which page or content led you to register, and the content you later open with your access profile.</li>
@@ -222,15 +222,15 @@ export const PRIVACY_SECTIONS: LegalSectionData[] = [
     body: (
       <>
         <p>
-          A person under 18 is a child under the Act. The access form asks whether you are 18 or older. If you are not, we
-          ask you to confirm that a parent or guardian has agreed, and we do not send you promotional messages or use
-          your information for tracking or targeted advertising.
+          A person under 18 is a child under the Act. The access form asks whether you are 18 or older. If you are not, we do
+          not create an access profile, because we cannot yet verify that a parent or guardian has agreed. We do not send
+          promotional messages to, or use information for tracking or targeted advertising about, anyone who tells us they are
+          under 18.
         </p>
         <LegalNote>
-          At present the parent or guardian confirmation is a tick box. It does not verify the parent or guardian. Before
-          launch, <Tbc>VERIFIABLE PARENTAL CONSENT METHOD</Tbc> must be put in place, as the Rules require for children&rsquo;s
-          data. Until then, we ask parents and guardians to supervise use of the access form, and to contact us to remove
-          a profile.
+          Access for visitors under 18 is switched off until <Tbc>VERIFIABLE PARENTAL CONSENT METHOD</Tbc> is put in place, as the
+          Rules require for children&rsquo;s data. A parent or guardian can contact us instead, and we can also remove a profile
+          on request.
         </LegalNote>
       </>
     ),

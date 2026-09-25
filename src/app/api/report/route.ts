@@ -1,37 +1,10 @@
-import { randomUUID } from "node:crypto";
-import type { NextRequest } from "next/server";
-import { clean } from "@/lib/access";
-import { DeliveryUnavailable, deliver } from "@/server/delivery";
-import { fail, guardPost, json } from "@/server/guard";
-import { sourceLabel } from "@/server/source-label";
-import { SessionNotConfigured, sessionFrom } from "@/server/session";
+import { fail } from "@/server/guard";
 
 export const dynamic = "force-dynamic";
 
-/**
- * Reports a comment or review for moderation. It is the intake half of moderation: it sends the report to the team.
- * Removing content is done by an authorised admin against the backend that stores comments (see docs/backend-requirements.md).
- */
-export async function POST(req: NextRequest) {
-  const g = await guardPost(req, "report", 10, 60 * 60_000, 60);
-  if (g.res) return g.res;
-  let session;
-  try {
-    session = sessionFrom(req);
-  } catch (e) {
-    if (e instanceof SessionNotConfigured) return fail(503, "Unavailable.");
-    throw e;
-  }
-  if (!session) return fail(401, "Access required.");
-  const slug = clean(g.body.slug, 120);
-  const itemId = clean(g.body.itemId, 60);
-  const reason = clean(g.body.reason, 500);
-  if (!slug || !/^[\w-]{1,60}$/.test(itemId) || sourceLabel("blog", slug) === null) return fail(400, "Invalid request.");
-  try {
-    await deliver("content-report", { id: randomUUID(), reporterId: session.sid, slug, itemId, reason, at: new Date().toISOString() });
-    return json({ ok: true });
-  } catch (e) {
-    if (e instanceof DeliveryUnavailable) return fail(503, "Reporting is not available right now.");
-    throw e;
-  }
+// BLOCKED. Comments and reviews are saved only on the device that wrote them, so a report would point at content the
+// team cannot see, and nothing in the site sends one. Turn this on together with server-side comments and moderation:
+// it then needs to check that the reported comment exists, and to be sent from a visible Report button.
+export async function POST() {
+  return fail(404, "Not found.");
 }

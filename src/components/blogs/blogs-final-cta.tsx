@@ -101,7 +101,7 @@ function FloatingPortraits({ visible }: { visible: boolean }) {
         >
           <div
             className={cn(
-              "avatar-drift size-full overflow-hidden rounded-full bg-gradient-to-br shadow-[0_8px_20px_-10px_rgba(16,20,28,0.35)] ring-2 ring-white",
+              "avatar-drift relative size-full overflow-hidden rounded-full bg-gradient-to-br shadow-[0_8px_20px_-10px_rgba(16,20,28,0.35)] ring-2 ring-white",
               TONES[i % TONES.length]
             )}
             style={

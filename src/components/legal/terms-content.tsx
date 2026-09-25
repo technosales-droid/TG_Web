@@ -179,7 +179,7 @@ export const TERMS_SECTIONS: LegalSectionData[] = [
           <Link href="/privacy-policy" className="font-medium text-primary underline-offset-2 hover:underline">
             Privacy Policy
           </Link>
-          . If you are under 18, a parent or guardian must agree before you create a profile. We may restrict or end
+          . Access profiles are not available to visitors under 18 at this time. We may restrict or end
           access if these terms or the Community Guidelines are broken, or if details are found to be false.
         </p>
       </>

@@ -14,6 +14,7 @@ import {
   type FieldErrors,
   type SourceType,
 } from "@/lib/access";
+import { CONTACT } from "@/components/contact/contact-data";
 import { cn } from "cn";
 import { ErrorText, FIELD, FOCUS, Honeypot, INVALID, Label } from "./form-ui";
 
@@ -64,6 +65,7 @@ export function AccessGate({
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
+    if (minor) return;
     const found = validateAccessFields({ ...v, interest: v.interest as AccessRequest["interest"] });
     if (Object.keys(found).length) {
       setErrors(found);
@@ -148,13 +150,15 @@ export function AccessGate({
       </fieldset>
 
       {minor && (
-        <div className="mt-4 rounded-xl border border-primary/20 bg-accent/70 p-4 text-sm leading-relaxed text-foreground/90">
-          <p>If you are under 18, a parent or guardian needs to agree to you sharing these details. We do not send promotional messages to visitors under 18.</p>
-          <label className="mt-3 flex cursor-pointer items-start gap-3">
-            <input id={`${uid}-guardianConsent`} type="checkbox" checked={v.guardianConsent} onChange={(e) => set("guardianConsent", e.target.checked)} aria-invalid={!!errors.guardianConsent} aria-describedby={desc("guardianConsent")} className="mt-0.5 size-5 shrink-0 accent-[#0c709a]" />
-            <span>My parent or guardian has agreed to me sharing these details with Techno Gurukul.</span>
-          </label>
-          <ErrorText id={`${uid}-guardianConsent-error`}>{errors.guardianConsent}</ErrorText>
+        <div role="alert" className="mt-4 rounded-xl border border-primary/20 bg-accent/70 p-4 text-sm leading-relaxed text-foreground/90">
+          <p>
+            Access profiles are not available to visitors under 18 yet, because we cannot verify a parent or guardian&rsquo;s agreement. A parent or
+            guardian can email{" "}
+            <a href={`mailto:${CONTACT.email ?? "admission@technogurukul.com"}`} className="font-semibold text-primary underline underline-offset-2">
+              {CONTACT.email ?? "admission@technogurukul.com"}
+            </a>{" "}
+            and we will help. You can keep reading the rest of the site.
+          </p>
         </div>
       )}
 
@@ -174,7 +178,7 @@ export function AccessGate({
         <button type="button" onClick={onCancel} className={cn("h-12 rounded-full border border-primary/25 px-6 text-[15px] font-semibold text-foreground hover:bg-muted", FOCUS)}>
           Not now
         </button>
-        <button type="submit" disabled={busy} className={cn("flex h-12 items-center justify-center gap-2 rounded-full bg-primary px-8 text-base font-semibold text-primary-foreground shadow-[0_10px_24px_-12px_rgba(12,112,154,0.8)] transition-colors hover:bg-primary/90 disabled:opacity-70 sm:min-w-56", FOCUS)}>
+        <button type="submit" disabled={busy || minor} className={cn("flex h-12 items-center justify-center gap-2 rounded-full bg-primary px-8 text-base font-semibold text-primary-foreground shadow-[0_10px_24px_-12px_rgba(12,112,154,0.8)] transition-colors hover:bg-primary/90 disabled:opacity-70 sm:min-w-56", FOCUS)}>
           {busy ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : null}
           {busy ? "Please wait" : "Continue"}
           {busy ? null : <ArrowRight className="size-4" aria-hidden="true" />}

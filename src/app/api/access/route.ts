@@ -18,6 +18,7 @@ import {
 } from "@/lib/access";
 import { PRIVACY_POLICY_VERSION, TERMS_VERSION } from "@/lib/legal-versions";
 import { DeliveryUnavailable, deliver } from "@/server/delivery";
+import { CONTACT } from "@/components/contact/contact-data";
 import { fail, guardPost, json, limited } from "@/server/guard";
 import { sourceLabel } from "@/server/source-label";
 import { SessionNotConfigured, clearSessionCookie, newSessionId, sessionFrom, setSessionCookie } from "@/server/session";
@@ -44,6 +45,9 @@ export async function POST(req: NextRequest) {
   // Spam traps: a filled hidden field, or a form submitted faster than a person can type.
   if (typeof b.website === "string" && b.website !== "") return fail(400, "Invalid request.");
   if (typeof b.elapsedMs !== "number" || b.elapsedMs < 3000) return fail(400, "Please take a moment to check your details and try again.");
+
+  // BLOCKED: a parent or guardian's agreement cannot be verified yet, so visitors under 18 get no access profile.
+  if (b.ageGroup === "minor") return fail(403, `Access profiles are not available to visitors under 18 yet. A parent or guardian can email ${CONTACT.email ?? "admission@technogurukul.com"}.`);
 
   const sourceType = b.source && typeof b.source === "object" ? (b.source as Record<string, unknown>).sourceType : null;
   const sourceId = clean(b.source && typeof b.source === "object" ? (b.source as Record<string, unknown>).sourceId : "", 120);
