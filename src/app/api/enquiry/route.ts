@@ -1,10 +1,10 @@
 import { randomUUID } from "node:crypto";
 import type { NextRequest } from "next/server";
 import { CONTACT_METHODS, INTERESTS, MESSAGE_MAX, SOURCES, STATUSES, validateEnquiry, type EnquiryValues } from "@/components/contact/contact-submit";
-import { cellSafe, clean, cleanText } from "@/lib/access";
+import { cellSafe, cellSafeText, clean, cleanText, displayPhone, normalizePhone } from "@/lib/access";
 import { PRIVACY_POLICY_VERSION } from "@/lib/legal-versions";
 import { DeliveryUnavailable, deliver } from "@/server/delivery";
-import { fail, guardPost, json } from "@/server/guard";
+import { fail, guardPost, json, markSeen, seenRecently } from "@/server/guard";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +12,7 @@ const pick = (v: unknown, list: readonly string[]) => (typeof v === "string" && 
 
 /** The Contact page enquiry. It is stored through the delivery boundary, and the answer says so only when it was. */
 export async function POST(req: NextRequest) {
-  const g = await guardPost(req, "enquiry", 8, 10 * 60_000);
+  const g = await guardPost(req, "enquiry", 15, 10 * 60_000);
   if (g.res) return g.res;
   const b = g.body;
   if (typeof b.website === "string" && b.website !== "") return fail(400, "Invalid request.");
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
   const v: EnquiryValues = {
     fullName: clean(b.fullName, 80),
     email: clean(b.email, 254).toLowerCase(),
-    phone: clean(b.phone, 30),
+    phone: normalizePhone(clean(b.phone, 30)),
     interest: pick(b.interest, INTERESTS),
     status: pick(b.status, STATUSES),
     contactMethod: pick(b.contactMethod, CONTACT_METHODS),
@@ -32,24 +32,29 @@ export async function POST(req: NextRequest) {
   const errors = validateEnquiry(v);
   if (Object.keys(errors).length) return json({ ok: false, error: "Please check the highlighted fields.", errors }, 400);
 
+  // The same person sending the same enquiry again within minutes (double tap, slow connection) is one enquiry.
+  const dupKey = `enquiry:${v.email}:${v.message.slice(0, 200)}`;
+  if (seenRecently(dupKey)) return json({ ok: true });
+
   const now = new Date().toISOString();
   try {
     await deliver("enquiry", {
       id: randomUUID(),
       name: cellSafe(v.fullName),
       email: v.email,
-      phone: v.phone,
+      phone: displayPhone(v.phone),
       interest: v.interest,
       currentStatus: v.status,
       preferredContact: v.contactMethod,
       heardVia: v.source,
-      message: cellSafe(v.message),
+      message: cellSafeText(v.message),
       consent: true,
       consentTimestamp: now,
       privacyPolicyVersion: PRIVACY_POLICY_VERSION,
       receivedAt: now,
       page: "/contact",
     });
+    markSeen(dupKey);
     return json({ ok: true });
   } catch (e) {
     if (e instanceof DeliveryUnavailable) {

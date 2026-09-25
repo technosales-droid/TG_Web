@@ -1,5 +1,6 @@
+import { randomUUID } from "node:crypto";
 import type { NextRequest } from "next/server";
-import { LIMITS, clean, cellSafe, validateAccessFields } from "@/lib/access";
+import { LIMITS, clean, cellSafe, cellSafeText, validateAccessFields } from "@/lib/access";
 import { PRIVACY_POLICY_VERSION } from "@/lib/legal-versions";
 import { PRIVACY_REQUEST_TYPES } from "@/lib/privacy-requests";
 import { DeliveryUnavailable, deliver } from "@/server/delivery";
@@ -13,7 +14,7 @@ export const dynamic = "force-dynamic";
  * the response says so.
  */
 export async function POST(req: NextRequest) {
-  const g = await guardPost(req, "privacy-request", 4, 60 * 60_000);
+  const g = await guardPost(req, "privacy-request", 10, 60 * 60_000);
   if (g.res) return g.res;
   const b = g.body;
   if (typeof b.website === "string" && b.website !== "") return fail(400, "Invalid request.");
@@ -29,10 +30,11 @@ export async function POST(req: NextRequest) {
 
   try {
     await deliver("privacy-request", {
+      id: randomUUID(),
       type,
       name: cellSafe(name),
       email,
-      message: cellSafe(message),
+      message: cellSafeText(message),
       receivedAt: new Date().toISOString(),
       privacyPolicyVersion: PRIVACY_POLICY_VERSION,
     });

@@ -88,13 +88,15 @@ export interface LeadRecord {
   lastAccessedAt: string;
   createdAt: string;
   updatedAt: string;
+  /** The readable title of the content, for the team's Sheet. */
+  sourceLabel?: string;
   /** Set by the team's workflow, never by this site. */
   status?: LeadStatus;
 }
 
 export const LIMITS = { name: 80, email: 254, phone: 15, text: 2000 } as const;
 
-const EMAIL_RE = /^[^\s@<>()[\]\,;:"]+@[^\s@<>()[\]\,;:"]+\.[^\s@<>()[\]\,;:"]{2,}$/;
+export const EMAIL_RE = /^[^\s@<>()[\]\,;:"]+@[^\s@<>()[\]\,;:"]+\.[^\s@<>()[\]\,;:"]{2,}$/;
 
 export type FieldErrors = Partial<Record<"name" | "email" | "phone" | "interest" | "guardianConsent" | "form", string>>;
 
@@ -114,13 +116,47 @@ export const cleanText = (s: unknown, max: number) =>
     .trim()
     .slice(0, max);
 
-/** Spreadsheet and CSV safe: a leading = + - @ would otherwise be run as a formula. */
+/** Spreadsheet and CSV safe for short fields such as names: a leading = + - @ would otherwise be run as a formula. */
 export const cellSafe = (s: string) => (/^[=+\-@]/.test(s) ? `'${s}` : s);
 
+// ponytail: free text may legitimately start with "-" or "+91 ...", so only = and @ are guarded. The Sheet stores every
+// cell as plain text; the guard only matters if someone exports to CSV and opens it in a spreadsheet program.
+export const cellSafeText = (s: string) => (/^[=@]/.test(s) ? `'${s}` : s);
+
+/**
+ * One phone format for every form: "+91XXXXXXXXXX" for an Indian number typed with or without 0, 91 or +91, and
+ * "+<digits>" for other countries. Anything with letters is returned unchanged so validation rejects it.
+ */
 export const normalizePhone = (s: string) => {
-  const t = s.replace(/[\s\-().]/g, "");
-  return t.startsWith("00") ? `+${t.slice(2)}` : t;
+  if (/[^\d\s+\-().]/.test(s)) return s.trim();
+  let t = s.replace(/[\s\-().]/g, "");
+  if (t.startsWith("00")) t = `+${t.slice(2)}`;
+  if (t.startsWith("+")) return `+${t.slice(1).replace(/\D/g, "")}`;
+  const d = t.replace(/\D/g, "");
+  if (d.length === 10) return `+91${d}`;
+  if (d.length === 11 && d[0] === "0") return `+91${d.slice(1)}`;
+  if (d.length === 12 && d.startsWith("91")) return `+${d}`;
+  return d;
 };
+
+/** The error to show for a phone number, or null when it is acceptable. Used by every form, so they never disagree. */
+export function phoneError(raw: string): string | null {
+  if (!raw.trim()) return "Please enter your phone number.";
+  const msg = "Please enter a valid phone number, like 98765 43210 or +971 50 123 4567.";
+  const p = normalizePhone(raw);
+  if (p.startsWith("+91")) return /^\+91[2-9]\d{9}$/.test(p) && !/^\+91(\d)\1{9}$/.test(p) ? null : msg;
+  return /^\+[1-9]\d{7,14}$/.test(p) ? null : msg;
+}
+
+/** How a stored phone number reads in the Sheet: "+91 98765 43210". */
+export const displayPhone = (p: string) => (/^\+91\d{10}$/.test(p) ? `+91 ${p.slice(3, 8)} ${p.slice(8)}` : p);
+
+const TITLES = /^(mr|mrs|ms|miss|dr|prof|shri|smt|sri|er|ca|adv|capt|col)\.?$/i;
+/** The first real name, skipping a title, so a greeting reads "Hi, Anil" and not "Hi, Prof.". */
+export function firstName(name: string): string {
+  const parts = name.split(" ").filter(Boolean);
+  return (parts.find((w) => !TITLES.test(w)) ?? parts[0] ?? "").slice(0, 30);
+}
 
 export function validateAccessFields(v: Pick<AccessRequest, "name" | "email" | "phone" | "interest" | "ageGroup" | "guardianConsent">): FieldErrors {
   const e: FieldErrors = {};
@@ -130,9 +166,8 @@ export function validateAccessFields(v: Pick<AccessRequest, "name" | "email" | "
   const email = clean(v.email, LIMITS.email);
   if (!email) e.email = "Please enter your email address.";
   else if (!EMAIL_RE.test(email)) e.email = "Please enter a valid email address, like name@example.com.";
-  const phone = normalizePhone(clean(v.phone, 30));
-  if (!phone) e.phone = "Please enter your phone number.";
-  else if (!/^\+?\d{7,15}$/.test(phone)) e.phone = "Please enter a valid phone number (7 to 15 digits).";
+  const pe = phoneError(clean(v.phone, 30));
+  if (pe) e.phone = pe;
   if (v.interest !== "" && !(INTERESTS as readonly string[]).includes(v.interest)) e.interest = "Please choose one of the options.";
   if (v.ageGroup === "minor" && !v.guardianConsent) e.guardianConsent = "A parent or guardian needs to agree before you continue.";
   return e;

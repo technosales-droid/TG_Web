@@ -1,3 +1,4 @@
+import { EMAIL_RE, phoneError } from "@/lib/access";
 import { CONTACT } from "./contact-data";
 
 export const INTERESTS = ["Game Development", "Digital Marketing", "General Enquiry", "Career Guidance", "Other"] as const;
@@ -8,11 +9,12 @@ export const SOURCES = ["Google Search", "Instagram", "Facebook", "YouTube", "Re
 export const MESSAGE_MAX = 1000;
 export const REQUIRED_KEYS = ["fullName", "email", "phone", "interest", "message", "consent"] as const;
 
-/** Groups a plain Indian mobile number as `XXXXX XXXXX`; anything starting with `+` is only cleaned. */
+/** Groups a plain 10-digit Indian mobile number as `XXXXX XXXXX` while typing. Numbers with a country code or a leading 0
+ * are left as digits, so nothing a person types is cut off. */
 export function formatPhone(raw: string): string {
-  if (raw.trim().startsWith("+")) return "+" + raw.replace(/[^\d\s()-]/g, "").replace(/^\s+/, "").slice(0, 18);
-  const d = raw.replace(/\D/g, "").slice(0, 10);
-  return d.length > 5 ? `${d.slice(0, 5)} ${d.slice(5)}` : d;
+  if (raw.trim().startsWith("+")) return "+" + raw.replace(/[^\d\s()-]/g, "").replace(/^\s+/, "").slice(0, 20);
+  const d = raw.replace(/\D/g, "").slice(0, 15);
+  return d.length > 5 && d.length <= 10 && d[0] !== "0" ? `${d.slice(0, 5)} ${d.slice(5)}` : d;
 }
 
 export interface EnquiryValues {
@@ -41,21 +43,13 @@ export const EMPTY_ENQUIRY: EnquiryValues = {
 
 export type EnquiryErrors = Partial<Record<keyof EnquiryValues, string>>;
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 export function validateEnquiry(v: EnquiryValues): EnquiryErrors {
   const e: EnquiryErrors = {};
-  if (v.fullName.trim().length < 2) e.fullName = "Please enter your name.";
+  if (v.fullName.trim().length < 2 || !/\p{L}/u.test(v.fullName)) e.fullName = "Please enter your name.";
   if (!v.email.trim()) e.email = "Please enter your email address.";
   else if (!EMAIL_RE.test(v.email.trim())) e.email = "Please enter a valid email address.";
-  const phone = v.phone.trim();
-  if (!phone) e.phone = "Please enter your phone number.";
-  else {
-    const digits = phone.replace(/\D/g, "");
-    if (!/^[+\d][\d\s()+-]*$/.test(phone) || digits.length < 10 || digits.length > 13) {
-      e.phone = "Please enter a valid phone number (10–13 digits).";
-    }
-  }
+  const pe = phoneError(v.phone);
+  if (pe) e.phone = pe;
   if (!v.interest) e.interest = "Please tell us what you're interested in.";
   if (!v.message.trim()) e.message = "Please enter a message.";
   else if (v.message.length > MESSAGE_MAX) e.message = `Please keep your message under ${MESSAGE_MAX} characters.`;

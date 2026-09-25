@@ -20,6 +20,8 @@ export const clientIp = (req: NextRequest) =>
 // Use a shared store (Redis, the hosting provider's rate limiter) for a hard limit.
 const buckets = new Map<string, { n: number; reset: number }>();
 export function limited(key: string, max: number, windowMs: number): boolean {
+  // When the host does not pass on the visitor's address, everyone shares one bucket, so it must be far larger.
+  if (key.endsWith(":unknown")) max *= 10;
   const now = Date.now();
   if (buckets.size > 5000) for (const [k, v] of buckets) if (v.reset < now) buckets.delete(k);
   const b = buckets.get(key);
@@ -29,6 +31,15 @@ export function limited(key: string, max: number, windowMs: number): boolean {
   }
   b.n += 1;
   return b.n > max;
+}
+
+// ponytail: per instance, like the rate limiter. A repeat within the window is answered as a success without storing again.
+const seen = new Map<string, number>();
+export const seenRecently = (key: string) => (seen.get(key) ?? 0) > Date.now();
+export function markSeen(key: string, ttlMs = 10 * 60_000) {
+  const now = Date.now();
+  if (seen.size > 2000) for (const [k, v] of seen) if (v < now) seen.delete(k);
+  seen.set(key, now + ttlMs);
 }
 
 export const json = (body: unknown, status = 200) => NextResponse.json(body, { status, headers: { "Cache-Control": "no-store" } });

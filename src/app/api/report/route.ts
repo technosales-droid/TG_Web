@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import type { NextRequest } from "next/server";
 import { clean } from "@/lib/access";
 import { DeliveryUnavailable, deliver } from "@/server/delivery";
@@ -26,7 +27,7 @@ export async function POST(req: NextRequest) {
   const reason = clean(g.body.reason, 500);
   if (!slug || !itemId) return fail(400, "Invalid request.");
   try {
-    await deliver("content-report", { reporterId: session.sid, slug, itemId, reason, at: new Date().toISOString() });
+    await deliver("content-report", { id: randomUUID(), reporterId: session.sid, slug, itemId, reason, at: new Date().toISOString() });
     return json({ ok: true });
   } catch (e) {
     if (e instanceof DeliveryUnavailable) return fail(503, "Reporting is not available right now.");

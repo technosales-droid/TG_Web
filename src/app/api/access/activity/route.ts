@@ -1,6 +1,8 @@
-import type { NextRequest } from "next/server";
-import { SOURCE_TYPES, clean } from "@/lib/access";
+import { randomUUID } from "node:crypto";
+import { after, type NextRequest } from "next/server";
+import { SOURCE_TYPES, clean, type SourceType } from "@/lib/access";
 import { deliver } from "@/server/delivery";
+import { sourceLabel } from "@/server/source-label";
 import { fail, guardPost, json } from "@/server/guard";
 import { SessionNotConfigured, sessionFrom } from "@/server/session";
 
@@ -24,10 +26,8 @@ export async function POST(req: NextRequest) {
   const src = g.body.source && typeof g.body.source === "object" ? (g.body.source as Record<string, unknown>) : {};
   const sourceId = clean(src.sourceId, 120);
   if (!(SOURCE_TYPES as readonly string[]).includes(src.sourceType as string) || !sourceId) return fail(400, "Invalid request.");
-  try {
-    await deliver("lead-activity", { leadId: session.sid, source: { sourceType: src.sourceType, sourceId }, at: new Date().toISOString() });
-  } catch {
-    // Activity is best effort; the visitor still gets their content.
-  }
+  // Logged after the response, so the visitor never waits on the Sheet. A failure is not worth showing them.
+  const type = src.sourceType as SourceType;
+  after(() => deliver("lead-activity", { id: randomUUID(), leadId: session.sid, source: { sourceType: type, sourceId }, sourceLabel: sourceLabel(type, sourceId), at: new Date().toISOString() }).catch(() => {}));
   return json({ ok: true });
 }

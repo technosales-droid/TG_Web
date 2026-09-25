@@ -25,17 +25,30 @@ export async function deliver(kind: DeliveryKind, data: unknown): Promise<{ pers
   // https only in production; plain http is accepted for a webhook on this same machine (local testing).
   if (isProd && !/^(https:\/\/|http:\/\/(localhost|127\.0\.0\.1)(:|\/))/.test(url)) throw new DeliveryUnavailable("LEAD_WEBHOOK_URL must be https");
   const secret = process.env.LEAD_WEBHOOK_SECRET;
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...(secret ? { Authorization: `Bearer ${secret}` } : {}) },
-    // The secret is also in the body because a Google Apps Script web app cannot read request headers.
-    body: JSON.stringify({ kind, sentAt: new Date().toISOString(), data, ...(secret ? { secret } : {}) }),
-    signal: AbortSignal.timeout(8000),
-    cache: "no-store",
-  });
-  if (!res.ok) throw new DeliveryUnavailable(`Webhook answered ${res.status}`);
-  // Google Apps Script answers 200 even when it rejects a request, so an explicit { ok: false } is also a failure.
-  const answer = await res.json().catch(() => null);
-  if (answer && answer.ok === false) throw new DeliveryUnavailable(`Webhook rejected the request: ${String(answer.error ?? "")}`.slice(0, 200));
-  return { persisted: true };
+  // Built once, so a retry sends exactly the same record. The receiver ignores a record id it has already written.
+  const body = JSON.stringify({ kind, sentAt: new Date().toISOString(), data, ...(secret ? { secret } : {}) });
+  let lastError = "";
+  // The Sheet takes about 2 seconds per record and handles one at a time, so a burst queues. Wait for it, and try once
+  // more if the first attempt did not answer; the receiver never stores the same record twice.
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...(secret ? { Authorization: `Bearer ${secret}` } : {}) },
+        // The secret is also in the body because a Google Apps Script web app cannot read request headers.
+        body,
+        signal: AbortSignal.timeout(20_000),
+        cache: "no-store",
+      });
+      if (!res.ok) throw new Error(`Webhook answered ${res.status}`);
+      // Google Apps Script answers 200 even when it rejects a request, so an explicit { ok: false } is also a failure.
+      const answer = await res.json().catch(() => null);
+      if (answer && answer.ok === false) throw new Error(`Webhook rejected the request: ${String(answer.error ?? "")}`);
+      return { persisted: true };
+    } catch (e) {
+      lastError = e instanceof Error ? `${e.name}: ${e.message}` : String(e);
+      if (/unauthori[sz]ed/i.test(lastError)) break; // a wrong secret will not fix itself on a retry
+    }
+  }
+  throw new DeliveryUnavailable(lastError.slice(0, 200));
 }

@@ -5,6 +5,7 @@ import {
   SOURCE_TYPES,
   cellSafe,
   clean,
+  firstName,
   normalizePhone,
   validateAccessFields,
   type AccessRequest,
@@ -15,6 +16,7 @@ import {
 import { PRIVACY_POLICY_VERSION, TERMS_VERSION } from "@/lib/legal-versions";
 import { DeliveryUnavailable, deliver } from "@/server/delivery";
 import { fail, guardPost, json } from "@/server/guard";
+import { sourceLabel } from "@/server/source-label";
 import { SessionNotConfigured, clearSessionCookie, newSessionId, sessionFrom, setSessionCookie } from "@/server/session";
 
 export const dynamic = "force-dynamic";
@@ -32,7 +34,7 @@ export async function GET(req: NextRequest) {
 
 /** Registers a visitor: validates, records the lead through the delivery boundary, then starts a session. */
 export async function POST(req: NextRequest) {
-  const g = await guardPost(req, "access", 12, 10 * 60_000);
+  const g = await guardPost(req, "access", 30, 10 * 60_000);
   if (g.res) return g.res;
   const b = g.body;
 
@@ -79,6 +81,7 @@ export async function POST(req: NextRequest) {
     privacyPolicyVersion: PRIVACY_POLICY_VERSION,
     termsVersion: TERMS_VERSION,
     source: v.source,
+    sourceLabel: sourceLabel(v.source.sourceType, v.source.sourceId),
     firstAccessedAt: now,
     lastAccessedAt: now,
     createdAt: now,
@@ -87,8 +90,8 @@ export async function POST(req: NextRequest) {
 
   try {
     await deliver("lead", lead);
-    const res = json({ ok: true, displayName: v.name.split(" ")[0].slice(0, 30), ageGroup: v.ageGroup });
-    setSessionCookie(res, { sid: id, dn: v.name.split(" ")[0].slice(0, 30), ag: v.ageGroup });
+    const res = json({ ok: true, displayName: firstName(v.name), ageGroup: v.ageGroup });
+    setSessionCookie(res, { sid: id, dn: firstName(v.name), ag: v.ageGroup });
     return res;
   } catch (e) {
     if (e instanceof DeliveryUnavailable || e instanceof SessionNotConfigured) {

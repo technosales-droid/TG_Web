@@ -5,30 +5,60 @@
  * docs/google-sheets-setup.md. The website sends every submission here as JSON:
  *   { kind, sentAt, data, secret }
  * `kind` decides which tab the row goes to. `secret` must equal the WEBHOOK_SECRET script property.
+ *
+ * Functions you can run from the editor (choose it in the dropdown, then Run):
+ *   setup()        Creates or upgrades every tab, dropdowns, colours and the Dashboard. Safe to run again.
+ *   healthCheck()  Tells you if the secret is set and every tab exists.
  */
 
+const VERSION = "2";
 const TIMEZONE = "Asia/Kolkata";
+const ROOM = 2000; // rows prepared in each tab; more are added automatically
 
-// Columns for lead tabs (someone who created an access profile to open content or to comment or review).
-const LEAD_COLUMNS = [
-  "Received at", "Lead ID", "Name", "Email", "Phone", "Interested in", "Age group", "Guardian consent",
-  "Marketing consent", "Marketing consent at", "Consent given at", "Privacy policy version", "Terms version",
-  "Source type", "Source ID", "Lead status", "Notes",
+const LEAD_STATUS = ["New", "Contacted", "Interested", "Enrolled", "Not interested", "Do not contact"];
+const REQUEST_STATUS = ["New", "In progress", "Done", "Could not verify"];
+const REPORT_STATUS = ["New", "Reviewed", "Removed", "Ignored"];
+
+// The columns you use every day come first. Grey columns (from `tech`) are technical details kept for reference.
+const LEAD_COLS = [
+  "Received at", "Name", "Phone", "Email", "Interested in", "Came from", "Content", "Follow-up OK?", "Lead status", "Notes",
+  "Age group", "Guardian consent", "Marketing consent", "Marketing consent at", "Consent given at",
+  "Privacy policy version", "Terms version", "Source type", "Source ID", "Lead ID",
 ];
+const LEAD_TAB = { cols: LEAD_COLS, tech: 11, status: "Lead status", options: LEAD_STATUS, dupe: "Email" };
 
-// Every tab and its columns. "Lead status" and "Notes" and "Status" are for your team to fill in.
 const TABS = {
-  "Enquiries": [
-    "Received at", "Enquiry ID", "Name", "Email", "Phone", "Interested in", "Current status", "Preferred contact",
-    "Heard about us via", "Message", "Consent given at", "Privacy policy version", "Page", "Lead status", "Notes",
-  ],
-  "Blog Comments": LEAD_COLUMNS,
-  "Projects": LEAD_COLUMNS,
-  "Resources": LEAD_COLUMNS,
-  "All Leads": LEAD_COLUMNS,
-  "Activity": ["Time", "Lead ID", "Name", "Email", "Source type", "Source ID", "Action"],
-  "Privacy Requests": ["Received at", "Request type", "Name", "Email", "Message", "Privacy policy version", "Status", "Notes"],
-  "Reports": ["Time", "Reporter lead ID", "Article", "Item ID", "Reason", "Status"],
+  "Enquiries": {
+    cols: ["Received at", "Name", "Phone", "Email", "Reply by", "Interested in", "Current status", "Message", "Heard about us via",
+      "Lead status", "Notes", "Consent given at", "Privacy policy version", "Page", "Enquiry ID"],
+    tech: 12, status: "Lead status", options: LEAD_STATUS, dupe: "Email",
+  },
+  "Blog Comments": LEAD_TAB,
+  "Projects": LEAD_TAB,
+  "Resources": LEAD_TAB,
+  "All Leads": LEAD_TAB,
+  "Activity": { cols: ["Time", "Name", "Email", "Opened", "Type", "Action", "Source ID", "Lead ID"], tech: 7 },
+  "Privacy Requests": {
+    cols: ["Received at", "Request", "Name", "Email", "Message", "Records found", "Status", "Notes", "Privacy policy version", "Request ID"],
+    tech: 9, status: "Status", options: REQUEST_STATUS,
+  },
+  "Reports": {
+    cols: ["Time", "Reporter", "Reporter email", "Article", "Item ID", "Reason", "Status", "Notes", "Reporter lead ID", "Report ID"],
+    tech: 9, status: "Status", options: REPORT_STATUS,
+  },
+};
+
+const WIDTH = { "Received at": 150, "Time": 150, "Name": 170, "Phone": 140, "Email": 230, "Message": 380, "Notes": 240, "Content": 260,
+  "Opened": 260, "Follow-up OK?": 210, "Reason": 300, "Article": 220, "Request": 160, "Records found": 190, "Reporter": 170 };
+
+const SOURCE_TYPE_LABEL = {
+  "blog": "Blog article", "comment": "Blog comment", "review": "Blog review", "resource": "Resource",
+  "student-project": "Student project", "faculty-project": "Faculty project", "institute-project": "Institute project",
+  "other-project": "Project",
+};
+const REQUEST_LABEL = {
+  "access": "Wants a copy of their data", "correction": "Correct their data", "deletion": "Delete their data",
+  "withdraw-consent": "Withdraw consent", "question": "Privacy question",
 };
 
 /** Which lead tab a registration belongs to, from what made the visitor register. */
@@ -38,48 +68,181 @@ function leadTab(sourceType) {
   return "Blog Comments"; // blog, comment, review
 }
 
-/** Run once from the editor (Run > setup) to create every tab with its header row. */
+// ---------------------------------------------------------------------------------------------------------------------
+// Setup (run from the editor)
+// ---------------------------------------------------------------------------------------------------------------------
+
 function setup() {
-  Object.keys(TABS).forEach(function (name) { getTab(name); });
+  const book = SpreadsheetApp.getActiveSpreadsheet();
+  book.setSpreadsheetTimeZone(TIMEZONE);
+  Object.keys(TABS).forEach(function (name) { prepareTab(name); });
+  buildDashboard();
+  book.toast("Done. Your tabs are ready. Old tabs from an earlier version were renamed 'Old ...'; delete them when you are sure.", "Techno Gurukul", 12);
 }
 
+function healthCheck() {
+  const book = SpreadsheetApp.getActiveSpreadsheet();
+  const problems = [];
+  if (!PropertiesService.getScriptProperties().getProperty("WEBHOOK_SECRET")) problems.push("WEBHOOK_SECRET is not set (Project Settings > Script properties).");
+  Object.keys(TABS).concat(["Dashboard"]).forEach(function (n) { if (!book.getSheetByName(n)) problems.push("Tab missing: " + n + " (run setup)."); });
+  const msg = problems.length ? "Problems: " + problems.join(" ") : "All good. Version " + VERSION + ". Deploy a New version if you changed this code.";
+  book.toast(msg, "Health check", 15);
+  Logger.log(msg);
+  return msg;
+}
+
+function colOf(name, header) { return TABS[name].cols.indexOf(header) + 1; }
+function letter(n) { let s = ""; while (n > 0) { const m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = Math.floor((n - 1) / 26); } return s; }
+
+/** Creates a tab, or upgrades it. A tab from an older version with different headers is kept and renamed "Old ...". */
+function prepareTab(name) {
+  const book = SpreadsheetApp.getActiveSpreadsheet();
+  const spec = TABS[name];
+  const n = spec.cols.length;
+  let sheet = book.getSheetByName(name);
+  if (sheet) {
+    const have = sheet.getLastColumn() ? sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0].join("|") : "";
+    if (have === spec.cols.join("|")) { formatTab(sheet, spec, n); return sheet; }
+    sheet.setName(("Old " + name + " " + Utilities.formatDate(new Date(), TIMEZONE, "MMdd-HHmm")).slice(0, 99));
+  }
+  sheet = book.insertSheet(name);
+  if (sheet.getMaxColumns() > n) sheet.deleteColumns(n + 1, sheet.getMaxColumns() - n);
+  if (sheet.getMaxRows() < ROOM) sheet.insertRowsAfter(sheet.getMaxRows(), ROOM - sheet.getMaxRows());
+  sheet.getRange(1, 1, 1, n).setValues([spec.cols]);
+  formatTab(sheet, spec, n);
+  return sheet;
+}
+
+function formatTab(sheet, spec, n) {
+  const max = sheet.getMaxRows();
+  const head = sheet.getRange(1, 1, 1, n);
+  head.setFontWeight("bold").setFontColor("#ffffff").setBackground("#0c709a").setVerticalAlignment("middle").setWrap(true);
+  if (spec.tech <= n) sheet.getRange(1, spec.tech, 1, n - spec.tech + 1).setBackground("#6b7280");
+  sheet.setRowHeight(1, 36);
+  sheet.setFrozenRows(1);
+  sheet.setFrozenColumns(2);
+  // Plain text everywhere, so nothing a visitor typed can turn into a formula and phone numbers keep their +.
+  sheet.getRange(2, 1, max - 1, n).setNumberFormat("@").setVerticalAlignment("top");
+  spec.cols.forEach(function (c, i) {
+    sheet.setColumnWidth(i + 1, WIDTH[c] || (i + 1 >= spec.tech ? 150 : 130));
+    if (c === "Message" || c === "Notes" || c === "Reason") sheet.getRange(2, i + 1, max - 1, 1).setWrap(true);
+  });
+  if (spec.status) {
+    const sc = spec.cols.indexOf(spec.status) + 1;
+    sheet.getRange(2, sc, max - 1, 1).setDataValidation(
+      SpreadsheetApp.newDataValidation().requireValueInList(spec.options, true).setAllowInvalid(true).build());
+  }
+  if (sheet.getFilter()) sheet.getFilter().remove();
+  sheet.getRange(1, 1, max, n).createFilter();
+
+  // Colours that tell the operator what to do without reading every cell.
+  const rules = [];
+  const all = sheet.getRange(2, 1, max - 1, n);
+  if (spec.status) {
+    const sl = letter(spec.cols.indexOf(spec.status) + 1);
+    rules.push(SpreadsheetApp.newConditionalFormatRule().whenFormulaSatisfied('=$' + sl + '2="Do not contact"').setFontColor("#9ca3af").setStrikethrough(true).setRanges([all]).build());
+    rules.push(SpreadsheetApp.newConditionalFormatRule().whenFormulaSatisfied('=OR($' + sl + '2="Done",$' + sl + '2="Enrolled")').setFontColor("#6b7280").setRanges([all]).build());
+    rules.push(SpreadsheetApp.newConditionalFormatRule().whenFormulaSatisfied('=$' + sl + '2="New"').setBackground("#e0f2fe").setRanges([sheet.getRange(2, spec.cols.indexOf(spec.status) + 1, max - 1, 1)]).build());
+  }
+  const fu = spec.cols.indexOf("Follow-up OK?") + 1;
+  if (fu) {
+    rules.push(SpreadsheetApp.newConditionalFormatRule().whenTextStartsWith("No").setBackground("#fef3c7").setRanges([sheet.getRange(2, fu, max - 1, 1)]).build());
+    rules.push(SpreadsheetApp.newConditionalFormatRule().whenTextStartsWith("Yes").setBackground("#dbeafe").setRanges([sheet.getRange(2, fu, max - 1, 1)]).build());
+  }
+  if (spec.dupe) {
+    const d = spec.cols.indexOf(spec.dupe) + 1, dl = letter(d);
+    rules.push(SpreadsheetApp.newConditionalFormatRule().whenFormulaSatisfied('=AND($' + dl + '2<>"",COUNTIF($' + dl + '$2:$' + dl + ',$' + dl + '2)>1)').setBackground("#fef9c3").setRanges([sheet.getRange(2, d, max - 1, 1)]).build());
+  }
+  const age = spec.cols.indexOf("Age group") + 1;
+  if (age) rules.push(SpreadsheetApp.newConditionalFormatRule().whenTextEqualTo("minor").setBackground("#fef3c7").setRanges([sheet.getRange(2, age, max - 1, 1)]).build());
+  sheet.setConditionalFormatRules(rules);
+}
+
+/** A page of counts, made of formulas that update themselves. */
+function buildDashboard() {
+  const book = SpreadsheetApp.getActiveSpreadsheet();
+  let d = book.getSheetByName("Dashboard");
+  if (!d) d = book.insertSheet("Dashboard", 0);
+  d.clear();
+  const rows = [["Techno Gurukul: what needs attention", "", "", "", ""], ["", "", "", "", ""], ["", "Total", "Today", "Last 7 days", "Waiting (status New)"]];
+  const lines = [
+    ["Enquiries (Contact page)", "Enquiries"], ["Blog comment and review sign-ups", "Blog Comments"], ["Project sign-ups", "Projects"],
+    ["Resource sign-ups", "Resources"], ["Privacy requests", "Privacy Requests"], ["Reported comments", "Reports"],
+  ];
+  lines.forEach(function (l) {
+    const q = "'" + l[1] + "'!", st = TABS[l[1]].status ? letter(colOf(l[1], TABS[l[1]].status)) : "";
+    rows.push([
+      l[0],
+      "=COUNTA(" + q + "A2:A)",
+      '=COUNTIF(' + q + 'A2:A,TEXT(TODAY(),"yyyy-mm-dd")&"*")',
+      '=SUMPRODUCT(--(LEFT(' + q + 'A2:A,10)>=TEXT(TODAY()-6,"yyyy-mm-dd")))',
+      st ? '=COUNTIF(' + q + st + '2:' + st + ',"New")' : "",
+    ]);
+  });
+  const L = "'All Leads'!", em = letter(colOf("All Leads", "Email")), fu = letter(colOf("All Leads", "Follow-up OK?")), ag = letter(colOf("All Leads", "Age group"));
+  rows.push(["", "", "", "", ""], ["People who registered (from All Leads)", "", "", "", ""]);
+  rows.push(["Different people (by email)", '=IFERROR(COUNTA(UNIQUE(FILTER(' + L + em + '2:' + em + ',' + L + em + '2:' + em + '<>""))),0)', "", "", ""]);
+  rows.push(["Agreed to marketing (may follow up)", '=COUNTIF(' + L + fu + '2:' + fu + ',"Yes*")', "", "", ""]);
+  rows.push(["Under 18 (do not market to)", '=COUNTIF(' + L + ag + '2:' + ag + ',"minor")', "", "", ""]);
+  rows.push(["", "", "", "", ""], ["How to work this Sheet: open a tab, filter Lead status to New, contact the person, then change the status.", "", "", "", ""]);
+  rows.push(["Yellow email = the same email appears more than once. Amber = do not market to them. Grey strikethrough = do not contact.", "", "", "", ""]);
+  d.getRange(1, 1, rows.length, 5).setValues(rows);
+  d.getRange(1, 1).setFontSize(16).setFontWeight("bold").setFontColor("#0c709a");
+  d.getRange(3, 1, 1, 5).setFontWeight("bold").setBackground("#0c709a").setFontColor("#ffffff");
+  d.getRange(11, 1).setFontWeight("bold");
+  d.getRange(4, 2, 6, 4).setHorizontalAlignment("center");
+  d.getRange(12, 2, 3, 1).setHorizontalAlignment("center");
+  d.setColumnWidth(1, 360); d.setColumnWidths(2, 4, 140);
+  d.setHiddenGridlines(true);
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Receiving
+// ---------------------------------------------------------------------------------------------------------------------
+
 function doGet() {
-  return out({ ok: true, service: "Techno Gurukul lead receiver" });
+  return out({ ok: true, service: "Techno Gurukul lead receiver", version: VERSION });
 }
 
 function doPost(e) {
+  let body;
+  try { body = JSON.parse(e.postData.contents); } catch (err) { return out({ ok: false, error: "bad request" }); }
+  const expected = PropertiesService.getScriptProperties().getProperty("WEBHOOK_SECRET");
+  if (!expected || body.secret !== expected) return out({ ok: false, error: "unauthorised" });
+
   const lock = LockService.getScriptLock();
   try {
-    const body = JSON.parse(e.postData.contents);
-    const expected = PropertiesService.getScriptProperties().getProperty("WEBHOOK_SECRET");
-    if (!expected || body.secret !== expected) return out({ ok: false, error: "unauthorised" });
-    lock.waitLock(20000);
-
+    lock.waitLock(30000);
     const d = body.data || {};
     const at = ist(body.sentAt);
+    const kind = String(body.kind);
+    const id = d.id ? String(d.id) : "";
 
-    if (body.kind === "lead") {
+    if (kind === "lead") {
       const src = d.source || {};
-      const row = [
-        at, d.id, d.name, d.email, d.phone, d.interest || "", d.ageGroup, d.guardianConsent,
-        d.marketingConsent ? "Yes" : "No", d.marketingConsentAt ? ist(d.marketingConsentAt) : "",
-        ist(d.consentTimestamp), d.privacyPolicyVersion, d.termsVersion, src.sourceType, src.sourceId, "", "",
-      ];
-      append(leadTab(src.sourceType), row);
-      append("All Leads", row);
-    } else if (body.kind === "enquiry") {
-      append("Enquiries", [
-        at, d.id, d.name, d.email, d.phone, d.interest, d.currentStatus, d.preferredContact, d.heardVia,
-        d.message, ist(d.consentTimestamp), d.privacyPolicyVersion, d.page, "", "",
+      const row = leadRow(at, d, src);
+      const tab = leadTab(src.sourceType);
+      writeOnce(tab, id, row);
+      writeOnce("All Leads", id, row);
+    } else if (kind === "enquiry") {
+      writeOnce("Enquiries", id, [
+        at, d.name, d.phone, d.email, d.preferredContact || "Any", d.interest, d.currentStatus, d.message, d.heardVia,
+        "New", "", ist(d.consentTimestamp), d.privacyPolicyVersion, d.page, id,
       ]);
-    } else if (body.kind === "lead-activity") {
+    } else if (kind === "lead-activity") {
       const lead = findLead(d.leadId);
       const src = d.source || {};
-      append("Activity", [ist(d.at || body.sentAt), d.leadId, lead.name, lead.email, src.sourceType, src.sourceId, d.action || "opened"]);
-    } else if (body.kind === "privacy-request") {
-      append("Privacy Requests", [at, d.type, d.name, d.email, d.message, d.privacyPolicyVersion, "New", ""]);
-    } else if (body.kind === "content-report") {
-      append("Reports", [ist(d.at || body.sentAt), d.reporterId, d.slug, d.itemId, d.reason, "New"]);
+      writeOnce("Activity", id, [
+        ist(d.at || body.sentAt), lead.name, lead.email, d.sourceLabel || src.sourceId, SOURCE_TYPE_LABEL[src.sourceType] || src.sourceType,
+        d.action || "opened", src.sourceId, d.leadId,
+      ]);
+    } else if (kind === "privacy-request") {
+      writeOnce("Privacy Requests", id, [
+        at, REQUEST_LABEL[d.type] || d.type, d.name, d.email, d.message, recordsFor(d.email), "New", "", d.privacyPolicyVersion, id,
+      ]);
+    } else if (kind === "content-report") {
+      const lead = findLead(d.reporterId);
+      writeOnce("Reports", id, [ist(d.at || body.sentAt), lead.name, lead.email, d.slug, d.itemId, d.reason, "New", "", d.reporterId, id]);
     } else {
       return out({ ok: false, error: "unknown kind" });
     }
@@ -91,40 +254,77 @@ function doPost(e) {
   }
 }
 
+function leadRow(at, d, src) {
+  const minor = d.ageGroup === "minor";
+  const followUp = minor ? "No: under 18" : d.marketingConsent ? "Yes: agreed to marketing" : "No: has not agreed to marketing";
+  return [
+    at, d.name, d.phone, d.email, d.interest || "", SOURCE_TYPE_LABEL[src.sourceType] || src.sourceType, d.sourceLabel || src.sourceId,
+    followUp, "New", "",
+    d.ageGroup, minor ? "Parent tick box (not verified)" : "Not needed", d.marketingConsent ? "Yes" : "No",
+    d.marketingConsentAt ? ist(d.marketingConsentAt) : "", ist(d.consentTimestamp), d.privacyPolicyVersion, d.termsVersion,
+    src.sourceType, src.sourceId, d.id,
+  ];
+}
+
 function out(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
 }
 
 function ist(iso) {
-  return iso ? Utilities.formatDate(new Date(iso), TIMEZONE, "yyyy-MM-dd HH:mm:ss") : "";
+  if (!iso) return "";
+  try { return Utilities.formatDate(new Date(iso), TIMEZONE, "yyyy-MM-dd HH:mm:ss"); } catch (err) { return String(iso); }
 }
 
-/** Finds a tab, creating it with a header row the first time. */
+/** The website retries a slow request, so a record id that was already written is skipped, never written twice. */
+function writeOnce(tab, id, row) {
+  const cache = CacheService.getScriptCache();
+  const key = id ? tab + "|" + id : "";
+  if (key && cache.get(key)) return;
+  append(tab, row);
+  if (key) cache.put(key, "1", 21600);
+}
+
 function getTab(name) {
-  const book = SpreadsheetApp.getActiveSpreadsheet();
-  let sheet = book.getSheetByName(name);
-  if (!sheet) {
-    sheet = book.insertSheet(name);
-    const header = TABS[name];
-    sheet.getRange(1, 1, 1, header.length).setValues([header]).setFontWeight("bold").setBackground("#e6f2f6");
-    sheet.setFrozenRows(1);
-  }
-  return sheet;
+  return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(name) || prepareTab(name);
 }
 
-/** Adds a row as plain text, so nothing a visitor typed can run as a spreadsheet formula. */
+/** Adds a row at the bottom, and more rows when the tab is full. Cells are already plain text (see setup). */
 function append(name, row) {
   const sheet = getTab(name);
-  const range = sheet.getRange(sheet.getLastRow() + 1, 1, 1, row.length);
-  range.setNumberFormat("@").setValues([row.map(function (v) { return v == null ? "" : String(v); })]);
+  const n = TABS[name].cols.length;
+  const at = sheet.getLastRow() + 1;
+  const max = sheet.getMaxRows();
+  if (at > max) {
+    sheet.insertRowsAfter(max, 1000);
+    const from = sheet.getRange(2, 1, 1, n), to = sheet.getRange(max + 1, 1, 1000, n);
+    from.copyTo(to, SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
+    from.copyTo(to, SpreadsheetApp.CopyPasteType.PASTE_DATA_VALIDATION, false);
+  }
+  sheet.getRange(at, 1, 1, n).setValues([row.map(function (v) { return v == null ? "" : String(v); })]);
 }
 
-/** Looks a lead up by id in "All Leads", so the Activity tab shows a name and email. */
+/** Looks a lead up by id in "All Leads", so Activity and Reports show a name and email. */
 function findLead(id) {
-  if (!id) return { name: "", email: "" };
+  const none = { name: "(not found)", email: "" };
+  if (!id) return none;
   const sheet = getTab("All Leads");
-  const cell = sheet.getRange("B:B").createTextFinder(String(id)).matchEntireCell(true).findNext();
-  if (!cell) return { name: "", email: "" };
-  const row = sheet.getRange(cell.getRow(), 1, 1, 4).getValues()[0];
-  return { name: row[2], email: row[3] };
+  const idCol = colOf("All Leads", "Lead ID");
+  const cell = sheet.getRange(1, idCol, Math.max(sheet.getLastRow(), 1), 1).createTextFinder(String(id)).matchEntireCell(true).findNext();
+  if (!cell) return none;
+  const row = sheet.getRange(cell.getRow(), 1, 1, idCol).getValues()[0];
+  return { name: row[colOf("All Leads", "Name") - 1], email: row[colOf("All Leads", "Email") - 1] };
+}
+
+/** How many records we hold for an email, so a deletion or access request shows what to look for. */
+function recordsFor(email) {
+  if (!email) return "";
+  const parts = [];
+  ["All Leads", "Enquiries"].forEach(function (name) {
+    const sheet = getTab(name);
+    const last = sheet.getLastRow();
+    if (last < 2) return;
+    const found = sheet.getRange(2, colOf(name, "Email"), last - 1, 1).createTextFinder(String(email)).matchEntireCell(true).matchCase(false).findAll().length;
+    if (found) parts.push((name === "All Leads" ? "Sign-ups: " : "Enquiries: ") + found);
+  });
+  return parts.length ? parts.join(", ") : "None found";
 }
