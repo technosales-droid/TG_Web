@@ -227,6 +227,9 @@ function doPost(e) {
   } catch (err) {
     return out({ ok: false, error: String(err) });
   } finally {
+    // Push the writes to the Sheet before letting the next request in. Without this, the next request can still see the
+    // old "last row" and write over a row that was just added (a lost sign-up).
+    try { SpreadsheetApp.flush(); } catch (ignore) {}
     try { lock.releaseLock(); } catch (ignore) {}
   }
 }

@@ -38,6 +38,14 @@ The columns you use every day are on the left. Grey headers on the right are tec
    long random value) and `NEXT_PUBLIC_SITE_URL`. Restart or redeploy.
 7. **Check.** Run `healthCheck` in the editor. Then send an enquiry on `/contact` and try to comment on a blog article.
 
+## The Sheet only changes when you update the script
+
+The website and the Sheet are separate. Pushing code to GitHub or redeploying the site never changes your Sheet's columns,
+colours or Dashboard: those come from the script pasted inside the Sheet. Until you paste the newest script, run `setup`
+and publish a new version, the Sheet keeps its old layout (the website still saves to it, just with the old columns and
+one record at a time). Version 3 also fixes a lost-sign-up bug in version 1: two sign-ups arriving together could write
+over each other's row in All Leads.
+
 ## Upgrade from an earlier version
 
 1. Replace the script with the new `docs/google-apps-script.gs` (version 3, which saves many visitors in one go). The website
