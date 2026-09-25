@@ -465,11 +465,12 @@ function auditTabs(withIds) {
     const spec = TABS[name], sheet = book.getSheetByName(name);
     if (!sheet) { result[name] = { missing: true }; return; }
     const last = sheet.getLastRow(), n = spec.cols.length;
-    const info = { headerOk: headerMatches(sheet, spec), rows: Math.max(0, last - 1), repeatedIds: 0, blankIds: 0, badTimes: 0 };
+    const info = { headerOk: headerMatches(sheet, spec), rows: Math.max(0, last - 1), repeatedIds: 0, blankIds: 0, badTimes: 0, unknownPeople: 0 };
     const idAt = ID_COLUMN[name] ? spec.cols.indexOf(ID_COLUMN[name]) : -1;
     if (last > 1) {
       const seen = {}, ids = [];
       sheet.getRange(2, 1, last - 1, n).getValues().forEach(function (row) {
+        if (name === "Activity" && row[1] === "(not found)") info.unknownPeople++;
         if (!/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(String(row[0]))) info.badTimes++;
         if (idAt < 0) return;
         const id = String(row[idAt]);
@@ -489,7 +490,7 @@ function audit() {
   const r = auditTabs(false), lines = [];
   Object.keys(r).forEach(function (name) {
     const t = r[name];
-    lines.push(t.missing ? name + ": MISSING" : name + ": " + t.rows + " rows" + (t.headerOk ? "" : ", HEADINGS WRONG") + (t.repeatedIds ? ", " + t.repeatedIds + " REPEATED" : "") + (t.blankIds ? ", " + t.blankIds + " WITHOUT ID" : "") + (t.badTimes ? ", " + t.badTimes + " BAD TIME" : ""));
+    lines.push(t.missing ? name + ": MISSING" : name + ": " + t.rows + " rows" + (t.headerOk ? "" : ", HEADINGS WRONG") + (t.repeatedIds ? ", " + t.repeatedIds + " REPEATED" : "") + (t.blankIds ? ", " + t.blankIds + " WITHOUT ID" : "") + (t.badTimes ? ", " + t.badTimes + " BAD TIME" : "") + (t.unknownPeople ? ", " + t.unknownPeople + " WITHOUT A MATCHING PERSON" : ""));
   });
   tell(lines.join("\n"));
 }
