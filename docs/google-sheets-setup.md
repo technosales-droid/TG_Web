@@ -91,6 +91,12 @@ twice, is missing its id, or sits under the wrong heading. Anything other than p
 - Limits, so a bot cannot fill the Sheet or use up the daily quota: 15 enquiries and 30 registrations per address per 10
   minutes; 120 enquiries and 240 registrations per minute for the whole site; 3 enquiries and 6 registrations per email per
   hour. During an attack these limits can also turn away real visitors for a minute; that is the deliberate trade.
+- A record that is sent twice (the website retrying) is recognised by its id among the most recent 600 rows of its tab and
+  skipped. A record sent again long after that would be written again; the yellow email colour and `audit` make that easy
+  to see.
+- Google's speed varies: in a real test of 7,000 records a typical batch of 40 took about 5 seconds, but a few took 20 to
+  30 seconds and one took over two minutes. The website waits up to a minute per batch and retries, and every record it
+  could not save is reported to the visitor, never dropped silently.
 - Only the first time a person opens a project or resource is recorded in Activity.
 - A failed or unclear answer from Google (including a Google error page) is never treated as saved: the visitor is told to
   try again. Each form carries a submission id, so trying again after a slow answer never creates a second row.

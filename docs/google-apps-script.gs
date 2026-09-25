@@ -13,7 +13,7 @@
  *   deleteAllDataAndStartFresh()  Deletes every tab and all data, then builds clean empty tabs. Asks first.
  */
 
-const VERSION = "5";
+const VERSION = "6";
 const TIMEZONE = "Asia/Kolkata";
 const ROOM = 2000; // rows prepared in each tab; more are added automatically
 
@@ -39,7 +39,7 @@ const TABS = {
   "Projects": LEAD_TAB,
   "Resources": LEAD_TAB,
   "All Leads": LEAD_TAB,
-  "Activity": { cols: ["Time", "Name", "Email", "Opened", "Type", "Action", "Source ID", "Lead ID"], tech: 7 },
+  "Activity": { cols: ["Time", "Name", "Email", "Opened", "Type", "Action", "Source ID", "Lead ID", "Activity ID"], tech: 7 },
   "Privacy Requests": {
     cols: ["Received at", "Request", "Name", "Email", "Message", "Records found", "Status", "Notes", "Privacy policy version", "Request ID"],
     tech: 9, status: "Status", options: REQUEST_STATUS,
@@ -218,7 +218,7 @@ function buildDashboard() {
   });
   const L = "'All Leads'!", em = letter(colOf("All Leads", "Email")), fu = letter(colOf("All Leads", "Follow-up OK?")), ag = letter(colOf("All Leads", "Age group"));
   rows.push(["", "", "", "", ""], ["People who registered (from All Leads)", "", "", "", ""]);
-  rows.push(["Different people (by email)", '=IFERROR(COUNTA(UNIQUE(FILTER(' + L + em + '2:' + em + ',' + L + em + '2:' + em + '<>""))),0)', "", "", ""]);
+  rows.push(["Different people (by email)", '=IFERROR(ROWS(UNIQUE(FILTER(' + L + em + '2:' + em + ',' + L + em + '2:' + em + '<>""))),0)', "", "", ""]);
   rows.push(["Agreed to marketing (may follow up)", '=COUNTIF(' + L + fu + '2:' + fu + ',"Yes*")', "", "", ""]);
   rows.push(["Under 18 (do not market to)", '=COUNTIF(' + L + ag + '2:' + ag + ',"minor")', "", "", ""]);
   rows.push(["", "", "", "", ""], ["How to work this Sheet: open a tab, filter Lead status to New, contact the person, then change the status.", "", "", "", ""]);
@@ -256,9 +256,16 @@ function doPost(e) {
   leadMap = null; emailCounts = null; checkedTabs = {};
   const lock = LockService.getScriptLock();
   try {
-    lock.waitLock(30000);
+    const t0 = Date.now();
+    lock.waitLock(55000);
+    const waited = Date.now() - t0;
     if (body.kind === "audit") return out({ ok: true, version: VERSION, tabs: auditTabs(!!body.withIds) });
-    if (body.kind === "batch") return out({ ok: true, results: processBatch(body.records || []) });
+    if (body.kind === "batch") {
+      const results = processBatch(body.records || []);
+      SpreadsheetApp.flush();
+      // ms says where the time went: waiting for the lock, or doing the work. Useful when a batch is slow.
+      return out({ ok: true, results: results, ms: { lockWait: waited, work: Date.now() - t0 - waited } });
+    }
     const items = [];
     collect(String(body.kind), body.data || {}, body.sentAt, function (tab, id, row) { items.push({ i: 0, tab: tab, id: id, row: row }); });
     const results = [{ ok: true }];
@@ -293,7 +300,7 @@ function collect(kind, d, sentAt, sink) {
     const src = d.source || {};
     sink("Activity", id, [
       ist(d.at || sentAt), lead.name, lead.email, d.sourceLabel || src.sourceId, SOURCE_TYPE_LABEL[src.sourceType] || src.sourceType,
-      d.action || "opened", src.sourceId, d.leadId,
+      d.action || "opened", src.sourceId, d.leadId, id,
     ]);
   } else if (kind === "privacy-request") {
     sink("Privacy Requests", id, [
@@ -326,9 +333,12 @@ function processBatch(records) {
   return results;
 }
 
+const RECENT_ROWS = 600; // how far back a repeated record is looked for in the tab itself
+
 /**
  * Writes collected rows, one write per tab. A record id that was already written (the website retried a slow request) is
- * skipped, never written twice. A failed tab marks its records as failed so the website can tell the visitor.
+ * skipped, never written twice: it is looked for in a short-term memory and in the tab's most recent rows, so it still
+ * works if that memory was cleared. A failed tab marks its records as failed so the website can tell the visitor.
  */
 function writeItems(items, results) {
   if (!items.length) return;
@@ -336,24 +346,41 @@ function writeItems(items, results) {
   const keyOf = function (it) { return it.id ? it.tab + "|" + it.id : ""; };
   const keys = items.map(keyOf).filter(function (k) { return k; });
   const known = keys.length ? cache.getAll(keys) : {};
-  const local = {};
   const groups = {};
   items.forEach(function (it) {
     const key = keyOf(it);
-    if (key && (known[key] || local[key])) return;
-    if (key) local[key] = true;
+    if (key && known[key]) return;
     (groups[it.tab] = groups[it.tab] || []).push(it);
   });
   Object.keys(groups).forEach(function (tab) {
     try {
-      appendMany(tab, groups[tab].map(function (x) { return x.row; }));
-      const done = {};
-      groups[tab].forEach(function (x) { if (x.id) done[tab + "|" + x.id] = "1"; });
+      const have = recentIds(tab);
+      const rows = [], done = {};
+      groups[tab].forEach(function (x) {
+        if (x.id) {
+          if (have[x.id]) return;
+          have[x.id] = true;
+          done[tab + "|" + x.id] = "1";
+        }
+        rows.push(x.row);
+      });
+      if (rows.length) appendMany(tab, rows);
       if (Object.keys(done).length) cache.putAll(done, 21600);
     } catch (err) {
       groups[tab].forEach(function (x) { results[x.i] = { ok: false, error: String(err) }; });
     }
   });
+}
+
+/** The ids in the most recent rows of a tab, as an object used like a set. */
+function recentIds(tab) {
+  const have = {};
+  if (!ID_COLUMN[tab]) return have;
+  const sheet = getTab(tab), last = sheet.getLastRow();
+  if (last < 2) return have;
+  const from = Math.max(2, last - RECENT_ROWS + 1);
+  sheet.getRange(from, colOf(tab, ID_COLUMN[tab]), last - from + 1, 1).getValues().forEach(function (r) { have[String(r[0])] = true; });
+  return have;
 }
 
 function leadRow(at, d, src) {
@@ -451,7 +478,7 @@ function recordsFor(email) {
   return parts.length ? parts.join(", ") : "None found";
 }
 
-const ID_COLUMN = { "Enquiries": "Enquiry ID", "Blog Comments": "Lead ID", "Projects": "Lead ID", "Resources": "Lead ID", "All Leads": "Lead ID", "Privacy Requests": "Request ID", "Reports": "Report ID" };
+const ID_COLUMN = { "Activity": "Activity ID", "Enquiries": "Enquiry ID", "Blog Comments": "Lead ID", "Projects": "Lead ID", "Resources": "Lead ID", "All Leads": "Lead ID", "Privacy Requests": "Request ID", "Reports": "Report ID" };
 
 /**
  * Checks every tab: are the headings right, how many rows, any repeated ids (a record written twice), any row without an

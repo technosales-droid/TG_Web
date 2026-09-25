@@ -29,7 +29,7 @@ interface Job {
 const MAX_BATCH = 40; // the receiver reads at most 100 cache keys per call and each lead uses two
 const MAX_QUEUE = 400; // beyond this, answer "busy" at once instead of making visitors wait
 const ACTIVITY_QUEUE = 100; // activity is best effort, so it yields when the queue is long
-const ATTEMPT_MS = 25_000;
+const ATTEMPT_MS = 60_000; // a slow batch is waited for, not abandoned while it is still running and holding the receiver's lock
 const queue: Job[] = [];
 let running = false;
 let timer: ReturnType<typeof setTimeout> | null = null;
@@ -82,10 +82,14 @@ async function post(payload: Record<string, unknown>): Promise<{ ok?: boolean; e
       // is not a JSON object is a failure, never a success.
       const answer = await res.json().catch(() => null);
       if (!answer || typeof answer !== "object") throw new Error("Webhook did not answer with JSON");
+      // The receiver could not get its lock in time because another request was still running. Nothing was written.
+      if (answer.ok === false && /lock timeout/i.test(String(answer.error))) throw new Error("Receiver busy: lock timeout");
       return answer;
     } catch (e) {
       last = e instanceof Error ? `${e.name}: ${e.message}` : String(e);
-      if (Date.now() - t0 > 10_000) break;
+      const busy = /receiver busy/i.test(last);
+      if (!busy && Date.now() - t0 > 10_000) break;
+      if (busy) await new Promise((r) => setTimeout(r, 3000));
     }
   }
   throw new DeliveryUnavailable(last.slice(0, 200));
