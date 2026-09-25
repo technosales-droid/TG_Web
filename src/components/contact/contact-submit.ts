@@ -63,17 +63,29 @@ export function validateEnquiry(v: EnquiryValues): EnquiryErrors {
   return e;
 }
 
-/** The only place a submission happens. There is no server route or email service in this project
- * yet, so this opens the visitor's email app with the enquiry pre-filled and returns the link.
- * Replace the body with a `fetch` to a real endpoint when one exists; the form needs no other change. */
-export function submitEnquiry(v: EnquiryValues): { mailto: string; email: string } {
-  const email = CONTACT.email ?? "hello@technogurukul.com";
+/** The fallback: an email to the team with the enquiry pre-filled, used only if sending fails. */
+export function buildMailto(v: EnquiryValues): { mailto: string; email: string } {
+  const email = CONTACT.email ?? "admission@technogurukul.com";
   const lines = [`Name: ${v.fullName.trim()}`, `Email: ${v.email.trim()}`, `Phone: ${v.phone.trim()}`, `Interested in: ${v.interest}`];
   if (v.status) lines.push(`Current status: ${v.status}`);
   if (v.contactMethod) lines.push(`Preferred contact: ${v.contactMethod}`);
   if (v.source) lines.push(`Heard about us via: ${v.source}`);
   lines.push("", v.message.trim());
-  const mailto = `mailto:${email}?subject=${encodeURIComponent(`Enquiry: ${v.interest}`)}&body=${encodeURIComponent(lines.join("\n"))}`;
-  window.location.href = mailto;
-  return { mailto, email };
+  return { mailto: `mailto:${email}?subject=${encodeURIComponent(`Enquiry: ${v.interest}`)}&body=${encodeURIComponent(lines.join("\n"))}`, email };
+}
+
+/** Sends the enquiry to the server, which stores it. Resolves to an error message when it could not be sent. */
+export async function sendEnquiry(v: EnquiryValues, openedAt: number, website: string): Promise<{ ok: true } | { ok: false; error: string }> {
+  try {
+    const res = await fetch("/api/enquiry", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...v, website, elapsedMs: Date.now() - openedAt }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.ok) return { ok: true };
+    return { ok: false, error: data.error ?? "Something went wrong. Please try again." };
+  } catch {
+    return { ok: false, error: "We could not reach the server. Check your connection and try again." };
+  }
 }

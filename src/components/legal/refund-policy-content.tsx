@@ -5,7 +5,7 @@ export const DESCRIPTION =
   "Understand the cancellation, refund and transfer terms that apply to Techno Gurukul programs and services.";
 export const LAST_UPDATED = "23 September 2026";
 
-const EMAIL = "hello@technogurukul.com";
+const EMAIL = "admission@technogurukul.com";
 
 export const REFUND_SECTIONS: LegalSectionData[] = [
   {

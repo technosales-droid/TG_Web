@@ -12,11 +12,13 @@ import {
   SOURCES,
   STATUSES,
   formatPhone,
-  submitEnquiry,
+  buildMailto,
+  sendEnquiry,
   validateEnquiry,
   type EnquiryValues,
 } from "./contact-submit";
 import { FOCUS } from "./contact-ui";
+import { Honeypot } from "@/components/access/form-ui";
 
 const FIELD =
   "block h-12 w-full rounded-xl border border-primary/20 bg-background px-4 text-base text-foreground placeholder:text-muted-foreground outline-none transition-[border-color,box-shadow] duration-150 hover:border-primary/40 focus-visible:border-primary focus-visible:ring-4 focus-visible:ring-primary/15 motion-reduce:transition-none";
@@ -103,14 +105,17 @@ function SelectField({
   );
 }
 
-/** No server route or email service exists yet, so a valid submission opens the visitor's email app
- * with the enquiry pre-filled (see `submitEnquiry`). The confirmation says exactly that; it never
- * claims the message was delivered. */
+/** Sends the enquiry to the server, which stores it for the team. The confirmation appears only after that succeeded;
+ * if it fails, the visitor is told and offered an email to the team instead. */
 export function ContactForm() {
   const [values, setValues] = useState<EnquiryValues>(EMPTY_ENQUIRY);
   const [touched, setTouched] = useState<Partial<Record<Key, boolean>>>({});
   const [submitted, setSubmitted] = useState(false);
-  const [ready, setReady] = useState<{ mailto: string; email: string } | null>(null);
+  const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [failure, setFailure] = useState<string | null>(null);
+  const [website, setWebsite] = useState("");
+  const [openedAt] = useState(() => Date.now());
 
   const errors = useMemo(() => validateEnquiry(values), [values]);
   const err = (k: Key) => (submitted || touched[k] ? errors[k] : undefined);
@@ -127,34 +132,32 @@ export function ContactForm() {
     className: cn(FIELD, err(key) && INVALID),
   });
 
-  function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSubmitted(true);
+    setFailure(null);
     const first = REQUIRED_KEYS.find((k) => errors[k]);
     if (first) {
       document.getElementById(`contact-${first}`)?.focus();
       return;
     }
-    setReady(submitEnquiry(values));
+    setSending(true);
+    const result = await sendEnquiry(values, openedAt, website);
+    setSending(false);
+    if (result.ok) setSent(true);
+    else setFailure(result.error);
   }
 
-  if (ready) {
+  if (sent) {
     return (
       <div role="status" className="rounded-3xl border border-primary/10 bg-card p-6 shadow-sm sm:p-10">
         <span aria-hidden="true" className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
           <CheckCircle2 className="size-6" />
         </span>
-        <h3 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">Your enquiry is ready to send.</h3>
+        <h3 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">Thank you, your enquiry has been sent.</h3>
         <p className="mt-3 text-base leading-relaxed text-muted-foreground">
-          Your email app should have opened with everything pre-filled. Press send there and it goes straight to the
-          Techno Gurukul team.
-        </p>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
-          Nothing opened? Email us directly at{" "}
-          <a href={ready.mailto} className={cn("rounded font-semibold text-primary underline-offset-2 hover:underline", FOCUS)}>
-            {ready.email}
-          </a>
-          .
+          The Techno Gurukul team has received your details and will reply using the contact method you chose. Sending an
+          enquiry does not create an access profile or sign you up for anything else.
         </p>
         <button
           type="button"
@@ -162,7 +165,7 @@ export function ContactForm() {
             setValues(EMPTY_ENQUIRY);
             setTouched({});
             setSubmitted(false);
-            setReady(null);
+            setSent(false);
           }}
           className={cn("mt-6 inline-flex min-h-11 items-center rounded text-base font-semibold text-primary", FOCUS)}
         >
@@ -311,20 +314,29 @@ export function ContactForm() {
           </label>
         </div>
         <ErrorText id="contact-consent-error">{err("consent")}</ErrorText>
+        <Honeypot value={website} onChange={setWebsite} />
+        {failure && (
+          <p role="alert" className="mt-5 rounded-xl border border-destructive/40 bg-destructive/5 px-4 py-3 text-sm leading-relaxed text-destructive">
+            {failure} You can also email us at{" "}
+            <a href={buildMailto(values).mailto} className="font-semibold underline underline-offset-2">{buildMailto(values).email}</a>.
+          </p>
+        )}
 
         <div className="mt-6 flex flex-col gap-4 @xl:flex-row @xl:items-center @xl:justify-between">
           <button
             type="submit"
+            disabled={sending}
             className={cn(
-              "group inline-flex h-12 w-full items-center justify-center gap-2 rounded-full @xl:w-auto @xl:min-w-56 bg-primary px-8 text-base font-semibold text-primary-foreground transition-colors duration-200 hover:bg-primary/90 motion-reduce:transition-none",
+              "group inline-flex h-12 disabled:opacity-70 w-full items-center justify-center gap-2 rounded-full @xl:w-auto @xl:min-w-56 bg-primary px-8 text-base font-semibold text-primary-foreground transition-colors duration-200 hover:bg-primary/90 motion-reduce:transition-none",
               FOCUS
             )}
           >
-            Send enquiry
+            {sending ? "Sending" : "Send enquiry"}
             <ArrowRight className="size-4 transition-transform duration-200 motion-safe:group-hover:translate-x-1" aria-hidden="true" />
           </button>
-          <p className="text-sm text-muted-foreground @xl:whitespace-nowrap @xl:text-right">
-            Opens your email app with this enquiry pre-filled.
+          <p className="text-sm text-muted-foreground @xl:text-right">
+            Read how we use your details in the{" "}
+            <a href="/privacy-policy" className={cn("rounded font-medium text-primary underline underline-offset-2", FOCUS)}>Privacy Policy</a>.
           </p>
         </div>
       </div>

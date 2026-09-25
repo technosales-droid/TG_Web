@@ -6,7 +6,7 @@ export const DESCRIPTION =
   "These terms explain the rules that apply when you access and use the Techno Gurukul website and services.";
 export const LAST_UPDATED = "24 September 2026";
 
-const EMAIL = "hello@technogurukul.com";
+const EMAIL = "admission@technogurukul.com";
 
 export const TERMS_SECTIONS: LegalSectionData[] = [
   {

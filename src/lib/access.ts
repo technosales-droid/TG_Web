@@ -106,6 +106,14 @@ export const clean = (s: unknown, max: number) =>
     .trim()
     .slice(0, max);
 
+/** Like clean() but keeps line breaks, for messages. */
+export const cleanText = (s: unknown, max: number) =>
+  (typeof s === "string" ? s : "")
+    .replace(/\r\n?/g, "\n")
+    .replace(/[\u0000-\u0009\u000b-\u001f\u007f]/g, " ")
+    .trim()
+    .slice(0, max);
+
 /** Spreadsheet and CSV safe: a leading = + - @ would otherwise be run as a formula. */
 export const cellSafe = (s: string) => (/^[=+\-@]/.test(s) ? `'${s}` : s);
 

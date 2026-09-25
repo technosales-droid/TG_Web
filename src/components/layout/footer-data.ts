@@ -61,7 +61,7 @@ export const footerSocials: { id: SocialId; label: string; href: string | null }
 // The web copy's Contact page lists the email below; its phone (0000000000) and address
 // ("Address, Address…") are placeholders, so those stay `null` until real values exist.
 export const footerContact: { email: string | null; phone: string | null } = {
-  email: "hello@technogurukul.com",
+  email: "admission@technogurukul.com",
   phone: null,
 };
 

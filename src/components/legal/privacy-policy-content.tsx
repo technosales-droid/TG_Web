@@ -7,7 +7,7 @@ export const DESCRIPTION =
   "How Techno Gurukul collects, uses and protects your personal information, and the choices and rights you have.";
 export const LAST_UPDATED = "24 September 2026";
 
-const EMAIL = "hello@technogurukul.com";
+const EMAIL = "admission@technogurukul.com";
 const A = "font-medium text-primary underline-offset-2 hover:underline";
 const UL = "list-disc space-y-2 pl-5";
 
@@ -58,8 +58,9 @@ export const PRIVACY_SECTIONS: LegalSectionData[] = [
         <p className="font-semibold text-foreground">When you contact us:</p>
         <ul className={UL}>
           <li>
-            The <Link href="/contact" className={A}>enquiry form</Link> prepares an email in your own email program.
-            Nothing is sent until you send it, and the website does not receive the details you type.
+            The <Link href="/contact" className={A}>enquiry form</Link> sends what you type (name, email, phone, what you are
+            interested in, your current status, preferred contact method, how you heard about us and your message) to us. It
+            is kept with the other records described below.
           </li>
           <li>
             A <Link href="/privacy-requests" className={A}>privacy request</Link> sends the request type, your name and
@@ -143,7 +144,7 @@ export const PRIVACY_SECTIONS: LegalSectionData[] = [
         <p>Your information is shared only with those who need it to run the service for us:</p>
         <ul className={UL}>
           <li><strong className="text-foreground">Hosting</strong>: <Tbc>HOSTING PROVIDER</Tbc>, which serves the website.</li>
-          <li><strong className="text-foreground">Lead and record storage</strong>: <Tbc>LEAD STORAGE / CRM PROVIDER</Tbc>, where access profiles and privacy requests are kept.</li>
+          <li><strong className="text-foreground">Lead and record storage</strong>: Google LLC (Google Sheets, in our Google Workspace account), where access profiles, enquiries and privacy requests are kept. We may move to a customer-relationship system later and will update this policy if we do.</li>
           <li><strong className="text-foreground">Authorities</strong>, where the law requires it.</li>
         </ul>
         <p>These providers may only use your information to provide their service to us. We do not share it for their own marketing.</p>

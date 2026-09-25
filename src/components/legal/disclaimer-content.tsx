@@ -5,7 +5,7 @@ export const DESCRIPTION =
   "Important information about educational content, career outcomes, third-party resources and use of this website.";
 export const LAST_UPDATED = "23 September 2026";
 
-const EMAIL = "hello@technogurukul.com";
+const EMAIL = "admission@technogurukul.com";
 
 export const DISCLAIMER_SECTIONS: LegalSectionData[] = [
   {

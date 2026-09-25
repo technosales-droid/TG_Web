@@ -29,7 +29,7 @@ export default function Page() {
         <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
           Sending this form asks us to look into your request. It does not change or delete anything by itself. We may ask
           you to confirm your identity first. If you would rather write to us, email{" "}
-          <a href="mailto:hello@technogurukul.com" className="font-medium text-primary underline underline-offset-2">hello@technogurukul.com</a>.
+          <a href="mailto:admission@technogurukul.com" className="font-medium text-primary underline underline-offset-2">admission@technogurukul.com</a>.
         </p>
       </div>
     </main>
