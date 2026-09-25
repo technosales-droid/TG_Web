@@ -121,7 +121,7 @@ export function SortSelect({ value, onChange }: { value: SortKey; onChange: (v: 
         id={id}
         value={value}
         onChange={(e) => onChange(e.target.value as SortKey)}
-        className={cn("h-10 appearance-none rounded-lg border border-primary/20 bg-card pr-9 pl-3 text-sm font-medium text-foreground", FOCUS)}
+        className={cn("h-11 appearance-none rounded-lg border border-primary/20 bg-card pr-9 pl-3 text-base font-medium text-foreground sm:text-sm", FOCUS)}
       >
         {SORT_OPTIONS.map((o) => (
           <option key={o.value} value={o.value}>
@@ -161,7 +161,7 @@ export function ResultsToolbar({
           type="button"
           onClick={(e) => onOpenFilters(e.currentTarget)}
           className={cn(
-            "inline-flex h-10 items-center gap-2 rounded-lg border border-primary/25 bg-card px-3.5 text-sm font-semibold text-foreground hover:bg-muted lg:hidden",
+            "inline-flex h-11 items-center gap-2 rounded-lg border border-primary/25 bg-card px-3.5 text-[15px] font-semibold text-foreground hover:bg-muted lg:hidden",
             FOCUS
           )}
         >

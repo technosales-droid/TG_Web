@@ -55,7 +55,7 @@ const SCHEMA = [
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${montserrat.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
+      <body className="min-h-full flex flex-col overflow-x-clip bg-background text-foreground font-sans">
         <AccessProvider>
           {SCHEMA.map((d) => (
             <JsonLd key={d["@type"]} data={d} />

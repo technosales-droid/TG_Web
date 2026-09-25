@@ -80,7 +80,7 @@ export function CoursePromotionPopup() {
       ref={modalRef}
       onClose={close}
       aria-label={`Featured program: ${promo.courseName}`}
-      className="course-promo m-auto w-[calc(100%-2rem)] max-w-sm overflow-hidden rounded-2xl sm:max-w-md sm:rounded-3xl lg:max-w-xl xl:max-w-2xl border border-primary/10 bg-card p-0 text-foreground shadow-[0_24px_60px_-20px_rgba(16,20,28,0.5)] backdrop:bg-black/60"
+      className="course-promo m-auto max-h-[92dvh] w-[calc(100%-2rem)] max-w-sm overflow-y-auto overscroll-contain rounded-2xl sm:max-w-md sm:rounded-3xl lg:max-w-xl xl:max-w-2xl border border-primary/10 bg-card p-0 text-foreground shadow-[0_24px_60px_-20px_rgba(16,20,28,0.5)] backdrop:bg-black/60"
     >
       <button
         type="button"

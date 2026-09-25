@@ -171,7 +171,7 @@ export function SiteFooter() {
                       <Link
                         href={link.href}
                         className={cn(
-                          "block py-1.5 text-base text-background/85 transition-colors duration-200 hover:text-background",
+                          "block py-2.5 text-base sm:py-1.5 text-background/85 transition-colors duration-200 hover:text-background",
                           focusRing
                         )}
                       >
@@ -259,7 +259,7 @@ export function SiteFooter() {
                   <Link
                     href={link.href}
                     className={cn(
-                      "block py-1.5 text-sm text-background/75 transition-colors duration-200 hover:text-background",
+                      "block py-2.5 text-sm sm:py-1.5 text-background/75 transition-colors duration-200 hover:text-background",
                       focusRing
                     )}
                   >

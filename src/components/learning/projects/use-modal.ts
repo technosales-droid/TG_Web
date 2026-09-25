@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { lockScroll } from "@/lib/scroll-lock";
 
 /**
  * Drives a native <dialog> from a boolean: opens it modally, locks page scroll while it is open and closes it
@@ -12,10 +13,9 @@ export function useModal(open: boolean) {
     const d = ref.current;
     if (!d || !open) return;
     if (!d.open) d.showModal();
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const unlock = lockScroll();
     return () => {
-      document.body.style.overflow = prev;
+      unlock();
       if (d.open) d.close();
     };
   }, [open]);

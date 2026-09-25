@@ -145,7 +145,7 @@ export function ResourcesLibrary() {
                 </ul>
               </div>
               ) : results.length > 0 ? (
-                <ResourceCards resources={results} />
+                <ResourceCards resources={results} view={state.view} />
               ) : (
                 <p role="status" className="rounded-3xl border border-dashed border-primary/30 bg-card p-8 text-center text-muted-foreground">
                   No resources match these filters.

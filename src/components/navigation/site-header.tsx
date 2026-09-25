@@ -20,6 +20,7 @@ import {
   CTA_LINK,
   LEARNING_LINKS,
 } from "@/components/navigation/nav-data";
+import { lockScroll } from "@/lib/scroll-lock";
 import { cn } from "cn";
 
 export function SiteHeader() {
@@ -28,14 +29,14 @@ export function SiteHeader() {
   useEffect(() => {
     if (!mobileOpen) return;
 
-    document.body.style.overflow = "hidden";
+    const unlock = lockScroll();
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setMobileOpen(false);
     };
     document.addEventListener("keydown", onKeyDown);
 
     return () => {
-      document.body.style.overflow = "";
+      unlock();
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [mobileOpen]);

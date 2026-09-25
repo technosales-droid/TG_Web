@@ -131,7 +131,7 @@ function Viewer({ state, onClose }: { state: ViewerState; onClose: () => void })
 
 const TONES = ["from-primary via-primary/70 to-brand-sky/50", "from-[#0b3d50] via-primary to-brand-sky/60", "from-[#0a4a66] via-[#0a6a8f] to-brand-sky/50"];
 
-function CardShell({ thumb, alt, tone, chips, title, text, meta, action, onOpen }: {
+function CardShell({ thumb, alt, tone, chips, title, text, meta, action, onOpen, list }: {
   thumb?: string;
   alt: string;
   tone: number;
@@ -141,10 +141,11 @@ function CardShell({ thumb, alt, tone, chips, title, text, meta, action, onOpen 
   meta: string;
   action: string;
   onOpen: () => void;
+  list?: boolean;
 }) {
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-primary/10 bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-24px_rgba(16,20,28,0.35)]">
-      <div className={cn("relative aspect-[16/10] overflow-hidden", !thumb && `bg-gradient-to-br ${TONES[tone % TONES.length]}`)}>
+    <article className={cn("group relative flex h-full flex-col overflow-hidden rounded-3xl border border-primary/10 bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-24px_rgba(16,20,28,0.35)]", list && "sm:flex-row")}>
+      <div className={cn("relative aspect-[16/10] overflow-hidden", list && "sm:aspect-auto sm:min-h-44 sm:w-64 sm:shrink-0", !thumb && `bg-gradient-to-br ${TONES[tone % TONES.length]}`)}>
         {thumb && <Image src={thumb} alt={alt} fill sizes="(min-width: 1280px) 30vw, (min-width: 640px) 45vw, 92vw" className="object-cover" />}
       </div>
       <div className="flex flex-1 flex-col p-5">
@@ -168,12 +169,12 @@ const AccessNote = ({ what }: { what: string }) => (
   </p>
 );
 
-export function ProjectCards({ projects }: { projects: Project[] }) {
+export function ProjectCards({ projects, view = "grid" }: { projects: Project[]; view?: "grid" | "list" }) {
   const { open, viewer } = useGatedViewer();
   return (
     <>
       <AccessNote what="The full project" />
-      <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      <ul className={view === "list" ? "grid gap-5" : "grid gap-5 sm:grid-cols-2 xl:grid-cols-3"}>
         {projects.map((p, i) => (
           <li key={p.slug}>
             <CardShell
@@ -186,6 +187,7 @@ export function ProjectCards({ projects }: { projects: Project[] }) {
               meta={p.creatorName ?? (p.creatorType === "student" ? "Student work" : p.creatorType === "faculty" ? "Faculty work" : "Techno Gurukul")}
               action="View project"
               onOpen={() => open("projects", p.slug, p.title, sourceTypeForCreator(p.creatorType))}
+              list={view === "list"}
             />
           </li>
         ))}
@@ -195,12 +197,12 @@ export function ProjectCards({ projects }: { projects: Project[] }) {
   );
 }
 
-export function ResourceCards({ resources }: { resources: Resource[] }) {
+export function ResourceCards({ resources, view = "grid" }: { resources: Resource[]; view?: "grid" | "list" }) {
   const { open, viewer } = useGatedViewer();
   return (
     <>
       <AccessNote what="The full resource" />
-      <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      <ul className={view === "list" ? "grid gap-5" : "grid gap-5 sm:grid-cols-2 xl:grid-cols-3"}>
         {resources.map((r, i) => (
           <li key={r.slug}>
             <CardShell
@@ -213,6 +215,7 @@ export function ResourceCards({ resources }: { resources: Resource[] }) {
               meta={`${r.format}${r.difficulty ? ` · ${r.difficulty[0].toUpperCase()}${r.difficulty.slice(1)}` : ""}`}
               action="Get access"
               onOpen={() => open("resources", r.slug, r.title, "resource")}
+              list={view === "list"}
             />
           </li>
         ))}

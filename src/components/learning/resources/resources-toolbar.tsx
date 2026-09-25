@@ -99,7 +99,7 @@ export function ResultsToolbar({
           type="button"
           onClick={(e) => onOpenFilters(e.currentTarget)}
           className={cn(
-            "inline-flex h-10 items-center gap-2 rounded-lg border border-primary/25 bg-card px-3.5 text-sm font-semibold text-foreground hover:bg-muted lg:hidden",
+            "inline-flex h-11 items-center gap-2 rounded-lg border border-primary/25 bg-card px-3.5 text-[15px] font-semibold text-foreground hover:bg-muted lg:hidden",
             FOCUS
           )}
         >

@@ -9,7 +9,7 @@ const OPTIONS = [
 
 export function ViewToggle({ view, onChange }: { view: ViewMode; onChange: (v: ViewMode) => void }) {
   return (
-    <div role="group" aria-label="View" className="inline-flex h-10 overflow-hidden rounded-lg border border-primary/20 bg-card">
+    <div role="group" aria-label="View" className="inline-flex h-11 overflow-hidden rounded-lg border border-primary/20 bg-card">
       {OPTIONS.map(({ value, label, Icon }) => (
         <button
           key={value}

@@ -166,7 +166,7 @@ export function ProjectsShowcase() {
                 </ul>
               </div>
               ) : results.length > 0 ? (
-                <ProjectCards projects={results} />
+                <ProjectCards projects={results} view={state.view} />
               ) : (
                 <p role="status" className="rounded-3xl border border-dashed border-primary/30 bg-card p-8 text-center text-muted-foreground">
                   No projects match these filters.
