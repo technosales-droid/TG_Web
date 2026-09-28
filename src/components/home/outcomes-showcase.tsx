@@ -101,7 +101,7 @@ export function OutcomesShowcase() {
   const { ref, visible } = useRevealOnView<HTMLElement>();
 
   return (
-    <section ref={ref} className="px-4 py-14 sm:px-6 sm:py-16">
+    <section ref={ref} className="px-4 py-10 sm:px-6 sm:py-12">
       <div className="mx-auto max-w-[1800px]">
         <div
           className={cn(
@@ -111,10 +111,10 @@ export function OutcomesShowcase() {
         >
           <div className="flex items-center justify-center gap-2 text-sm font-medium text-primary">
             <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
-            What You Can Build
+            Why Techno Gurukul
           </div>
 
-          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-balance text-foreground sm:text-4xl lg:text-5xl">
+          <h2 className="mt-4 text-2xl font-semibold tracking-tight text-balance text-foreground sm:text-3xl lg:text-4xl">
             Don&rsquo;t Just Learn the Skill. Build Something With It.
           </h2>
 
@@ -129,7 +129,7 @@ export function OutcomesShowcase() {
         {/* Below lg: a static grid, every card fully readable (no hover on touch devices).
             At lg+: a single accordion row: each card is narrow at rest and grows on hover
             to reveal the description + highlights, matching the reference layout. */}
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:mt-16 lg:flex lg:h-[540px] lg:gap-3">
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:mt-12 lg:flex lg:h-[440px] lg:gap-3">
           {OUTCOMES.map((outcome, index) => (
             <OutcomeCard key={outcome.tag} outcome={outcome} index={index} visible={visible} />
           ))}

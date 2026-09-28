@@ -10,9 +10,9 @@ import {
 } from "@/components/ui/navigation-menu";
 import {
   DIGITAL_MARKETING_CATEGORY,
-  DIGITAL_MARKETING_PROGRAMS,
-  FLAGSHIP_PROGRAM,
+  GAME_DEVELOPMENT_PROGRAMS,
   PROGRAM_CATEGORY,
+  SIGNATURE_PROGRAM,
   SPECIALIZED_PROGRAMS,
   type ProgramLink,
 } from "@/components/navigation/nav-data";
@@ -48,7 +48,7 @@ function Tile({
 
       {flagship && (
         <span className="absolute top-4 left-4 rounded-full bg-brand-sky px-3 py-1 text-[11px] font-semibold tracking-wide text-white uppercase">
-          Flagship
+          Signature Course
         </span>
       )}
       <span className="absolute top-3 right-3 flex size-8 items-center justify-center rounded-full bg-white text-foreground opacity-0 transition-all duration-300 motion-safe:translate-y-1 group-hover/item:opacity-100 motion-safe:group-hover/item:translate-y-0 group-focus-visible/item:opacity-100">
@@ -90,12 +90,12 @@ export function ProgramsMenu() {
           </div>
 
           <div className="grid auto-rows-[9.5rem] grid-cols-4 gap-3">
-            <Tile program={FLAGSHIP_PROGRAM} eyebrow={PROGRAM_CATEGORY} flagship className="col-span-2 row-span-2" />
+            <Tile program={SIGNATURE_PROGRAM} eyebrow={DIGITAL_MARKETING_CATEGORY} flagship className="col-span-2 row-span-2" />
             {SPECIALIZED_PROGRAMS.map((program) => (
               <Tile key={program.href} program={program} />
             ))}
-            {DIGITAL_MARKETING_PROGRAMS.map((program) => (
-              <Tile key={program.href} program={program} eyebrow={DIGITAL_MARKETING_CATEGORY} className="col-span-2" />
+            {GAME_DEVELOPMENT_PROGRAMS.map((program) => (
+              <Tile key={program.href} program={program} eyebrow={PROGRAM_CATEGORY} className="col-span-2" />
             ))}
           </div>
         </div>

@@ -4,9 +4,9 @@ import Link from "next/link";
 import {
   ABOUT_LINKS,
   CTA_LINK,
-  DIGITAL_MARKETING_PROGRAMS,
-  FLAGSHIP_PROGRAM,
+  GAME_DEVELOPMENT_PROGRAMS,
   LEARNING_LINKS,
+  SIGNATURE_PROGRAM,
   SPECIALIZED_PROGRAMS,
   type NavLink,
 } from "@/components/navigation/nav-data";
@@ -83,25 +83,25 @@ export function MobileNav({
         <ul className="flex flex-col">
           <li>
             <Link
-              href={FLAGSHIP_PROGRAM.href}
+              href={SIGNATURE_PROGRAM.href}
               onClick={onClose}
               className="block rounded-md py-3 text-[15px] font-medium text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
             >
-              {FLAGSHIP_PROGRAM.label}: {FLAGSHIP_PROGRAM.tagline}
+              {SIGNATURE_PROGRAM.label}: {SIGNATURE_PROGRAM.tagline}
             </Link>
           </li>
-          {SPECIALIZED_PROGRAMS.map((program) => (
+          {GAME_DEVELOPMENT_PROGRAMS.map((program) => (
             <li key={program.href}>
               <Link
                 href={program.href}
                 onClick={onClose}
-                className="block rounded-md py-3 text-[15px] text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                className="block rounded-md py-3 text-[15px] text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
               >
                 {program.label}
               </Link>
             </li>
           ))}
-          {DIGITAL_MARKETING_PROGRAMS.map((program) => (
+          {SPECIALIZED_PROGRAMS.map((program) => (
             <li key={program.href}>
               <Link
                 href={program.href}

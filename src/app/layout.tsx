@@ -7,7 +7,7 @@ import { CookieBanner } from "@/components/access/cookie-banner";
 import { CookieSettings } from "@/components/access/cookie-settings";
 import { CoursePromotionPopup } from "@/components/promotions/course-promotion-popup";
 import { JsonLd } from "@/components/seo/json-ld";
-import { footerSocials } from "@/components/layout/footer-data";
+import { footerLocation, footerSocials } from "@/components/layout/footer-data";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -48,6 +48,17 @@ const SCHEMA = [
     url: SITE_URL,
     logo: `${SITE_URL}/brand/logo.png`,
     sameAs: footerSocials.flatMap((s) => (s.href ? [s.href] : [])),
+    ...(footerLocation.address
+      ? {
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: footerLocation.shortAddress ?? undefined,
+            addressLocality: "Nashik",
+            addressRegion: "Maharashtra",
+            addressCountry: "IN",
+          },
+        }
+      : {}),
   },
   { "@context": "https://schema.org", "@type": "WebSite", name: SITE_NAME, url: SITE_URL },
 ];

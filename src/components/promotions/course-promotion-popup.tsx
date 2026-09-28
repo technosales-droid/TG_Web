@@ -13,7 +13,12 @@ import { pickNext } from "./rotation";
 
 const DELAY_S = 45;
 const STORAGE_KEY = "tg-course-promo";
-const IDS = COURSE_PROMOTIONS.map((p) => p.courseId);
+// Only the two courses actually open for enrolment are promoted; the individual Game Development studios (Unity,
+// Unreal, and so on) are not advertised on their own, matching how they're presented everywhere else on the site.
+const PROMOTABLE_IDS = ["tg-digital-marketing", "tg-gameforge"];
+const IDS = COURSE_PROMOTIONS.filter((p) => PROMOTABLE_IDS.includes(p.courseId)).map((p) => p.courseId);
+// At most one popup per browser session, so a visitor is never interrupted twice in one visit.
+const SESSION_SHOWN_KEY = "tg-course-promo-shown-session";
 
 const readShown = (): string[] => {
   try {
@@ -28,6 +33,18 @@ const writeShown = (shown: string[]) => {
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(shown));
   } catch {}
 };
+const alreadyShownThisSession = () => {
+  try {
+    return sessionStorage.getItem(SESSION_SHOWN_KEY) === "1";
+  } catch {
+    return false;
+  }
+};
+const markShownThisSession = () => {
+  try {
+    sessionStorage.setItem(SESSION_SHOWN_KEY, "1");
+  } catch {}
+};
 
 /** True while something else owns the visitor's attention: an open menu or dialog, a locked page, or a field being used. */
 function isBusy() {
@@ -40,9 +57,11 @@ function isBusy() {
 }
 
 /**
- * One global promotion modal (native <dialog>: dims and inerts the page, locks scroll, traps focus). After 45 seconds of active browsing (tab visible) it promotes one course; once
- * closed the next 45 seconds start and a different course is shown, until all have been shown. Copy and courses live in
- * data/course-promotions.ts. It stays until the visitor closes it (button or Escape), not on backdrop click.
+ * One global promotion modal (native <dialog>: dims and inerts the page, locks scroll, traps focus), for the two
+ * courses currently open for enrolment (Digital Marketing, Game Development). After 45 seconds of active browsing
+ * (tab visible) it promotes one of them; which one rotates across visits (data/promotions/rotation.ts), but never
+ * more than once in a single browser session, so a visitor is interrupted at most once per visit. It stays until
+ * the visitor closes it (button or Escape), not on backdrop click.
  */
 export function CoursePromotionPopup() {
   const pathname = usePathname();
@@ -57,7 +76,7 @@ export function CoursePromotionPopup() {
   }, []);
 
   useEffect(() => {
-    if (current || !IDS.length) return;
+    if (current || !IDS.length || alreadyShownThisSession()) return;
     const tick = setInterval(() => {
       if (document.hidden) return;
       seconds.current += 1;
@@ -65,6 +84,7 @@ export function CoursePromotionPopup() {
       if (seconds.current < DELAY_S || onContact || isBusy()) return;
       const next = pickNext(IDS, readShown());
       writeShown(next.shown);
+      markShownThisSession();
       const { messages } = COURSE_PROMOTIONS.find((p) => p.courseId === next.id)!;
       setCurrent({ courseId: next.id, message: messages[Math.floor(Math.random() * messages.length)] });
     }, 1000);

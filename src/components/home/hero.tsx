@@ -41,7 +41,7 @@ export function Hero() {
           <div className="relative max-w-4xl">
             <div className="flex items-center gap-2 text-sm font-medium text-white/80">
               <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
-              Techno Gurukul
+              Techno Gurukul &middot; Nashik
             </div>
 
             <h1 className="mt-5 max-w-3xl text-[2.25rem] leading-[1.05] font-semibold tracking-tight text-balance text-white min-[430px]:text-5xl sm:text-6xl lg:text-7xl xl:text-[5rem]">
@@ -52,8 +52,9 @@ export function Hero() {
             </h1>
 
             <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
-              Techno Gurukul is built around practical learning, helping students develop creative, technical and
-              digital skills through hands-on education, real projects and industry-relevant tools.
+              Techno Gurukul is a Nashik-based learning institute built around practical education. Our signature
+              Digital Marketing program leads the way, alongside hands-on Game Development training, both taught
+              through real projects and industry-relevant tools.
             </p>
 
             <div className="mt-9 flex flex-wrap items-center gap-4">
