@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { after, type NextRequest } from "next/server";
 import { deliver } from "@/server/delivery";
-import { getGatedProject, getGatedResource } from "@/server/gated-content";
+import { getGatedBrochure, getGatedProject, getGatedResource } from "@/server/gated-content";
 import { claim, clientIp, fail, json, limited } from "@/server/guard";
 import { sourceLabel } from "@/server/source-label";
 import { SessionNotConfigured, sessionFrom } from "@/server/session";
@@ -21,7 +21,8 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ kind: strin
   }
   if (!session) return fail(401, "Access required.");
 
-  const found = kind === "projects" ? getGatedProject(slug) : kind === "resources" ? getGatedResource(slug) : null;
+  const found =
+    kind === "projects" ? getGatedProject(slug) : kind === "resources" ? getGatedResource(slug) : kind === "brochures" ? getGatedBrochure(slug) : null;
   if (!found) return fail(404, "Not found.");
 
   // Only the first open per person is recorded, and it is logged after the response so opening never waits on the Sheet.
@@ -30,6 +31,6 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ kind: strin
   }
   const c = found.content;
   // A private file is reached through the file route, so its location on the server is never sent.
-  const content = "kind" in c ? (c.kind === "file" ? { kind: "file", url: `/api/content/resources/${encodeURIComponent(slug)}/file` } : { kind: "external", url: c.url }) : c;
+  const content = "kind" in c ? (c.kind === "file" ? { kind: "file", url: `/api/content/${kind}/${encodeURIComponent(slug)}/file` } : { kind: "external", url: c.url }) : c;
   return json({ ok: true, content });
 }

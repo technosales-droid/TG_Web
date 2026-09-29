@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/home/hero";
 import { AvailableCourses } from "@/components/home/available-courses";
+import { LearningApproach } from "@/components/home/learning-approach";
 import { OutcomesShowcase } from "@/components/home/outcomes-showcase";
 import { ComingSoonPrograms } from "@/components/home/programs-preview";
 import { ClosingCta } from "@/components/home/closing-cta";
@@ -21,6 +22,7 @@ export default function Page() {
     <main>
       <Hero />
       <AvailableCourses />
+      <LearningApproach />
       <OutcomesShowcase />
       <ComingSoonPrograms />
       <ClosingCta />

@@ -1,17 +1,18 @@
 import type { NextConfig } from "next";
 
 // Security headers. The CSP allows what the site actually uses: its own scripts, styles (Next inlines both), images,
-// video and self-hosted fonts, plus the single Google Maps embed in the footer and contact page. It is applied to
+// video and self-hosted fonts, plus the single Google Maps embed in the footer and contact page, and YouTube (the
+// hero's video card: a thumbnail image, and the player only once a visitor clicks play). It is applied to
 // production builds only, because the dev server needs eval and websockets for hot reload.
 const csp = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline'",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob:",
+  "img-src 'self' data: blob: https://i.ytimg.com",
   "media-src 'self'",
   "font-src 'self' data:",
   "connect-src 'self'",
-  "frame-src https://www.google.com",
+  "frame-src https://www.google.com https://www.youtube-nocookie.com",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -33,6 +34,9 @@ const nextConfig: NextConfig = {
 
   // Files behind the access gate live in /private-content (not /public) and are read by the file route.
   outputFileTracingIncludes: { "/api/content/**": ["./private-content/**"] },
+
+  // The hero's video card thumbnail, once a real YouTube video id is set (src/components/home/hero-video-card.tsx).
+  images: { remotePatterns: [{ protocol: "https", hostname: "i.ytimg.com" }] },
 
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];

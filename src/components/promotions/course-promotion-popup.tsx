@@ -4,12 +4,23 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowRight, X } from "lucide-react";
+import { ArrowRight, Download, X } from "lucide-react";
 import { useModal } from "@/components/learning/projects/use-modal";
 import { buttonVariants } from "@/components/ui/button";
+import { ACTIVE_PROGRAMS } from "@/data/active-programs";
 import { COURSE_PROMOTIONS, type PromotionMessage } from "@/data/course-promotions";
+import { INTERESTS, type Interest } from "@/lib/access";
 import { cn } from "cn";
+import { useBrochureDownload } from "./brochure-download";
 import { pickNext } from "./rotation";
+
+/** The course's plain catalogue name (e.g. "Digital Marketing"), not its marketing title (e.g. "TG GameForge"), so it
+ * both reads naturally as a button label and lines up with the existing "interested in" values. null when a promoted
+ * course somehow isn't one of the two active programs, in which case no brochure button is offered for it. */
+function courseInterest(href: string): Interest | null {
+  const title = ACTIVE_PROGRAMS.find((p) => p.href === href)?.title;
+  return title && (INTERESTS as readonly string[]).includes(title) ? (title as Interest) : null;
+}
 
 const DELAY_S = 45;
 const STORAGE_KEY = "tg-course-promo";
@@ -66,9 +77,11 @@ function isBusy() {
 export function CoursePromotionPopup() {
   const pathname = usePathname();
   const [current, setCurrent] = useState<{ courseId: string; message: PromotionMessage } | null>(null);
+  const [brochureBusy, setBrochureBusy] = useState(false);
   const seconds = useRef(0);
   const modalRef = useModal(current !== null);
   const onContact = pathname.startsWith("/contact");
+  const { open: openBrochure, viewer: brochureViewer } = useBrochureDownload();
 
   const close = useCallback(() => {
     seconds.current = 0;
@@ -91,48 +104,100 @@ export function CoursePromotionPopup() {
     return () => clearInterval(tick);
   }, [current, onContact]);
 
-  if (!current) return null;
+  // The brochure viewer is a separate dialog (its own access-gate step, then a ready/download step), so it must keep
+  // rendering even once the promotion dialog below has closed.
+  if (!current) return brochureViewer;
   const promo = COURSE_PROMOTIONS.find((p) => p.courseId === current.courseId)!;
   const { headline, description, ctaLabel } = current.message;
+  const brochureInterest = courseInterest(promo.href);
+
+  const downloadBrochure = async () => {
+    if (!brochureInterest || brochureBusy) return;
+    setBrochureBusy(true);
+    close(); // one dialog at a time: the access-gate/brochure dialog takes over from here
+    try {
+      await openBrochure({ slug: current.courseId, name: brochureInterest });
+    } finally {
+      setBrochureBusy(false);
+    }
+  };
 
   return (
-    <dialog
-      ref={modalRef}
-      onClose={close}
-      aria-label={`Featured program: ${promo.courseName}`}
-      className="course-promo m-auto max-h-[92dvh] w-[calc(100%-2rem)] max-w-sm overflow-y-auto overscroll-contain rounded-2xl sm:max-w-md sm:rounded-3xl lg:max-w-xl xl:max-w-2xl border border-primary/10 bg-card p-0 text-foreground shadow-[0_24px_60px_-20px_rgba(16,20,28,0.5)] backdrop:bg-black/60"
-    >
-      <button
-        type="button"
-        onClick={close}
-        aria-label="Close promotion"
-        className="absolute top-2 right-2 lg:top-4 lg:right-4 z-10 inline-flex size-11 items-center justify-center rounded-full bg-card/90 text-foreground shadow-sm hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:size-10 lg:size-11"
+    <>
+      {/*
+        Width: one formula (never wider than 900px, never wider than the viewport minus its side margin) replaces
+        the old max-w-* ladder, so everything inside is sized against the popup's own real width at every viewport,
+        not a breakpoint guess. overflow-x-hidden is deliberate, documented "vertical scroll only" behaviour, not a
+        substitute for the real fix below: without the min-w-0/shrink/flex-wrap changes on the CTA row and the
+        break-words/max-w-prose text, content that no longer fits would be silently clipped instead of visible; the
+        point of this pass is that it now genuinely fits, and this line only forecloses the alternative (a stray
+        scrollbar) if something ever regresses.
+      */}
+      <dialog
+        ref={modalRef}
+        onClose={close}
+        aria-label={`Featured program: ${promo.courseName}`}
+        className="course-promo relative m-auto box-border max-h-[92dvh] w-[min(900px,calc(100vw-2rem))] overflow-x-hidden overflow-y-auto overscroll-contain rounded-2xl border border-primary/10 bg-card p-0 text-foreground shadow-[0_24px_60px_-20px_rgba(16,20,28,0.5)] backdrop:bg-black/60 sm:rounded-3xl"
       >
-        <X className="size-5 sm:size-5" aria-hidden="true" />
-      </button>
-
-      {promo.image && (
-        <div className="relative aspect-[16/9] bg-muted">
-          <Image src={promo.image.src} alt={promo.image.alt} fill sizes="(min-width: 1280px) 672px, (min-width: 1024px) 576px, (min-width: 640px) 448px, 384px" className="object-cover" />
-        </div>
-      )}
-
-      <div className={cn("p-4 sm:p-6 lg:p-8", !promo.image && "pr-14")}>
-        <div className="flex items-center gap-2 text-xs font-medium tracking-[0.2em] lg:text-sm text-primary uppercase">
-          <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
-          {promo.category}
-        </div>
-        <p className="mt-2 text-lg leading-snug sm:mt-3 sm:text-xl lg:text-2xl xl:text-3xl font-semibold tracking-tight text-balance text-foreground">{headline}</p>
-        <p className="mt-1.5 text-sm leading-relaxed sm:mt-2 sm:text-base lg:text-lg text-muted-foreground">{description}</p>
-        <Link
-          href={promo.href}
+        <button
+          type="button"
           onClick={close}
-          className={cn(buttonVariants({ variant: "default" }), "mt-4 h-11 w-full rounded-full px-5 text-[15px] sm:mt-6 sm:h-12 sm:text-base lg:h-14 lg:text-lg")}
+          aria-label="Close promotion"
+          className="absolute top-3 right-3 z-10 inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-card/90 text-foreground shadow-sm hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:top-4 sm:right-4 sm:size-11"
         >
-          {ctaLabel ?? `Explore ${promo.courseName}`}
-          <ArrowRight className="size-4" aria-hidden="true" />
-        </Link>
-      </div>
-    </dialog>
+          <X className="size-5" aria-hidden="true" />
+        </button>
+
+        {promo.image && (
+          <div className="relative aspect-[16/9] w-full overflow-hidden bg-muted">
+            <Image src={promo.image.src} alt={promo.image.alt} fill sizes="(min-width: 932px) 900px, calc(100vw - 2rem)" className="object-cover" />
+          </div>
+        )}
+
+        <div className={cn("min-w-0 p-4 sm:p-6 lg:p-8", !promo.image && "pr-14")}>
+          <div className="flex min-w-0 items-center gap-2 text-xs font-medium tracking-[0.2em] lg:text-sm text-primary uppercase">
+            <span className="size-1.5 shrink-0 rounded-full bg-brand-sky" aria-hidden="true" />
+            <span className="min-w-0 break-words">{promo.category}</span>
+          </div>
+          <p className="mt-2 text-lg leading-snug text-balance break-words text-foreground sm:mt-3 sm:text-xl lg:text-2xl xl:text-3xl font-semibold tracking-tight">{headline}</p>
+          <p className="mt-1.5 max-w-prose text-sm leading-relaxed break-words text-muted-foreground sm:mt-2 sm:text-base lg:text-lg">{description}</p>
+
+          {/* Each button is sized to its own label first (flex-auto: grow and shrink from its natural content width,
+              not from a shared fixed share of the row) — a short "Explore ..." and a long "Download ... Brochure"
+              sit at their own natural widths side by side, rather than being forced to an equal 50/50 split that
+              leaves the long label wrapping while the short one has spare room. Either button is still free to drop
+              to its own full-width line the moment both don't fit together; whitespace-normal only matters in the
+              rare case a single button, alone on its own full-width line, still can't fit its label on one row. */}
+          <div className="mt-4 flex flex-wrap gap-3 sm:mt-6">
+            <Link
+              href={promo.href}
+              onClick={close}
+              className={cn(
+                buttonVariants({ variant: "default" }),
+                "h-11 max-w-full min-w-0 flex-auto justify-center rounded-full px-5 text-center text-[15px] whitespace-normal sm:h-12 sm:text-base lg:h-14 lg:text-lg"
+              )}
+            >
+              {ctaLabel ?? `Explore ${promo.courseName}`}
+              <ArrowRight className="size-4 shrink-0" aria-hidden="true" />
+            </Link>
+            {brochureInterest && (
+              <button
+                type="button"
+                onClick={downloadBrochure}
+                disabled={brochureBusy}
+                className={cn(
+                  buttonVariants({ variant: "outline" }),
+                  "h-11 max-w-full min-w-0 flex-auto justify-center rounded-full border-primary/30 px-5 text-center text-[15px] whitespace-normal text-foreground hover:bg-muted disabled:opacity-70 sm:h-12 sm:text-base lg:h-14 lg:text-lg"
+                )}
+              >
+                <Download className="size-4 shrink-0" aria-hidden="true" />
+                <span className="min-w-0">Download {brochureInterest} Brochure</span>
+              </button>
+            )}
+          </div>
+        </div>
+      </dialog>
+      {brochureViewer}
+    </>
   );
 }

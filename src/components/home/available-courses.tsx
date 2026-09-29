@@ -17,7 +17,12 @@ import { ALL_OFFERINGS } from "@/data/programs";
 // entries, not an arbitrary list.
 const DIGITAL_MARKETING = { ...ACTIVE_PROGRAMS.find((p) => p.href === "/programs/tg-digital-marketing")! } as typeof ACTIVE_PROGRAMS[number] & { image: string };
 const GAME_DEVELOPMENT = { ...ACTIVE_PROGRAMS.find((p) => p.href === "/programs/tg-gameforge")! } as typeof ACTIVE_PROGRAMS[number] & { image: string };
-const dmTags = ALL_OFFERINGS.find((o) => o.slug === "tg-digital-marketing")?.tags ?? [];
+const dmOffering = ALL_OFFERINGS.find((o) => o.slug === "tg-digital-marketing");
+// The three most concrete, recognisable skills; "Marketing" is dropped as redundant with the category label above it,
+// and the list is capped so the card stays readable rather than a wall of chips.
+const dmTags = (dmOffering?.tags ?? []).filter((t) => t !== "Marketing").slice(0, 3);
+// Duration, mode and location all come from the same verified record used on the course's own page.
+const dmMeta = [dmOffering?.duration, dmOffering?.mode, dmOffering?.location].filter(Boolean).join(" · ");
 
 function prefersReducedMotion() {
   return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -61,14 +66,14 @@ export function AvailableCourses() {
         >
           <div className="flex items-center justify-center gap-2 text-sm font-medium text-primary">
             <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
-            Available Courses in Nashik
+            Available Courses
           </div>
           <h2 id="available-courses-heading" className="mt-4 text-3xl font-semibold tracking-tight text-balance text-foreground sm:text-4xl lg:text-5xl">
-            Practical Digital Marketing and Game Development Training.
+            Start With What&rsquo;s Available Today.
           </h2>
           <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Two courses are open for enrolment right now at our Nashik institute. Everything else on the way is
-            listed further down as Coming Soon.
+            Digital Marketing and Game Development are open for enrolment at our Nashik institute right now.
+            Everything else further down the page is on the way.
           </p>
         </div>
 
@@ -106,8 +111,9 @@ function PrimaryCourseCard() {
 
       <div className="flex flex-1 flex-col p-6 sm:p-8">
         <p className="text-xs font-semibold tracking-widest text-brand-sky uppercase">{DIGITAL_MARKETING.category}</p>
-        <h3 className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">{DIGITAL_MARKETING.title} Course in Nashik</h3>
+        <h3 className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">{DIGITAL_MARKETING.title}</h3>
         <p className="mt-3 max-w-xl text-base leading-relaxed text-white/80">{DIGITAL_MARKETING.description}</p>
+        {dmMeta && <p className="mt-3 text-sm font-medium text-white/60">{dmMeta}</p>}
 
         {dmTags.length > 0 && (
           <ul className="mt-5 flex flex-wrap gap-2">
@@ -120,7 +126,7 @@ function PrimaryCourseCard() {
           </ul>
         )}
 
-        <div className="mt-7 flex flex-wrap items-center gap-4">
+        <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3">
           <Link
             href={DIGITAL_MARKETING.href}
             className={cn(
@@ -131,7 +137,7 @@ function PrimaryCourseCard() {
             Explore Digital Marketing
             <ArrowRight className="size-4" aria-hidden="true" />
           </Link>
-          <Link href="/contact" className="text-base font-medium text-white/90 underline underline-offset-4 hover:text-white">
+          <Link href="/contact" className="text-sm font-medium text-white/75 underline underline-offset-4 hover:text-white">
             Enquire now
           </Link>
         </div>
@@ -143,7 +149,7 @@ function PrimaryCourseCard() {
 function SecondaryCourseCard() {
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-[2.5rem] border border-primary/10 bg-card lg:col-span-2">
-      <div className="relative aspect-[16/10] w-full overflow-hidden">
+      <div className="relative aspect-[21/9] w-full overflow-hidden sm:aspect-[16/10]">
         <Image
           src={GAME_DEVELOPMENT.image}
           alt={GAME_DEVELOPMENT.alt}

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { Clock } from "lucide-react";
 import { cn } from "cn";
 
 // Committed future directions, not yet enrollable; no routes, no fabricated details. Digital Marketing and Game
@@ -127,7 +128,7 @@ export function ComingSoonPrograms() {
           visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
         )}
       >
-        <div className="flex w-max gap-7 px-4 opacity-90 [animation:marquee_55s_linear_infinite] group-hover/marquee:[animation-play-state:paused] motion-reduce:animate-none sm:px-6 lg:gap-10">
+        <div className="flex w-max gap-7 px-4 [animation:marquee_55s_linear_infinite] group-hover/marquee:[animation-play-state:paused] motion-reduce:animate-none sm:px-6 lg:gap-10">
           {COMING_SOON_PROGRAMS.map((program) => (
             <ProgramCard key={`a-${program.title}`} program={program} />
           ))}
@@ -158,7 +159,8 @@ function ProgramCard({ program, duplicate }: { program: (typeof COMING_SOON_PROG
       />
       <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/15" />
 
-      <span className="relative m-6 inline-flex w-fit items-center rounded-full bg-background/70 px-3.5 py-1.5 text-xs font-semibold text-muted-foreground">
+      <span className="relative m-6 inline-flex w-fit items-center gap-1.5 rounded-full bg-background/85 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+        <Clock className="size-3.5" aria-hidden="true" />
         Coming Soon
       </span>
 

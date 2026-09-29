@@ -12,6 +12,7 @@ import {
   type AccessSource,
   type AgeGroup,
   type FieldErrors,
+  type Interest,
   type SourceType,
 } from "@/lib/access";
 import { CONTACT } from "@/components/contact/contact-data";
@@ -32,6 +33,7 @@ const COPY: Record<SourceType, { title: string; text: string }> = {
   "faculty-project": { title: "Access this project", text: "Create your access profile to view the full project." },
   "institute-project": { title: "Access this project", text: "Create your access profile to view the full project." },
   "other-project": { title: "Access this project", text: "Create your access profile to view the full project." },
+  brochure: { title: "Download the brochure", text: "Enter your details and the brochure is yours." },
 };
 
 const LINK = "font-medium text-primary underline underline-offset-2 hover:text-primary/80";
@@ -45,15 +47,24 @@ export function AccessGate({
   source,
   onGranted,
   onCancel,
+  title,
+  text,
+  presetInterest,
 }: {
   source: AccessSource;
   onGranted: (s: GrantedSession) => void;
   onCancel: () => void;
+  /** Overrides the generic per-sourceType copy below, e.g. to name the specific course a brochure is for. */
+  title?: string;
+  text?: string;
+  /** When set, the "interested in" field is fixed to this and shown as the course the visitor is downloading/opening,
+   * rather than an open choice: there is nothing to ask again. */
+  presetInterest?: Interest;
 }) {
   const uid = useId();
   const [openedAt] = useState(() => Date.now());
   const [submissionId] = useState(newSubmissionId);
-  const [v, setV] = useState({ name: "", email: "", phone: "", interest: "", ageGroup: "adult" as AgeGroup, guardianConsent: false, marketingConsent: false, website: "" });
+  const [v, setV] = useState({ name: "", email: "", phone: "", interest: presetInterest ?? "", ageGroup: "adult" as AgeGroup, guardianConsent: false, marketingConsent: false, website: "" });
   const [errors, setErrors] = useState<FieldErrors>({});
   const [busy, setBusy] = useState(false);
   const set = <K extends keyof typeof v>(k: K, val: (typeof v)[K]) => {
@@ -98,9 +109,9 @@ export function AccessGate({
         <ShieldCheck className="size-4" aria-hidden="true" />
         Access profile
       </p>
-      <h2 id="access-gate-title" className="mt-2 text-2xl leading-tight font-semibold tracking-tight text-balance text-foreground sm:text-3xl">{copy.title}</h2>
+      <h2 id="access-gate-title" className="mt-2 text-2xl leading-tight font-semibold tracking-tight text-balance text-foreground sm:text-3xl">{title ?? copy.title}</h2>
       <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
-        {copy.text} Your details help us provide access to selected Techno Gurukul resources, projects and community features.
+        {text ?? copy.text} Your details help us provide access to selected Techno Gurukul resources, projects and community features.
       </p>
 
       <div className="mt-6 grid gap-x-4 gap-y-4 sm:grid-cols-2">
@@ -120,13 +131,27 @@ export function AccessGate({
           <ErrorText id={`${uid}-phone-error`}>{errors.phone}</ErrorText>
         </div>
         <div>
-          <Label htmlFor={`${uid}-interest`}>I&rsquo;m interested in</Label>
+          <Label htmlFor={`${uid}-interest`}>{presetInterest ? "Course" : "I’m interested in"}</Label>
           <div className="relative">
-            <select id={`${uid}-interest`} value={v.interest} onChange={(e) => set("interest", e.target.value)} aria-invalid={!!errors.interest} aria-describedby={desc("interest")} className={cn(FIELD, "h-11 appearance-none pr-10", !v.interest && "text-muted-foreground", errors.interest && INVALID)}>
-              <option value="">Select an option</option>
-              {INTERESTS.map((i) => (
-                <option key={i} value={i}>{i}</option>
-              ))}
+            <select
+              id={`${uid}-interest`}
+              value={v.interest}
+              onChange={(e) => set("interest", e.target.value)}
+              disabled={!!presetInterest}
+              aria-invalid={!!errors.interest}
+              aria-describedby={desc("interest")}
+              className={cn(FIELD, "h-11 appearance-none pr-10", !v.interest && "text-muted-foreground", errors.interest && INVALID, presetInterest && "text-foreground disabled:opacity-100")}
+            >
+              {presetInterest ? (
+                <option value={presetInterest}>{presetInterest}</option>
+              ) : (
+                <>
+                  <option value="">Select an option</option>
+                  {INTERESTS.map((i) => (
+                    <option key={i} value={i}>{i}</option>
+                  ))}
+                </>
+              )}
             </select>
             <ChevronDown className="pointer-events-none absolute top-1/2 right-3.5 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
           </div>

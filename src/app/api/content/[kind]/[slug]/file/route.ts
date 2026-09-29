@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { NextRequest } from "next/server";
 import { deliver } from "@/server/delivery";
-import { getGatedResource } from "@/server/gated-content";
+import { getGatedBrochure, getGatedResource } from "@/server/gated-content";
 import { clientIp, fail, limited } from "@/server/guard";
 import { SessionNotConfigured, sessionFrom } from "@/server/session";
 
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ kind: strin
   }
   if (!session) return fail(401, "Access required.");
 
-  const found = kind === "resources" ? getGatedResource(slug) : null;
+  const found = kind === "resources" ? getGatedResource(slug) : kind === "brochures" ? getGatedBrochure(slug) : null;
   if (!found || found.content.kind !== "file") return fail(404, "Not found.");
 
   // The file name was validated when the content was defined; basename is a second guard against path tricks.
@@ -34,7 +34,9 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ kind: strin
     return fail(404, "Not found.");
   }
   try {
-    await deliver("lead-activity", { leadId: session.sid, source: { sourceType: "resource", sourceId: slug }, at: new Date().toISOString(), action: "download" });
+    const sourceType = kind === "brochures" ? "brochure" : "resource";
+    const action = kind === "brochures" ? "brochure-download" : "download";
+    await deliver("lead-activity", { leadId: session.sid, source: { sourceType, sourceId: slug }, at: new Date().toISOString(), action });
   } catch {
     // Best effort.
   }

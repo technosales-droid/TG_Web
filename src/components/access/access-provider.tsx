@@ -3,10 +3,17 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { X } from "lucide-react";
 import { useModal } from "@/components/learning/projects/use-modal";
-import type { AccessSource } from "@/lib/access";
+import type { AccessSource, Interest } from "@/lib/access";
 import { AccessGate, type GrantedSession } from "./access-gate";
 
 type Session = { status: "unknown" } | { status: "anon" } | ({ status: "granted" } & GrantedSession);
+
+/** Lets a caller name what it's gating (e.g. a specific course's brochure) instead of the generic per-sourceType copy. */
+export interface GateDisplay {
+  title?: string;
+  text?: string;
+  presetInterest?: Interest;
+}
 
 interface AccessContextValue {
   session: Session;
@@ -16,7 +23,7 @@ interface AccessContextValue {
    * Resolves true once the visitor has an access session: straight away if they already do, otherwise after they
    * complete the gate. Resolves false if they close it.
    */
-  requireAccess: (source: AccessSource) => Promise<boolean>;
+  requireAccess: (source: AccessSource, display?: GateDisplay) => Promise<boolean>;
   signOut: () => Promise<void>;
 }
 
@@ -43,7 +50,7 @@ const post = (url: string, body: unknown) =>
  */
 export function AccessProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session>({ status: "unknown" });
-  const [gate, setGate] = useState<AccessSource | null>(null);
+  const [gate, setGate] = useState<{ source: AccessSource; display?: GateDisplay } | null>(null);
   const loading = useRef<Promise<Session> | null>(null);
   const resolver = useRef<((ok: boolean) => void) | null>(null);
   const modalRef = useModal(gate !== null);
@@ -71,7 +78,7 @@ export function AccessProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const requireAccess = useCallback(
-    async (source: AccessSource) => {
+    async (source: AccessSource, display?: GateDisplay) => {
       const s = session.status === "unknown" ? await fetchSession() : session;
       if (s.status === "granted") {
         void post("/api/access/activity", { source });
@@ -80,7 +87,7 @@ export function AccessProvider({ children }: { children: ReactNode }) {
       return new Promise<boolean>((resolve) => {
         resolver.current?.(false);
         resolver.current = resolve;
-        setGate(source);
+        setGate({ source, display });
       });
     },
     [session, fetchSession],
@@ -115,7 +122,10 @@ export function AccessProvider({ children }: { children: ReactNode }) {
           </button>
           <div className="pr-6">
             <AccessGate
-              source={gate}
+              source={gate.source}
+              title={gate.display?.title}
+              text={gate.display?.text}
+              presetInterest={gate.display?.presetInterest}
               onGranted={(g) => {
                 setSession({ status: "granted", ...g });
                 loading.current = Promise.resolve({ status: "granted", ...g });

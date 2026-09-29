@@ -7,6 +7,7 @@
 //
 // Nothing has been published yet, so both maps are empty. To publish: add the record to the public data file with
 // `sample: false` (and, for a project, the permission fields), then add its full content below under the same slug.
+import { ACTIVE_PROGRAMS } from "@/data/active-programs";
 import { PROJECTS, isProjectPublic, type Project } from "@/data/projects";
 import { RESOURCES, isResourcePublic } from "@/data/resources";
 import { sourceTypeForCreator, type SourceType } from "@/lib/access";
@@ -55,6 +56,33 @@ const RESOURCE_CONTENT: Record<string, GatedResourceContent> = {
   },
 };
 
+/** A brochure PDF, gated the same way a resource file is. One entry per course currently open for enrolment. */
+export interface GatedBrochureContent {
+  kind: "file";
+  file: string;
+  downloadName: string;
+  contentType: string;
+}
+
+// BROCHURE FILES NOT YET SUPPLIED: both entries point at a file that does not exist in /private-content yet. The
+// download stays gated and correctly answers "not found" (see the file route) rather than a broken link, until the
+// real PDFs are added at these exact paths. Keyed by the course's existing route slug (ACTIVE_PROGRAMS' href), so a
+// popup or card only ever needs to know the course, never a filename.
+const BROCHURE_CONTENT: Record<string, GatedBrochureContent> = {
+  "tg-digital-marketing": {
+    kind: "file",
+    file: "brochure-digital-marketing.pdf",
+    downloadName: "techno-gurukul-digital-marketing-brochure.pdf",
+    contentType: "application/pdf",
+  },
+  "tg-gameforge": {
+    kind: "file",
+    file: "brochure-game-development.pdf",
+    downloadName: "techno-gurukul-game-development-brochure.pdf",
+    contentType: "application/pdf",
+  },
+};
+
 const isSafeUrl = (u: string) => /^(https:\/\/|\/)[^\s]+$/.test(u);
 // Images and videos are shown on this site, so they must be files it hosts (the Content Security Policy blocks others).
 const isOwnFile = (u: string) => /^\/[^\s/][^\s]*$/.test(u);
@@ -72,6 +100,10 @@ for (const [slug, c] of Object.entries(RESOURCE_CONTENT)) {
   if (c.kind === "external" && !isSafeUrl(c.url)) throw new Error(`[gated-content] "${slug}" has an unsafe url`);
   if (c.kind === "file" && !/^[a-z0-9][a-z0-9._-]*$/i.test(c.file)) throw new Error(`[gated-content] "${slug}" has an unsafe file name`);
 }
+for (const [slug, c] of Object.entries(BROCHURE_CONTENT)) {
+  if (!ACTIVE_PROGRAMS.some((p) => p.href === `/programs/${slug}`)) throw new Error(`[gated-content] no active course "${slug}"`);
+  if (!/^[a-z0-9][a-z0-9._-]*$/i.test(c.file)) throw new Error(`[gated-content] "${slug}" has an unsafe file name`);
+}
 
 export const projectSource = (p: Pick<Project, "creatorType">): SourceType => sourceTypeForCreator(p.creatorType);
 
@@ -87,4 +119,12 @@ export function getGatedResource(slug: string) {
   const content = RESOURCE_CONTENT[slug];
   if (!resource || !content || !isResourcePublic(resource)) return null;
   return { sourceType: "resource" as const, content };
+}
+
+/** A course's brochure. `slug` is the course's own route slug (e.g. "tg-digital-marketing"), not a separate id. */
+export function getGatedBrochure(slug: string) {
+  const course = ACTIVE_PROGRAMS.some((p) => p.href === `/programs/${slug}`);
+  const content = BROCHURE_CONTENT[slug];
+  if (!course || !content) return null;
+  return { sourceType: "brochure" as const, content };
 }

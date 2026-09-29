@@ -12,7 +12,8 @@ into the right tab. No CRM is needed. Allow about 30 minutes the first time, 5 m
 | Blog Comments | People who registered to comment or review | The access form, opened from a blog article |
 | Projects | People who registered to open a project | The access form, opened from a project card |
 | Resources | People who registered to open a resource | The access form, opened from a resource card |
-| All Leads | Every registration, from any of the three | The access form |
+| Brochure Downloads | People who registered to download a course brochure | The access form, opened from "Download Brochure" in the course popup |
+| All Leads | Every registration, from any of the above | The access form |
 | Activity | Each time a registered person opens a project or resource | Gated content |
 | Privacy Requests | Access, correction, deletion, consent withdrawal and questions | The Privacy Requests page |
 | Reports | Reported comments | Not used: the report route is switched off until comments are saved on the server |

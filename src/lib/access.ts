@@ -24,6 +24,7 @@ export const SOURCE_TYPES = [
   "other-project",
   "review",
   "comment",
+  "brochure",
 ] as const;
 export type SourceType = (typeof SOURCE_TYPES)[number];
 

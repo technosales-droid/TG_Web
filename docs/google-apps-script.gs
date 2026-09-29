@@ -13,7 +13,7 @@
  *   deleteAllDataAndStartFresh()  Deletes every tab and all data, then builds clean empty tabs. Asks first.
  */
 
-const VERSION = "7";
+const VERSION = "8";
 const TIMEZONE = "Asia/Kolkata";
 const ROOM = 2000; // rows prepared in each tab; more are added automatically
 
@@ -38,6 +38,7 @@ const TABS = {
   "Blog Comments": LEAD_TAB,
   "Projects": LEAD_TAB,
   "Resources": LEAD_TAB,
+  "Brochure Downloads": LEAD_TAB,
   "All Leads": LEAD_TAB,
   "Activity": { cols: ["Time", "Name", "Email", "Opened", "Type", "Action", "Source ID", "Lead ID", "Activity ID"], tech: 7 },
   "Privacy Requests": {
@@ -56,7 +57,7 @@ const WIDTH = { "Received at": 150, "Time": 150, "Name": 170, "Phone": 140, "Ema
 const SOURCE_TYPE_LABEL = {
   "blog": "Blog article", "comment": "Blog comment", "review": "Blog review", "resource": "Resource",
   "student-project": "Student project", "faculty-project": "Faculty project", "institute-project": "Institute project",
-  "other-project": "Project",
+  "other-project": "Project", "brochure": "Brochure",
 };
 const REQUEST_LABEL = {
   "access": "Wants a copy of their data", "correction": "Correct their data", "deletion": "Delete their data",
@@ -66,6 +67,7 @@ const REQUEST_LABEL = {
 /** Which lead tab a registration belongs to, from what made the visitor register. */
 function leadTab(sourceType) {
   if (sourceType === "resource") return "Resources";
+  if (sourceType === "brochure") return "Brochure Downloads";
   if (/-project$/.test(sourceType)) return "Projects";
   return "Blog Comments"; // blog, comment, review
 }
@@ -204,7 +206,7 @@ function buildDashboard() {
   const rows = [["Techno Gurukul: what needs attention", "", "", "", ""], ["", "", "", "", ""], ["", "Total", "Today", "Last 7 days", "Waiting (status New)"]];
   const lines = [
     ["Enquiries (Contact page)", "Enquiries"], ["Blog comment and review sign-ups", "Blog Comments"], ["Project sign-ups", "Projects"],
-    ["Resource sign-ups", "Resources"], ["Privacy requests", "Privacy Requests"], ["Reported comments", "Reports"],
+    ["Resource sign-ups", "Resources"], ["Brochure downloads", "Brochure Downloads"], ["Privacy requests", "Privacy Requests"], ["Reported comments", "Reports"],
   ];
   lines.forEach(function (l) {
     const q = "'" + l[1] + "'!", st = TABS[l[1]].status ? letter(colOf(l[1], TABS[l[1]].status)) : "";
@@ -226,9 +228,12 @@ function buildDashboard() {
   d.getRange(1, 1, rows.length, 5).setValues(rows);
   d.getRange(1, 1).setFontSize(16).setFontWeight("bold").setFontColor("#0c709a");
   d.getRange(3, 1, 1, 5).setFontWeight("bold").setBackground("#0c709a").setFontColor("#ffffff");
-  d.getRange(11, 1).setFontWeight("bold");
-  d.getRange(4, 2, 6, 4).setHorizontalAlignment("center");
-  d.getRange(12, 2, 3, 1).setHorizontalAlignment("center");
+  // Row numbers below follow the size of `lines` (row 3 is the header, then one row per line, then a blank row),
+  // so adding or removing a Dashboard line here never leaves the heading or the stat rows in the wrong place.
+  const peopleHeadingRow = 4 + lines.length + 1;
+  d.getRange(peopleHeadingRow, 1).setFontWeight("bold");
+  d.getRange(4, 2, lines.length, 4).setHorizontalAlignment("center");
+  d.getRange(peopleHeadingRow + 1, 2, 3, 1).setHorizontalAlignment("center");
   d.setColumnWidth(1, 360); d.setColumnWidths(2, 4, 140);
   d.setHiddenGridlines(true);
 }
@@ -478,7 +483,7 @@ function recordsFor(email) {
   return parts.length ? parts.join(", ") : "None found";
 }
 
-const ID_COLUMN = { "Activity": "Activity ID", "Enquiries": "Enquiry ID", "Blog Comments": "Lead ID", "Projects": "Lead ID", "Resources": "Lead ID", "All Leads": "Lead ID", "Privacy Requests": "Request ID", "Reports": "Report ID" };
+const ID_COLUMN = { "Activity": "Activity ID", "Enquiries": "Enquiry ID", "Blog Comments": "Lead ID", "Projects": "Lead ID", "Resources": "Lead ID", "Brochure Downloads": "Lead ID", "All Leads": "Lead ID", "Privacy Requests": "Request ID", "Reports": "Report ID" };
 
 /**
  * Checks every tab: are the headings right, how many rows, any repeated ids (a record written twice), any row without an

@@ -1,10 +1,14 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
+import { HeroVideoCard } from "./hero-video-card";
 
-const HERO_VIDEO_SRC: string | null = "/hero/hero-video.mp4";
-const HERO_POSTER_SRC: string | null = null;
+const HERO_IMAGE_SRC = "/brand/Index hero section.png";
+// The people and the laptop sit in the right two-thirds of the photo; the left third is a plain dark wall, which is
+// exactly where the text sits. This keeps that same framing however the image gets cropped at other hero shapes.
+const HERO_IMAGE_POSITION = "72% 38%";
 
 // `outline-solid` matters: the shared button style sets `outline-none`, which would otherwise cancel the ring.
 const FOCUS = "focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-4 focus-visible:outline-background";
@@ -13,30 +17,22 @@ export function Hero() {
   return (
     <section className="px-4 pt-6 pb-10 sm:px-6 sm:pt-8 sm:pb-14">
       <div className="mx-auto max-w-[1800px]">
-        <div className="relative isolate flex min-h-[560px] flex-col justify-center overflow-hidden rounded-[2.5rem] border border-white/10 bg-gradient-to-br from-[#0b3d50] via-[#0d5674] to-primary px-6 py-14 sm:min-h-[640px] sm:px-10 sm:py-16 lg:min-h-[720px] lg:px-16 xl:min-h-[800px]">
-          {/* Texture: a faint dot grid, consistent with the dark panels used across the rest of the site. */}
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 -z-10 opacity-30 [background-image:radial-gradient(rgba(255,255,255,0.35)_1px,transparent_1px)] [background-size:26px_26px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]"
+        <div className="relative isolate flex min-h-[560px] flex-col justify-center overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#0b1720] px-6 py-14 sm:min-h-[640px] sm:px-10 sm:py-16 lg:min-h-[720px] lg:px-16 xl:min-h-[800px]">
+          <Image
+            src={HERO_IMAGE_SRC}
+            alt="A Techno Gurukul counsellor talking with a student and their parents"
+            fill
+            priority
+            sizes="100vw"
+            style={{ objectPosition: HERO_IMAGE_POSITION }}
+            className="-z-10 object-cover"
           />
-          <div aria-hidden="true" className="pointer-events-none absolute -bottom-48 -left-40 -z-10 size-[34rem] rounded-full border border-white/10" />
-          <div aria-hidden="true" className="pointer-events-none absolute -top-56 right-0 -z-10 size-[36rem] rounded-full border border-white/5" />
 
-          {HERO_VIDEO_SRC && (
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              poster={HERO_POSTER_SRC ?? undefined}
-              className="absolute inset-0 -z-10 size-full object-cover"
-            >
-              <source src={HERO_VIDEO_SRC} type="video/mp4" />
-            </video>
-          )}
-
-          {/* Readability overlay: sits above the video/gradient, below the content. */}
-          <div aria-hidden="true" className="absolute inset-0 -z-[5] bg-gradient-to-t from-black/55 via-black/20 to-black/10" />
+          {/* Readability overlays: darkest over the text (left, and toward the bottom), fading out toward the
+              photo's right side so the photograph itself stays visible, per the "no green UI, but leave real photo
+              colour untouched" rule (there is none to touch here; this only ever darkens, never recolours). */}
+          <div aria-hidden="true" className="absolute inset-0 -z-[5] bg-gradient-to-r from-black/75 via-black/40 to-black/10" />
+          <div aria-hidden="true" className="absolute inset-0 -z-[5] bg-gradient-to-t from-black/55 via-transparent to-transparent" />
 
           <div className="relative max-w-4xl">
             <div className="flex items-center gap-2 text-sm font-medium text-white/80">
@@ -52,9 +48,8 @@ export function Hero() {
             </h1>
 
             <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
-              Techno Gurukul is a Nashik-based learning institute built around practical education. Our signature
-              Digital Marketing program leads the way, alongside hands-on Game Development training, both taught
-              through real projects and industry-relevant tools.
+              A Nashik-based institute for practical, hands-on learning, currently led by our Digital Marketing
+              program and complemented by hands-on Game Development training.
             </p>
 
             <div className="mt-9 flex flex-wrap items-center gap-4">
@@ -79,6 +74,16 @@ export function Hero() {
                 <ChevronRight className="size-4 transition-transform duration-200 motion-safe:group-hover:translate-x-1" aria-hidden="true" />
               </Link>
             </div>
+
+            {/* Phone/tablet: part of the normal flow, below the CTAs, so it can never sit over the text. */}
+            <div className="mt-8 max-w-[280px] motion-safe:animate-[course-promo-in_500ms_ease-out_200ms_both] sm:max-w-xs lg:hidden">
+              <HeroVideoCard />
+            </div>
+          </div>
+
+          {/* Desktop: floats over the photo's bottom-right corner, clear of the text and the CTAs. */}
+          <div className="absolute right-10 bottom-9 z-10 hidden w-[320px] motion-safe:animate-[course-promo-in_500ms_ease-out_300ms_both] lg:block lg:right-14 xl:w-[380px]">
+            <HeroVideoCard />
           </div>
         </div>
       </div>

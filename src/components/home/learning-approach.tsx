@@ -1,9 +1,5 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { BarChart3, Book, Settings2, Shapes } from "lucide-react";
-import { cn } from "cn";
 
 const STAGES = [
   {
@@ -36,71 +32,33 @@ const STAGES = [
   },
 ] as const;
 
-function prefersReducedMotion() {
-  return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
-
-function useRevealOnView<T extends HTMLElement>() {
-  const ref = useRef<T>(null);
-  const [visible, setVisible] = useState(prefersReducedMotion);
-
-  useEffect(() => {
-    if (visible) return;
-
-    const el = ref.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.2 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [visible]);
-
-  return { ref, visible };
-}
-
+// ponytail: no scroll-triggered reveal here (this section previously faded and slid each card in on
+// scroll). It renders in place; a card still lifts on hover, a plain CSS affordance, not an animation
+// that plays on its own.
 export function LearningApproach() {
-  const { ref, visible } = useRevealOnView<HTMLElement>();
-
   return (
-    <section ref={ref} className="px-4 py-12 sm:px-6 sm:py-14">
+    <section className="px-4 py-10 sm:px-6 sm:py-12">
       <div className="mx-auto max-w-[1800px]">
-        <div className="rounded-[2.5rem] border border-primary/10 bg-muted/50 p-6 sm:p-8 lg:p-10">
-          <div
-            className={cn(
-              "transition-all duration-700",
-              visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-            )}
-          >
-            <div className="flex items-center gap-2 text-sm font-medium text-primary">
-              <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
-              How We Learn
-            </div>
-
-            <div className="mt-4 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-10">
-              <h2 className="max-w-xl text-3xl font-semibold tracking-tight text-balance text-foreground sm:text-4xl lg:text-5xl">
-                Learning Should Lead to Something You Can Build.
-              </h2>
-
-              <p className="max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg lg:max-w-xl lg:pt-2 lg:text-right">
-                At Techno Gurukul, learning is designed to move beyond
-                theory. Students build their understanding step by step,
-                apply their skills through practical work, and bring what
-                they learn together in projects they can actually show.
-              </p>
-            </div>
+        <div className="rounded-[2.5rem] border border-primary/10 bg-muted/50 p-5 sm:p-7 lg:p-8">
+          <div className="flex items-center gap-2 text-sm font-medium text-primary">
+            <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
+            How We Learn
           </div>
 
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:mt-10 lg:grid-cols-4">
-            {STAGES.map((stage, index) => (
-              <StageCard key={stage.label} stage={stage} index={index} visible={visible} />
+          <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between lg:gap-10">
+            <h2 className="max-w-xl text-2xl font-semibold tracking-tight text-balance text-foreground sm:text-3xl lg:text-4xl">
+              Learning Should Lead to Something You Can Build.
+            </h2>
+
+            <p className="max-w-md text-base leading-relaxed text-muted-foreground lg:max-w-xl lg:pt-1 lg:text-right">
+              Students build their understanding step by step, apply their skills through practical work, and bring
+              what they learn together in projects they can actually show.
+            </p>
+          </div>
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:mt-8 lg:grid-cols-4">
+            {STAGES.map((stage) => (
+              <StageCard key={stage.label} stage={stage} />
             ))}
           </div>
         </div>
@@ -109,26 +67,12 @@ export function LearningApproach() {
   );
 }
 
-function StageCard({
-  stage,
-  index,
-  visible,
-}: {
-  stage: (typeof STAGES)[number];
-  index: number;
-  visible: boolean;
-}) {
+function StageCard({ stage }: { stage: (typeof STAGES)[number] }) {
   const Icon = stage.icon;
 
   return (
-    <div
-      className={cn(
-        "group flex flex-col overflow-hidden rounded-[1.75rem] bg-card shadow-[0_0_0_rgba(16,20,28,0)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_16px_32px_-16px_rgba(16,20,28,0.35)]",
-        visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
-      )}
-      style={{ transitionDelay: visible ? `${index * 120}ms` : "0ms" }}
-    >
-      <div className="relative aspect-[4/3] w-full overflow-hidden border-b border-primary/10 bg-muted">
+    <div className="group flex flex-col overflow-hidden rounded-[1.5rem] bg-card transition-shadow duration-300 hover:shadow-[0_16px_32px_-16px_rgba(16,20,28,0.35)]">
+      <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-primary/10 bg-muted">
         <Image
           src={stage.image}
           alt={stage.alt}
@@ -138,17 +82,16 @@ function StageCard({
         />
       </div>
 
-      <div className="relative -mt-6 flex items-end px-6">
-        <span className="flex size-12 items-center justify-center rounded-full bg-card text-primary shadow-[0_8px_20px_-8px_rgba(16,20,28,0.35)] ring-4 ring-card">
-          <Icon className="size-5" aria-hidden="true" />
+      <div className="relative -mt-5 flex items-end px-5">
+        <span className="flex size-10 items-center justify-center rounded-full bg-card text-primary shadow-[0_8px_20px_-8px_rgba(16,20,28,0.35)] ring-4 ring-card">
+          <Icon className="size-4" aria-hidden="true" />
         </span>
       </div>
 
-      <div className="flex flex-1 flex-col px-6 pt-4 pb-7">
-        <h3 className="text-xl font-semibold tracking-tight text-foreground">{stage.label}</h3>
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{stage.description}</p>
+      <div className="flex flex-1 flex-col px-5 pt-3 pb-5">
+        <h3 className="text-lg font-semibold tracking-tight text-foreground">{stage.label}</h3>
+        <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{stage.description}</p>
       </div>
     </div>
   );
 }
-
