@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
 import { Phone } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa6";
@@ -11,6 +11,55 @@ import { cn } from "cn";
 
 // True on the client once hydrated, so the buttons never flash on then off while consent loads from storage.
 const useHydrated = () => useSyncExternalStore(() => () => {}, () => true, () => false);
+
+/** True whenever any of the site's native <dialog> overlays (course promo, brochure/access form, filter sheets,
+ * cookie settings, the hero video popup...) is open. A dialog's own top-layer backdrop should already sit above a
+ * plain fixed element, but that didn't hold up on real devices (the buttons stayed visible, undimmed, over an open
+ * popup) so this watches the DOM directly instead of trusting that layering. */
+function useAnyDialogOpen() {
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const check = () => setOpen(document.querySelectorAll("dialog[open]").length > 0);
+    check();
+    const observer = new MutationObserver(check);
+    observer.observe(document.body, { attributes: true, attributeFilter: ["open"], subtree: true });
+    return () => observer.disconnect();
+  }, []);
+  return open;
+}
+
+/** Hides the buttons while the visitor is actively scrolling down (where they're most likely to be passing over,
+ * not reading, content), and brings them back on any upward scroll or once scrolling has settled for a moment. This
+ * doesn't stop them from ever sitting over content at rest — no fixed corner widget can promise that on a page with
+ * scrolling images and cards, and every site with one behaves the same way — but it keeps them out of the way for
+ * most of the time a visitor spends scrolling past a section, rather than tracking down the page with it. */
+function useScrollSettled() {
+  const [visible, setVisible] = useState(true);
+  useEffect(() => {
+    let lastY = window.scrollY;
+    let ticking = false;
+    let idleTimer: ReturnType<typeof setTimeout>;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        if (y > lastY + 4 && y > 120) setVisible(false);
+        else if (y < lastY - 4) setVisible(true);
+        lastY = y;
+        ticking = false;
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => setVisible(true), 500);
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      clearTimeout(idleTimer);
+    };
+  }, []);
+  return visible;
+}
 
 /** The enrollable program a path belongs to, if any, for a one-line contextual message; every other page (including
  * program studios that aren't open for enrolment yet) falls back to the generic message. */
@@ -30,21 +79,32 @@ const TOOLTIP =
 /**
  * Global floating contact buttons: a call button and a WhatsApp button, stacked bottom-right on every route,
  * mounted once from the root layout. Hidden while the cookie notice is on screen (it spans the full width at the
- * bottom on phones, right where these buttons sit); every other overlay on the site is a native <dialog>, whose
- * own top-layer backdrop already dims and sits above a fixed element like this one without any extra handling here.
+ * bottom on phones, right where these buttons sit) or while any dialog on the site is open, and dimmed out while
+ * actively scrolling down.
  */
 export function FloatingContact() {
   const hydrated = useHydrated();
   const { at } = useConsent();
   const pathname = usePathname();
+  const dialogOpen = useAnyDialogOpen();
+  const scrollSettled = useScrollSettled();
 
-  if (!footerContact.whatsapp || !hydrated || at === null) return null;
+  if (!footerContact.whatsapp || !hydrated || at === null || dialogOpen) return null;
 
   const telHref = `tel:+${footerContact.whatsapp}`;
   const waHref = `https://wa.me/${footerContact.whatsapp}?text=${encodeURIComponent(whatsappMessageFor(pathname))}`;
 
   return (
-    <div className="fixed right-[calc(0.875rem+env(safe-area-inset-right))] bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 flex flex-col items-end gap-2 sm:right-[calc(1.5rem+env(safe-area-inset-right))] sm:bottom-[calc(1.5rem+env(safe-area-inset-bottom))] sm:gap-3">
+    <div
+      // `inert`, not `aria-hidden`: aria-hidden on an ancestor of focusable links without also pulling them out of
+      // the tab order is an accessibility bug in itself (a keyboard user could still tab to an invisible button).
+      // `inert` removes the whole subtree from both the accessibility tree and tab order in one go.
+      inert={!scrollSettled}
+      className={cn(
+        "fixed right-[calc(0.875rem+env(safe-area-inset-right))] bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 flex flex-col items-end gap-2 transition-[opacity,transform] duration-200 sm:right-[calc(1.5rem+env(safe-area-inset-right))] sm:bottom-[calc(1.5rem+env(safe-area-inset-bottom))] sm:gap-3 motion-reduce:transition-none",
+        scrollSettled ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0"
+      )}
+    >
       <a href={telHref} aria-label="Call Techno Gurukul" className={cn(BUTTON, "bg-primary")}>
         <Phone className="size-5 sm:size-6" aria-hidden="true" />
         <span aria-hidden="true" className={TOOLTIP}>
