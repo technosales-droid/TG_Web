@@ -121,7 +121,7 @@ function SheetBody({ initial, facets, onApply, onCancel }: { initial: ProgramSta
           <X className="size-5" aria-hidden="true" />
         </button>
       </div>
-      <div className="overflow-y-auto overscroll-contain px-5 py-4">
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-4">
         <FilterGroups idPrefix="sheet" state={draft} facets={facets} onChange={(patch) => setDraft((d) => ({ ...d, ...patch }))} />
       </div>
       <div className="grid grid-cols-2 gap-3 border-t border-primary/10 bg-background px-5 py-4">

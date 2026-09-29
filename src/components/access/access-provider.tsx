@@ -112,14 +112,21 @@ export function AccessProvider({ children }: { children: ReactNode }) {
           aria-labelledby="access-gate-title"
           className="access-dialog m-auto max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto overscroll-contain rounded-3xl border border-primary/10 bg-card p-5 text-foreground shadow-[0_24px_60px_-20px_rgba(16,20,28,0.5)] backdrop:bg-black/60 sm:p-8"
         >
-          <button
-            type="button"
-            onClick={() => finish(false)}
-            aria-label="Close"
-            className="absolute top-3 right-3 z-10 inline-flex size-10 items-center justify-center rounded-full text-muted-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-          >
-            <X className="size-5" aria-hidden="true" />
-          </button>
+          {/* A zero-height sticky anchor, not a plain absolute button: the dialog itself is the
+              scrolling container (overflow-y-auto above), so a plainly-`absolute` close button would
+              scroll away with the form on a short viewport where the content needs to scroll. The
+              negative margin cancels the dialog's own p-5/sm:p-8 padding so the anchor's box (and so
+              the button's top-3/right-3) lines up with the dialog's true corner, exactly as before. */}
+          <div className="sticky top-0 z-10 -m-5 h-0 sm:-m-8">
+            <button
+              type="button"
+              onClick={() => finish(false)}
+              aria-label="Close"
+              className="absolute top-3 right-3 inline-flex size-10 items-center justify-center rounded-full text-muted-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            >
+              <X className="size-5" aria-hidden="true" />
+            </button>
+          </div>
           <div className="pr-6">
             <AccessGate
               source={gate.source}

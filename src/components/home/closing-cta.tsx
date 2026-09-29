@@ -42,7 +42,7 @@ export function ClosingCta() {
   return (
     <section ref={ref} className="px-4 py-14 sm:px-6 sm:py-16">
       <div className="mx-auto max-w-[1800px]">
-        <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary to-[#0b3d50] px-6 py-14 sm:px-10 sm:py-16 lg:overflow-visible lg:px-16 lg:py-16">
+        <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary to-[#0b3d50] px-6 py-10 sm:px-10 sm:py-16 lg:overflow-visible lg:px-16 lg:py-16">
           <div
             className={cn(
               "relative z-10 max-w-2xl transition-all duration-700",
@@ -90,8 +90,9 @@ export function ClosingCta() {
           </div>
 
           {/* Mobile/tablet (below lg): stacked below the text, full column width, intrinsic
-              aspect ratio; never cropped. */}
-          <div className="px-6 pb-14 sm:px-10 sm:pb-16 lg:hidden">
+              aspect ratio; never cropped. No extra horizontal/bottom padding here: the panel
+              above already provides it, and duplicating it left a large dead gap under the image. */}
+          <div className="lg:hidden">
             <Image
               src="/brand/index-cta.png"
               alt=""
@@ -99,7 +100,7 @@ export function ClosingCta() {
               width={1672}
               height={941}
               sizes="90vw"
-              className="pointer-events-none mt-10 h-auto w-full"
+              className="pointer-events-none mt-6 h-auto w-full sm:mt-10"
             />
           </div>
 

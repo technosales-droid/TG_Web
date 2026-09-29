@@ -141,7 +141,10 @@ export function SiteFooter() {
 
   return (
     <footer className="bg-[#0b3d50] text-background">
-      <div className="mx-auto max-w-[1800px] px-4 pt-14 pb-8 sm:px-6 sm:pt-16">
+      {/* Extra bottom clearance on mobile only: the floating call/WhatsApp buttons are fixed to the
+          viewport's bottom-right, so without it they'd sit on top of the last legal links once a
+          visitor scrolls to the true bottom of the page. */}
+      <div className="mx-auto max-w-[1800px] px-4 pt-14 pb-24 sm:px-6 sm:pt-16 sm:pb-8">
         {/* Layer 2: brand, navigation, contact */}
         <div className="grid gap-12 xl:grid-cols-[minmax(0,1fr)_minmax(0,2.4fr)] xl:gap-x-16">
           <div className="order-1 max-w-sm xl:col-start-1 xl:row-start-1">

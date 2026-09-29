@@ -107,7 +107,7 @@ export function SiteHeader() {
               aria-controls="mobile-nav-panel"
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
               onClick={() => setMobileOpen((value) => !value)}
-              className="inline-flex size-10 items-center justify-center rounded-full text-foreground hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none lg:hidden"
+              className="inline-flex size-11 items-center justify-center rounded-full text-foreground hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none lg:hidden"
             >
               {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
             </button>

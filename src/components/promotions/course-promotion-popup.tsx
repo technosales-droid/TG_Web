@@ -139,14 +139,20 @@ export function CoursePromotionPopup() {
         aria-label={`Featured program: ${promo.courseName}`}
         className="course-promo relative m-auto box-border max-h-[92dvh] w-[min(900px,calc(100vw-2rem))] overflow-x-hidden overflow-y-auto overscroll-contain rounded-2xl border border-primary/10 bg-card p-0 text-foreground shadow-[0_24px_60px_-20px_rgba(16,20,28,0.5)] backdrop:bg-black/60 sm:rounded-3xl"
       >
-        <button
-          type="button"
-          onClick={close}
-          aria-label="Close promotion"
-          className="absolute top-3 right-3 z-10 inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-card/90 text-foreground shadow-sm hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:top-4 sm:right-4 sm:size-11"
-        >
-          <X className="size-5" aria-hidden="true" />
-        </button>
+        {/* A zero-height sticky anchor, not a plain absolute button: the dialog itself is the
+            scrolling container (overflow-y-auto above), so a plainly-`absolute` close button would
+            scroll away with the content on a short viewport where the popup's content needs to
+            scroll. Sticking the anchor keeps it pinned to the visible top-right corner instead. */}
+        <div className="sticky top-0 z-10 h-0">
+          <button
+            type="button"
+            onClick={close}
+            aria-label="Close promotion"
+            className="absolute top-3 right-3 inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-card/90 text-foreground shadow-sm hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:top-4 sm:right-4 sm:size-11"
+          >
+            <X className="size-5" aria-hidden="true" />
+          </button>
+        </div>
 
         {promo.image && (
           <div className="relative aspect-[16/9] w-full overflow-hidden bg-muted">

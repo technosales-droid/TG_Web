@@ -17,7 +17,7 @@ export function Hero() {
   return (
     <section className="px-4 pt-6 pb-10 sm:px-6 sm:pt-8 sm:pb-14">
       <div className="mx-auto max-w-[1800px]">
-        <div className="relative isolate flex min-h-[560px] flex-col justify-center overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#0b1720] px-6 py-14 sm:min-h-[640px] sm:px-10 sm:py-16 lg:min-h-[720px] lg:px-16 xl:min-h-[800px]">
+        <div className="relative isolate flex min-h-[560px] flex-col justify-center overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#0b1720] px-6 py-10 sm:min-h-[640px] sm:px-10 sm:py-16 lg:min-h-[720px] lg:px-16 xl:min-h-[800px]">
           <Image
             src={HERO_IMAGE_SRC}
             alt="A Techno Gurukul counsellor talking with a student and their parents"
@@ -40,24 +40,24 @@ export function Hero() {
               Techno Gurukul &middot; Nashik
             </div>
 
-            <h1 className="mt-5 max-w-3xl text-[2.25rem] leading-[1.05] font-semibold tracking-tight text-balance text-white min-[430px]:text-5xl sm:text-6xl lg:text-7xl xl:text-[5rem]">
+            <h1 className="mt-4 max-w-3xl text-[1.875rem] leading-[1.1] font-semibold tracking-tight text-balance text-white min-[430px]:text-5xl sm:mt-5 sm:text-6xl sm:leading-[1.05] lg:text-7xl xl:text-[5rem]">
               Learn. Create.
               <br />
               Build{" "}
               <span className="bg-gradient-to-r from-[#8fd3f0] to-brand-sky bg-clip-text text-transparent">What&rsquo;s Next.</span>
             </h1>
 
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
+            <p className="mt-4 max-w-xl text-base leading-normal text-white/80 sm:mt-6 sm:leading-relaxed sm:text-lg">
               A Nashik-based institute for practical, hands-on learning, currently led by our Digital Marketing
               program and complemented by hands-on Game Development training.
             </p>
 
-            <div className="mt-9 flex flex-wrap items-center gap-4">
+            <div className="mt-6 flex flex-col items-stretch gap-3 sm:mt-9 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
               <Link
                 href="/programs"
                 className={cn(
                   buttonVariants({ variant: "default" }),
-                  "h-12 rounded-full bg-white px-7 text-base text-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-lg active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:translate-y-0",
+                  "h-12 w-full rounded-full bg-white px-7 text-base text-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-lg active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:w-auto",
                   FOCUS
                 )}
               >
@@ -66,7 +66,7 @@ export function Hero() {
               <Link
                 href="/about"
                 className={cn(
-                  "group inline-flex h-12 items-center gap-1.5 rounded-full border-2 border-white/50 px-6 text-base font-medium text-white transition-all duration-200 hover:-translate-y-0.5 hover:border-white hover:bg-white/10 active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:translate-y-0",
+                  "group inline-flex h-12 w-full items-center justify-center gap-1.5 rounded-full border-2 border-white/50 px-6 text-base font-medium text-white transition-all duration-200 hover:-translate-y-0.5 hover:border-white hover:bg-white/10 active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:w-auto",
                   FOCUS
                 )}
               >
@@ -76,7 +76,7 @@ export function Hero() {
             </div>
 
             {/* Phone/tablet: part of the normal flow, below the CTAs, so it can never sit over the text. */}
-            <div className="mt-8 max-w-[280px] motion-safe:animate-[course-promo-in_500ms_ease-out_200ms_both] sm:max-w-xs lg:hidden">
+            <div className="mt-6 max-w-[240px] motion-safe:animate-[course-promo-in_500ms_ease-out_200ms_both] sm:mt-8 sm:max-w-xs lg:hidden">
               <HeroVideoCard />
             </div>
           </div>
