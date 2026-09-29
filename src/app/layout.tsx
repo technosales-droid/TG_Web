@@ -6,6 +6,7 @@ import { AccessProvider } from "@/components/access/access-provider";
 import { CookieBanner } from "@/components/access/cookie-banner";
 import { CookieSettings } from "@/components/access/cookie-settings";
 import { CoursePromotionPopup } from "@/components/promotions/course-promotion-popup";
+import { FloatingContact } from "@/components/common/floating-contact";
 import { JsonLd } from "@/components/seo/json-ld";
 import { footerLocation, footerSocials } from "@/components/layout/footer-data";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
@@ -83,6 +84,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           </div>
           <SiteFooter />
           <CoursePromotionPopup />
+          <FloatingContact />
           <CookieSettings />
           <CookieBanner />
         </AccessProvider>
