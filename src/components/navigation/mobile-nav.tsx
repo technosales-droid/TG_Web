@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import {
-  ABOUT_LINKS,
   CTA_LINK,
   GAME_DEVELOPMENT_PROGRAMS,
   LEARNING_LINKS,
@@ -129,7 +128,16 @@ export function MobileNav({
 
       <MobileSection title="Learning" href="/learning" links={LEARNING_LINKS} onNavigate={onClose} />
       <div className="h-px bg-border" />
-      <MobileSection title="About" href="/about" links={ABOUT_LINKS} onNavigate={onClose} />
+
+      <div className="py-1">
+        <Link
+          href="/about"
+          onClick={onClose}
+          className="block rounded-md py-3 font-heading text-base font-semibold text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+        >
+          About
+        </Link>
+      </div>
 
       <Link
         href={CTA_LINK.href}

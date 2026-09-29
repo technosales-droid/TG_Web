@@ -4,11 +4,10 @@ import { COURSE_DETAILS } from "@/data/course-details";
 import { SITE_URL } from "@/lib/site";
 
 // Every indexable page, once, at its canonical path. Redirect-only routes (/faculty, /career-paths, the old About
-// pages) are deliberately absent.
+// pages, /about/facilities) are deliberately absent.
 const STATIC_PATHS = [
   "/",
   "/about",
-  "/about/facilities",
   "/programs",
   "/learning",
   "/learning/projects",

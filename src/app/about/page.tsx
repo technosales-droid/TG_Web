@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { AboutEnvironment, AboutTeach, AboutWho, AboutWhy } from "@/components/about/about-sections";
+import { AboutTeach, AboutWho, AboutWhy } from "@/components/about/about-sections";
 import { AboutStages } from "@/components/about/about-stages";
 import { AboutDirections } from "@/components/about/about-directions";
 import { LearningCta } from "@/components/learning/overview/learning-cta";
@@ -20,7 +20,6 @@ export default function Page() {
       <AboutTeach />
       <AboutDirections />
       <AboutWhy />
-      <AboutEnvironment />
       <LearningCta
         eyebrow="Ready to begin?"
         headline={["Start Your", "Learning Journey."]}

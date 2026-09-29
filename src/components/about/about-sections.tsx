@@ -1,8 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight, Check, Compass, FolderOpen, MessageSquare, Target, Users, Wrench } from "lucide-react";
+import { Check, Compass, FolderOpen, MessageSquare, Target, Users, Wrench } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
 import { Reveal } from "@/components/ui/reveal";
 import { GRADIENT_TEXT } from "@/components/ui/section-header";
@@ -238,46 +236,6 @@ export function AboutWhy() {
             </ul>
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
-
-export function AboutEnvironment() {
-  return (
-    <section aria-labelledby="ab-env-heading" className={cn(SECTION, "pt-0 sm:pt-0 xl:pt-0")}>
-      <div className="mx-auto max-w-[1800px] xl:px-8">
-        <Reveal>
-          <div className="group relative isolate flex min-h-[26rem] flex-col justify-end overflow-hidden rounded-[2.5rem] px-6 py-14 text-white sm:min-h-[32rem] sm:px-10 sm:py-16 xl:min-h-[40rem] xl:px-16 xl:py-20">
-            <Image src="/brand/practice-work.jpg" alt="" fill sizes="100vw" className="-z-20 object-cover transition-transform duration-700 ease-out motion-safe:group-hover:scale-105 motion-reduce:transition-none" />
-            <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-r from-[#062c3d]/95 via-[#0a4a66]/75 to-[#0a4a66]/35" />
-            <div className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-end">
-              <div className="max-w-2xl">
-                <div className="flex items-center gap-2 text-sm font-medium tracking-[0.2em] text-white/80 uppercase">
-                  <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />
-                  The learning environment
-                </div>
-                <h2 id="ab-env-heading" className="mt-4 text-3xl font-semibold tracking-tight text-balance sm:text-4xl xl:text-5xl">
-                  Where the Learning{" "}
-                  <span className="bg-gradient-to-r from-[#8fd3f0] to-brand-sky bg-clip-text text-transparent">Happens.</span>
-                </h2>
-                <p className="mt-4 text-base leading-relaxed text-white/80 sm:text-lg">
-                  Meet the people who guide the learning and see the space where learners practise, collaborate and build.
-                </p>
-              </div>
-              <Link
-                href="/about/facilities"
-                className={cn(
-                  buttonVariants({ variant: "default" }),
-                  "group/btn h-12 shrink-0 gap-2 rounded-full bg-white px-7 text-base text-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-lg motion-reduce:transition-none"
-                )}
-              >
-                Faculty &amp; Facilities
-                <ArrowRight className="size-4 transition-transform duration-200 motion-safe:group-hover/btn:translate-x-1" aria-hidden="true" />
-              </Link>
-            </div>
-          </div>
-        </Reveal>
       </div>
     </section>
   );

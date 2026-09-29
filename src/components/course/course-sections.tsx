@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Check, Layers, Star } from "lucide-react";
-import { Media } from "@/components/facilities/media";
+import { Media } from "./media";
 import { COURSE_DETAILS, relatedOf, type CourseDetail } from "@/data/course-details";
 import { FACULTY } from "@/data/institute";
 import { CurriculumAccordion, ExpandableText } from "./course-client";
@@ -171,12 +171,6 @@ export function CourseMain({ course: c }: { course: CourseDetail }) {
                 ))}
               </ul>
             ) : null}
-            <Link
-              href={instructor ? `/faculty/${instructor.slug}` : "/about/facilities#faculty"}
-              className={`mt-4 inline-flex h-11 items-center border border-primary px-5 text-base font-semibold text-primary transition-colors hover:bg-primary/5 ${FOCUS}`}
-            >
-              {instructor ? "View Faculty Profile" : "Meet our faculty"}
-            </Link>
           </div>
         </div>
       </Section>

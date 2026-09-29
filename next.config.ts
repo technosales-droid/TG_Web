@@ -44,11 +44,11 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
-      // The Mission, Why and Approach pages are folded into /about.
-      ...["mission", "why-technogurukul", "approach"].map((slug) => ({ source: `/about/${slug}`, destination: "/about", permanent: true })),
-      // Faculty are shown on the Faculty & Facilities page; there are no per-member pages.
-      { source: "/faculty", destination: "/about/facilities#faculty", permanent: true },
-      { source: "/faculty/:slug", destination: "/about/facilities#faculty", permanent: true },
+      // The Mission, Why, Approach and Facilities & Faculty pages are folded into /about.
+      ...["mission", "why-technogurukul", "approach", "facilities"].map((slug) => ({ source: `/about/${slug}`, destination: "/about", permanent: true })),
+      // There is no dedicated faculty page or per-member pages.
+      { source: "/faculty", destination: "/about", permanent: true },
+      { source: "/faculty/:slug", destination: "/about", permanent: true },
       // The Privacy Policy and Terms moved out of /legal.
       { source: "/legal/privacy-policy", destination: "/privacy-policy", permanent: true },
       { source: "/legal/terms-conditions", destination: "/terms", permanent: true },
