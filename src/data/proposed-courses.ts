@@ -2,7 +2,7 @@
 // Earlier granular course ideas (40 Digital Marketing + 60 game). Classified against the source
 // documents (Web copy, Game Development Programs):
 //   - CURRICULUM ITEMS: topics inside a source module/course, e.g. "Technical SEO" (module 06 SEO),
-//     "Unity Physics & Interaction" (TG Unity Studio curriculum). Not separate offerings.
+//     "Unity Physics & Interaction" (Unity Studio curriculum). Not separate offerings.
 //   - PROPOSED / FUTURE: not stated in the sources (e.g. "Conversion Rate Optimization",
 //     "Game Economy Design"). They may become courses only if approved.
 // They are kept for reference and reuse, and are deliberately not in the public catalogue.
@@ -129,7 +129,7 @@ const DIGITAL_MARKETING: Course[] = [
 
 // ------------------------------------------------------------------ Game development & creative technology (60)
 const GAME_COURSES: Course[] = [
-  // TG GameForge: general game development (10)
+  // Game Development Professional Program: general game development (10)
   ...group("forge", [
     ["Game Development Foundations", "Get an overview of how games are made, from idea and prototype to a playable build.", ["Game Development"], ["basics", "introduction", "game pipeline"], ["gamepad", "code", "layers"], { featured: true }],
     ["Game Production Fundamentals", "Learn how game projects are planned, scoped and organised across a team.", ["Game Development"], ["production", "planning", "scrum", "milestones"], ["workflow", "layers", "target"]],
@@ -142,7 +142,7 @@ const GAME_COURSES: Course[] = [
     ["Game Publishing", "Explore how finished games are prepared, released and presented on stores and platforms.", ["Game Development"], ["release", "store page", "launch", "distribution"], ["package", "rocket", "globe"]],
     ["Game Production & Portfolio", "Bring project work together into a finished game and a clear portfolio presentation.", ["Game Development"], ["capstone", "portfolio", "showcase", "project"], ["layers", "rocket", "sparkles"]],
   ]),
-  // TG Unity Studio (10)
+  // Unity Studio (10)
   ...group("unity", [
     ["Unity Fundamentals", "Learn the Unity editor, scenes, objects and components, and build a first playable project.", ["Unity", "Game Development"], ["game engine", "editor", "scenes", "basics"], ["gamepad", "cube", "layers"], { featured: true }],
     ["C# for Unity", "Learn the C# used in Unity scripts, from variables and functions to classes and components.", ["Unity", "Programming"], ["c#", "csharp", "scripting", "monobehaviour"], ["code", "cpu", "gamepad"], { slug: "csharp-for-unity" }],
@@ -155,7 +155,7 @@ const GAME_COURSES: Course[] = [
     ["Unity Mobile Game Development", "Adapt Unity projects for touch input, mobile screens and device limits.", ["Unity", "Game Development"], ["android", "ios", "touch controls", "mobile games"], ["smartphone", "gamepad", "code"]],
     ["Unity Game Production & Deployment", "Prepare a Unity project for building, testing and releasing on target platforms.", ["Unity", "Game Development"], ["build", "deployment", "release", "platforms"], ["package", "rocket", "gamepad"]],
   ]),
-  // TG Unreal Studio (10)
+  // Unreal Studio (10)
   ...group("unreal", [
     ["Unreal Engine Fundamentals", "Learn the Unreal Engine editor, levels and actors, and set up a first project.", ["Unreal Engine", "Game Development"], ["game engine", "editor", "levels", "basics", "3d"], ["cube", "gamepad", "layers"], { featured: true }],
     ["Blueprint Development", "Build gameplay and interaction visually using Unreal's Blueprint system.", ["Unreal Engine", "Programming"], ["blueprints", "visual scripting", "gameplay"], ["workflow", "cube", "code"], { slug: "unreal-blueprints" }],
@@ -168,7 +168,7 @@ const GAME_COURSES: Course[] = [
     ["Unreal Optimization", "Profile and improve the performance of Unreal Engine projects.", ["Unreal Engine", "Programming"], ["profiling", "performance", "frame rate", "stats"], ["zap", "bar-chart", "cpu"]],
     ["Unreal Production & Deployment", "Prepare an Unreal project for packaging, testing and release.", ["Unreal Engine", "Game Development"], ["packaging", "build", "release", "platforms"], ["package", "rocket", "cube"]],
   ]),
-  // TG GameArt Studio (10)
+  // GameArt Studio (10)
   ...group("art", [
     ["Visual Design for Games", "Learn the visual principles of shape, colour and composition that make game art read clearly.", ["2D Art", "Game Development"], ["art fundamentals", "colour", "composition", "art direction"], ["palette", "pen-tool", "sparkles"], { featured: true }],
     ["2D Game Art Fundamentals", "Create sprites, backgrounds and interface art built for use in games.", ["2D Art"], ["sprites", "pixel art", "backgrounds", "game art"], ["pen-tool", "palette", "layers"]],
@@ -181,7 +181,7 @@ const GAME_COURSES: Course[] = [
     ["3D Environment Modelling", "Model buildings, terrain and set pieces for game environments.", ["3D Art"], ["blender", "modular kits", "level art", "environment"], ["globe", "cube", "boxes"]],
     ["Game-Ready Asset Production", "Take assets through texturing, optimisation and export so they work inside a game engine.", ["3D Art", "Game Development"], ["texturing", "pbr", "export", "substance", "optimisation"], ["package", "cube", "palette"]],
   ]),
-  // TG GameDesign Studio (8)
+  // GameDesign Studio (8)
   ...group("design", [
     ["Game Design Fundamentals", "Learn what makes games engaging, and the core concepts designers use to shape play.", ["Game Design"], ["basics", "player experience", "design thinking"], ["lightbulb", "gamepad", "layers"], { featured: true }],
     ["Game Mechanics Design", "Design rules, actions and systems that give a game its core play.", ["Game Design"], ["mechanics", "rules", "core loop", "systems"], ["gamepad", "zap", "workflow"]],
@@ -192,7 +192,7 @@ const GAME_COURSES: Course[] = [
     ["Game Economy Design", "Design in-game resources, rewards and exchanges so they stay meaningful over time.", ["Game Design"], ["economy", "resources", "currency", "monetisation"], ["coins", "sliders", "bar-chart"]],
     ["Game Design Documents & Prototyping", "Communicate designs clearly through documents and quick prototypes.", ["Game Design", "Game Development"], ["gdd", "documentation", "prototype", "pitch"], ["file-text", "rocket", "lightbulb"]],
   ]),
-  // TG Game Animation & VFX (6)
+  // Game Animation & VFX (6)
   ...group("anim", [
     ["Animation Fundamentals for Games", "Learn the principles of motion and timing that make game characters feel alive.", ["Animation"], ["principles of animation", "timing", "spacing", "keyframes"], ["clapperboard", "workflow", "sparkles"], { featured: true }],
     ["Character Animation", "Animate characters for movement, actions and expression in interactive projects.", ["Animation", "3D Art"], ["locomotion", "walk cycle", "actions", "3d animation"], ["clapperboard", "users", "cube"]],
@@ -201,7 +201,7 @@ const GAME_COURSES: Course[] = [
     ["Lighting & Cinematics", "Light scenes and frame shots to create mood and tell stories on screen.", ["Cinematics", "VFX"], ["lighting", "camera", "cinematography", "rendering"], ["sun", "clapperboard", "sparkles"]],
     ["Game Cutscenes & Sequencing", "Assemble animation, cameras and audio into in-engine cutscenes.", ["Cinematics", "Animation"], ["cutscenes", "sequencer", "timeline", "storytelling"], ["clapperboard", "layers", "gamepad"]],
   ]),
-  // TG AI for Games (6)
+  // AI for Games (6)
   ...group("ai", [
     ["AI for Games Fundamentals", "Understand the role AI plays in games, from enemy behaviour to procedural content.", ["AI", "Game AI"], ["basics", "introduction", "artificial intelligence"], ["cpu", "gamepad", "bot"], { featured: true }],
     ["Game AI Systems", "Learn the common approaches used to structure how in-game AI perceives and acts.", ["Game AI", "Programming"], ["behaviour trees", "pathfinding", "ai architecture", "steering"], ["bot", "workflow", "code"]],

@@ -110,24 +110,25 @@ export function AccessProvider({ children }: { children: ReactNode }) {
           // Escape or the close button: closing is always possible.
           onClose={() => finish(false)}
           aria-labelledby="access-gate-title"
-          className="access-dialog m-auto max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto overscroll-contain rounded-3xl border border-primary/10 bg-card p-5 text-foreground shadow-[0_24px_60px_-20px_rgba(16,20,28,0.5)] backdrop:bg-black/60 sm:p-8"
+          className="access-dialog m-auto max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto overscroll-contain rounded-3xl border border-primary/10 bg-card text-foreground shadow-[0_24px_60px_-20px_rgba(16,20,28,0.5)] backdrop:bg-black/60"
         >
           {/* A zero-height sticky anchor, not a plain absolute button: the dialog itself is the
               scrolling container (overflow-y-auto above), so a plainly-`absolute` close button would
-              scroll away with the form on a short viewport where the content needs to scroll. The
-              negative margin cancels the dialog's own p-5/sm:p-8 padding so the anchor's box (and so
-              the button's top-3/right-3) lines up with the dialog's true corner, exactly as before. */}
-          <div className="sticky top-0 z-10 -m-5 h-0 sm:-m-8">
+              scroll away with the form on a short viewport where the content needs to scroll. The dialog
+              itself carries no padding (unlike the old p-5/sm:p-8 version), so this anchor's own box
+              already starts at the dialog's true corner with no margin trick needed to cancel padding
+              that isn't there — the content below supplies its own padding instead. */}
+          <div className="sticky top-0 z-10 h-0">
             <button
               type="button"
               onClick={() => finish(false)}
               aria-label="Close"
-              className="absolute top-3 right-3 inline-flex size-10 items-center justify-center rounded-full text-muted-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+              className="absolute top-3 right-3 inline-flex size-10 items-center justify-center rounded-full text-muted-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:top-4 sm:right-4"
             >
               <X className="size-5" aria-hidden="true" />
             </button>
           </div>
-          <div className="pr-6">
+          <div className="p-5 pr-14 sm:p-8 sm:pr-16">
             <AccessGate
               source={gate.source}
               title={gate.display?.title}

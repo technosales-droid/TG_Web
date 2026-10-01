@@ -6,6 +6,8 @@
 // place of `image` when set. `image` may be null for a program with no real photo/video yet, in
 // that case the hero falls back to an icon + gradient treatment (`visual`) instead of a photo, the
 // same honest fallback the /programs catalogue cards already use for programs with no image.
+import { INTERESTS, type Interest } from "@/lib/access";
+
 export interface ActiveProgram {
   category: string;
   title: string;
@@ -54,3 +56,11 @@ export const ACTIVE_PROGRAMS: ActiveProgram[] = [
     visual: { tone: "navy", icon: "layers" },
   },
 ];
+
+/** `href`'s program as its plain catalogue name (e.g. "Digital Marketing"), usable as an access-form Interest value;
+ * null when `href` isn't an active program or its title isn't one of the fixed Interest options, in which case no
+ * brochure/interest-gated action should be offered for it. */
+export function activeProgramInterest(href: string): Interest | null {
+  const title = ACTIVE_PROGRAMS.find((p) => p.href === href)?.title;
+  return title && (INTERESTS as readonly string[]).includes(title) ? (title as Interest) : null;
+}

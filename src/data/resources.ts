@@ -100,13 +100,13 @@ export const RESOURCE_PAGE_SIZE = 12;
 
 const DM = { industry: "Digital Marketing", program: "Digital Marketing Professional Program", course: null } as const;
 const GAME = { industry: "Game Development", program: "Game Development & Design" } as const;
-const FORGE = { ...GAME, course: "TG GameForge" } as const;
-const UNITY = { ...GAME, course: "TG Unity Studio" } as const;
-const UNREAL = { ...GAME, course: "TG Unreal Studio" } as const;
-const ART = { ...GAME, course: "TG GameArt Studio" } as const;
-const DESIGN = { ...GAME, course: "TG GameDesign Studio" } as const;
-const ANIM = { ...GAME, course: "TG Game Animation & VFX" } as const;
-const AI = { ...GAME, course: "TG AI for Games" } as const;
+const FORGE = { ...GAME, course: "Game Development Professional Program" } as const;
+const UNITY = { ...GAME, course: "Unity Studio" } as const;
+const UNREAL = { ...GAME, course: "Unreal Studio" } as const;
+const ART = { ...GAME, course: "GameArt Studio" } as const;
+const DESIGN = { ...GAME, course: "GameDesign Studio" } as const;
+const ANIM = { ...GAME, course: "Game Animation & VFX" } as const;
+const AI = { ...GAME, course: "AI for Games" } as const;
 const GENERAL = { industry: null, program: null, course: null } as const;
 
 type Seed = Omit<Resource, "id" | "order" | "status" | "featured" | "sample">;

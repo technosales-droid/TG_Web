@@ -7,26 +7,11 @@ import { FaWhatsapp } from "react-icons/fa6";
 import { ACTIVE_PROGRAMS } from "@/data/active-programs";
 import { footerContact } from "@/components/layout/footer-data";
 import { useConsent } from "@/lib/consent";
+import { useAnyDialogOpen } from "@/lib/use-any-dialog-open";
 import { cn } from "cn";
 
 // True on the client once hydrated, so the buttons never flash on then off while consent loads from storage.
 const useHydrated = () => useSyncExternalStore(() => () => {}, () => true, () => false);
-
-/** True whenever any of the site's native <dialog> overlays (course promo, brochure/access form, filter sheets,
- * cookie settings, the hero video popup...) is open. A dialog's own top-layer backdrop should already sit above a
- * plain fixed element, but that didn't hold up on real devices (the buttons stayed visible, undimmed, over an open
- * popup) so this watches the DOM directly instead of trusting that layering. */
-function useAnyDialogOpen() {
-  const [open, setOpen] = useState(false);
-  useEffect(() => {
-    const check = () => setOpen(document.querySelectorAll("dialog[open]").length > 0);
-    check();
-    const observer = new MutationObserver(check);
-    observer.observe(document.body, { attributes: true, attributeFilter: ["open"], subtree: true });
-    return () => observer.disconnect();
-  }, []);
-  return open;
-}
 
 /** Hides the buttons while the visitor is actively scrolling down (where they're most likely to be passing over,
  * not reading, content), and brings them back on any upward scroll or once scrolling has settled for a moment. This

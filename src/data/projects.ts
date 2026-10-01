@@ -166,12 +166,12 @@ export const STATUS_LABEL: Record<ProjectStatus, string> = {
 
 const DM = { industry: "Digital Marketing", program: "Digital Marketing Professional Program", course: null } as const;
 const GAME = { industry: "Game Development", program: "Game Development & Design" } as const;
-const FORGE = { ...GAME, course: "TG GameForge" } as const;
-const UNITY = { ...GAME, course: "TG Unity Studio" } as const;
-const ART = { ...GAME, course: "TG GameArt Studio" } as const;
-const DESIGN = { ...GAME, course: "TG GameDesign Studio" } as const;
-const ANIM = { ...GAME, course: "TG Game Animation & VFX" } as const;
-const AI = { ...GAME, course: "TG AI for Games" } as const;
+const FORGE = { ...GAME, course: "Game Development Professional Program" } as const;
+const UNITY = { ...GAME, course: "Unity Studio" } as const;
+const ART = { ...GAME, course: "GameArt Studio" } as const;
+const DESIGN = { ...GAME, course: "GameDesign Studio" } as const;
+const ANIM = { ...GAME, course: "Game Animation & VFX" } as const;
+const AI = { ...GAME, course: "AI for Games" } as const;
 
 const PDF = "application/pdf";
 const DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";

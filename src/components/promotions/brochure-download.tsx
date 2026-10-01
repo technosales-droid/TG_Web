@@ -82,7 +82,7 @@ export function useBrochureDownload() {
       <button type="button" onClick={close} aria-label="Close" className={cn("absolute top-3 right-3 inline-flex size-10 items-center justify-center rounded-full text-muted-foreground hover:bg-muted", FOCUS)}>
         <X className="size-5" aria-hidden="true" />
       </button>
-      <div className="flex flex-col items-center pt-4 pr-6 text-center">
+      <div className="flex flex-col items-center pt-6 text-center">
         {state.status === "loading" && (
           <>
             <Loader2 className="size-8 animate-spin text-primary" aria-hidden="true" />
@@ -93,8 +93,8 @@ export function useBrochureDownload() {
           <>
             <CheckCircle2 className="size-8 text-primary" aria-hidden="true" />
             <p role="status" className="mt-4 text-base font-semibold text-foreground">Your brochure is ready.</p>
-            <p className="mt-1 text-sm text-muted-foreground">The download should have started. If it didn&rsquo;t:</p>
-            <a href={state.blobUrl} download={state.downloadName} className={cn("mt-4 inline-flex h-11 items-center gap-2 rounded-full bg-primary px-6 text-[15px] font-semibold text-primary-foreground hover:bg-primary/90", FOCUS)}>
+            <p className="mt-1.5 text-balance text-sm text-muted-foreground">The download should have started. If it didn&rsquo;t:</p>
+            <a href={state.blobUrl} download={state.downloadName} className={cn("mt-5 inline-flex h-11 items-center gap-2 rounded-full bg-primary px-6 text-[15px] font-semibold text-primary-foreground hover:bg-primary/90", FOCUS)}>
               <Download className="size-4" aria-hidden="true" />
               Download the brochure
             </a>
@@ -104,13 +104,13 @@ export function useBrochureDownload() {
           <>
             <FileWarning className="size-8 text-primary" aria-hidden="true" />
             <p role="alert" className="mt-4 text-base font-semibold text-foreground">The brochure isn&rsquo;t ready to download yet.</p>
-            <p className="mt-1 text-sm text-muted-foreground">We have your details and will follow up. You can also reach us on the Contact page.</p>
+            <p className="mt-1.5 text-balance text-sm text-muted-foreground">We have your details and will follow up. You can also reach us on the Contact page.</p>
           </>
         )}
         {state.status === "error" && (
           <>
             <AlertCircle className="size-8 text-destructive" aria-hidden="true" />
-            <p role="alert" className="mt-4 text-base font-semibold text-foreground">{state.message}</p>
+            <p role="alert" className="mt-4 text-balance text-base font-semibold text-foreground">{state.message}</p>
           </>
         )}
       </div>

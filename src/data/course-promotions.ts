@@ -30,8 +30,8 @@ const MESSAGES: Record<string, PromotionMessage[]> = {
     { headline: "Curious how brands get noticed?", description: "Explore SEO, social media and performance marketing, step by step." },
   ],
   "tg-gameforge": [
-    { headline: "Ever wanted to make your own game?", description: "Start with small exercises and work up to a capstone game project." },
-    { headline: "From first idea to finished game.", description: "Design, program, animate, test and publish, all in one program." },
+    { headline: "Ever wanted to make your own game?", description: "Start with small exercises and work up to a capstone game project.", ctaLabel: "Explore Game Development" },
+    { headline: "From first idea to finished game.", description: "Design, program, animate, test and publish, all in one program.", ctaLabel: "Explore Game Development" },
   ],
   "tg-unity-studio": [
     { headline: "Turn game ideas into playable builds.", description: "Learn Unity and C#, from gameplay and physics to UI, game AI and deployment." },

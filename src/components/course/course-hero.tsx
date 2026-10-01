@@ -1,21 +1,16 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { Award, BarChart3, Briefcase, ChevronRight, Clock, Hammer, Layers, MapPin, Monitor, Play, Star, Wrench } from "lucide-react";
+import { Award, BarChart3, ChevronRight, Clock, Hammer, Layers, MapPin, Monitor, Play, Star } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "cn";
+import { BrochureButton } from "@/components/course/brochure-button";
+import { INCLUDE_ICON } from "@/components/course/include-icon";
 import { buttonVariants } from "@/components/ui/button";
-import type { CourseDetail, IncludeIcon } from "@/data/course-details";
+import type { CourseDetail } from "@/data/course-details";
 import { FACULTY } from "@/data/institute";
-
-export const INCLUDE_ICON: Record<IncludeIcon, LucideIcon> = {
-  clock: Clock,
-  mode: Monitor,
-  place: MapPin,
-  tools: Wrench,
-  projects: Hammer,
-  portfolio: Briefcase,
-  practice: Hammer,
-};
+import { useAnyDialogOpen } from "@/lib/use-any-dialog-open";
 
 const FOCUS = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
 
@@ -42,6 +37,11 @@ export function CourseHeader({ course: c }: { course: CourseDetail }) {
       </nav>
 
       <h1 id="course-title" className="mt-5 text-3xl leading-[1.15] font-semibold tracking-tight text-balance sm:text-4xl">{c.title}</h1>
+      {c.programTagline && (
+        <p className="mt-2 inline-flex w-fit items-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold tracking-wide text-[#8fd3f0] uppercase">
+          {c.programTagline}
+        </p>
+      )}
       <p className="mt-3 max-w-3xl text-lg leading-relaxed text-white/85">{c.subtitle ? `${c.subtitle}. ` : ""}{c.description}</p>
 
       <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
@@ -78,8 +78,19 @@ export function CourseHeader({ course: c }: { course: CourseDetail }) {
 /** The sticky card on the right: preview media, Apply Now / Enquire Now, and what the course includes. */
 export function CourseCard({ course: c }: { course: CourseDetail }) {
   const highlights = c.includes.slice(0, 4);
+  // A dialog's backdrop should already dim this sticky card; on real devices it doesn't, so it's hidden outright
+  // while any dialog (e.g. its own brochure/access form) is open, the same fix already used for the floating
+  // contact buttons.
+  const dialogOpen = useAnyDialogOpen();
   return (
-    <aside aria-label="Course preview" className="overflow-hidden border border-primary/20 bg-card text-foreground shadow-[0_24px_48px_-24px_rgba(6,44,61,0.5)]">
+    <aside
+      aria-label="Course preview"
+      inert={dialogOpen}
+      className={cn(
+        "overflow-hidden border border-primary/20 bg-card text-foreground shadow-[0_24px_48px_-24px_rgba(6,44,61,0.5)] transition-opacity duration-150",
+        dialogOpen && "opacity-0"
+      )}
+    >
       <div className="relative aspect-video bg-gradient-to-br from-[#0d5674] to-primary">
         {c.heroImage ? (
           <Image src={c.heroImage} alt={c.heroAlt} fill priority sizes="(min-width: 1024px) 23rem, 100vw" className="object-cover" />
@@ -98,6 +109,7 @@ export function CourseCard({ course: c }: { course: CourseDetail }) {
         <div className="mt-4 grid gap-2.5">
           <Link href="/contact" className={cn(buttonVariants({ variant: "default" }), "h-12 w-full rounded-none text-base font-semibold")}>Apply Now</Link>
           <Link href="/contact" className="inline-flex h-12 w-full items-center justify-center border border-primary text-base font-semibold text-primary transition-colors hover:bg-primary/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Enquire Now</Link>
+          <BrochureButton slug={c.slug} />
         </div>
         {c.note && <p className="mt-3 text-center text-sm text-muted-foreground">{c.note}</p>}
 

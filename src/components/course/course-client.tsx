@@ -7,8 +7,9 @@ import type { CourseModule } from "@/data/course-details";
 
 const FOCUS = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
-/** Udemy-style curriculum: modules as an accordion, only the first open, with "Expand all sections". */
-export function CurriculumAccordion({ modules }: { modules: CourseModule[] }) {
+/** Udemy-style curriculum: modules (or, with `unitLabel`, e.g. semesters) as an accordion, only the first open,
+ * with "Expand all sections". */
+export function CurriculumAccordion({ modules, unitLabel = "Module" }: { modules: CourseModule[]; unitLabel?: string }) {
   const [open, setOpen] = useState<Set<number>>(() => new Set([0]));
   const all = open.size === modules.length;
   const toggle = (i: number) =>
@@ -20,7 +21,7 @@ export function CurriculumAccordion({ modules }: { modules: CourseModule[] }) {
     });
 
   const lessons = modules.reduce((n, m) => n + m.lessons.length, 0);
-  const meta = [`${modules.length} modules`, lessons ? `${lessons} lessons` : ""].filter(Boolean).join(" • ");
+  const meta = [`${modules.length} ${unitLabel.toLowerCase()}s`, lessons ? `${lessons} topics` : ""].filter(Boolean).join(" • ");
 
   return (
     <div>
@@ -50,23 +51,23 @@ export function CurriculumAccordion({ modules }: { modules: CourseModule[] }) {
                 <span className="flex items-center gap-3 text-base font-semibold text-foreground">
                   <ChevronDown className={cn("size-4 shrink-0 transition-transform duration-200", isOpen && "rotate-180")} aria-hidden="true" />
                   <span>
-                    <span className="text-xs font-semibold tracking-[0.2em] text-primary uppercase">Module {String(i + 1).padStart(2, "0")}</span>
+                    <span className="text-xs font-semibold tracking-[0.2em] text-primary uppercase">{unitLabel} {String(i + 1).padStart(2, "0")}</span>
                     <span className="block">{m.title}</span>
                   </span>
                 </span>
                 <span className="shrink-0 text-sm text-muted-foreground">
-                  {[m.lessons.length ? `${m.lessons.length} lessons` : "", m.duration ?? ""].filter(Boolean).join(" • ")}
+                  {[m.lessons.length ? `${m.lessons.length} topics` : "", m.duration ?? ""].filter(Boolean).join(" • ")}
                 </span>
               </button>
               <div id={`module-${i}`} hidden={!isOpen} className="bg-card px-4 py-3">
-                {m.lessons.length ? (
+                {m.lessons.length > 0 ? (
                   <ul className="grid gap-1">
                     {m.lessons.map((l, li) => (
                       <li key={l.title} className="flex items-start justify-between gap-4 py-2 text-base text-foreground">
                         <span className="flex items-start gap-3">
                           <PlayCircle className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
                           <span>
-                            <span className="text-muted-foreground">Lesson {String(li + 1).padStart(2, "0")}: </span>
+                            <span className="text-muted-foreground">Topic {String(li + 1).padStart(2, "0")}: </span>
                             {l.title}
                             {l.preview && <span className="ml-2 text-sm font-semibold text-primary underline">Preview</span>}
                           </span>
@@ -75,8 +76,14 @@ export function CurriculumAccordion({ modules }: { modules: CourseModule[] }) {
                       </li>
                     ))}
                   </ul>
-                ) : (
-                  <p className="py-1 text-base leading-relaxed text-muted-foreground">{m.summary ?? "Lessons for this module will be added here."}</p>
+                ) : !m.summary ? (
+                  <p className="py-1 text-base leading-relaxed text-muted-foreground">Topics for this {unitLabel.toLowerCase()} will be added here.</p>
+                ) : null}
+                {m.summary && (
+                  <p className="mt-3 border-t border-primary/10 pt-3 text-base leading-relaxed text-foreground">
+                    <span className="font-semibold text-primary">Skill development: </span>
+                    {m.summary}
+                  </p>
                 )}
               </div>
             </div>

@@ -3,7 +3,7 @@
 // Three levels:  INDUSTRY  ->  PROGRAM  ->  COURSE
 //   Industry = the broad field         (e.g. "Game Development")
 //   Program  = the umbrella inside it  (e.g. "Game Development & Design")
-//   Course   = the enrolment offering  (e.g. "TG Unreal Studio") - what a student chooses
+//   Course   = the enrolment offering  (e.g. "Unreal Studio") - what a student chooses
 //
 // A Program contains `courses` (records in course-catalogue.ts / future-catalogue.ts that name it via
 // `programSlug`) and/or a `curriculum` of modules. Curriculum modules are NOT courses: they are the
@@ -96,6 +96,9 @@ export interface CurriculumModule {
   slug: string;
   title: string;
   description: string;
+  /** The module's own syllabus bullet points, verbatim from the source curriculum document. Rendered as the
+   * module's lessons on its program's detail page. */
+  topics: string[];
   tags: string[];
   keywords?: string[];
 }
@@ -136,7 +139,7 @@ export interface Course {
   origin: CatalogueOrigin;
   /**
    * Detail page. Required when active, must be null otherwise (nothing is linked).
-   * Until /courses/[slug] pages exist, TG GameForge points at its existing page.
+   * Until /courses/[slug] pages exist, Game Development Professional Program points at its existing page.
    */
   href: string | null;
   /** "Beginner" | "Intermediate" | "Advanced", or null when not stated. */

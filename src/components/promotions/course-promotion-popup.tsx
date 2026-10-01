@@ -7,20 +7,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowRight, Download, X } from "lucide-react";
 import { useModal } from "@/components/learning/projects/use-modal";
 import { buttonVariants } from "@/components/ui/button";
-import { ACTIVE_PROGRAMS } from "@/data/active-programs";
+import { activeProgramInterest } from "@/data/active-programs";
 import { COURSE_PROMOTIONS, type PromotionMessage } from "@/data/course-promotions";
-import { INTERESTS, type Interest } from "@/lib/access";
 import { cn } from "cn";
 import { useBrochureDownload } from "./brochure-download";
 import { pickNext } from "./rotation";
-
-/** The course's plain catalogue name (e.g. "Digital Marketing"), not its marketing title (e.g. "TG GameForge"), so it
- * both reads naturally as a button label and lines up with the existing "interested in" values. null when a promoted
- * course somehow isn't one of the two active programs, in which case no brochure button is offered for it. */
-function courseInterest(href: string): Interest | null {
-  const title = ACTIVE_PROGRAMS.find((p) => p.href === href)?.title;
-  return title && (INTERESTS as readonly string[]).includes(title) ? (title as Interest) : null;
-}
 
 const DELAY_S = 45;
 const STORAGE_KEY = "tg-course-promo";
@@ -109,7 +100,7 @@ export function CoursePromotionPopup() {
   if (!current) return brochureViewer;
   const promo = COURSE_PROMOTIONS.find((p) => p.courseId === current.courseId)!;
   const { headline, description, ctaLabel } = current.message;
-  const brochureInterest = courseInterest(promo.href);
+  const brochureInterest = activeProgramInterest(promo.href);
 
   const downloadBrochure = async () => {
     if (!brochureInterest || brochureBusy) return;
