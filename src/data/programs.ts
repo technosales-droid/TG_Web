@@ -66,7 +66,7 @@ const DIGITAL_MARKETING_OFFERING: Offering = {
   subtitle: "SEO, Social Media & Performance Marketing",
   description:
     "A complete, practical digital marketing learning program covering strategy, content, SEO, advertising, analytics and AI.",
-  duration: "4.5–5 Months",
+  duration: "3–3.5 Months",
   mode: "Offline / In-Person",
   location: "Nashik, Maharashtra",
   tags: ["Marketing", "SEO", "Social Media", "Performance Marketing", "AI"],
@@ -88,43 +88,11 @@ export const PROGRAM_CATEGORIES: ProgramCategory[] = [
     id: "game-development",
     slug: "game-development",
     name: "Game Development",
-    description: "One flagship program plus five specialized studios covering every part of making a game.",
+    description: "A complete, practical path through every part of making a game.",
     offerings: [
       courseOffering("tg-gameforge", {
         src: "/brand/course-tg-gameforge.png",
         alt: "A collage of game development work: code, 3D sculpting and digital art on tablets",
-      }),
-      courseOffering("tg-unity-studio", {
-        src: "/brand/course-tg-unity-studio.png",
-        alt: "A student building a game in the Unity editor across two monitors",
-      }),
-      courseOffering("tg-unreal-studio", {
-        src: "/brand/course-tg-unreal-studio.png",
-        alt: "A character facing a large mechanical creature in an Unreal Engine scene",
-      }),
-      courseOffering("tg-gameart-studio", {
-        src: "/brand/course-tg-gameart-studio.png",
-        alt: "An artist sculpting a 3D character on a monitor and drawing tablet",
-      }),
-      courseOffering("tg-game-animation-vfx", {
-        src: "/brand/course-tg-game-animation-vfx.png",
-        alt: "A split view of a finished VFX shot beside its green-screen production plate",
-      }),
-      courseOffering("tg-ai-for-games", {
-        src: "/brand/course-tg-ai-for-games.png",
-        alt: "An illustration of an AI head made of circuitry, held in an open hand",
-      }),
-    ],
-  },
-  {
-    id: "game-design",
-    slug: "game-design",
-    name: "Game Design",
-    description: "A focused, standalone path into designing game mechanics, levels and player experience.",
-    offerings: [
-      courseOffering("tg-gamedesign-studio", {
-        src: "/brand/course-tg-gamedesign-studio.png",
-        alt: "A designer working on a 3D character rig across two screens",
       }),
     ],
   },

@@ -13,7 +13,6 @@ import {
   GAME_DEVELOPMENT_PROGRAMS,
   PROGRAM_CATEGORY,
   SIGNATURE_PROGRAM,
-  SPECIALIZED_PROGRAMS,
   type ProgramLink,
 } from "@/components/navigation/nav-data";
 
@@ -89,13 +88,10 @@ export function ProgramsMenu() {
             </NavigationMenuLink>
           </div>
 
-          <div className="grid auto-rows-[9.5rem] grid-cols-4 gap-3">
-            <Tile program={SIGNATURE_PROGRAM} eyebrow={DIGITAL_MARKETING_CATEGORY} flagship className="col-span-2 row-span-2" />
-            {SPECIALIZED_PROGRAMS.map((program) => (
-              <Tile key={program.href} program={program} />
-            ))}
+          <div className="grid grid-cols-3 gap-3">
+            <Tile program={SIGNATURE_PROGRAM} eyebrow={DIGITAL_MARKETING_CATEGORY} flagship className="col-span-2 h-[19rem]" />
             {GAME_DEVELOPMENT_PROGRAMS.map((program) => (
-              <Tile key={program.href} program={program} eyebrow={PROGRAM_CATEGORY} className="col-span-2" />
+              <Tile key={program.href} program={program} eyebrow={PROGRAM_CATEGORY} className="h-[19rem]" />
             ))}
           </div>
         </div>

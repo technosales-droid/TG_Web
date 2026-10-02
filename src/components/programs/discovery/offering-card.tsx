@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Gamepad2, Layers, Megaphone, Sparkles, type LucideIcon } from "lucide-react";
+import { ArrowUpRight, Gamepad2, Megaphone, Sparkles, type LucideIcon } from "lucide-react";
 import { cn } from "cn";
 import type { Offering } from "@/data/programs";
 import type { ViewMode } from "./program-utils";
@@ -8,7 +8,6 @@ import type { ViewMode } from "./program-utils";
 const CATEGORY_VISUAL: Record<string, { tone: string; icon: LucideIcon }> = {
   "digital-marketing": { tone: "from-primary via-primary/70 to-brand-sky/50", icon: Megaphone },
   "game-development": { tone: "from-brand-sky/80 via-primary/70 to-[#0b3d50]", icon: Gamepad2 },
-  "game-design": { tone: "from-[#0d6386] to-[#0b3d50]", icon: Layers },
 };
 
 const MAX_TAGS = 4;

@@ -167,11 +167,6 @@ export const STATUS_LABEL: Record<ProjectStatus, string> = {
 const DM = { industry: "Digital Marketing", program: "Digital Marketing Professional Program", course: null } as const;
 const GAME = { industry: "Game Development", program: "Game Development & Design" } as const;
 const FORGE = { ...GAME, course: "Game Development Professional Program" } as const;
-const UNITY = { ...GAME, course: "Unity Studio" } as const;
-const ART = { ...GAME, course: "GameArt Studio" } as const;
-const DESIGN = { ...GAME, course: "GameDesign Studio" } as const;
-const ANIM = { ...GAME, course: "Game Animation & VFX" } as const;
-const AI = { ...GAME, course: "AI for Games" } as const;
 
 const PDF = "application/pdf";
 const DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
@@ -279,7 +274,7 @@ const SEEDS: Omit<Project, "id" | "order">[] = [
     title: "3D Environment",
     shortDescription:
       "A 3D environment built from blockout to a lit, presentable scene, with process images along the way.",
-    ...ART,
+    ...FORGE,
     projectType: "3D Asset",
     topics: ["3D Art", "Game Development"],
     tools: ["Blender", "Photoshop"],
@@ -294,7 +289,7 @@ const SEEDS: Omit<Project, "id" | "order">[] = [
     title: "Faculty Design Study",
     shortDescription:
       "A design study on pacing, player guidance and layout, documented so learners can see the reasoning behind each choice.",
-    ...DESIGN,
+    ...FORGE,
     projectType: "Level Design",
     topics: ["Level Design", "Game Design"],
     featured: true,
@@ -315,7 +310,7 @@ const SEEDS: Omit<Project, "id" | "order">[] = [
     title: "Faculty Technical Experiment",
     shortDescription:
       "A short technical experiment showing how a visual effect is built up in layers and refined.",
-    ...ANIM,
+    ...FORGE,
     projectType: "Experiment",
     topics: ["VFX", "Animation"],
     tools: ["Unreal Engine", "Houdini"],
@@ -326,7 +321,7 @@ const SEEDS: Omit<Project, "id" | "order">[] = [
     title: "Game Design Document",
     shortDescription:
       "A game design document laying out the concept, mechanics, level flow and player experience for a small game.",
-    ...DESIGN,
+    ...FORGE,
     projectType: "Game Design",
     topics: ["Game Design", "Game Development"],
     status: "completed",
@@ -364,7 +359,7 @@ const SEEDS: Omit<Project, "id" | "order">[] = [
     title: "Level Prototype",
     shortDescription:
       "A blockout level built to test layout and player flow, with a walkthrough and notes on changes made.",
-    ...DESIGN,
+    ...FORGE,
     projectType: "Level Design",
     topics: ["Level Design", "Game Design", "Unreal Engine"],
     tools: ["Unreal Engine"],
@@ -403,7 +398,7 @@ const SEEDS: Omit<Project, "id" | "order">[] = [
     title: "Character Asset",
     shortDescription:
       "A game-ready character model shown as turnarounds and close-ups, with a short note on how it was built.",
-    ...ART,
+    ...FORGE,
     projectType: "3D Asset",
     topics: ["3D Art", "Game Development"],
     tools: ["Blender", "Photoshop"],
@@ -431,7 +426,7 @@ const SEEDS: Omit<Project, "id" | "order">[] = [
     title: "Animation Study",
     shortDescription:
       "A short character animation study exploring timing and weight, shared with the process behind it.",
-    ...ANIM,
+    ...FORGE,
     projectType: "Animation",
     topics: ["Animation", "3D Art"],
     tools: ["Blender"],
@@ -442,7 +437,7 @@ const SEEDS: Omit<Project, "id" | "order">[] = [
     title: "Interactive System Prototype",
     shortDescription:
       "A small interactive system prepared as a reference build, with a project page describing how it is structured.",
-    ...UNITY,
+    ...FORGE,
     projectType: "Prototype",
     topics: ["Game Development", "Programming"],
     tools: ["Unity", "C#"],
@@ -463,7 +458,7 @@ const SEEDS: Omit<Project, "id" | "order">[] = [
     title: "VFX Experiment",
     shortDescription:
       "A visual effect built and refined in stages, shared as a short clip with a still that shows the breakdown.",
-    ...ANIM,
+    ...FORGE,
     projectType: "VFX",
     topics: ["VFX", "Animation"],
     tools: ["Unreal Engine", "Houdini"],
@@ -490,7 +485,7 @@ const SEEDS: Omit<Project, "id" | "order">[] = [
     title: "Gameplay System",
     shortDescription:
       "A self-contained gameplay system, such as movement or inventory, built and documented as a reusable piece.",
-    ...UNITY,
+    ...FORGE,
     projectType: "Technical Build",
     topics: ["Programming", "Unity", "Game Development"],
     tools: ["Unity", "C#", "Git / GitHub"],
@@ -501,7 +496,7 @@ const SEEDS: Omit<Project, "id" | "order">[] = [
     title: "Game AI Prototype",
     shortDescription:
       "A prototype in which a non-player character moves and reacts, used to explore simple decision-making.",
-    ...AI,
+    ...FORGE,
     projectType: "Prototype",
     topics: ["Game AI", "Programming"],
     tools: ["Unity", "C#"],
@@ -567,7 +562,7 @@ const SEEDS: Omit<Project, "id" | "order">[] = [
     title: "Visual Concept Presentation",
     shortDescription:
       "A visual concept presented as a short deck: mood, references, key frames and how the idea would be developed.",
-    ...ART,
+    ...FORGE,
     projectType: "Presentation",
     topics: ["2D Art", "Game Development"],
     tools: ["Photoshop", "Figma"],

@@ -1,4 +1,4 @@
-import { Award, Briefcase, Clock, Hammer, MapPin, Monitor, Wrench } from "lucide-react";
+import { Briefcase, Clock, Hammer, MapPin, Monitor, Wrench } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { IncludeIcon } from "@/data/course-details";
 

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Award, BarChart3, ChevronRight, Clock, Hammer, Layers, MapPin, Monitor, Play, Star } from "lucide-react";
+import { Award, BarChart3, ChevronRight, Clock, Hammer, Layers, Monitor, Play, Star } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "cn";
 import { BrochureButton } from "@/components/course/brochure-button";

@@ -101,12 +101,6 @@ export const RESOURCE_PAGE_SIZE = 12;
 const DM = { industry: "Digital Marketing", program: "Digital Marketing Professional Program", course: null } as const;
 const GAME = { industry: "Game Development", program: "Game Development & Design" } as const;
 const FORGE = { ...GAME, course: "Game Development Professional Program" } as const;
-const UNITY = { ...GAME, course: "Unity Studio" } as const;
-const UNREAL = { ...GAME, course: "Unreal Studio" } as const;
-const ART = { ...GAME, course: "GameArt Studio" } as const;
-const DESIGN = { ...GAME, course: "GameDesign Studio" } as const;
-const ANIM = { ...GAME, course: "Game Animation & VFX" } as const;
-const AI = { ...GAME, course: "AI for Games" } as const;
 const GENERAL = { industry: null, program: null, course: null } as const;
 
 type Seed = Omit<Resource, "id" | "order" | "status" | "featured" | "sample">;
@@ -128,7 +122,7 @@ const SEEDS: (Seed & { featured?: boolean })[] = [
     slug: "sample-game-design-guide",
     title: "Sample Game Design Guide",
     shortDescription: "An overview of how a game idea becomes mechanics, goals and a loop a player can understand.",
-    ...DESIGN,
+    ...FORGE,
     resourceType: "Guide",
     topics: ["Game Design", "Game Development"],
     difficulty: "beginner",
@@ -162,7 +156,7 @@ const SEEDS: (Seed & { featured?: boolean })[] = [
     slug: "sample-level-design-checklist",
     title: "Sample Level Design Checklist",
     shortDescription: "Points to check when reviewing a level's flow, pacing, player guidance and readability.",
-    ...DESIGN,
+    ...FORGE,
     resourceType: "Checklist",
     topics: ["Level Design", "Game Design"],
     difficulty: "intermediate",
@@ -226,7 +220,7 @@ const SEEDS: (Seed & { featured?: boolean })[] = [
     slug: "sample-unity-planning-worksheet",
     title: "Sample Unity Planning Worksheet",
     shortDescription: "A worksheet for planning a small Unity build: scope, scenes, scripts and what to test first.",
-    ...UNITY,
+    ...FORGE,
     resourceType: "Worksheet",
     topics: ["Unity", "C#", "Planning"],
     difficulty: "beginner",
@@ -248,7 +242,7 @@ const SEEDS: (Seed & { featured?: boolean })[] = [
     slug: "sample-unreal-development-reference",
     title: "Sample Unreal Development Reference",
     shortDescription: "A reference to project structure and common building blocks when working in Unreal Engine.",
-    ...UNREAL,
+    ...FORGE,
     resourceType: "Reference",
     topics: ["Unreal Engine", "Game Development"],
     difficulty: "intermediate",
@@ -271,7 +265,7 @@ const SEEDS: (Seed & { featured?: boolean })[] = [
     slug: "sample-game-art-checklist",
     title: "Sample Game Art Checklist",
     shortDescription: "Points to check before an art asset is handed over: scale, naming, textures and presentation.",
-    ...ART,
+    ...FORGE,
     resourceType: "Checklist",
     topics: ["3D Art", "Blender"],
     difficulty: "beginner",
@@ -303,7 +297,7 @@ const SEEDS: (Seed & { featured?: boolean })[] = [
     slug: "sample-character-art-reference",
     title: "Sample Character Art Reference",
     shortDescription: "A reference for proportions, silhouettes and turnaround sheets used when building a character in Blender.",
-    ...ART,
+    ...FORGE,
     resourceType: "Reference",
     topics: ["3D Art", "Blender", "Animation"],
     difficulty: "intermediate",
@@ -325,7 +319,7 @@ const SEEDS: (Seed & { featured?: boolean })[] = [
     slug: "sample-game-ai-guide",
     title: "Sample Game AI Guide",
     shortDescription: "A guide to simple decision-making for non-player characters, from states to basic pathfinding ideas.",
-    ...AI,
+    ...FORGE,
     resourceType: "Guide",
     topics: ["Game AI", "Programming", "Unity"],
     difficulty: "advanced",
@@ -368,7 +362,7 @@ const SEEDS: (Seed & { featured?: boolean })[] = [
     slug: "sample-animation-basics-video",
     title: "Sample Animation Basics Video",
     shortDescription: "A short walkthrough of timing, spacing and weight, shown with a simple bouncing-ball exercise.",
-    ...ANIM,
+    ...FORGE,
     resourceType: "Video",
     topics: ["Animation", "Blender"],
     difficulty: "beginner",
@@ -380,7 +374,7 @@ const SEEDS: (Seed & { featured?: boolean })[] = [
     slug: "sample-level-blockout-template",
     title: "Sample Level Blockout Template",
     shortDescription: "A layout sheet for sketching a level blockout before building it in an engine.",
-    ...DESIGN,
+    ...FORGE,
     resourceType: "Template",
     topics: ["Level Design", "Planning"],
     difficulty: "beginner",
@@ -412,7 +406,7 @@ const SEEDS: (Seed & { featured?: boolean })[] = [
     slug: "sample-vfx-reference",
     title: "Sample VFX Reference",
     shortDescription: "A reference to the building blocks of a visual effect: shape, colour, timing and layering.",
-    ...ANIM,
+    ...FORGE,
     resourceType: "Reference",
     topics: ["VFX", "Animation"],
     difficulty: "intermediate",

@@ -43,18 +43,6 @@ export const ACTIVE_PROGRAMS: ActiveProgram[] = [
     video: "/brand/programs-game-development.mp4",
     alt: "A person editing a game scene across multiple monitors in a production studio",
   },
-  {
-    category: "Creative Technology",
-    title: "Game Design",
-    description:
-      "Turn ideas into structured game experiences by designing mechanics, levels, progression, challenges and rewards.",
-    outcome: "Mechanics. Levels. Play.",
-    href: "/programs/tg-gamedesign-studio",
-    image: null,
-    video: "/brand/programs-gamedesign-studio.mp4",
-    alt: "A montage of game design work: 3D terrain and level design tools alongside digital character art",
-    visual: { tone: "navy", icon: "layers" },
-  },
 ];
 
 /** `href`'s program as its plain catalogue name (e.g. "Digital Marketing"), usable as an access-form Interest value;

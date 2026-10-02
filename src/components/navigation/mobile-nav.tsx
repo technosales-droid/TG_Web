@@ -6,7 +6,6 @@ import {
   GAME_DEVELOPMENT_PROGRAMS,
   LEARNING_LINKS,
   SIGNATURE_PROGRAM,
-  SPECIALIZED_PROGRAMS,
   type NavLink,
 } from "@/components/navigation/nav-data";
 
@@ -95,17 +94,6 @@ export function MobileNav({
                 href={program.href}
                 onClick={onClose}
                 className="block rounded-md py-3 text-[15px] text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-              >
-                {program.label}
-              </Link>
-            </li>
-          ))}
-          {SPECIALIZED_PROGRAMS.map((program) => (
-            <li key={program.href}>
-              <Link
-                href={program.href}
-                onClick={onClose}
-                className="block rounded-md py-3 text-[15px] text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
               >
                 {program.label}
               </Link>

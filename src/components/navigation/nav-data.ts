@@ -30,45 +30,6 @@ export const GAME_DEVELOPMENT_PROGRAMS: ProgramLink[] = [
   },
 ];
 
-export const SPECIALIZED_PROGRAMS: ProgramLink[] = [
-  {
-    label: "Unity Studio",
-    href: "/programs/tg-unity-studio",
-    tagline: "Unity Game Development",
-    image: "/brand/course-tg-unity-studio.png",
-  },
-  {
-    label: "Unreal Studio",
-    href: "/programs/tg-unreal-studio",
-    tagline: "Unreal Engine Development",
-    image: "/brand/course-tg-unreal-studio.png",
-  },
-  {
-    label: "GameArt Studio",
-    href: "/programs/tg-gameart-studio",
-    tagline: "2D & 3D Game Art",
-    image: "/brand/course-tg-gameart-studio.png",
-  },
-  {
-    label: "GameDesign Studio",
-    href: "/programs/tg-gamedesign-studio",
-    tagline: "Game & Level Design",
-    image: "/brand/course-tg-gamedesign-studio.png",
-  },
-  {
-    label: "Game Animation & VFX",
-    href: "/programs/tg-game-animation-vfx",
-    tagline: "Animation, VFX & Cinematics",
-    image: "/brand/course-tg-game-animation-vfx.png",
-  },
-  {
-    label: "AI for Games",
-    href: "/programs/tg-ai-for-games",
-    tagline: "AI & Generative AI for Game Development",
-    image: "/brand/course-tg-ai-for-games.png",
-  },
-];
-
 export const LEARNING_LINKS: NavLink[] = [
   { label: "Projects", href: "/learning/projects" },
   { label: "Resources", href: "/learning/resources" },
