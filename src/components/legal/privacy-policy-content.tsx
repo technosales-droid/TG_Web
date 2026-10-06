@@ -5,7 +5,7 @@ import { LegalNote, Tbc, type LegalSectionData } from "./legal-layout";
 export const HEADING = "Privacy Policy";
 export const DESCRIPTION =
   "How Techno Gurukul collects, uses and protects your personal information, and the choices and rights you have.";
-export const LAST_UPDATED = "24 September 2026";
+export const LAST_UPDATED = "6 October 2026";
 
 const EMAIL = "admission@technogurukul.com";
 const A = "font-medium text-primary underline-offset-2 hover:underline";
@@ -145,6 +145,7 @@ export const PRIVACY_SECTIONS: LegalSectionData[] = [
         <ul className={UL}>
           <li><strong className="text-foreground">Hosting</strong>: <Tbc>HOSTING PROVIDER</Tbc>, which serves the website.</li>
           <li><strong className="text-foreground">Lead and record storage</strong>: Google LLC (Google Sheets, in our Google Workspace account), where access profiles, enquiries and privacy requests are kept. We may move to a customer-relationship system later and will update this policy if we do.</li>
+          <li><strong className="text-foreground">Analytics</strong>: Google LLC (Google Analytics), only if you allow analytics in your cookie preferences. Helps us understand how the site is used, in aggregate; not used for advertising.</li>
           <li><strong className="text-foreground">Authorities</strong>, where the law requires it.</li>
         </ul>
         <p>These providers may only use your information to provide their service to us. We do not share it for their own marketing.</p>
@@ -240,10 +241,11 @@ export const PRIVACY_SECTIONS: LegalSectionData[] = [
     title: "Cookies and similar technologies",
     body: (
       <p>
-        The website sets one cookie, an access session cookie, and only after you create an access profile. It also uses
-        your browser&rsquo;s storage for a few settings. The{" "}
-        <Link href="/cookie-policy" className={A}>Cookie Policy</Link> lists each one and how to manage them. We do not use
-        analytics or advertising cookies.
+        The website sets one cookie by default, an access session cookie, and only after you create an access profile.
+        It also uses your browser&rsquo;s storage for a few settings. If you allow analytics in your cookie
+        preferences, Google Analytics (GA4) sets its own cookies too. The{" "}
+        <Link href="/cookie-policy" className={A}>Cookie Policy</Link> lists each one and how to manage them. We do not
+        use advertising cookies.
       </p>
     ),
   },

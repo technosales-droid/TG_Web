@@ -31,8 +31,8 @@ export function CookieBanner() {
         <div className="min-w-0 lg:max-w-2xl">
           <h2 className="text-base font-semibold tracking-tight sm:text-lg">Your cookie choices</h2>
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground sm:mt-1.5 sm:text-[15px]">
-            We use necessary cookies and storage to keep the site and your access profile working. Optional content, such as the Google Map, loads only if you allow it.{" "}
-            <span className="max-sm:hidden">We do not use analytics or advertising cookies. </span>
+            We use necessary cookies and storage to keep the site and your access profile working. Optional content, such as the Google Map and analytics, loads only if you allow it.{" "}
+            <span className="max-sm:hidden">We do not use advertising cookies. </span>
             <Link href="/cookie-policy" className={cn("rounded font-medium text-primary underline underline-offset-2", FOCUS)}>Cookie Policy</Link>
             <span aria-hidden="true" className="mx-1.5">&middot;</span>
             <button type="button" onClick={openCookieSettings} className={cn("rounded font-medium text-primary underline underline-offset-2", FOCUS)}>
@@ -42,13 +42,13 @@ export function CookieBanner() {
         </div>
 
         <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-row sm:flex-wrap lg:shrink-0 lg:flex-nowrap">
-          <button type="button" onClick={() => setConsent({ embeds: false, choice: "rejected" })} className={cn(BTN, "border border-primary/30 hover:bg-muted", FOCUS)}>
+          <button type="button" onClick={() => setConsent({ embeds: false, analytics: false, choice: "rejected" })} className={cn(BTN, "border border-primary/30 hover:bg-muted", FOCUS)}>
             Reject all
           </button>
-          <button type="button" onClick={() => setConsent({ embeds: false, choice: "necessary" })} className={cn(BTN, "border border-primary/30 hover:bg-muted", FOCUS)}>
+          <button type="button" onClick={() => setConsent({ embeds: false, analytics: false, choice: "necessary" })} className={cn(BTN, "border border-primary/30 hover:bg-muted", FOCUS)}>
             Accept necessary
           </button>
-          <button type="button" onClick={() => setConsent({ embeds: true, choice: "all" })} className={cn(BTN, "col-span-2 bg-primary text-primary-foreground hover:bg-primary/90 sm:col-auto", FOCUS)}>
+          <button type="button" onClick={() => setConsent({ embeds: true, analytics: true, choice: "all" })} className={cn(BTN, "col-span-2 bg-primary text-primary-foreground hover:bg-primary/90 sm:col-auto", FOCUS)}>
             Accept all
           </button>
         </div>

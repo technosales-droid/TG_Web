@@ -8,7 +8,7 @@ import { setConsent, useConsent } from "@/lib/consent";
  * and the visitor sees a plain placeholder with a button to load it.
  */
 export function ConsentIframe({ src, title }: { src: string; title: string }) {
-  const { embeds } = useConsent();
+  const { embeds, analytics } = useConsent();
   if (embeds) {
     return (
       <iframe
@@ -28,7 +28,7 @@ export function ConsentIframe({ src, title }: { src: string; title: string }) {
       <p className="max-w-xs text-sm text-white/85">The map is a Google service and is not loaded until you allow it.</p>
       <button
         type="button"
-        onClick={() => setConsent({ embeds: true, choice: "custom" })}
+        onClick={() => setConsent({ embeds: true, analytics, choice: "custom" })}
         className="relative z-10 inline-flex h-10 items-center rounded-full bg-white px-5 text-sm font-semibold text-[#0b3d50] hover:bg-white/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
       >
         Load map

@@ -1,17 +1,19 @@
 import type { NextConfig } from "next";
 
 // Security headers. The CSP allows what the site actually uses: its own scripts, styles (Next inlines both), images,
-// video and self-hosted fonts, plus the single Google Maps embed in the footer and contact page, and YouTube (the
-// hero's video card: a thumbnail image, and the player only once a visitor clicks play). It is applied to
-// production builds only, because the dev server needs eval and websockets for hot reload.
+// video and self-hosted fonts, plus the single Google Maps embed in the footer and contact page, YouTube (the
+// hero's video card: a thumbnail image, and the player only once a visitor clicks play), and Google Analytics
+// (gtag.js and its collection endpoints) -- which itself only ever loads once a visitor allows analytics in their
+// cookie preferences (src/components/analytics/google-analytics.tsx). It is applied to production builds only,
+// because the dev server needs eval and websockets for hot reload.
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://i.ytimg.com",
   "media-src 'self'",
   "font-src 'self' data:",
-  "connect-src 'self'",
+  "connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com",
   "frame-src https://www.google.com https://www.youtube-nocookie.com",
   "object-src 'none'",
   "base-uri 'self'",

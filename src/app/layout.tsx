@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { AccessProvider } from "@/components/access/access-provider";
 import { CookieBanner } from "@/components/access/cookie-banner";
 import { CookieSettings } from "@/components/access/cookie-settings";
+import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { CoursePromotionPopup } from "@/components/promotions/course-promotion-popup";
 import { FloatingContact } from "@/components/common/floating-contact";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -88,6 +89,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <FloatingContact />
           <CookieSettings />
           <CookieBanner />
+          <GoogleAnalytics />
         </AccessProvider>
       </body>
     </html>

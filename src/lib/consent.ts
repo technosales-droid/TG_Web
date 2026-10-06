@@ -2,22 +2,25 @@
 
 import { useSyncExternalStore } from "react";
 
-// Cookie and embed preferences. The site sets no analytics or advertising cookies, so the only optional item is
-// third-party embedded content (the Google Map). It is not loaded until the visitor allows it, and this record of
-// their choice is kept in the browser's local storage (a "necessary" item: without it the choice could not be kept).
+// Cookie and embed preferences. The site sets no advertising cookies, so the only optional items are third-party
+// embedded content (the Google Map) and analytics (Google Analytics). Neither loads until the visitor allows it,
+// and this record of their choice is kept in the browser's local storage (a "necessary" item: without it the
+// choice could not be kept).
 
 export type ConsentChoice = "all" | "necessary" | "rejected" | "custom";
 
 export interface Consent {
   /** Allow third-party embedded content (Google Maps). */
   embeds: boolean;
+  /** Allow Google Analytics (GA4) to load. */
+  analytics: boolean;
   /** When the choice was made; null until the visitor chooses, which is when the cookie notice is shown. */
   at: string | null;
   choice: ConsentChoice | null;
 }
 
 const KEY = "tg-cookie-preferences";
-const DEFAULT: Consent = { embeds: false, at: null, choice: null };
+const DEFAULT: Consent = { embeds: false, analytics: false, at: null, choice: null };
 const listeners = new Set<() => void>();
 let cache: { raw: string | null; value: Consent } | null = null;
 
@@ -32,15 +35,25 @@ function read(): Consent {
     try {
       const v = JSON.parse(raw);
       if (typeof v.embeds === "boolean")
-        value = { embeds: v.embeds, at: typeof v.at === "string" ? v.at : null, choice: ["all", "necessary", "rejected", "custom"].includes(v.choice) ? v.choice : null };
+        value = {
+          embeds: v.embeds,
+          analytics: typeof v.analytics === "boolean" ? v.analytics : false,
+          at: typeof v.at === "string" ? v.at : null,
+          choice: ["all", "necessary", "rejected", "custom"].includes(v.choice) ? v.choice : null,
+        };
     } catch {}
   }
   cache = { raw, value };
   return value;
 }
 
-export function setConsent(next: { embeds: boolean; choice?: ConsentChoice }) {
-  const value: Consent = { embeds: next.embeds, at: new Date().toISOString(), choice: next.choice ?? (next.embeds ? "all" : "necessary") };
+export function setConsent(next: { embeds: boolean; analytics: boolean; choice?: ConsentChoice }) {
+  const value: Consent = {
+    embeds: next.embeds,
+    analytics: next.analytics,
+    at: new Date().toISOString(),
+    choice: next.choice ?? (next.embeds || next.analytics ? "all" : "necessary"),
+  };
   try {
     localStorage.setItem(KEY, JSON.stringify(value));
   } catch {}

@@ -3,5 +3,5 @@
 // text of the Privacy Policy or Terms changes materially.
 //
 // These are DRAFT versions: the documents still contain [PLACEHOLDERS] that need legal review before launch.
-export const PRIVACY_POLICY_VERSION = "draft-2026-09-24";
+export const PRIVACY_POLICY_VERSION = "draft-2026-10-06";
 export const TERMS_VERSION = "draft-2026-09-24";

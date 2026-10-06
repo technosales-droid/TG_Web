@@ -47,28 +47,30 @@ function Switch({ checked, onChange, label }: { checked: boolean; onChange: (v: 
 const Fixed = ({ text }: { text: string }) => <span className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">{text}</span>;
 
 /**
- * Cookie preferences. Only what the site really does is offered as a choice: third-party embedded content (the Google
- * Map). Necessary storage is shown as always on, and analytics and marketing are shown as not used, because the site
- * runs neither. There are no switches that do nothing.
+ * Cookie preferences. Only what the site really does is offered as a choice: third-party embedded content (the
+ * Google Map) and analytics (Google Analytics). Necessary storage is shown as always on, and marketing is shown as
+ * not used, because the site runs none. There are no switches that do nothing.
  */
 export function CookieSettings() {
   const consent = useConsent();
   const [open, setOpen] = useState(false);
   const [embeds, setEmbeds] = useState(false);
+  const [analytics, setAnalytics] = useState(false);
   const ref = useModal(open);
 
   useEffect(() => {
     const show = () => {
       setEmbeds(consent.embeds);
+      setAnalytics(consent.analytics);
       setOpen(true);
     };
     window.addEventListener(OPEN_SETTINGS_EVENT, show);
     return () => window.removeEventListener(OPEN_SETTINGS_EVENT, show);
-  }, [consent.embeds]);
+  }, [consent.embeds, consent.analytics]);
 
   if (!open) return null;
-  const save = (value: boolean, choice: ConsentChoice) => {
-    setConsent({ embeds: value, choice });
+  const save = (embedsValue: boolean, analyticsValue: boolean, choice: ConsentChoice) => {
+    setConsent({ embeds: embedsValue, analytics: analyticsValue, choice });
     setOpen(false);
   };
 
@@ -89,13 +91,13 @@ export function CookieSettings() {
       <ul className="mt-6">
         <Row title="Necessary" text="Keeps your access session and remembers these choices. The website cannot work as described without them." control={<Fixed text="Always on" />} />
         <Row title="Third-party embeds" text="Loads the Google Map in the footer. Google may set its own cookies when it loads." control={<Switch checked={embeds} onChange={setEmbeds} label="Allow third-party embeds" />} />
-        <Row title="Analytics" text="This site does not use analytics." control={<Fixed text="Not used" />} />
+        <Row title="Analytics" text="Google Analytics (GA4), to help us understand how the site is used, in aggregate. Not used for advertising. Google may set its own cookies when it loads." control={<Switch checked={analytics} onChange={setAnalytics} label="Allow analytics" />} />
         <Row title="Marketing" text="This site does not use advertising or marketing cookies." control={<Fixed text="Not used" />} />
       </ul>
       <div className="mt-4 flex flex-col gap-3 border-t border-primary/10 pt-6 sm:flex-row sm:justify-end">
-        <button type="button" onClick={() => save(false, "rejected")} className={cn("h-11 whitespace-nowrap rounded-full px-6 text-[15px] font-semibold border border-primary/30 hover:bg-muted", FOCUS)}>Reject optional</button>
-        <button type="button" onClick={() => save(embeds, "custom")} className={cn("h-11 whitespace-nowrap rounded-full px-6 text-[15px] font-semibold border border-primary/30 hover:bg-muted", FOCUS)}>Save choices</button>
-        <button type="button" onClick={() => save(true, "all")} className={cn("h-11 whitespace-nowrap rounded-full px-6 text-[15px] font-semibold bg-primary text-primary-foreground hover:bg-primary/90", FOCUS)}>Allow all</button>
+        <button type="button" onClick={() => save(false, false, "rejected")} className={cn("h-11 whitespace-nowrap rounded-full px-6 text-[15px] font-semibold border border-primary/30 hover:bg-muted", FOCUS)}>Reject optional</button>
+        <button type="button" onClick={() => save(embeds, analytics, "custom")} className={cn("h-11 whitespace-nowrap rounded-full px-6 text-[15px] font-semibold border border-primary/30 hover:bg-muted", FOCUS)}>Save choices</button>
+        <button type="button" onClick={() => save(true, true, "all")} className={cn("h-11 whitespace-nowrap rounded-full px-6 text-[15px] font-semibold bg-primary text-primary-foreground hover:bg-primary/90", FOCUS)}>Allow all</button>
       </div>
     </dialog>
   );
