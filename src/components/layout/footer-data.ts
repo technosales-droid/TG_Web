@@ -48,28 +48,28 @@ export const footerLegal: NavLink[] = [
 // Set `href` to the verified profile URL to activate an icon. Still unverified profiles stay `null`.
 export type SocialId = "instagram" | "facebook" | "linkedin" | "youtube" | "whatsapp" | "threads" | "pinterest";
 
-export const footerSocials: { id: SocialId; label: string; href: string | null }[] = [
-  { id: "instagram", label: "Instagram", href: "https://www.instagram.com/_technogurukul_/" },
-  { id: "facebook", label: "Facebook", href: "https://www.facebook.com/share/1EsCQmrfKt/" },
-  { id: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com/company/technogurukul" },
-  { id: "youtube", label: "YouTube", href: "https://www.youtube.com/@techno_gurukul" },
-  { id: "whatsapp", label: "WhatsApp", href: null },
-  { id: "threads", label: "Threads", href: "https://www.threads.com/@_technogurukul_" },
-  { id: "pinterest", label: "Pinterest", href: "https://pin.it/1EuzMsFLY" },
-];
-
-// The web copy's Contact page lists the email and phone below; its address ("Address, Address…") is
-// still a placeholder, so that stays `null` until a real value exists.
+// The web copy's Contact page lists the email, phone and address below; all three are real, verified values.
 //
 // `whatsapp`: the number the global floating contact buttons (src/components/common/floating-contact.tsx) use for
 // both the call and the WhatsApp button, in wa.me's plain international digits format with no "+", spaces or
 // leading zero. Kept separate from `phone` above: that field drives the footer's and Contact page's own "tel:"
-// link; both currently point at the same verified number.
+// link; both currently point at the same verified number. Declared before footerSocials so the social icon
+// below can reuse it as the single source of truth, rather than a second hardcoded copy of the digits.
 export const footerContact: { email: string | null; phone: string | null; whatsapp: string | null } = {
   email: "admission@technogurukul.com",
   phone: "+91 73871 52953",
   whatsapp: "917387152953",
 };
+
+export const footerSocials: { id: SocialId; label: string; href: string | null }[] = [
+  { id: "instagram", label: "Instagram", href: "https://www.instagram.com/_technogurukul_/" },
+  { id: "facebook", label: "Facebook", href: "https://www.facebook.com/share/1EsCQmrfKt/" },
+  { id: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com/company/technogurukul" },
+  { id: "youtube", label: "YouTube", href: "https://www.youtube.com/@techno_gurukul" },
+  { id: "whatsapp", label: "WhatsApp", href: footerContact.whatsapp ? `https://wa.me/${footerContact.whatsapp}` : null },
+  { id: "threads", label: "Threads", href: "https://www.threads.com/@_technogurukul_" },
+  { id: "pinterest", label: "Pinterest", href: "https://pin.it/1EuzMsFLY" },
+];
 
 // Office number and building were provided by the team; the rest of the address is the place
 // Google Maps resolves for the team's share link (XQXG+VJ2 Platinum Plaza, Tilak Wadi, Nashik).
