@@ -58,17 +58,17 @@ export const footerSocials: { id: SocialId; label: string; href: string | null }
   { id: "pinterest", label: "Pinterest", href: "https://pin.it/1EuzMsFLY" },
 ];
 
-// The web copy's Contact page lists the email below; its phone (0000000000) and address
-// ("Address, Address…") are placeholders, so those stay `null` until real values exist.
+// The web copy's Contact page lists the email and phone below; its address ("Address, Address…") is
+// still a placeholder, so that stays `null` until a real value exists.
 //
 // `whatsapp`: the number the global floating contact buttons (src/components/common/floating-contact.tsx) use for
 // both the call and the WhatsApp button, in wa.me's plain international digits format with no "+", spaces or
 // leading zero. Kept separate from `phone` above: that field drives the footer's and Contact page's own "tel:"
-// link and only takes a verified, publicly-listed business line, which hasn't been supplied yet.
+// link; both currently point at the same verified number.
 export const footerContact: { email: string | null; phone: string | null; whatsapp: string | null } = {
   email: "admission@technogurukul.com",
-  phone: null,
-  whatsapp: "919767637299",
+  phone: "+91 73871 52953",
+  whatsapp: "917387152953",
 };
 
 // Office number and building were provided by the team; the rest of the address is the place

@@ -8,7 +8,7 @@ import { CookieSettings } from "@/components/access/cookie-settings";
 import { CoursePromotionPopup } from "@/components/promotions/course-promotion-popup";
 import { FloatingContact } from "@/components/common/floating-contact";
 import { JsonLd } from "@/components/seo/json-ld";
-import { footerLocation, footerSocials } from "@/components/layout/footer-data";
+import { footerContact, footerLocation, footerSocials } from "@/components/layout/footer-data";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -39,8 +39,8 @@ export const metadata: Metadata = {
   twitter: { card: "summary", title: "Techno Gurukul", description },
 };
 
-// Organization and WebSite only: name, address of the site, logo and the verified social profiles. No ratings,
-// reviews, contact numbers or other claims.
+// Organization and WebSite only: name, address of the site, logo, verified phone and the verified social
+// profiles. No ratings, reviews or other unverified claims.
 const SCHEMA = [
   {
     "@context": "https://schema.org",
@@ -48,6 +48,7 @@ const SCHEMA = [
     name: SITE_NAME,
     url: SITE_URL,
     logo: `${SITE_URL}/brand/logo.png`,
+    ...(footerContact.phone ? { telephone: footerContact.phone } : {}),
     sameAs: footerSocials.flatMap((s) => (s.href ? [s.href] : [])),
     ...(footerLocation.address
       ? {
