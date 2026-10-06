@@ -32,6 +32,10 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
 
+  // Lets the dev server's HMR/fonts load when previewed through GoDaddy's Node hosting, which proxies the app
+  // through a subdomain of its own rather than localhost. Harmless in production: this only affects next dev.
+  allowedDevOrigins: ["*.preview.c40.airoapp.ai"],
+
   // Files behind the access gate live in /private-content (not /public) and are read by the file route.
   outputFileTracingIncludes: { "/api/content/**": ["./private-content/**"] },
 
