@@ -4,7 +4,7 @@ import Script from "next/script";
 import { useConsent } from "@/lib/consent";
 
 // Public by design: a GA4 measurement ID is meant to be embedded in client-side code, not a secret.
-const GA_MEASUREMENT_ID = "G-H1G7WG6CBP";
+const GA_MEASUREMENT_ID = "G-H1G7W6GCBP";
 
 /**
  * Loads Google Analytics (GA4) only once the visitor has allowed analytics in their cookie preferences (see
