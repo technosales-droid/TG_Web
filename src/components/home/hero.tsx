@@ -5,7 +5,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
 import { HeroVideoCard } from "./hero-video-card";
 
-const HERO_IMAGE_SRC = "/brand/Index hero section.png";
+const HERO_IMAGE_SRC = "/brand/index-hero.jpg";
 // The people and the laptop sit in the right two-thirds of the photo; the left third is a plain dark wall, which is
 // exactly where the text sits. This keeps that same framing however the image gets cropped at other hero shapes.
 const HERO_IMAGE_POSITION = "72% 38%";
