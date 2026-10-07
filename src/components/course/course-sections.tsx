@@ -93,19 +93,6 @@ export function CourseMain({ course: c }: { course: CourseDetail }) {
         )}
       </Section>
 
-      {/* Gallery: extra photos of the work itself, only set for programs that have them. */}
-      {c.galleryImages && c.galleryImages.length > 0 && (
-        <Section id="gallery" title="Inside the Program">
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {c.galleryImages.map((g) => (
-              <div key={g.src} className="relative aspect-[4/3] overflow-hidden rounded-xl bg-muted">
-                <Image src={g.src} alt={g.alt} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
-              </div>
-            ))}
-          </div>
-        </Section>
-      )}
-
       {/* Course content */}
       <Section id="content" title="Course content">
         {c.curriculum.length ? <CurriculumAccordion modules={c.curriculum} unitLabel={c.curriculumUnitLabel} /> : <Empty>The course content will be added here.</Empty>}

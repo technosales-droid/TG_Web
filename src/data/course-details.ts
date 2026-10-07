@@ -92,8 +92,6 @@ export interface CourseDetail {
   portfolioNote?: string;
   /** The site's own learning-journey stages (see AboutStages), restated with this program's own detail under each. */
   practicalLearningStages?: { title: string; text: string }[];
-  /** Extra photos of the work itself (beyond the single heroImage), shown as a small gallery. Unset shows nothing. */
-  galleryImages?: { src: string; alt: string }[];
   /** Slugs. Unset uses other courses in the same category. */
   relatedCourses?: string[];
   reviews: CourseReview[];
@@ -276,13 +274,6 @@ const OVERRIDES: Record<string, Override> = {
         sequence: "Research → Strategy → Website/Landing Page → Social Media → Content → SEO → Meta Ads → Google Ads → WhatsApp/CRM → Analytics → Report",
       },
     ],
-    galleryImages: [
-      { src: "/brand/digital-marketing-1.jpg", alt: "A student reviewing a marketing analytics dashboard on a laptop" },
-      { src: "/brand/digital-marketing-2.jpg", alt: "A student reviewing campaign content across a phone and laptop" },
-      { src: "/brand/digital-marketing-3.jpg", alt: "A student editing campaign photos and planning content" },
-      { src: "/brand/digital-marketing-4.jpg", alt: "A student analysing marketing performance charts across two screens" },
-      { src: "/brand/digital-marketing-5.jpg", alt: "A student reviewing marketing reports and dashboards across a laptop and monitor" },
-    ],
   },
   "tg-gameforge": {
     programTagline: "Build Games. Learn the Technology. Create Your Portfolio.",
@@ -376,11 +367,6 @@ const OVERRIDES: Record<string, Override> = {
     ],
     portfolioNote:
       "By the end of the program, a student can put together a portfolio spanning game concepts and artwork, 2D and 3D assets and animation, engine-built playable levels, programmed gameplay systems and a larger, team-built project: real, presentable evidence of what they can build, not just what they have studied.",
-    galleryImages: [
-      { src: "/brand/gameforge-coding.jpg", alt: "A student programming a game level across two monitors" },
-      { src: "/brand/gameforge-design.jpg", alt: "A student laying out level design documents and concept art" },
-      { src: "/brand/gameforge-sculpting.jpg", alt: "A student sculpting a 3D character model across two monitors and a tablet" },
-    ],
   },
   "tg-unity-studio": {
     programPhilosophy:
