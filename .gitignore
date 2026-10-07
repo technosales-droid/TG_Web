@@ -42,3 +42,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# unused asset kept locally only (not referenced by any page)
+public/brand/programs-gamedesign-studio.mp4
