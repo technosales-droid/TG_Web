@@ -35,9 +35,9 @@ export const metadata: Metadata = {
     siteName: "Techno Gurukul",
     type: "website",
     locale: "en_IN",
-    images: [{ url: "/brand/logo.png", alt: "Techno Gurukul" }],
+    images: [{ url: "/brand/link-preview.jpg", width: 1200, height: 630, alt: "Techno Gurukul" }],
   },
-  twitter: { card: "summary", title: "Techno Gurukul", description },
+  twitter: { card: "summary_large_image", title: "Techno Gurukul", description, images: ["/brand/link-preview.jpg"] },
 };
 
 export const viewport: Viewport = {

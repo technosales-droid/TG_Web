@@ -13,8 +13,8 @@ const description =
 export const metadata: Metadata = {
   title,
   description,
-  openGraph: { title, description, type: "website", images: [{ url: "/brand/logo.png", alt: "Techno Gurukul" }] },
-  twitter: { card: "summary", title, description },
+  openGraph: { title, description, type: "website", images: [{ url: "/brand/link-preview.jpg", width: 1200, height: 630, alt: "Techno Gurukul" }] },
+  twitter: { card: "summary_large_image", title, description, images: ["/brand/link-preview.jpg"] },
 };
 
 export default function Page() {
