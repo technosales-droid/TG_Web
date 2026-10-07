@@ -7,9 +7,9 @@ import { FaYoutube } from "react-icons/fa6";
 import { useModal } from "@/components/learning/projects/use-modal";
 import { cn } from "cn";
 
-// The part after "youtu.be/" (or "v=") in the supplied video's URL: https://youtu.be/IDKESUr_2Yc
+// The part after "youtu.be/" (or "v=") in the supplied video's URL: https://youtu.be/MWLXjhJwgZ0
 // To change or remove the hero's video, edit (or null out) this one line; nothing else needs to change.
-export const HERO_YOUTUBE_VIDEO_ID: string | null = "IDKESUr_2Yc";
+export const HERO_YOUTUBE_VIDEO_ID: string | null = "MWLXjhJwgZ0";
 
 /**
  * The hero's video card: a YouTube thumbnail with a play button, so the card itself never loads the heavy YouTube
