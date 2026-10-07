@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState, type FormEvent } from "react";
+import Link from "next/link";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { ErrorText, FIELD, FOCUS, Honeypot, INVALID, Label } from "@/components/access/form-ui";
 import { PRIVACY_REQUEST_TYPES, type PrivacyRequestType } from "@/lib/privacy-requests";
@@ -52,6 +53,22 @@ export function PrivacyRequestForm() {
           It has been passed to Techno Gurukul&rsquo;s privacy contact. It is not handled automatically. We may ask you to
           confirm who you are before we act on it, and we will reply to the email address you gave.
         </p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={() => {
+              setV({ name: "", email: "", message: "", website: "" });
+              setErrors({});
+              setSent(false);
+            }}
+            className={cn("flex h-11 items-center justify-center rounded-full border border-primary/25 px-5 text-[15px] font-semibold text-foreground hover:border-primary/45", FOCUS)}
+          >
+            Send another request
+          </button>
+          <Link href="/" className={cn("flex h-11 items-center justify-center rounded-full px-5 text-[15px] font-semibold text-primary hover:underline", FOCUS)}>
+            Back to home
+          </Link>
+        </div>
       </div>
     );
   }
