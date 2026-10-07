@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Montserrat } from "next/font/google";
 import { SiteHeader } from "@/components/navigation/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
@@ -38,6 +38,10 @@ export const metadata: Metadata = {
     images: [{ url: "/brand/logo.png", alt: "Techno Gurukul" }],
   },
   twitter: { card: "summary", title: "Techno Gurukul", description },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0c709a",
 };
 
 // Organization and WebSite only: name, address of the site, logo, verified phone and the verified social
