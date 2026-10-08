@@ -7,8 +7,11 @@ import { ArticleHero } from "@/components/blogs/article/article-hero";
 import { ArticleToc } from "@/components/blogs/article/article-toc";
 import { JsonLd } from "@/components/seo/json-ld";
 import { getBlogPost, getBlogPosts, toBlogCard, type BlogPost } from "@/data/blogs";
-import { headingIds, RELATED_CATEGORIES, TAIL_TOC } from "@/lib/blog-article";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { headingIds, PROGRAM_FOR, RELATED_CATEGORIES, TAIL_TOC } from "@/lib/blog-article";
+import { SITE_URL } from "@/lib/site";
+import { buildMetadata } from "@/lib/seo";
+import { ORG_ID } from "@/data/business-facts";
+import { breadcrumbSchema } from "@/lib/schema";
 
 export const dynamicParams = false;
 
@@ -20,23 +23,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const post = getBlogPost(slug);
   if (!post) return {};
-  const url = `/blogs/${post.slug}`;
   return {
-    title: `${post.title} | Techno Gurukul`,
-    description: post.excerpt,
-    alternates: { canonical: url },
-    authors: [{ name: post.author }],
-    openGraph: {
-      title: post.title,
+    ...buildMetadata({
+      title: `${post.title} | Techno Gurukul`,
       description: post.excerpt,
-      url,
+      path: `/blogs/${post.slug}`,
       type: "article",
-      publishedTime: post.publishedAt,
-      authors: [post.author],
-      section: post.category,
-      ...(post.heroImage ? { images: [{ url: post.heroImage, alt: post.heroImageAlt }] } : {}),
-    },
-    twitter: { card: post.heroImage ? "summary_large_image" : "summary", title: post.title, description: post.excerpt },
+      article: { publishedTime: post.publishedAt, authors: [post.author], section: post.category },
+      ...(post.heroImage ? { image: { url: post.heroImage, alt: post.heroImageAlt } } : {}),
+    }),
+    authors: [{ name: post.author }],
   };
 }
 
@@ -62,6 +58,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const url = `${SITE_URL}/blogs/${post.slug}`;
   const toc = [...headingIds(post.blocks).items, ...(post.takeaways.length ? TAIL_TOC : TAIL_TOC.slice(1))];
   const more = getBlogPosts().filter((p) => p.slug !== post.slug).slice(0, 3).map(toBlogCard);
+  const program = PROGRAM_FOR[post.category];
 
   return (
     <main>
@@ -78,19 +75,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           articleSection: post.category,
           ...(post.heroImage ? { image: `${SITE_URL}${post.heroImage}` } : {}),
           author: { "@type": "Organization", name: post.author },
-          publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL, logo: { "@type": "ImageObject", url: `${SITE_URL}/brand/logo.png` } },
+          publisher: { "@id": ORG_ID },
+          ...(program ? { about: { "@id": `${SITE_URL}${program.href}/#course` } } : {}),
         }}
       />
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Articles", item: `${SITE_URL}/blogs` },
-            { "@type": "ListItem", position: 2, name: post.title, item: url },
-          ],
-        }}
-      />
+      <JsonLd data={breadcrumbSchema([{ name: "Articles", path: "/blogs" }, { name: post.title, path: `/blogs/${post.slug}` }])} />
 
       <ArticleHero post={post} />
 

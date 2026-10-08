@@ -1,5 +1,6 @@
 import type { Block } from "@/data/blog-content/types";
 import type { BlogCategory } from "@/data/blogs";
+import { DM_PROGRAM_HREF, GD_PROGRAM_HREF } from "@/lib/program-routes";
 
 export interface TocItem {
   id: string;
@@ -36,25 +37,45 @@ export const TAIL_TOC: TocItem[] = [
   { id: "discussion", text: "Discussion" },
 ];
 
-/** Where an article naturally leads. Categories without a matching program get no program prompt. */
-export const PROGRAM_FOR: Partial<Record<BlogCategory, { href: string; cta: string; question: string; topic: string }>> = {
+/** Where an article naturally leads. Every category maps to one of the two live programs -- Education, Careers
+ * and Technology cover topics relevant to both, so they point at whichever program a given post leans toward
+ * (set per-post isn't practical here; both programs are a safe, honest default since neither claim is false). */
+export const PROGRAM_FOR: Record<BlogCategory, { href: string; cta: string; question: string; topic: string }> = {
   "Game Development": {
-    href: "/programs?category=game-development#programs-listing",
+    href: GD_PROGRAM_HREF,
     cta: "Explore Game Development",
     question: "Want to learn game development by building real projects?",
     topic: "game development",
   },
   "Game Design": {
-    href: "/programs?category=game-design#programs-listing",
-    cta: "Explore Game Design",
+    href: GD_PROGRAM_HREF,
+    cta: "Explore Game Development",
     question: "Want to design games people enjoy playing?",
     topic: "game design",
   },
   "Digital Marketing": {
-    href: "/programs/tg-digital-marketing",
+    href: DM_PROGRAM_HREF,
     cta: "Explore Digital Marketing",
     question: "Want to build practical digital marketing skills?",
     topic: "digital marketing",
+  },
+  Careers: {
+    href: DM_PROGRAM_HREF,
+    cta: "Explore Our Programs",
+    question: "Want practical, project-based training that builds a real portfolio?",
+    topic: "digital marketing or game development",
+  },
+  Education: {
+    href: DM_PROGRAM_HREF,
+    cta: "Explore Our Programs",
+    question: "Want to learn by building real, hands-on projects?",
+    topic: "digital marketing or game development",
+  },
+  Technology: {
+    href: GD_PROGRAM_HREF,
+    cta: "Explore Our Programs",
+    question: "Want to turn this into a practical, job-ready skill?",
+    topic: "digital marketing or game development",
   },
 };
 

@@ -1,5 +1,6 @@
 // Digital marketing articles.
 import { example, flow, h2, IMG, image, insight, lead, ol, p, table, tip, ul, type ArticleContent } from "./types";
+import { DM_PROGRAM_HREF } from "@/lib/program-routes";
 
 export const MARKETING_ARTICLES: Record<string, ArticleContent> = {
   "state-of-digital-marketing-in-india-2026": {
@@ -39,6 +40,7 @@ export const MARKETING_ARTICLES: Record<string, ArticleContent> = {
       ),
       h2("What to take away"),
       p("Digital marketing in 2026 rewards people who can think across channels, understand audiences and measure honestly. Tools will keep changing. Those skills will not."),
+      p(`If you want to build those skills hands-on rather than read about them, [our Digital Marketing course in Nashik](${DM_PROGRAM_HREF}) covers exactly this: strategy, content, SEO, paid channels and measurement through real campaigns, not just theory.`),
     ],
     takeaways: [
       "Audiences move across many channels in a single day, so strategy should follow the customer, not one platform.",
@@ -84,6 +86,7 @@ export const MARKETING_ARTICLES: Record<string, ArticleContent> = {
       p("Search behaviour is shifting quickly, and confident predictions are often wrong. Track what actually changes for your site: which pages get visits, what people search to find you, and which questions bring in enquiries. Adjust from that evidence."),
       h2("Where this leaves SEO skills"),
       p("The people who do well are those who understand users, write clearly and pay attention to the technical basics. If that sounds like ordinary good marketing, that is the point. For the foundations, read [why SEO is more than keywords](/blogs/seo-is-more-than-keywords)."),
+      p(`SEO, content and AI-assisted search are all covered as part of [Techno Gurukul's Digital Marketing Professional Program](${DM_PROGRAM_HREF}), taught offline in Nashik through real client-style projects rather than slides.`),
     ],
     takeaways: [
       "Search is shifting from lists of links towards conversational, summarised answers.",
@@ -131,6 +134,7 @@ export const MARKETING_ARTICLES: Record<string, ArticleContent> = {
         "Review results every month and adjust.",
       ),
       p("If you are interested in how one channel differs from the full picture, see [why social media marketing is not digital marketing](/blogs/social-media-marketing-is-not-digital-marketing)."),
+      p(`Building a channel strategy like this, not just posting on Instagram, is what [Techno Gurukul's practical marketing course](${DM_PROGRAM_HREF}) in Nashik is built around.`),
     ],
     takeaways: [
       "Relying on one platform exposes a brand to algorithm and policy changes.",
@@ -181,6 +185,7 @@ export const MARKETING_ARTICLES: Record<string, ArticleContent> = {
       p("A great ad cannot rescue a slow or confusing landing page. Many performance problems are actually website problems: unclear offers, long forms, poor mobile layouts or missing trust information such as contact details and policies."),
       h2("A note on honesty"),
       p("Claims in ads should be true and verifiable. Inflated promises may improve clicks for a week and damage trust for far longer. The related question of which numbers deserve attention is covered in [from likes to leads](/blogs/from-likes-to-leads-marketing-metrics)."),
+      p(`Running and reading real ad campaigns like this is a core part of [our digital marketing course in Nashik](${DM_PROGRAM_HREF}), where students work on live Meta Ads and Google Ads projects, not simulations.`),
     ],
     takeaways: [
       "Performance marketing ties spend to business outcomes, not vanity metrics.",
@@ -234,6 +239,7 @@ export const MARKETING_ARTICLES: Record<string, ArticleContent> = {
         "Keep the message consistent across channels.",
       ),
       p("The best marketers are not loyal to a medium. They are loyal to the audience. If you want a fuller picture of how the digital side works, see [how digital marketing helps Indian businesses find customers](/blogs/how-digital-marketing-helps-indian-businesses-find-customers)."),
+      p(`If the digital side of that mix is where you want to build real skills, [Techno Gurukul's Digital Marketing course in Nashik](${DM_PROGRAM_HREF}) teaches it through live campaigns, not just theory.`),
     ],
     takeaways: [
       "Digital channels make response easier to measure and campaigns easier to adjust.",
@@ -283,6 +289,7 @@ export const MARKETING_ARTICLES: Record<string, ArticleContent> = {
       tip("Walk through your own customer journey as a stranger. Search for your business, open your website on a phone, try to contact yourself. Note every place you would give up."),
       h2("The combination that works"),
       p("That is why digital marketing has increasingly become a combination of **creative communication, technology and data**. Creativity earns attention, technology delivers it, and data shows whether it worked. Learners who develop all three are well placed. If you want to go beyond the basics, see [skills beyond social media](/blogs/building-a-digital-marketing-career-beyond-social-media)."),
+      p(`[Techno Gurukul's Digital Marketing Professional Program](${DM_PROGRAM_HREF}) in Nashik is built around exactly that combination: content, websites, paid campaigns and analytics, taught together rather than as separate subjects.`),
     ],
     takeaways: [
       "Customers often move across search, social, video, websites and messaging before buying.",
@@ -338,6 +345,7 @@ export const MARKETING_ARTICLES: Record<string, ArticleContent> = {
         "Check that it loads quickly on a phone and has a descriptive title.",
       ),
       p("Good SEO therefore combines **content, technical implementation, information architecture and user intent**. For where search is heading, see [AI search and SEO](/blogs/ai-search-is-changing-seo)."),
+      p(`SEO fundamentals like these are taught hands-on, on real websites, in [our Digital Marketing course in Nashik](${DM_PROGRAM_HREF}).`),
     ],
     takeaways: [
       "Keywords are one part of search visibility, not the whole of it.",
@@ -391,6 +399,7 @@ export const MARKETING_ARTICLES: Record<string, ArticleContent> = {
       tip("Write down the one outcome each campaign is meant to achieve before it launches. Then choose the two or three metrics that most directly show progress towards it."),
       h2("Reporting honestly"),
       p("Reports should show the whole picture, including numbers that look unimpressive. It builds credibility with clients and colleagues, and it is the only way to learn. For a deeper look at connecting spend to outcomes, read about [performance marketing](/blogs/performance-marketing-in-india)."),
+      p(`Reading campaign data honestly, not just running campaigns, is a skill [our digital marketing course in Nashik](${DM_PROGRAM_HREF}) deliberately builds through real client-style reporting exercises.`),
     ],
     takeaways: [
       "Impressions, reach, engagement, leads and customers each measure something different.",
@@ -442,6 +451,7 @@ export const MARKETING_ARTICLES: Record<string, ArticleContent> = {
       p("Reviewing existing content is often more valuable than creating more. An old article with outdated information hurts trust. Refreshing the best-performing pieces is usually quicker and more effective than writing new ones."),
       h2("The real goal"),
       p("The goal is not simply creating more content. It is creating content that deserves to be consumed and shared. For how video changes what that looks like, see [why short-form video changed content strategy](/blogs/why-short-form-video-changed-content-strategy)."),
+      p(`Planning content that earns attention, rather than just filling a calendar, is covered in [Techno Gurukul's hands-on digital marketing program](${DM_PROGRAM_HREF}) in Nashik.`),
     ],
     takeaways: [
       "More content does not automatically mean more visibility.",
@@ -498,6 +508,7 @@ export const MARKETING_ARTICLES: Record<string, ArticleContent> = {
         "Identify one channel the brand could use better.",
       ),
       p("If you are thinking about where to go next, read [how a marketing career can extend beyond social media](/blogs/building-a-digital-marketing-career-beyond-social-media)."),
+      p(`That wider toolkit, search, websites, email, ads and analytics alongside social, is exactly what [a practical digital marketing course in Nashik](${DM_PROGRAM_HREF}) like ours is built to teach.`),
     ],
     takeaways: [
       "Social media is one part of digital marketing, alongside search, websites, email, ads, content and analytics.",
@@ -552,6 +563,7 @@ export const MARKETING_ARTICLES: Record<string, ArticleContent> = {
       p("Views are a starting point. Watch time, saves, shares, profile visits and the actions people take afterwards say more. If none of them connects to a business outcome, adjust the idea or how the video leads people onwards. See [from likes to leads](/blogs/from-likes-to-leads-marketing-metrics) for how to think about that."),
       h2("A caution"),
       p("Chasing every trend can leave a brand sounding like everyone else. Use trends when they fit, and otherwise stay consistent with what your audience came for."),
+      p(`Reels, shorts and other short-form editing are part of the creative toolkit covered in [our Digital Marketing course in Nashik](${DM_PROGRAM_HREF}), alongside the strategy behind why a video works.`),
     ],
     takeaways: [
       "Short-form video compresses the time a brand has to earn attention.",
@@ -601,7 +613,7 @@ export const MARKETING_ARTICLES: Record<string, ArticleContent> = {
       tip("Present your portfolio pieces as short case studies: the problem, your approach, the result and what you learned. Process is as convincing as outcome."),
       h2("Stay curious and stay honest"),
       p("Tools and platforms will keep changing. The habits that last are testing ideas, reading results honestly and staying aware of how real people behave. If you are building a portfolio, [this guide to technology portfolios](/blogs/build-a-technology-portfolio-that-gets-noticed) is a useful companion."),
-      p("If you would like structured, hands-on practice across these areas, see our [Digital Marketing program](/programs/tg-digital-marketing)."),
+      p(`If you would like structured, hands-on practice across these areas, see our [Digital Marketing program](${DM_PROGRAM_HREF}).`),
     ],
     takeaways: [
       "Digital marketing spans content, search, paid media, analytics, email and strategy.",

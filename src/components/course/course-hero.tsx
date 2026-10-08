@@ -44,22 +44,24 @@ export function CourseHeader({ course: c }: { course: CourseDetail }) {
       )}
       <p className="mt-3 max-w-3xl text-lg leading-relaxed text-white/85">{c.subtitle ? `${c.subtitle}. ` : ""}{c.description}</p>
 
-      <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
-        {c.rating ? (
-          <span className="flex items-center gap-1.5 font-semibold">
-            <Star className="size-4 fill-amber-400 text-amber-400" aria-hidden="true" />
-            {c.rating.value.toFixed(1)}
-            <span className="font-normal text-white/70">({c.rating.count} ratings)</span>
-          </span>
-        ) : (
-          <span className="text-white/70">Ratings will appear once learner feedback is collected</span>
-        )}
-        {c.students !== undefined && <span className="text-white/85">{c.students.toLocaleString()} learners</span>}
-      </div>
+      {(c.rating || c.students !== undefined) && (
+        <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+          {c.rating && (
+            <span className="flex items-center gap-1.5 font-semibold">
+              <Star className="size-4 fill-amber-400 text-amber-400" aria-hidden="true" />
+              {c.rating.value.toFixed(1)}
+              <span className="font-normal text-white/70">({c.rating.count} ratings)</span>
+            </span>
+          )}
+          {c.students !== undefined && <span className="text-white/85">{c.students.toLocaleString()} learners</span>}
+        </div>
+      )}
 
-      <p className="mt-3 text-sm text-white/85">
-        Instructor: <span className="font-semibold text-[#8fd3f0]">{instructor?.name ?? "To be announced"}</span>
-      </p>
+      {instructor && (
+        <p className="mt-3 text-sm text-white/85">
+          Instructor: <span className="font-semibold text-[#8fd3f0]">{instructor.name}</span>
+        </p>
+      )}
 
       {meta.length > 0 && (
         <ul className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/85">

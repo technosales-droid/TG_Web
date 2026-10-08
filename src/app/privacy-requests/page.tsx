@@ -1,16 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { buildMetadata } from "@/lib/seo";
+import { breadcrumbSchema } from "@/lib/schema";
+import { JsonLd } from "@/components/seo/json-ld";
 import { PrivacyRequestForm } from "@/components/legal/privacy-request-form";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: "Privacy Requests | Techno Gurukul",
-  description: "Ask to access, correct or delete your personal information, withdraw consent, or ask a privacy question.",
-  alternates: { canonical: "/privacy-requests" },
-};
+  description:
+    "Ask Techno Gurukul to access, correct or delete your personal information, withdraw a consent you gave, or ask a privacy question. We reply within 30 days.",
+  path: "/privacy-requests",
+});
 
 export default function Page() {
   return (
     <main className="px-4 pt-10 pb-20 sm:px-6 sm:pt-14 sm:pb-24">
+      <JsonLd data={breadcrumbSchema([{ name: "Privacy Requests", path: "/privacy-requests" }])} />
       <div className="mx-auto max-w-3xl">
         <p className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-accent px-3 py-1 text-sm font-medium text-primary">
           <span className="size-1.5 rounded-full bg-brand-sky" aria-hidden="true" />

@@ -76,8 +76,6 @@ export function CurriculumAccordion({ modules, unitLabel = "Module" }: { modules
                       </li>
                     ))}
                   </ul>
-                ) : !m.summary ? (
-                  <p className="py-1 text-base leading-relaxed text-muted-foreground">Topics for this {unitLabel.toLowerCase()} will be added here.</p>
                 ) : null}
                 {m.summary && (
                   <p className="mt-3 border-t border-primary/10 pt-3 text-base leading-relaxed text-foreground">

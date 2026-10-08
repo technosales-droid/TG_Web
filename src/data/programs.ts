@@ -50,6 +50,9 @@ function courseOffering(slug: string, image: OfferingImage): Offering {
     description: course.description,
     duration: course.duration,
     mode: course.format ?? undefined,
+    // Every current course is taught at the one Nashik institute; hardcoded here rather than added as a Course
+    // field, since there is nothing (yet) for it to vary by.
+    location: "Nashik, Maharashtra",
     tags: course.tags,
     tools: course.tools,
     href: course.href,

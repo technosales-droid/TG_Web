@@ -94,6 +94,15 @@ function useRevealOnView<T extends HTMLElement>() {
  */
 export function ComingSoonPrograms() {
   const { ref, visible } = useRevealOnView<HTMLElement>();
+  // The marquee's seamless loop needs the row doubled, but that second copy is pure CSS animation plumbing, not
+  // content -- doubling it in the server-rendered HTML just doubles "Coming Soon" marketing text for every crawler
+  // that doesn't execute JS (most AI crawlers don't). So the real content renders once, server-side; the clone is
+  // added client-side after mount and stays aria-hidden, same as before.
+  const [showClone, setShowClone] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setShowClone(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   return (
     <section ref={ref} aria-labelledby="coming-soon-heading" className="py-14 sm:py-16">
@@ -132,9 +141,8 @@ export function ComingSoonPrograms() {
           {COMING_SOON_PROGRAMS.map((program) => (
             <ProgramCard key={`a-${program.title}`} program={program} />
           ))}
-          {COMING_SOON_PROGRAMS.map((program) => (
-            <ProgramCard key={`b-${program.title}`} program={program} duplicate />
-          ))}
+          {showClone &&
+            COMING_SOON_PROGRAMS.map((program) => <ProgramCard key={`b-${program.title}`} program={program} duplicate />)}
         </div>
       </div>
     </section>

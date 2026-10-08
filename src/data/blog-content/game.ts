@@ -1,5 +1,6 @@
 // Game development and game design articles.
 import { code, example, flow, h2, h3, IMG, image, insight, lead, ol, p, quote, table, tip, ul, type ArticleContent } from "./types";
+import { GD_PROGRAM_HREF } from "@/lib/program-routes";
 
 export const GAME_ARTICLES: Record<string, ArticleContent> = {
   "how-ai-is-changing-game-development": {
@@ -48,6 +49,7 @@ export const GAME_ARTICLES: Record<string, ArticleContent> = {
         "Who owns the result, and does it fit the style of the rest of the project?",
       ),
       p("Asking them early is part of working like a professional, whatever tools are in the pipeline."),
+      p(`Both the AI inside a game and the AI tools around development are covered in [our Game Development course in Nashik](${GD_PROGRAM_HREF}), alongside the fundamentals they build on.`),
     ],
     takeaways: [
       "“AI in games” covers both the characters players meet and the tools developers use to build.",
@@ -92,6 +94,7 @@ export const GAME_ARTICLES: Record<string, ArticleContent> = {
       insight("Studios rarely move through these stages in a straight line. They revisit earlier ones whenever new information arrives. The order describes priorities, not a one-way street."),
       h2("Using the pipeline as a learner"),
       p("You can practise the same stages on a small scale. Choose a tiny idea, prototype it in a weekend, decide whether it is worth continuing, and only then invest in art and polish. Finishing several small projects teaches the pipeline better than abandoning one large one. For a closer look at the people involved, see [why game development is a team sport](/blogs/why-game-development-is-a-team-sport)."),
+      p(`[Techno Gurukul's Game Development Professional Program](${GD_PROGRAM_HREF}) in Nashik walks students through exactly this pipeline, from concept to a finished, playable capstone project.`),
     ],
     takeaways: [
       "A game moves through concept, pre-production, production, testing and release, and revisits earlier stages as it learns.",
@@ -141,6 +144,7 @@ export const GAME_ARTICLES: Record<string, ArticleContent> = {
       p("The engine is a tool. The skills that make you employable and effective sit underneath it: game mechanics, level design, player experience, programming logic, testing and iteration. Someone who understands those can move from one engine to another far faster than someone who only memorised menus."),
       quote("The engine is the tool. The ability to design and build experiences is the skill."),
       p("Choose one, commit for a few months, and build things. You can always learn the other later, and the second one is much easier than the first."),
+      p(`[Our Game Development course in Nashik](${GD_PROGRAM_HREF}) covers both Unity and Unreal Engine, so you build the underlying skills rather than betting everything on one tool.`),
     ],
     takeaways: [
       "There is no universally better engine; the right one depends on what you want to build.",
@@ -179,6 +183,7 @@ export const GAME_ARTICLES: Record<string, ArticleContent> = {
       h2("Starting out"),
       p("You do not need permission to begin designing. Take a game you know and change one rule, then play it with friends and see what happens. Make a small board or card game. Build a tiny level in any engine. Write down what you tried and what you learned."),
       tip("Keep a playtest log: what you changed, what you expected, what actually happened. It is the beginning of a portfolio and a habit that will serve you throughout your career."),
+      p(`Design, prototyping and playtesting like this are part of [Techno Gurukul's Game Development course](${GD_PROGRAM_HREF}) in Nashik, not a separate specialisation you have to find elsewhere.`),
     ],
     takeaways: [
       "Game design defines how a game plays: mechanics, rules, goals and feedback.",
@@ -229,6 +234,7 @@ export const GAME_ARTICLES: Record<string, ArticleContent> = {
         "Show it to people, listen to feedback and improve it.",
       ),
       p("None of this requires waiting for a job or a course to begin. It requires a computer, a project idea and regular practice."),
+      p(`If you'd rather build these skills with structure and guidance, [our Game Development course in Nashik](${GD_PROGRAM_HREF}) covers programming, art, design and production together, ending in a capstone project.`),
     ],
     takeaways: [
       "Game development includes programming, design, art, animation, level design, audio and production.",
@@ -259,6 +265,7 @@ export const GAME_ARTICLES: Record<string, ArticleContent> = {
       h2("What to take from this if you are learning"),
       p("For students interested in game development, understanding this pipeline is often more important than immediately learning every tool. Tools change, but the process stays remarkably consistent. Practise it on small projects: design something tiny, prototype it, test it with a friend, improve it, and repeat."),
       p("Curious about the longer version? [The full pipeline explained](/blogs/idea-to-playable-game-pipeline) covers each stage in more detail."),
+      p(`You can practise that exact design-build-test-improve cycle, with real teammates, in [Techno Gurukul's Game Development course in Nashik](${GD_PROGRAM_HREF}).`),
     ],
     takeaways: [
       "Game creation is multidisciplinary; code is only one part.",
@@ -299,6 +306,7 @@ export const GAME_ARTICLES: Record<string, ArticleContent> = {
       h2("Why this matters when you are learning"),
       p("Students who want to enter game development should learn more than their individual discipline. They should understand how their work fits into the larger production pipeline. Try joining a game jam, a class project or an online team, even a small one, to feel what collaboration is like before you need it professionally."),
       p("It also helps to know the lifecycle your work is part of. [How a game actually gets made](/blogs/how-a-game-actually-gets-made) is a good place to see the whole picture."),
+      p(`Team projects like this, not just solo tutorials, are a core part of [Techno Gurukul's Game Development program](${GD_PROGRAM_HREF}) in Nashik.`),
     ],
     takeaways: [
       "Games are built by specialists across programming, art, design, animation, audio, writing and production.",
@@ -344,6 +352,7 @@ export const GAME_ARTICLES: Record<string, ArticleContent> = {
       p("Loops can be built to respect players or to exploit them. Good designers ask whether the loop leaves people feeling satisfied and in control, or compelled and drained. It is worth deciding that early, because it shapes everything that follows."),
       tip("Try describing your favourite game’s core loop in one line. Then find the place where the loop is at its strongest and the place where it is weakest. That is a design exercise you can do in ten minutes."),
       p("Understanding game loops helps aspiring designers move beyond thinking about “features” and start thinking about **player behaviour**."),
+      p(`Game design thinking like this is taught alongside hands-on development in [our Game Development course in Nashik](${GD_PROGRAM_HREF}), through playable prototypes, not just theory.`),
     ],
     takeaways: [
       "The core loop is the repeating cycle of action, feedback, reward and decision.",
@@ -410,6 +419,7 @@ void Update()
       tip("Change one feel parameter at a time, such as jump speed, and play for a minute before changing another. Small adjustments are easier to judge than many at once."),
       h2("Why it matters for aspiring developers"),
       p("For aspiring game developers, learning to evaluate how something feels, not just whether it technically works, is an important design skill. It connects to the [loop that keeps players coming back](/blogs/the-psychology-behind-a-good-game-loop): a satisfying moment repeated well becomes a great game."),
+      p(`Tuning feel through real playtesting is part of [Techno Gurukul's Game Development course](${GD_PROGRAM_HREF}) in Nashik, where students build and refine actual playable projects.`),
     ],
     takeaways: [
       "Game feel is the moment-to-moment sensation of controlling something in a game.",
@@ -460,6 +470,7 @@ void Update()
       ),
       h2("Iteration is the point"),
       p("The first version of an idea is rarely the final version. Rapid prototypes let teams discover problems before investing significant production time, which is one reason game development is so iterative. It also connects directly to the daily work of [a game designer](/blogs/what-does-a-game-designer-do)."),
+      p(`Students build exactly this prototype-and-playtest habit in [our Game Development course in Nashik](${GD_PROGRAM_HREF}), across several small projects before the final capstone.`),
     ],
     takeaways: [
       "A prototype is a tool for answering questions, not a miniature finished game.",

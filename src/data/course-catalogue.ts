@@ -284,7 +284,7 @@ const game = (
   title: string,
   subtitle: string,
   description: string,
-  duration: string,
+  duration: string | undefined,
   tools: string[],
   tags: string[],
   keywords: string[],
@@ -319,7 +319,10 @@ const GAME_COURSES: Course[] = [
     "Game Development Professional Program",
     "Professional Game Development & Design",
     "Learn how games are conceived, designed, programmed, illustrated, animated, tested and published, from small exercises to a capstone game project.",
-    "30 months",
+    // No confirmed duration for this program yet -- do not display an invented or inherited figure (see Phase 0
+    // audit: "30 months" here was leftover from the reference program this curriculum was adapted from, and
+    // directly contradicted that file's own stated intent not to carry over that program's duration).
+    undefined,
     [
       "Unity",
       "Unreal Engine",
@@ -329,22 +332,19 @@ const GAME_COURSES: Course[] = [
       "Blender",
       "Mudbox",
       "ZBrush",
-      "Houdini",
-      "Nuke",
       "Adobe Photoshop",
       "Adobe Illustrator",
       "Adobe Animate",
       "After Effects",
       "DaVinci Resolve",
       "PFTrack",
-      "Figma",
       "Git / GitHub",
     ],
     ["Game Development", "Game Design", "Programming", "2D Art", "3D Art", "Animation"],
     ["flagship", "vfx", "unity", "unreal", "ai", "multiplayer", "production", "publishing", "capstone", "game production", "ui/ux"],
     ["code", "pen-tool", "boxes"],
     "sky",
-    { status: "active", href: "/programs/tg-gameforge", featured: true, order: 2 }
+    { status: "active", href: "/programs/tg-gameforge", featured: true, order: 2, format: "Offline / In-Person" }
   ),
 ];
 

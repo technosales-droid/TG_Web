@@ -9,8 +9,8 @@ import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { CoursePromotionPopup } from "@/components/promotions/course-promotion-popup";
 import { FloatingContact } from "@/components/common/floating-contact";
 import { JsonLd } from "@/components/seo/json-ld";
-import { footerContact, footerLocation, footerSocials } from "@/components/layout/footer-data";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { SITE_URL } from "@/lib/site";
+import { organizationSchema, websiteSchema } from "@/lib/schema";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -44,39 +44,18 @@ export const viewport: Viewport = {
   themeColor: "#0c709a",
 };
 
-// Organization and WebSite only: name, address of the site, logo, verified phone and the verified social
-// profiles. No ratings, reviews or other unverified claims.
-const SCHEMA = [
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: SITE_NAME,
-    url: SITE_URL,
-    logo: `${SITE_URL}/brand/logo.png`,
-    ...(footerContact.phone ? { telephone: footerContact.phone } : {}),
-    sameAs: footerSocials.flatMap((s) => (s.href ? [s.href] : [])),
-    ...(footerLocation.address
-      ? {
-          address: {
-            "@type": "PostalAddress",
-            streetAddress: footerLocation.shortAddress ?? undefined,
-            addressLocality: "Nashik",
-            addressRegion: "Maharashtra",
-            addressCountry: "IN",
-          },
-        }
-      : {}),
-  },
-  { "@context": "https://schema.org", "@type": "WebSite", name: SITE_NAME, url: SITE_URL },
-];
+// Organization (typed as EducationalOrganization + LocalBusiness) and WebSite, both with stable @ids so other
+// pages can reference them instead of re-declaring the entity. No ratings, reviews or other unverified claims --
+// see src/data/business-facts.ts for what's confirmed vs. still unknown.
+const SCHEMA = [organizationSchema(), websiteSchema()];
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${montserrat.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col overflow-x-clip bg-background text-foreground font-sans">
         <AccessProvider>
-          {SCHEMA.map((d) => (
-            <JsonLd key={d["@type"]} data={d} />
+          {SCHEMA.map((d, i) => (
+            <JsonLd key={i} data={d} />
           ))}
           <a
             href="#main-content"

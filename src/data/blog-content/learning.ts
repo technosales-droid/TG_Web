@@ -1,5 +1,6 @@
 // Education, careers and technology articles.
 import { example, flow, h2, IMG, image, insight, lead, ol, p, quote, table, tip, ul, type ArticleContent } from "./types";
+import { DM_PROGRAM_HREF, GD_PROGRAM_HREF } from "@/lib/program-routes";
 
 export const LEARNING_ARTICLES: Record<string, ArticleContent> = {
   "what-to-learn-before-a-technology-career": {
@@ -48,6 +49,7 @@ export const LEARNING_ARTICLES: Record<string, ArticleContent> = {
       ),
       tip("When choosing what to learn next, ask which topic would let you build something you actually want to exist. Motivation makes practice easier."),
       p("Technology education works best when learning moves through that whole loop rather than stopping at the first step. For why the project step is so important, see [why projects matter more than tutorials](/blogs/projects-matter-more-than-tutorials)."),
+      p(`That whole loop, concept, practice, project, feedback, is how Techno Gurukul structures both [our Digital Marketing course](${DM_PROGRAM_HREF}) and [our Game Development course](${GD_PROGRAM_HREF}) in Nashik.`),
     ],
     takeaways: [
       "Learning with direction beats trying to learn everything.",
@@ -100,6 +102,7 @@ export const LEARNING_ARTICLES: Record<string, ArticleContent> = {
       p("Tutorials are useful for meeting a new tool or technique. The trick is to use them as a starting point rather than a substitute. After following one, close it and rebuild the result from memory, then add a feature it did not cover."),
       tip("After any tutorial, change three things without looking: the design, a behaviour and something structural. If you get stuck, that is the part you have not learned yet."),
       p("That process develops the practical confidence needed for technology careers. It also gives you something to show, which leads to [building a portfolio](/blogs/build-a-technology-portfolio-that-gets-noticed)."),
+      p(`Project-based learning like this is the core teaching approach behind [Techno Gurukul's programs in Nashik](${DM_PROGRAM_HREF}), rather than a one-off exercise bolted onto lectures.`),
     ],
     takeaways: [
       "Tutorials make decisions for you; projects require you to make them.",
@@ -156,6 +159,7 @@ export const LEARNING_ARTICLES: Record<string, ArticleContent> = {
       tip("Ask a friend to open your portfolio and tell you, after one minute, what you do and what they remember. If they cannot, simplify."),
       h2("Keep building"),
       p("A portfolio is never finished. Each new project is a chance to show growth. A steady pattern of finished work matters more than one impressive piece. To build that habit, see [why projects matter more than tutorials](/blogs/projects-matter-more-than-tutorials)."),
+      p(`By the end of [our Game Development course in Nashik](${GD_PROGRAM_HREF}), students have exactly this: a capstone project and a body of smaller playable work to show.`),
     ],
     takeaways: [
       "A portfolio should show what you built, why and what you learned.",
@@ -207,6 +211,7 @@ export const LEARNING_ARTICLES: Record<string, ArticleContent> = {
       p("The objective of education should not be simply completing lessons. It should be developing the ability to take knowledge and apply it to unfamiliar situations."),
       tip("At the end of each study session, write one sentence beginning “I can now…”. If you cannot, the session was probably consumption rather than learning."),
       p("This is the same reason we argue that [projects matter more than tutorials](/blogs/projects-matter-more-than-tutorials): they are where knowledge becomes ability."),
+      p(`[Techno Gurukul's Digital Marketing course in Nashik](${DM_PROGRAM_HREF}) is built around this same idea: applying a skill on a real campaign, not just recognising it in a lecture.`),
     ],
     takeaways: [
       "Recognising an answer is different from producing one independently.",
@@ -263,6 +268,7 @@ export const LEARNING_ARTICLES: Record<string, ArticleContent> = {
       p("The technology becomes most useful when it increases the amount of experimentation a student can do. It should reduce unnecessary friction, not remove the thinking process."),
       tip("Set yourself a “no AI for the first attempt” rule on practice problems. Use it afterwards to review, not before to replace."),
       p("For a related discussion in creative technology, see [how AI is changing game development](/blogs/how-ai-is-changing-game-development)."),
+      p(`Whether it's AI-assisted ad creatives or AI-assisted game asset workflows, both are taught responsibly, not as a shortcut, in [Techno Gurukul's Digital Marketing](${DM_PROGRAM_HREF}) and [Game Development](${GD_PROGRAM_HREF}) courses in Nashik.`),
     ],
     takeaways: [
       "AI is a strong learning aid when it supports understanding and a weak one when it replaces it.",
@@ -315,6 +321,7 @@ export const LEARNING_ARTICLES: Record<string, ArticleContent> = {
       h2("It also helps your career"),
       p("Interviews, portfolio write-ups, client conversations and team meetings all reward clear communication. A person who explains their thinking well often appears more capable, because others can see how they reason. If you are working on your own portfolio, [this guide](/blogs/build-a-technology-portfolio-that-gets-noticed) shows how to present your reasoning."),
       tip("Before you send a long message, read only the first two sentences. If a reader could stop there and still understand the point, it is well structured."),
+      p(`Students practise exactly this, briefing teammates, explaining decisions, presenting work, in the team projects that run through [our Game Development course in Nashik](${GD_PROGRAM_HREF}).`),
     ],
     takeaways: [
       "Most technology work happens between people, so communication is central.",

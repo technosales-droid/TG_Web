@@ -4,7 +4,11 @@ import { CourseCard, CourseHeader } from "@/components/course/course-hero";
 import { CourseMain } from "@/components/course/course-sections";
 import { JsonLd } from "@/components/seo/json-ld";
 import { COURSE_DETAILS, getCourseDetail } from "@/data/course-details";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { FACULTY } from "@/data/institute";
+import { BUSINESS, ORG_ID, PROGRAM_FACTS } from "@/data/business-facts";
+import { SITE_URL } from "@/lib/site";
+import { buildMetadata } from "@/lib/seo";
+import { breadcrumbSchema } from "@/lib/schema";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -14,15 +18,32 @@ export function generateStaticParams() {
   return COURSE_DETAILS.map((c) => ({ slug: c.slug }));
 }
 
+// Dedicated, keyword-first copy for the <title>/meta description of each program page. Deliberately separate from
+// course.description (the shorter line also used on-page): a meta description earns its own 140-160 character
+// target, which the on-page copy isn't written to hit. Visible page copy (H1, subtitle) is untouched here.
+const SEO_COPY: Record<string, { title: string; description: string }> = {
+  "tg-digital-marketing": {
+    title: "Digital Marketing Course in Nashik | Techno Gurukul",
+    description:
+      "A practical, offline Digital Marketing course in Nashik covering SEO, Google Ads, Meta Ads, social media, content and analytics through hands-on projects.",
+  },
+  "tg-gameforge": {
+    title: "Game Development Course in Nashik | Techno Gurukul",
+    description:
+      "A practical, offline Game Development course in Nashik covering game design, 2D/3D art, animation, Unity, Unreal Engine and programming through projects.",
+  },
+};
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const course = getCourseDetail((await params).slug);
   if (!course) return {};
-  const title = `${course.title} | Techno Gurukul`;
-  return {
-    title,
-    description: course.description,
-    openGraph: { title, description: course.description, type: "website", ...(course.heroImage ? { images: [{ url: course.heroImage, alt: course.heroAlt }] } : {}) },
-  };
+  const seo = SEO_COPY[course.slug];
+  return buildMetadata({
+    title: seo?.title ?? `${course.title} | Techno Gurukul`,
+    description: seo?.description ?? course.description,
+    path: `/programs/${course.slug}`,
+    ...(course.heroImage ? { image: { url: course.heroImage, alt: course.heroAlt } } : {}),
+  });
 }
 
 // Every course renders through this one template; the content comes from data/course-details.ts.
@@ -32,28 +53,43 @@ export default async function Page({ params }: Props) {
   if (!course) notFound();
 
   const url = `${SITE_URL}/programs/${course.slug}`;
+  const facts = PROGRAM_FACTS[course.slug];
+  const teaches = course.learningOutcomes.length > 0 ? course.learningOutcomes : course.topics;
+  const instructor = course.instructor ? FACULTY.find((f) => f.slug === course.instructor?.facultySlug) : undefined;
   return (
     <main>
       <JsonLd
         data={{
           "@context": "https://schema.org",
           "@type": "Course",
+          "@id": `${url}/#course`,
           name: course.title,
           description: course.description,
           url,
-          provider: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+          inLanguage: "en",
+          provider: { "@id": ORG_ID },
+          ...(teaches.length > 0 ? { teaches } : {}),
+          ...(facts
+            ? {
+                hasCourseInstance: {
+                  "@type": "CourseInstance",
+                  courseMode: "onsite",
+                  location: {
+                    "@type": "Place",
+                    name: BUSINESS.name,
+                    address: { "@type": "PostalAddress", ...BUSINESS.address },
+                  },
+                  ...(facts.durationIso ? { courseWorkload: facts.durationIso } : {}),
+                },
+              }
+            : {}),
+          ...(course.requirements.length > 0 ? { coursePrerequisites: course.requirements.join("; ") } : {}),
+          ...(course.certificate ? { educationalCredentialAwarded: "Certificate of Completion" } : {}),
+          ...(facts?.fee ? { offers: { "@type": "Offer", price: facts.fee, priceCurrency: "INR", availability: "https://schema.org/InStock" } } : {}),
+          ...(instructor ? { instructor: { "@type": "Person", name: instructor.name } } : {}),
         }}
       />
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Programs", item: `${SITE_URL}/programs` },
-            { "@type": "ListItem", position: 2, name: course.title, item: url },
-          ],
-        }}
-      />
+      <JsonLd data={breadcrumbSchema([{ name: "Programs", path: "/programs" }, { name: course.title, path: `/programs/${course.slug}` }])} />
       <div className="mx-auto -mt-[5.25rem] grid max-w-[1350px] px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_23rem] lg:grid-rows-[auto_1fr] lg:gap-x-10 xl:px-8">
         <section
           aria-labelledby="course-title"
