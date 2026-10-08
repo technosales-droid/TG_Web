@@ -1,5 +1,6 @@
 import type { Block } from "@/data/blog-content/types";
 import type { BlogCategory } from "@/data/blogs";
+import { BLOG_FEEDBACK_ENABLED } from "@/lib/feature-flags";
 import { DM_PROGRAM_HREF, GD_PROGRAM_HREF } from "@/lib/program-routes";
 
 export interface TocItem {
@@ -15,7 +16,7 @@ const slugify = (s: string) =>
 
 /** Anchor ids for the article's h2 headings, keyed by block index, plus the table-of-contents entries. */
 export function headingIds(blocks: Block[]) {
-  const used = new Set<string>(["key-takeaways", "reactions", "discussion"]);
+  const used = new Set<string>(BLOG_FEEDBACK_ENABLED ? ["key-takeaways", "reactions", "discussion"] : ["key-takeaways"]);
   const ids = new Map<number, string>();
   const items: TocItem[] = [];
   blocks.forEach((b, i) => {
@@ -33,8 +34,7 @@ export function headingIds(blocks: Block[]) {
 /** Sections that follow the article body, so the table of contents reaches the whole page. */
 export const TAIL_TOC: TocItem[] = [
   { id: "key-takeaways", text: "Key takeaways" },
-  { id: "reactions", text: "Reader reactions" },
-  { id: "discussion", text: "Discussion" },
+  ...(BLOG_FEEDBACK_ENABLED ? [{ id: "reactions", text: "Reader reactions" }, { id: "discussion", text: "Discussion" }] : []),
 ];
 
 /** Where an article naturally leads. Every category maps to one of the two live programs -- Education, Careers

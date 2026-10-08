@@ -6,6 +6,7 @@ import { footerContact, footerLocation } from "../layout/footer-data";
 export const CONTACT = {
   email: footerContact.email,
   phone: footerContact.phone,
+  whatsapp: footerContact.whatsapp,
   hours: null as string | null,
   location: footerLocation,
 };

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticleContent } from "@/components/blogs/article/article-content";
 import { ArticleFeedback } from "@/components/blogs/article/article-feedback";
+import { BLOG_FEEDBACK_ENABLED } from "@/lib/feature-flags";
 import { ArticleAuthor, ArticleFinalCta, ArticleInfo, ArticleRelated, ArticleTakeaways, ProgramCta } from "@/components/blogs/article/article-extras";
 import { ArticleHero } from "@/components/blogs/article/article-hero";
 import { ArticleToc } from "@/components/blogs/article/article-toc";
@@ -93,9 +94,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             <ArticleTakeaways items={post.takeaways} />
             <ProgramCta post={post} className="mt-10 lg:hidden" />
             <ArticleAuthor post={post} more={more} />
-            <div className="max-w-[64rem]">
-              <ArticleFeedback slug={post.slug} />
-            </div>
+            {BLOG_FEEDBACK_ENABLED && (
+              <div className="max-w-[64rem]">
+                <ArticleFeedback slug={post.slug} />
+              </div>
+            )}
           </div>
 
           <aside aria-label="Article information" className="space-y-5 lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:self-start lg:overflow-y-auto">

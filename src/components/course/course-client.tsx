@@ -83,6 +83,7 @@ export function CurriculumAccordion({ modules, unitLabel = "Module" }: { modules
                     {m.summary}
                   </p>
                 )}
+                {m.note && <p className="mt-3 border-t border-primary/10 pt-3 text-sm italic text-muted-foreground">{m.note}</p>}
               </div>
             </div>
           );

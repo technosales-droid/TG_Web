@@ -2,7 +2,9 @@ import { useSyncExternalStore } from "react";
 
 // Reader reviews and comments. There is no backend yet, so entries are kept in this browser only (localStorage) and
 // are visible only to the person who wrote them. Nothing is seeded: an article with no entries shows an empty state.
-// To go live, replace read()/write() with calls to an API; the components do not change.
+// To go live, replace read()/write() with calls to an API; the components do not change. Whether the sections that
+// use this are shown at all is gated by BLOG_FEEDBACK_ENABLED in @/lib/feature-flags (kept out of this file since
+// this one is client-only and the flag needs to be readable from server components too).
 
 export interface Review {
   id: string;

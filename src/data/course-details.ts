@@ -22,6 +22,8 @@ export interface CourseModule {
   title: string;
   /** Shown when the individual lessons are not written yet. */
   summary?: string;
+  /** A short caveat about the module (e.g. project selection depending on the candidate), shown under its topics. */
+  note?: string;
   duration?: string;
   lessons: CourseLesson[];
 }
@@ -258,7 +260,11 @@ const OVERRIDES: Record<string, Override> = {
       "Freelance Ready: Ability to package and sell services such as social media, Meta Ads, Google Ads, SEO, content, websites/landing pages and lead generation.",
       "Agency Ready: Ability to understand niche selection, service packaging, pricing, proposals, client on boarding, execution, reporting and basic agency operations.",
     ],
-    curriculum: DIGITAL_MARKETING_CURRICULUM.map((m) => ({ title: m.title, lessons: m.topics.map((t) => ({ title: t })) })),
+    curriculum: DIGITAL_MARKETING_CURRICULUM.map((m) => ({
+      title: m.title,
+      lessons: m.topics.map((t) => ({ title: t })),
+      ...(m.description !== m.title ? { note: m.description } : {}),
+    })),
     includes: [
       { label: "Campaign projects that build portfolio-worthy work", icon: "portfolio" },
       { label: "Exposure to professional tools", icon: "tools" },

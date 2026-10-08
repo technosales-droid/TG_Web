@@ -15,7 +15,7 @@ export interface ProgramLink extends NavLink {
 export const DIGITAL_MARKETING_CATEGORY = "Digital Marketing";
 
 export const SIGNATURE_PROGRAM: ProgramLink = {
-  label: "TG Digital Marketing",
+  label: "Digital Marketing Course",
   href: DM_PROGRAM_HREF,
   tagline: "SEO, Social Media & Performance Marketing",
   image: "/brand/course-tg-digital-marketing.png",
@@ -25,7 +25,7 @@ export const PROGRAM_CATEGORY = "Game Development & Design";
 
 export const GAME_DEVELOPMENT_PROGRAMS: ProgramLink[] = [
   {
-    label: "Game Development",
+    label: "Game Development Course",
     href: GD_PROGRAM_HREF,
     tagline: "Professional Game Development & Design",
     image: "/brand/course-tg-gameforge.png",

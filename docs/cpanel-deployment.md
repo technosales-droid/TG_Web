@@ -42,7 +42,7 @@ In the same Node.js App screen, add these under **Environment Variables**:
 | Variable | Value |
 |---|---|
 | `NEXT_PUBLIC_SITE_URL` | your real domain, e.g. `https://www.technogurukul.com` (no trailing slash) |
-| `ACCESS_SESSION_SECRET` | a random 32+ character string — **do not reuse the one from local dev.** A fresh one: `8850df34d88cb5a4b197e3e274ca0f4cbee0a701e321634ca724efb6fd721b73` |
+| `ACCESS_SESSION_SECRET` | a random 32+ character string — **do not reuse the one from local dev.** Generate one locally with `openssl rand -hex 32` and paste it only into cPanel's Environment Variables — never into any file in this repo. |
 | `LEAD_WEBHOOK_URL` | the Google Apps Script webhook URL (same one used for local testing, or a fresh deployment if you want production leads in a separate Sheet) |
 | `LEAD_WEBHOOK_SECRET` | the matching secret for that webhook |
 

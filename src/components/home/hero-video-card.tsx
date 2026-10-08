@@ -44,7 +44,13 @@ export function HeroVideoCard({ className }: { className?: string }) {
             aria-label="Play video"
             className="group absolute inset-0 flex size-full items-center justify-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
-            <Image src={`https://i.ytimg.com/vi/${HERO_YOUTUBE_VIDEO_ID}/hqdefault.jpg`} alt="" fill sizes="420px" className="object-cover" />
+            <Image
+              src={`https://i.ytimg.com/vi/${HERO_YOUTUBE_VIDEO_ID}/hqdefault.jpg`}
+              alt="Thumbnail preview of Techno Gurukul's featured video"
+              fill
+              sizes="420px"
+              className="object-cover"
+            />
             <span aria-hidden="true" className="absolute inset-0 bg-black/30 transition-colors duration-200 group-hover:bg-black/15" />
             <FaYoutube
               aria-hidden="true"

@@ -26,10 +26,10 @@ const next = () => ++order;
 // topic bullets to show, so `description` itself is never displayed, only kept non-empty for the catalogue's
 // own validation. `topics` are the module's bullet points, verbatim; also used as `keywords` so every one of
 // them is findable from the Programs search, without inventing separate search terms.
-const dm = (slug: string, title: string, tags: string[], topics: string[]): CurriculumModule => ({
+const dm = (slug: string, title: string, tags: string[], topics: string[], description?: string): CurriculumModule => ({
   slug,
   title,
-  description: title,
+  description: description ?? title,
   topics,
   tags,
   keywords: topics,
@@ -242,7 +242,7 @@ export const DIGITAL_MARKETING_CURRICULUM: CurriculumModule[] = [
     "Handling Revisions",
     "Client Retention",
   ]),
-  dm("agency-building", "Agency Building(optional)", ["Freelancing", "Strategy"], [
+  dm("agency-building", "Agency Building (Optional)", ["Freelancing", "Strategy"], [
     "Agency Business Model",
     "Choosing a Niche",
     "Service Selection",
@@ -271,12 +271,18 @@ export const DIGITAL_MARKETING_CURRICULUM: CurriculumModule[] = [
     "Salary Negotiation",
     "Career Roadmap",
   ]),
-  dm("live-projects-and-capstone", "Live Projects & Capstone (As per the candidate and the situation)", ["Marketing"], [
-    "Project 1: Social Media — Strategy → Content → Creatives → Reels → Reporting",
-    "Project 2: SEO — Keyword Research → Website Audit → Content → On-page Optimization → Search Console",
-    "Project 3: Paid Ads — Strategy → Meta Ads → Google Ads → Tracking → Optimization → Report",
-    "Project 4: Complete Business Project — Research → Strategy → Website/Landing Page → Social Media → Content → SEO → Meta Ads → Google Ads → WhatsApp/CRM → Analytics → Report",
-  ]),
+  dm(
+    "live-projects-and-capstone",
+    "Live Projects & Capstone",
+    ["Marketing"],
+    [
+      "Project 1: Social Media — Strategy → Content → Creatives → Reels → Reporting",
+      "Project 2: SEO — Keyword Research → Website Audit → Content → On-page Optimization → Search Console",
+      "Project 3: Paid Ads — Strategy → Meta Ads → Google Ads → Tracking → Optimization → Report",
+      "Project 4: Complete Business Project — Research → Strategy → Website/Landing Page → Social Media → Content → SEO → Meta Ads → Google Ads → WhatsApp/CRM → Analytics → Report",
+    ],
+    "Projects are assigned as per the candidate and the situation."
+  ),
 ];
 
 // Game Development: Game Development Programs, "Program Structure" and "Programs at a Glance".

@@ -1,4 +1,6 @@
 import { cn } from "cn";
+import { FaWhatsapp } from "react-icons/fa6";
+import { buttonVariants } from "@/components/ui/button";
 import { CONTACT, ENQUIRY_ID } from "./contact-data";
 import { ContactForm } from "./contact-form";
 import { Reveal } from "./contact-reveal";
@@ -6,6 +8,7 @@ import { Eyebrow, FOCUS, INNER } from "./contact-ui";
 
 const LINK = cn("inline-flex min-h-11 items-center rounded text-base font-medium break-all text-foreground hover:text-primary", FOCUS);
 const PENDING = <p className="text-base text-muted-foreground">Not listed yet, please email us.</p>;
+const WHATSAPP_MESSAGE = "Hi, I'd like to know about your courses";
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -18,7 +21,7 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
 
 /** One section: introduction and verified contact details on the left, the form on the right. */
 export function ContactEnquiry() {
-  const { email, phone, hours, location } = CONTACT;
+  const { email, phone, whatsapp, hours, location } = CONTACT;
 
   return (
     <section id={ENQUIRY_ID} aria-labelledby="ct-enquiry-heading" className="scroll-mt-20 bg-muted/50 px-4 py-14 sm:px-6 sm:py-20 xl:py-24">
@@ -44,9 +47,23 @@ export function ContactEnquiry() {
             </Row>
             <Row label="Phone">
               {phone ? (
-                <a href={`tel:${phone.replace(/[^\d+]/g, "")}`} className={LINK}>
-                  {phone}
-                </a>
+                <div className="flex flex-wrap items-center gap-3">
+                  <a href={`tel:${phone.replace(/[^\d+]/g, "")}`} className={LINK}>
+                    {phone}
+                  </a>
+                  {whatsapp && (
+                    <a
+                      href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={cn(buttonVariants({ variant: "outline", size: "sm" }), FOCUS)}
+                    >
+                      <FaWhatsapp className="size-4 text-[#25D366]" aria-hidden="true" />
+                      WhatsApp
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    </a>
+                  )}
+                </div>
               ) : (
                 PENDING
               )}
@@ -60,7 +77,9 @@ export function ContactEnquiry() {
                 </a>
               )}
             </Row>
-            <Row label="Working hours">{hours ? <p className="text-base font-medium text-foreground">{hours}</p> : PENDING}</Row>
+            {hours && <Row label="Working hours">
+              <p className="text-base font-medium text-foreground">{hours}</p>
+            </Row>}
           </div>
         </Reveal>
 

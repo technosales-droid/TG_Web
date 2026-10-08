@@ -6,7 +6,6 @@ import { Award, BarChart3, ChevronRight, Clock, Hammer, Layers, Monitor, Play, S
 import type { LucideIcon } from "lucide-react";
 import { cn } from "cn";
 import { BrochureButton } from "@/components/course/brochure-button";
-import { INCLUDE_ICON } from "@/components/course/include-icon";
 import { buttonVariants } from "@/components/ui/button";
 import type { CourseDetail } from "@/data/course-details";
 import { FACULTY } from "@/data/institute";
@@ -87,7 +86,6 @@ export function CourseHeader({ course: c }: { course: CourseDetail }) {
 
 /** The sticky card on the right: preview media, Apply Now / Enquire Now, and what the course includes. */
 export function CourseCard({ course: c }: { course: CourseDetail }) {
-  const highlights = c.includes.slice(0, 4);
   // A dialog's backdrop should already dim this sticky card; on real devices it doesn't, so it's hidden outright
   // while any dialog (e.g. its own brochure/access form) is open, the same fix already used for the floating
   // contact buttons.
@@ -122,23 +120,6 @@ export function CourseCard({ course: c }: { course: CourseDetail }) {
           <BrochureButton slug={c.slug} />
         </div>
         {c.note && <p className="mt-3 text-center text-sm text-muted-foreground">{c.note}</p>}
-
-        <h3 className="mt-5 text-base font-semibold">This course includes</h3>
-        <ul className="mt-2 grid gap-2 text-sm text-foreground">
-          {highlights.map(({ label, icon }) => {
-            const Icon = INCLUDE_ICON[icon];
-            return (
-              <li key={label} className="flex items-start gap-2.5">
-                <Icon className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-                {label}
-              </li>
-            );
-          })}
-          <li className="flex items-start gap-2.5">
-            <Award className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-            {c.certificate === undefined ? "Ask an advisor about certification" : c.certificate ? "Certificate of completion" : "No certificate"}
-          </li>
-        </ul>
       </div>
     </aside>
   );
