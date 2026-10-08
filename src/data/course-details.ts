@@ -10,6 +10,8 @@
 // placement figure, learner count, certificate claim or partner.
 import { DIGITAL_MARKETING_CURRICULUM } from "./course-catalogue";
 import { ALL_OFFERINGS } from "./programs";
+import { DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
+import { PROGRAM_FACTS } from "./business-facts";
 
 export interface CourseLesson {
   title: string;
@@ -39,6 +41,13 @@ export interface CourseDetail {
   /** The source document's own positioning line, e.g. "2026 Curriculum | Job • Freelance • Agency Ready", shown
    * as a small badge under the hero title. Unset shows nothing. */
   programTagline?: string;
+  /** Keyword-first H1 for search/AI (e.g. "Digital Marketing Course in Nashik"). Unset falls back to `title`.
+   * When set, an extra "Professional Program" eyebrow badge renders above the H1 so the original program name
+   * (still `title` everywhere else -- cards, breadcrumbs, JSON-LD) stays visible on the page too. */
+  seoH1?: string;
+  /** A 40-60 word, answer-first paragraph built only from published facts, written to be quoted verbatim by an
+   * AI answer engine. Renders directly under the H1. Unset shows nothing (not every course needs one). */
+  answerSummary?: string;
   description: string;
   heroImage: string | null;
   heroAlt: string;
@@ -237,9 +246,12 @@ const GD_CURRICULUM: CourseModule[] = [
 ];
 
 const OVERRIDES: Record<string, Override> = {
-  "tg-digital-marketing": {
+  [DM_PROGRAM_SLUG]: {
     note: "Batch size is limited.",
     programTagline: "2026 Curriculum | Job • Freelance • Agency Ready",
+    seoH1: "Digital Marketing Course in Nashik",
+    answerSummary:
+      `Techno Gurukul's Digital Marketing Course in Nashik is a 3–3.5 month, offline, project-based program covering SEO, social media, Google Ads, Meta Ads, content and analytics across 18 modules and 205 topics. Students work through ${PROGRAM_FACTS[DM_PROGRAM_SLUG].projectsLabel}, building real campaigns rather than studying theory alone, at its institute in Tilak Wadi, Nashik.`,
     outcomesHeading: "Career Outcomes",
     learningOutcomes: [
       "Job Ready: Digital Marketing Executive, Social Media Executive, SEO Executive, Performance Marketing Executive, Digital Marketing Associate and related entry-level roles.",
@@ -275,8 +287,11 @@ const OVERRIDES: Record<string, Override> = {
       },
     ],
   },
-  "tg-gameforge": {
+  [GD_PROGRAM_SLUG]: {
     programTagline: "Build Games. Learn the Technology. Create Your Portfolio.",
+    seoH1: "Game Development Course in Nashik",
+    answerSummary:
+      `Techno Gurukul's Game Development Course in Nashik is an offline, project-based program covering game design, 2D and 3D art, animation, programming, and both Unity and Unreal Engine, across 7 modules and 66 topics. Students build ${PROGRAM_FACTS[GD_PROGRAM_SLUG].projectsLabel}, from concept art through a full gameplay and programming project, at its institute in Tilak Wadi, Nashik.`,
     programPhilosophy:
       "The program moves students through the full game development journey: from idea and artwork, through 2D and 3D assets and animation, into game engines, programming and game systems, and finally into optimisation, testing and a complete, presentable project.",
     learningOutcomes: [

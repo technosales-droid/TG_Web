@@ -8,7 +8,9 @@ import { FACULTY } from "@/data/institute";
 import { BUSINESS, ORG_ID, PROGRAM_FACTS } from "@/data/business-facts";
 import { SITE_URL } from "@/lib/site";
 import { buildMetadata } from "@/lib/seo";
-import { breadcrumbSchema } from "@/lib/schema";
+import { breadcrumbSchema, faqSchema } from "@/lib/schema";
+import { DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
+import { PROGRAM_FAQS } from "@/data/program-faqs";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -22,12 +24,12 @@ export function generateStaticParams() {
 // course.description (the shorter line also used on-page): a meta description earns its own 140-160 character
 // target, which the on-page copy isn't written to hit. Visible page copy (H1, subtitle) is untouched here.
 const SEO_COPY: Record<string, { title: string; description: string }> = {
-  "tg-digital-marketing": {
+  [DM_PROGRAM_SLUG]: {
     title: "Digital Marketing Course in Nashik | Techno Gurukul",
     description:
       "A practical, offline Digital Marketing course in Nashik covering SEO, Google Ads, Meta Ads, social media, content and analytics through hands-on projects.",
   },
-  "tg-gameforge": {
+  [GD_PROGRAM_SLUG]: {
     title: "Game Development Course in Nashik | Techno Gurukul",
     description:
       "A practical, offline Game Development course in Nashik covering game design, 2D/3D art, animation, Unity, Unreal Engine and programming through projects.",
@@ -54,7 +56,7 @@ export default async function Page({ params }: Props) {
 
   const url = `${SITE_URL}/programs/${course.slug}`;
   const facts = PROGRAM_FACTS[course.slug];
-  const teaches = course.learningOutcomes.length > 0 ? course.learningOutcomes : course.topics;
+  const teaches = course.curriculum.map((m) => m.title);
   const instructor = course.instructor ? FACULTY.find((f) => f.slug === course.instructor?.facultySlug) : undefined;
   return (
     <main>
@@ -90,6 +92,10 @@ export default async function Page({ params }: Props) {
         }}
       />
       <JsonLd data={breadcrumbSchema([{ name: "Programs", path: "/programs" }, { name: course.title, path: `/programs/${course.slug}` }])} />
+      {(() => {
+        const faq = faqSchema(PROGRAM_FAQS[course.slug] ?? []);
+        return faq && <JsonLd data={faq} />;
+      })()}
       <div className="mx-auto -mt-[5.25rem] grid max-w-[1350px] px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_23rem] lg:grid-rows-[auto_1fr] lg:gap-x-10 xl:px-8">
         <section
           aria-labelledby="course-title"

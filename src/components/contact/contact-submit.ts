@@ -1,5 +1,6 @@
 import { EMAIL_RE, phoneError } from "@/lib/access";
 import { CONTACT } from "./contact-data";
+import { BUSINESS } from "@/data/business-facts";
 
 export const INTERESTS = ["Game Development", "Digital Marketing", "General Enquiry", "Career Guidance", "Other"] as const;
 export const STATUSES = ["School Student", "College Student", "Graduate", "Working Professional", "Parent / Guardian", "Other"] as const;
@@ -59,7 +60,7 @@ export function validateEnquiry(v: EnquiryValues): EnquiryErrors {
 
 /** The fallback: an email to the team with the enquiry pre-filled, used only if sending fails. */
 export function buildMailto(v: EnquiryValues): { mailto: string; email: string } {
-  const email = CONTACT.email ?? "admission@technogurukul.com";
+  const email = CONTACT.email ?? BUSINESS.email;
   const lines = [`Name: ${v.fullName.trim()}`, `Email: ${v.email.trim()}`, `Phone: ${v.phone.trim()}`, `Interested in: ${v.interest}`];
   if (v.status) lines.push(`Current status: ${v.status}`);
   if (v.contactMethod) lines.push(`Preferred contact: ${v.contactMethod}`);

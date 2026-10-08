@@ -36,12 +36,20 @@ export function CourseHeader({ course: c }: { course: CourseDetail }) {
         <span aria-current="page" className="text-white/80">{c.title}</span>
       </nav>
 
-      <h1 id="course-title" className="mt-5 text-3xl leading-[1.15] font-semibold tracking-tight text-balance sm:text-4xl">{c.title}</h1>
+      {c.seoH1 && (
+        <p className="mt-5 inline-flex w-fit items-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold tracking-wide text-[#8fd3f0] uppercase">
+          Professional Program
+        </p>
+      )}
+      <h1 id="course-title" className={cn("text-3xl leading-[1.15] font-semibold tracking-tight text-balance sm:text-4xl", c.seoH1 ? "mt-2" : "mt-5")}>
+        {c.seoH1 ?? c.title}
+      </h1>
       {c.programTagline && (
         <p className="mt-2 inline-flex w-fit items-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold tracking-wide text-[#8fd3f0] uppercase">
           {c.programTagline}
         </p>
       )}
+      {c.answerSummary && <p className="mt-3 max-w-3xl text-lg leading-relaxed text-white/85">{c.answerSummary}</p>}
       <p className="mt-3 max-w-3xl text-lg leading-relaxed text-white/85">{c.subtitle ? `${c.subtitle}. ` : ""}{c.description}</p>
 
       {(c.rating || c.students !== undefined) && (

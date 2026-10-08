@@ -1,4 +1,5 @@
 import { ABOUT_LINKS, LEARNING_LINKS, type NavLink } from "@/components/navigation/nav-data";
+import { BUSINESS } from "@/data/business-facts";
 
 // Single source of truth for the global footer. Every value that is not yet verified is `null`;
 // the footer only renders a value once it is filled in here.
@@ -56,7 +57,7 @@ export type SocialId = "instagram" | "facebook" | "linkedin" | "youtube" | "what
 // link; both currently point at the same verified number. Declared before footerSocials so the social icon
 // below can reuse it as the single source of truth, rather than a second hardcoded copy of the digits.
 export const footerContact: { email: string | null; phone: string | null; whatsapp: string | null } = {
-  email: "admission@technogurukul.com",
+  email: BUSINESS.email,
   phone: "+91 73871 52953",
   whatsapp: "917387152953",
 };

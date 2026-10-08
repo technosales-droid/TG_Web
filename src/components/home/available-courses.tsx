@@ -8,6 +8,7 @@ import { cn } from "cn";
 import { buttonVariants } from "@/components/ui/button";
 import { ACTIVE_PROGRAMS } from "@/data/active-programs";
 import { ALL_OFFERINGS } from "@/data/programs";
+import { DM_PROGRAM_HREF, DM_PROGRAM_SLUG, GD_PROGRAM_HREF } from "@/lib/program-routes";
 
 // The two courses Techno Gurukul currently teaches, in Nashik. Digital Marketing is the signature/primary course;
 // Game Development is a real, available second course, shown as one entry rather than its full studio ecosystem
@@ -15,9 +16,9 @@ import { ALL_OFFERINGS } from "@/data/programs";
 // this section can never drift out of sync with what /programs actually offers.
 // Both real photos in the data, asserted here (not filtered defensively) because these are two specific, known
 // entries, not an arbitrary list.
-const DIGITAL_MARKETING = { ...ACTIVE_PROGRAMS.find((p) => p.href === "/programs/tg-digital-marketing")! } as typeof ACTIVE_PROGRAMS[number] & { image: string };
-const GAME_DEVELOPMENT = { ...ACTIVE_PROGRAMS.find((p) => p.href === "/programs/tg-gameforge")! } as typeof ACTIVE_PROGRAMS[number] & { image: string };
-const dmOffering = ALL_OFFERINGS.find((o) => o.slug === "tg-digital-marketing");
+const DIGITAL_MARKETING = { ...ACTIVE_PROGRAMS.find((p) => p.href === DM_PROGRAM_HREF)! } as typeof ACTIVE_PROGRAMS[number] & { image: string };
+const GAME_DEVELOPMENT = { ...ACTIVE_PROGRAMS.find((p) => p.href === GD_PROGRAM_HREF)! } as typeof ACTIVE_PROGRAMS[number] & { image: string };
+const dmOffering = ALL_OFFERINGS.find((o) => o.slug === DM_PROGRAM_SLUG);
 // The three most concrete, recognisable skills; "Marketing" is dropped as redundant with the category label above it,
 // and the list is capped so the card stays readable rather than a wall of chips.
 const dmTags = (dmOffering?.tags ?? []).filter((t) => t !== "Marketing").slice(0, 3);

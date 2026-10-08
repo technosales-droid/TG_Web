@@ -12,12 +12,13 @@ import { COURSE_PROMOTIONS, type PromotionMessage } from "@/data/course-promotio
 import { cn } from "cn";
 import { useBrochureDownload } from "./brochure-download";
 import { pickNext } from "./rotation";
+import { DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
 
 const DELAY_S = 45;
 const STORAGE_KEY = "tg-course-promo";
 // Only the two courses actually open for enrolment are promoted; the individual Game Development studios (Unity,
 // Unreal, and so on) are not advertised on their own, matching how they're presented everywhere else on the site.
-const PROMOTABLE_IDS = ["tg-digital-marketing", "tg-gameforge"];
+const PROMOTABLE_IDS = [DM_PROGRAM_SLUG, GD_PROGRAM_SLUG];
 const IDS = COURSE_PROMOTIONS.filter((p) => PROMOTABLE_IDS.includes(p.courseId)).map((p) => p.courseId);
 // At most one popup per browser session, so a visitor is never interrupted twice in one visit.
 const SESSION_SHOWN_KEY = "tg-course-promo-shown-session";

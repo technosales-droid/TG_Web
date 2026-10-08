@@ -4,6 +4,7 @@ import { buildMetadata } from "@/lib/seo";
 import { breadcrumbSchema } from "@/lib/schema";
 import { JsonLd } from "@/components/seo/json-ld";
 import { PrivacyRequestForm } from "@/components/legal/privacy-request-form";
+import { BUSINESS } from "@/data/business-facts";
 
 export const metadata: Metadata = buildMetadata({
   title: "Privacy Requests | Techno Gurukul",
@@ -34,7 +35,7 @@ export default function Page() {
         <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
           Sending this form asks us to look into your request. It does not change or delete anything by itself. We may ask
           you to confirm your identity first. If you would rather write to us, email{" "}
-          <a href="mailto:admission@technogurukul.com" className="font-medium text-primary underline underline-offset-2">admission@technogurukul.com</a>.
+          <a href={`mailto:${BUSINESS.email}`} className="font-medium text-primary underline underline-offset-2">{BUSINESS.email}</a>.
         </p>
       </div>
     </main>

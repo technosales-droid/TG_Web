@@ -4,6 +4,7 @@
 // (JSON-LD, the program pages' key-facts table, the FAQ) picks up the new value automatically. Never invent a
 // value for an unknown field anywhere else in the codebase; render nothing for it instead.
 import { SITE_URL } from "@/lib/site";
+import { DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
 
 export const ORG_ID = `${SITE_URL}/#organization`;
 export const WEBSITE_ID = `${SITE_URL}/#website`;
@@ -35,11 +36,11 @@ export const BUSINESS = {
     "https://www.pinterest.com/Techno_Gurukul/",
   ],
 
+  /** The one real, already-used contact address. Every consumer (footer, legal pages, forms, Organization and
+   * ContactPage schema) reads it from here now, instead of each holding its own copy. */
+  email: "admission@technogurukul.com",
+
   // --- UNKNOWN. Fill in when available; every consumer already handles `null` by omitting the field/section. ---
-  /** Note: admission@technogurukul.com already exists in the codebase (footer-data.ts, used for contact forms),
-   * but was explicitly scoped as unknown for this structured-data pass -- left null here on purpose. Flagged in
-   * the Phase 2 report in case that was an oversight rather than a deliberate choice to hold it back. */
-  email: null as string | null,
   geo: null as { latitude: number; longitude: number } | null,
   openingHoursSpecification: null as { dayOfWeek: string[]; opens: string; closes: string }[] | null,
   foundingDate: null as string | null,
@@ -58,7 +59,11 @@ export interface ProgramFacts {
   location: string;
   moduleCount: number;
   topicCount: number;
-  projectCount: number;
+  /** The single canonical phrase for "what you'll build", lowercase/mid-sentence form (e.g. "5 projects", "up to
+   * 4 live project tracks"). Every consumer -- the answer summary, the key-facts table, the FAQ answer and
+   * llms.txt -- reads this same field, so the wording can't drift between them. Capitalise it yourself where a
+   * sentence or table cell needs it capitalised; the stored value never is. */
+  projectsLabel: string;
   learningSplit?: { practical: number; strategy: number; tools: number };
   learningTracks?: string[];
   // UNKNOWN for both programs -- fill in when available.
@@ -72,14 +77,16 @@ export interface ProgramFacts {
 }
 
 export const PROGRAM_FACTS: Record<string, ProgramFacts> = {
-  "tg-digital-marketing": {
+  [DM_PROGRAM_SLUG]: {
     duration: "3–3.5 months",
     durationIso: "P3M",
     mode: "Offline / In-Person",
     location: "Nashik, Maharashtra",
     moduleCount: 18,
     topicCount: 205,
-    projectCount: 4,
+    // The curriculum's capstone/project selection is "as per the candidate and the situation" (see
+    // course-sections.tsx's Live Projects & Capstone note) -- not a fixed guarantee of 4, hence "up to".
+    projectsLabel: "up to 4 live project tracks",
     learningSplit: { practical: 60, strategy: 25, tools: 15 },
     fee: null,
     nextBatch: null,
@@ -89,14 +96,14 @@ export const PROGRAM_FACTS: Record<string, ProgramFacts> = {
     demoClassAvailable: null,
     emi: null,
   },
-  "tg-gameforge": {
+  [GD_PROGRAM_SLUG]: {
     duration: null,
     durationIso: null,
     mode: "Offline / In-Person",
     location: "Nashik, Maharashtra",
     moduleCount: 7,
     topicCount: 66,
-    projectCount: 5,
+    projectsLabel: "5 projects",
     learningTracks: ["Unity", "Unreal Engine"],
     fee: null,
     nextBatch: null,

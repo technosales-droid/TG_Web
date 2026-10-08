@@ -5,6 +5,7 @@
 // still gets promoted, using its own catalogue description. Keep every line truthful: no counts, ratings, discounts,
 // deadlines, scarcity or testimonials.
 import { COURSE_DETAILS } from "./course-details";
+import { DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
 
 export interface PromotionMessage {
   headline: string;
@@ -24,12 +25,12 @@ export interface CoursePromotion {
 }
 
 const MESSAGES: Record<string, PromotionMessage[]> = {
-  "tg-digital-marketing": [
+  [DM_PROGRAM_SLUG]: [
     { headline: "Your next campaign could start here.", description: "Learn digital marketing through practical projects, tools and real-world workflows.", ctaLabel: "Explore Digital Marketing" },
     { headline: "Build work you can show.", description: "Campaign projects that turn what you learn into portfolio-worthy work." },
     { headline: "Curious how brands get noticed?", description: "Explore SEO, social media and performance marketing, step by step." },
   ],
-  "tg-gameforge": [
+  [GD_PROGRAM_SLUG]: [
     { headline: "Ever wanted to make your own game?", description: "Start with small exercises and work up to a capstone game project.", ctaLabel: "Explore Game Development" },
     { headline: "From first idea to finished game.", description: "Design, program, animate, test and publish, all in one program.", ctaLabel: "Explore Game Development" },
   ],

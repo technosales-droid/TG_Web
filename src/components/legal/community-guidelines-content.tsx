@@ -1,10 +1,11 @@
 import type { LegalSectionData } from "./legal-layout";
+import { BUSINESS } from "@/data/business-facts";
 
 export const HEADING = "Community Guidelines";
 export const DESCRIPTION = "How we keep classes, comments and community spaces at Techno Gurukul safe, respectful and productive.";
 export const LAST_UPDATED = "7 October 2026";
 
-const EMAIL = "admission@technogurukul.com";
+const EMAIL = BUSINESS.email;
 const A = "font-medium text-primary underline-offset-2 hover:underline";
 const UL = "list-disc space-y-2 pl-5";
 

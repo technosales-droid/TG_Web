@@ -7,6 +7,7 @@
 // that case the hero falls back to an icon + gradient treatment (`visual`) instead of a photo, the
 // same honest fallback the /programs catalogue cards already use for programs with no image.
 import { INTERESTS, type Interest } from "@/lib/access";
+import { DM_PROGRAM_HREF, GD_PROGRAM_HREF } from "@/lib/program-routes";
 
 export interface ActiveProgram {
   category: string;
@@ -27,7 +28,7 @@ export const ACTIVE_PROGRAMS: ActiveProgram[] = [
     description:
       "Build practical skills across digital marketing, content, campaigns, audience understanding and measurable digital work.",
     outcome: "Learn. Execute. Measure. Grow.",
-    href: "/programs/tg-digital-marketing",
+    href: DM_PROGRAM_HREF,
     image: "/brand/programs-digital-marketing.jpg",
     video: "/brand/programs-digital-marketing.mp4",
     alt: "A laptop showing a digital marketing strategy breakdown beside matching handwritten notes",
@@ -38,7 +39,7 @@ export const ACTIVE_PROGRAMS: ActiveProgram[] = [
     description:
       "Learn the foundations of game creation through design, development, interactive systems and hands-on project work.",
     outcome: "Design. Build. Play.",
-    href: "/programs/tg-gameforge",
+    href: GD_PROGRAM_HREF,
     image: "/brand/programs-game-development.jpg",
     video: "/brand/programs-game-development.mp4",
     alt: "A person editing a game scene across multiple monitors in a production studio",

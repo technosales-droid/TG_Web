@@ -1,10 +1,11 @@
 import type { LegalSectionData } from "./legal-layout";
+import { BUSINESS } from "@/data/business-facts";
 
 export const HEADING = "Disclaimer";
 export const DESCRIPTION = "Important information about educational content, career outcomes, certifications and third-party tools referenced on this website.";
 export const LAST_UPDATED = "7 October 2026";
 
-const EMAIL = "admission@technogurukul.com";
+const EMAIL = BUSINESS.email;
 const A = "font-medium text-primary underline-offset-2 hover:underline";
 
 export const DISCLAIMER_SECTIONS: LegalSectionData[] = [

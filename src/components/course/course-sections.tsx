@@ -4,6 +4,8 @@ import { ArrowRight, Check, Layers, Star } from "lucide-react";
 import { Media } from "./media";
 import { COURSE_DETAILS, relatedOf, type CourseDetail } from "@/data/course-details";
 import { FACULTY } from "@/data/institute";
+import { PROGRAM_FACTS } from "@/data/business-facts";
+import { PROGRAM_FAQS } from "@/data/program-faqs";
 import { CurriculumAccordion, ExpandableText } from "./course-client";
 import { INCLUDE_ICON } from "./include-icon";
 
@@ -33,6 +35,41 @@ function CourseThumb({ course, className }: { course: CourseDetail; className: s
 
 const instructorOf = (c: CourseDetail) => (c.instructor ? FACULTY.find((f) => f.slug === c.instructor?.facultySlug) : undefined);
 
+/** A real HTML table, not a styled grid of cards -- the structure itself is part of what makes this scannable
+ * and quotable by an AI answer. Rows with no known value (fee, next batch, timings, eligibility, certificate)
+ * simply don't exist until src/data/business-facts.ts has a real answer for them. */
+function KeyFactsTable({ slug }: { slug: string }) {
+  const f = PROGRAM_FACTS[slug];
+  if (!f) return null;
+  const rows: [string, string][] = [
+    ...(f.duration ? ([["Duration", f.duration]] as [string, string][]) : []),
+    ["Mode", f.mode],
+    ["Location", f.location],
+    ["Modules", `${f.moduleCount} modules, ${f.topicCount} topics`],
+    ["Projects", f.projectsLabel.charAt(0).toUpperCase() + f.projectsLabel.slice(1)],
+    ...(f.learningTracks ? ([["Learning tracks", f.learningTracks.join(" & ")]] as [string, string][]) : []),
+    ...(f.fee ? ([["Fee", f.fee]] as [string, string][]) : []),
+    ...(f.nextBatch ? ([["Next batch", f.nextBatch]] as [string, string][]) : []),
+    ...(f.timings ? ([["Timings", f.timings]] as [string, string][]) : []),
+    ...(f.eligibility ? ([["Eligibility", f.eligibility]] as [string, string][]) : []),
+    ...(f.certificate ? ([["Certificate", f.certificate]] as [string, string][]) : []),
+  ];
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full max-w-xl border-collapse text-left text-base">
+        <tbody>
+          {rows.map(([k, v]) => (
+            <tr key={k} className="border-b border-primary/15 last:border-b-0">
+              <th scope="row" className="w-40 py-2.5 pr-4 align-top font-semibold text-foreground">{k}</th>
+              <td className="py-2.5 text-muted-foreground">{v}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 export function CourseMain({ course: c }: { course: CourseDetail }) {
   const related = relatedOf(c);
   const shown = new Set([c.slug, ...related.map((r) => r.slug)]);
@@ -41,6 +78,13 @@ export function CourseMain({ course: c }: { course: CourseDetail }) {
 
   return (
     <div className="divide-y divide-primary/15">
+      {/* Key facts: a real HTML table, scannable at a glance and the first thing an AI answer would quote. */}
+      {PROGRAM_FACTS[c.slug] && (
+        <Section id="key-facts" title="Key Facts">
+          <KeyFactsTable slug={c.slug} />
+        </Section>
+      )}
+
       {/* What you'll learn (or, for a program whose own source document names it that, Career Outcomes) */}
       {c.learningOutcomes.length > 0 && (
         <Section id="learn" title={c.outcomesHeading ?? "What you'll learn"}>
@@ -240,6 +284,24 @@ export function CourseMain({ course: c }: { course: CourseDetail }) {
       <Section id="description" title="Description">
         <ExpandableText paragraphs={c.longDescription} />
       </Section>
+
+      {/* FAQ: every question here is also in the page's FAQPage schema (programs/[slug]/page.tsx) -- kept as one
+          list in src/data/program-faqs.ts so the two can never drift apart. Plain <details>/<summary>: every
+          answer stays in the server HTML, just visually collapsed, so it's crawlable without JS. */}
+      {(PROGRAM_FAQS[c.slug]?.length ?? 0) > 0 && (
+        <Section id="faq" title="Frequently Asked Questions">
+          <div className="divide-y divide-primary/15 border border-primary/20">
+            {PROGRAM_FAQS[c.slug].map((item) => (
+              <details key={item.question} className="group p-4 sm:p-5">
+                <summary className={`cursor-pointer list-none font-semibold text-foreground marker:content-none ${FOCUS}`}>
+                  {item.question}
+                </summary>
+                <p className="mt-2 text-base leading-relaxed text-muted-foreground">{item.answer}</p>
+              </details>
+            ))}
+          </div>
+        </Section>
+      )}
 
       {/* Explore related programs */}
       {related.length > 0 && (

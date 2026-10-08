@@ -22,6 +22,7 @@
 // object below. No component changes are needed.
 import { COURSES as CURRENT_COURSES, DIGITAL_MARKETING_CURRICULUM } from "./course-catalogue";
 import { FUTURE_COURSES, FUTURE_INDUSTRIES, FUTURE_PROGRAMS } from "./future-catalogue";
+import { DM_PROGRAM_HREF } from "@/lib/program-routes";
 
 export type ProgramIcon =
   | "megaphone"
@@ -272,7 +273,7 @@ const CURRENT_PROGRAMS: Program[] = [
     description:
       "Complete practical digital marketing learning program covering strategy, content, SEO, advertising, analytics and AI.",
     status: "active",
-    href: "/programs/tg-digital-marketing",
+    href: DM_PROGRAM_HREF,
     origin: "source",
     curriculum: DIGITAL_MARKETING_CURRICULUM,
     listing: {

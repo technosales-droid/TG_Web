@@ -11,6 +11,7 @@ import { ACTIVE_PROGRAMS } from "@/data/active-programs";
 import { PROJECTS, isProjectPublic, type Project } from "@/data/projects";
 import { RESOURCES, isResourcePublic } from "@/data/resources";
 import { sourceTypeForCreator, type SourceType } from "@/lib/access";
+import { DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
 
 export interface GatedProjectContent {
   longDescription?: string;
@@ -69,13 +70,13 @@ export interface GatedBrochureContent {
 // real PDFs are added at these exact paths. Keyed by the course's existing route slug (ACTIVE_PROGRAMS' href), so a
 // popup or card only ever needs to know the course, never a filename.
 const BROCHURE_CONTENT: Record<string, GatedBrochureContent> = {
-  "tg-digital-marketing": {
+  [DM_PROGRAM_SLUG]: {
     kind: "file",
     file: "brochure-digital-marketing.pdf",
     downloadName: "techno-gurukul-digital-marketing-brochure.pdf",
     contentType: "application/pdf",
   },
-  "tg-gameforge": {
+  [GD_PROGRAM_SLUG]: {
     kind: "file",
     file: "brochure-game-development.pdf",
     downloadName: "techno-gurukul-game-development-brochure.pdf",
@@ -121,7 +122,7 @@ export function getGatedResource(slug: string) {
   return { sourceType: "resource" as const, content };
 }
 
-/** A course's brochure. `slug` is the course's own route slug (e.g. "tg-digital-marketing"), not a separate id. */
+/** A course's brochure. `slug` is the course's own route slug (see src/lib/program-routes.ts), not a separate id. */
 export function getGatedBrochure(slug: string) {
   const course = ACTIVE_PROGRAMS.some((p) => p.href === `/programs/${slug}`);
   const content = BROCHURE_CONTENT[slug];

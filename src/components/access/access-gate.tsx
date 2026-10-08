@@ -16,6 +16,7 @@ import {
   type SourceType,
 } from "@/lib/access";
 import { CONTACT } from "@/components/contact/contact-data";
+import { BUSINESS } from "@/data/business-facts";
 import { cn } from "cn";
 import { ErrorText, FIELD, FOCUS, Honeypot, INVALID, Label } from "./form-ui";
 
@@ -179,8 +180,8 @@ export function AccessGate({
           <p>
             Access profiles are not available to visitors under 18 yet, because we cannot verify a parent or guardian&rsquo;s agreement. A parent or
             guardian can email{" "}
-            <a href={`mailto:${CONTACT.email ?? "admission@technogurukul.com"}`} className="font-semibold text-primary underline underline-offset-2">
-              {CONTACT.email ?? "admission@technogurukul.com"}
+            <a href={`mailto:${CONTACT.email ?? BUSINESS.email}`} className="font-semibold text-primary underline underline-offset-2">
+              {CONTACT.email ?? BUSINESS.email}
             </a>{" "}
             and we will help. You can keep reading the rest of the site.
           </p>

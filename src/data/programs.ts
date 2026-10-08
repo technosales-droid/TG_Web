@@ -7,6 +7,7 @@
 // reflects the real, validated course data rather than a second copy of it. Only Digital Marketing
 // is hand-written below, since it is modelled as a Program (not a Course) in catalogue.ts.
 import { COURSE_CATALOGUE } from "./catalogue";
+import { DM_PROGRAM_HREF, DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
 
 export interface OfferingImage {
   src: string | null;
@@ -63,8 +64,8 @@ function courseOffering(slug: string, image: OfferingImage): Offering {
 }
 
 const DIGITAL_MARKETING_OFFERING: Offering = {
-  id: "tg-digital-marketing",
-  slug: "tg-digital-marketing",
+  id: DM_PROGRAM_SLUG,
+  slug: DM_PROGRAM_SLUG,
   title: "Digital Marketing Professional Program",
   subtitle: "SEO, Social Media & Performance Marketing",
   description:
@@ -73,7 +74,7 @@ const DIGITAL_MARKETING_OFFERING: Offering = {
   mode: "Offline / In-Person",
   location: "Nashik, Maharashtra",
   tags: ["Marketing", "SEO", "Social Media", "Performance Marketing", "AI"],
-  href: "/programs/tg-digital-marketing",
+  href: DM_PROGRAM_HREF,
   image: { src: "/brand/course-tg-digital-marketing.png", alt: "A phone held up surrounded by digital marketing icons: content, email, ads and analytics" },
   status: "active",
   flagship: true,
@@ -93,7 +94,7 @@ export const PROGRAM_CATEGORIES: ProgramCategory[] = [
     name: "Game Development",
     description: "A complete, practical path through every part of making a game.",
     offerings: [
-      courseOffering("tg-gameforge", {
+      courseOffering(GD_PROGRAM_SLUG, {
         src: "/brand/course-tg-gameforge.png",
         alt: "A collage of game development work: code, 3D sculpting and digital art on tablets",
       }),

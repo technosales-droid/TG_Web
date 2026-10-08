@@ -1,11 +1,12 @@
 import Link from "next/link";
 import type { LegalSectionData } from "./legal-layout";
+import { BUSINESS } from "@/data/business-facts";
 
 export const HEADING = "Terms of Use";
 export const DESCRIPTION = "The rules that apply when you access and use the Techno Gurukul website and programs.";
 export const LAST_UPDATED = "7 October 2026";
 
-const EMAIL = "admission@technogurukul.com";
+const EMAIL = BUSINESS.email;
 const A = "font-medium text-primary underline-offset-2 hover:underline";
 const UL = "list-disc space-y-2 pl-5";
 

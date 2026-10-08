@@ -14,6 +14,7 @@
 //
 // When a course is approved for launch: set `status: "active"` and `href` (e.g. "/courses/tg-unity-studio").
 import type { Course, CurriculumModule, ProgramTone } from "./catalogue";
+import { GD_PROGRAM_HREF, GD_PROGRAM_SLUG } from "@/lib/program-routes";
 
 const GAME = { industrySlug: "game-development", programSlug: "game-development-and-design" } as const;
 
@@ -315,7 +316,7 @@ const game = (
 
 const GAME_COURSES: Course[] = [
   game(
-    "tg-gameforge",
+    GD_PROGRAM_SLUG,
     "Game Development Professional Program",
     "Professional Game Development & Design",
     "Learn how games are conceived, designed, programmed, illustrated, animated, tested and published, from small exercises to a capstone game project.",
@@ -344,7 +345,7 @@ const GAME_COURSES: Course[] = [
     ["flagship", "vfx", "unity", "unreal", "ai", "multiplayer", "production", "publishing", "capstone", "game production", "ui/ux"],
     ["code", "pen-tool", "boxes"],
     "sky",
-    { status: "active", href: "/programs/tg-gameforge", featured: true, order: 2, format: "Offline / In-Person" }
+    { status: "active", href: GD_PROGRAM_HREF, featured: true, order: 2, format: "Offline / In-Person" }
   ),
 ];
 

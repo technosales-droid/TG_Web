@@ -9,7 +9,7 @@ import type { Interest } from "@/lib/access";
 import { cn } from "cn";
 
 export interface BrochureCourse {
-  /** The course's own route slug, e.g. "tg-digital-marketing"; also the brochure's sourceId. */
+  /** The course's own route slug (see src/lib/program-routes.ts); also the brochure's sourceId. */
   slug: string;
   /** Shown as "Download the {name} Brochure", and used as the pre-filled Course field. */
   name: Interest;

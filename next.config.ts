@@ -61,6 +61,10 @@ const nextConfig: NextConfig = {
       // Career Paths was retired and replaced by Blogs.
       { source: "/career-paths", destination: "/blogs", permanent: true },
       { source: "/career-paths/:slug", destination: "/blogs", permanent: true },
+      // Program slugs migrated to keyword-bearing URLs (SEO Phase 3). Keep these forever -- old links,
+      // bookmarks and any external site that linked the old slug must keep working.
+      { source: "/programs/tg-digital-marketing", destination: "/programs/digital-marketing-course-nashik", permanent: true },
+      { source: "/programs/tg-gameforge", destination: "/programs/game-development-course-nashik", permanent: true },
     ];
   },
 };
