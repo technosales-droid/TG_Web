@@ -2,13 +2,13 @@ import type { NextConfig } from "next";
 
 // Security headers. The CSP allows what the site actually uses: its own scripts, styles (Next inlines both), images,
 // video and self-hosted fonts, plus the single Google Maps embed in the footer and contact page, YouTube (the
-// hero's video card: a thumbnail image, and the player only once a visitor clicks play), and Google Analytics /
-// Google Tag Manager (gtag.js, gtm.js, their collection endpoints, and GTM's own image-beacon diagnostics at
-// /td and /a) -- which themselves only ever load once a visitor allows analytics in their cookie preferences
-// (src/components/analytics/). The GTM <noscript> fallback iframe (src/app/layout.tsx) is the one exception: it
-// needs frame-src unconditionally, since it only matters to visitors with JS disabled, for whom that consent
-// gate could never have run anyway. Applied to production builds only, because the dev server needs eval and
-// websockets for hot reload.
+// hero's video card: a thumbnail image, and the player only once a visitor clicks play), and Google Tag Manager
+// (gtm.js, its own image-beacon diagnostics at /td and /a, and the collection endpoints used by the GA4 tag
+// configured inside that GTM container -- there is no separate GA4 script in this codebase) -- which only ever
+// loads once a visitor allows analytics in their cookie preferences (src/components/analytics/). The GTM
+// <noscript> fallback iframe (src/app/layout.tsx) is the one exception: it needs frame-src unconditionally,
+// since it only matters to visitors with JS disabled, for whom that consent gate could never have run anyway.
+// Applied to production builds only, because the dev server needs eval and websockets for hot reload.
 const csp = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",

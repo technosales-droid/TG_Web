@@ -8,11 +8,12 @@ const GTM_ID = "GTM-WMBMSM8C";
 
 /**
  * Loads Google Tag Manager only once the visitor has allowed analytics in their cookie preferences (see
- * src/lib/consent.ts) -- the same gate already used for GA4 (google-analytics.tsx), since GTM is itself a tag
- * loader. Renders nothing beforehand -- no script is requested, no cookie is set, until then. The <noscript>
- * fallback iframe Google also asks for is not gated: it only ever matters to visitors with JS disabled, for
- * whom this consent system (itself React) could never have run anyway, and Google's own install instructions
- * require it as high in <body> as possible -- see src/app/layout.tsx.
+ * src/lib/consent.ts). GA4 is configured as a tag inside this GTM container (in the GTM web console, not in
+ * this codebase) rather than loaded separately, so gating GTM itself is enough -- there is no standalone GA4
+ * script here. Renders nothing beforehand -- no script is requested, no cookie is set, until then. The
+ * <noscript> fallback iframe Google also asks for is not gated: it only ever matters to visitors with JS
+ * disabled, for whom this consent system (itself React) could never have run anyway, and Google's own install
+ * instructions require it as high in <body> as possible -- see src/app/layout.tsx.
  */
 export function GoogleTagManager() {
   const { analytics } = useConsent();
