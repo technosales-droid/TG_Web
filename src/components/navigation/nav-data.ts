@@ -1,3 +1,4 @@
+import { LEARNING_PROJECTS_RESOURCES_ENABLED } from "@/lib/feature-flags";
 import { DM_PROGRAM_HREF, GD_PROGRAM_HREF } from "@/lib/program-routes";
 
 export interface NavLink {
@@ -32,10 +33,12 @@ export const GAME_DEVELOPMENT_PROGRAMS: ProgramLink[] = [
   },
 ];
 
-export const LEARNING_LINKS: NavLink[] = [
-  { label: "Projects", href: "/learning/projects" },
-  { label: "Resources", href: "/learning/resources" },
-];
+export const LEARNING_LINKS: NavLink[] = LEARNING_PROJECTS_RESOURCES_ENABLED
+  ? [
+      { label: "Projects", href: "/learning/projects" },
+      { label: "Resources", href: "/learning/resources" },
+    ]
+  : [];
 
 
 export const ABOUT_LINKS: NavLink[] = [{ label: "About Techno Gurukul", href: "/about" }];

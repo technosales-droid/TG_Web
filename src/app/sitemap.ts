@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getBlogPosts } from "@/data/blogs";
 import { COURSE_DETAILS } from "@/data/course-details";
+import { LEARNING_PROJECTS_RESOURCES_ENABLED } from "@/lib/feature-flags";
 import { SITE_URL } from "@/lib/site";
 
 // Every indexable page, once, at its canonical path. Redirect-only routes (/faculty, /career-paths, the old About
@@ -10,8 +11,7 @@ const STATIC_PATHS = [
   "/about",
   "/programs",
   "/learning",
-  "/learning/projects",
-  "/learning/resources",
+  ...(LEARNING_PROJECTS_RESOURCES_ENABLED ? ["/learning/projects", "/learning/resources"] : []),
   "/blogs",
   "/contact",
   "/privacy-policy",

@@ -28,7 +28,7 @@ export function DropdownNavItem({
           >
             Overview
           </NavigationMenuLink>
-          <div className="my-1.5 h-px bg-border" />
+          {items.length > 0 && <div className="my-1.5 h-px bg-border" />}
           {items.map((item) => (
             <NavigationMenuLink
               key={item.href}

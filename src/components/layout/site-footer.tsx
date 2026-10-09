@@ -165,7 +165,7 @@ export function SiteFooter() {
             aria-label="Footer navigation"
             className="order-3 grid grid-cols-2 gap-x-6 gap-y-10 md:order-2 lg:grid-cols-4 xl:col-start-2 xl:row-start-1"
           >
-            {footerNavigation.map((group) => (
+            {footerNavigation.filter((group) => group.links.length > 0).map((group) => (
               <div key={group.title}>
                 <h3 className="text-sm font-semibold tracking-widest text-background/70 uppercase">{group.title}</h3>
                 <ul className="mt-3 flex flex-col">

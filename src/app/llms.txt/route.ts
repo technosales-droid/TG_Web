@@ -2,6 +2,7 @@ import { getBlogPosts } from "@/data/blogs";
 import { COURSE_DETAILS } from "@/data/course-details";
 import { BUSINESS, PROGRAM_FACTS } from "@/data/business-facts";
 import { PROGRAM_FAQS } from "@/data/program-faqs";
+import { LEARNING_PROJECTS_RESOURCES_ENABLED } from "@/lib/feature-flags";
 import { SITE_URL } from "@/lib/site";
 
 export const dynamic = "force-static";
@@ -70,8 +71,8 @@ ${recentPosts}
 ## Learning approach
 
 - [How We Learn](${SITE_URL}/learning): How ${BUSINESS.name} approaches practical learning through understanding, practice, projects and continuous improvement.
-- [Projects](${SITE_URL}/learning/projects): How learning turns into practical projects that students build, test, refine, document and present.
-- [Resources](${SITE_URL}/learning/resources): Guides, references, templates and practice material supporting practical learning.
+${LEARNING_PROJECTS_RESOURCES_ENABLED ? `- [Projects](${SITE_URL}/learning/projects): How learning turns into practical projects that students build, test, refine, document and present.
+- [Resources](${SITE_URL}/learning/resources): Guides, references, templates and practice material supporting practical learning.` : ""}
 
 ## About and contact
 

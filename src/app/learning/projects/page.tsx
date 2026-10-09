@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { buildMetadata } from "@/lib/seo";
 import { breadcrumbSchema } from "@/lib/schema";
 import { JsonLd } from "@/components/seo/json-ld";
+import { LEARNING_PROJECTS_RESOURCES_ENABLED } from "@/lib/feature-flags";
 import { ProjectsHero } from "@/components/learning/projects/projects-hero";
 import { ProjectsShowcase } from "@/components/learning/projects/projects-showcase";
 import { LearningCta } from "@/components/learning/overview/learning-cta";
@@ -14,6 +16,8 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default function Page() {
+  if (!LEARNING_PROJECTS_RESOURCES_ENABLED) notFound();
+
   return (
     <main>
       <JsonLd data={breadcrumbSchema([{ name: "Learning", path: "/learning" }, { name: "Projects", path: "/learning/projects" }])} />
