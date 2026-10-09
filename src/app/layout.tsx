@@ -6,6 +6,7 @@ import { AccessProvider } from "@/components/access/access-provider";
 import { CookieBanner } from "@/components/access/cookie-banner";
 import { CookieSettings } from "@/components/access/cookie-settings";
 import { GoogleAnalytics } from "@/components/analytics/google-analytics";
+import { GoogleTagManager } from "@/components/analytics/google-tag-manager";
 import { CoursePromotionPopup } from "@/components/promotions/course-promotion-popup";
 import { FloatingContact } from "@/components/common/floating-contact";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -53,6 +54,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${montserrat.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col overflow-x-clip bg-background text-foreground font-sans">
+        {/* GTM noscript fallback: required by Google as high in <body> as possible, for visitors with JS
+            disabled -- for whom the cookie-consent gate below (itself React) could never have run anyway. */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-WMBMSM8C"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
         <AccessProvider>
           {SCHEMA.map((d, i) => (
             <JsonLd key={i} data={d} />
@@ -73,6 +84,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <CookieSettings />
           <CookieBanner />
           <GoogleAnalytics />
+          <GoogleTagManager />
         </AccessProvider>
       </body>
     </html>

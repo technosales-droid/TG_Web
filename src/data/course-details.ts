@@ -271,18 +271,6 @@ const OVERRIDES: Record<string, Override> = {
     ],
     programPhilosophy: DM_PROGRAM_PHILOSOPHY,
     finalReadiness: DM_FINAL_READINESS,
-    practicalLearningModel: {
-      split: [
-        { label: "Practical Execution", percent: 60 },
-        { label: "Strategy & Concepts", percent: 25 },
-        { label: "Tools, Theory & Professional Skills", percent: 15 },
-      ],
-      points: [
-        "Assignments based on real businesses and realistic campaign scenarios",
-        "Portfolio-first approach: students finish with work they can show in interviews or to clients",
-        "Regular campaign analysis, troubleshooting and reporting exercises",
-      ],
-    },
     liveProjects: [
       { title: "Project 1: Social Media", sequence: "Strategy → Content → Creatives → Reels → Reporting" },
       { title: "Project 2: SEO", sequence: "Keyword Research → Website Audit → Content → On-page Optimization → Search Console" },
