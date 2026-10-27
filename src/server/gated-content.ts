@@ -11,7 +11,7 @@ import { ACTIVE_PROGRAMS } from "@/data/active-programs";
 import { PROJECTS, isProjectPublic, type Project } from "@/data/projects";
 import { RESOURCES, isResourcePublic } from "@/data/resources";
 import { sourceTypeForCreator, type SourceType } from "@/lib/access";
-import { DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
+import { AI_PROGRAM_SLUG, DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
 
 export interface GatedProjectContent {
   longDescription?: string;
@@ -65,11 +65,17 @@ export interface GatedBrochureContent {
   contentType: string;
 }
 
-// BROCHURE FILES NOT YET SUPPLIED: both entries point at a file that does not exist in /private-content yet. The
-// download stays gated and correctly answers "not found" (see the file route) rather than a broken link, until the
-// real PDFs are added at these exact paths. Keyed by the course's existing route slug (ACTIVE_PROGRAMS' href), so a
-// popup or card only ever needs to know the course, never a filename.
+// If a course's real PDF isn't in /private-content yet, point its entry at a filename that doesn't exist: the
+// download stays gated and correctly answers "not found" (see the file route) rather than a broken link, until
+// the real PDF is added at that exact path. Keyed by the course's existing route slug (ACTIVE_PROGRAMS' href),
+// so a popup or card only ever needs to know the course, never a filename.
 const BROCHURE_CONTENT: Record<string, GatedBrochureContent> = {
+  [AI_PROGRAM_SLUG]: {
+    kind: "file",
+    file: "brochure-ai-program.pdf",
+    downloadName: "techno-gurukul-ai-program-brochure.pdf",
+    contentType: "application/pdf",
+  },
   [DM_PROGRAM_SLUG]: {
     kind: "file",
     file: "brochure-digital-marketing.pdf",
