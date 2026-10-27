@@ -10,7 +10,7 @@
 // placement figure, learner count, certificate claim or partner.
 import { DIGITAL_MARKETING_CURRICULUM } from "./course-catalogue";
 import { ALL_OFFERINGS } from "./programs";
-import { DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
+import { AI_PROGRAM_SLUG, DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
 import { PROGRAM_FACTS } from "./business-facts";
 
 export interface CourseLesson {
@@ -247,6 +247,76 @@ const GD_CURRICULUM: CourseModule[] = [
   ),
 ];
 
+// Complete Applied AI Program: 9 modules, adapted from Techno Gurukul's own "Complete Applied AI Curriculum"
+// source document (Technogurukul_AI_Curriculum_Overview.pdf). Each module's SUBTOPICS bullets become its
+// lessons and its BUILD OUTCOME paragraph becomes `summary`, word-for-word, the same pattern used for Game
+// Development's semesters above. The source document itself caveats that tool names are examples, not fixed
+// commitments ("Specific features, access and pricing can change; the batch will use suitable tools available
+// at the time"), so no fee, batch date, instructor or certificate claim is made here -- those stay unset, same
+// as every other program, until confirmed.
+const aiModule = (title: string, topics: string[], buildOutcome: string): CourseModule => ({
+  title,
+  lessons: topics.map((t) => ({ title: t })),
+  summary: buildOutcome,
+});
+
+const AI_CURRICULUM: CourseModule[] = [
+  aiModule(
+    "AI Foundations: Understand the tools, lead the work",
+    ["How AI creates", "Prompting that works", "Quality and judgement", "Responsible use", "Practical workflows", "ChatGPT in practice"],
+    "A personal AI playbook: reusable prompts, a checked research brief, a repeatable work/study workflow and a checklist for safe, reliable AI use."
+  ),
+  aiModule(
+    "Claude Deep Dive: From capable assistant to build partner",
+    ["Work with long context", "Projects and repeatable work", "Think, compare and structure", "Create and iterate", "Visual and file-based work", "Handoff to development"],
+    "A Claude-powered project workspace with a reusable instruction set, an analyzed source pack, a polished deliverable and a development-ready product brief."
+  ),
+  aiModule(
+    "Generative AI Studio: Concepts, content and creative direction",
+    ["Brief to creative concept", "Prompt craft for media", "AI-assisted writing", "Creative quality control", "Creative production workflow", "Portfolio presentation"],
+    "A campaign concept pack: creative brief, messaging, script/caption set, visual direction and a presentation-ready case study."
+  ),
+  aiModule(
+    "Image Generation: Art-direct a visual world",
+    ["Image prompting fundamentals", "Generate and refine", "Consistency across assets", "Applied visual formats", "Design review"],
+    "A coordinated set of campaign visuals with a style board, selected variations, final crops and a short explanation of the art direction."
+  ),
+  aiModule(
+    "Video Generation: Turn a story into a finished short",
+    ["Story and pre-production", "Generate video scenes", "Continuity and control", "Edit the story", "Production practice"],
+    "A finished short-form video with script, storyboard, generated/edited scenes, captions, sound mix and a second format or cut-down."
+  ),
+  aiModule(
+    "Voice, Music & Song: Give your ideas a sound",
+    ["Voiceover writing", "AI voice production", "Music for mood", "Song generation", "Audio finishing and rights"],
+    "A narrated video or audio piece with a generated voiceover, plus an original music bed or song demo and a note on tool and rights checks."
+  ),
+  aiModule(
+    "Website Creation: From idea to a polished online experience",
+    ["Plan the experience", "Write and structure content", "Generate the site", "Responsive design and interaction", "Launch readiness", "Iterate from feedback"],
+    "A responsive landing page or multi-section site with a clear offer, working navigation/forms or a reviewed preview, plus a short handover note."
+  ),
+  aiModule(
+    "AI Automation: Connect tools and make work flow",
+    ["Workflow thinking", "n8n foundations", "Make.com foundations", "AI in a workflow", "Connections and reliability", "Human approval"],
+    "Two tested workflow automations, such as form-to-summary and enquiry-to-draft, with sample data, error handling and a human approval step."
+  ),
+  aiModule(
+    "Agentic AI & Development: Build assistants that can act",
+    [
+      "What makes an agent",
+      "Design the agent",
+      "Knowledge assistants",
+      "Tool use and connections",
+      "Claude for agentic work",
+      "Claude Code build lab",
+      "Test and improve",
+      "Capstone and presentation",
+    ],
+    "A demonstrated AI assistant or agentic workflow, test notes, a simple interface or workflow map, a project readme and a portfolio presentation. All practice uses simulated data; consequential actions stay under human control."
+  ),
+];
+
 const OVERRIDES: Record<string, Override> = {
   [DM_PROGRAM_SLUG]: {
     note: "Batch size is limited.",
@@ -376,6 +446,64 @@ const OVERRIDES: Record<string, Override> = {
     ],
     portfolioNote:
       "By the end of the program, a student can put together a portfolio spanning game concepts and artwork, 2D and 3D assets and animation, engine-built playable levels, programmed gameplay systems and a larger, team-built project: real, presentable evidence of what they can build, not just what they have studied.",
+  },
+  [AI_PROGRAM_SLUG]: {
+    programTagline: "Complete Applied AI Program",
+    seoH1: "AI Course in Nashik",
+    answerSummary:
+      `Techno Gurukul's AI Course in Nashik is a 3.5-month, offline, project-based program covering generative AI, Claude, image, video, voice and website creation, plus automation and agentic AI development, across 9 modules and 53 topics. Students complete ${PROGRAM_FACTS[AI_PROGRAM_SLUG].projectsLabel}, building a real, presentable AI portfolio at its institute in Tilak Wadi, Nashik.`,
+    learningOutcomes: [
+      "Generative AI & Prompting",
+      "Claude for Research & Development",
+      "Creative Content & Campaign Direction",
+      "AI Image Generation",
+      "AI Video Generation",
+      "AI Voice, Music & Song",
+      "AI-Assisted Website Creation",
+      "Workflow Automation (n8n & Make.com)",
+      "Agentic AI & Claude Code Development",
+    ],
+    curriculum: AI_CURRICULUM,
+    includes: [
+      { label: "A curated AI portfolio across media, web, automation and agents", icon: "portfolio" },
+      { label: "Exposure to current AI and no-code tools", icon: "tools" },
+    ],
+    programPhilosophy:
+      "Learn how generative AI works. Get fluent with ChatGPT and Claude. Create images, videos, voiceovers, music and web experiences. Then design automations and AI agents using tools such as n8n, Make.com and Claude Code.",
+    finalReadiness:
+      "At the end of the program, a learner has a curated portfolio of original media, an AI-enabled web experience, working workflow automations and a demonstrated AI assistant prototype, and has practised explaining the value of their work and presenting a mock service or product offer.",
+    practicalLearningStages: [
+      { title: "Understand", text: "Understand the brief behind each AI topic -- what the tool or technique is for -- before building with it." },
+      { title: "Practise", text: "See a trainer demonstration, then work through guided exercises across prompting, creation and development tools." },
+      { title: "Build", text: "Make an independent version of the task, applying the brief and the demonstration to original work." },
+      { title: "Show", text: "Review the work against a checklist, then present what was built and what was learned." },
+      {
+        title: "Prepare",
+        text: "Carry a portfolio of original media, a web experience, automations and an AI assistant prototype into the next step, whether that's further learning or a career.",
+      },
+    ],
+    toolsByCategory: [
+      { category: "AI Assistants", items: ["ChatGPT", "Claude", "Gemini"] },
+      { category: "Image Generation", items: ["ChatGPT Image Generation", "Adobe Firefly", "Canva", "Ideogram"] },
+      { category: "Video Generation", items: ["Google Flow", "Higgsfield", "Veo", "Runway", "Kling", "CapCut"] },
+      { category: "Voice & Music", items: ["ElevenLabs", "Suno"] },
+      { category: "Website Creation", items: ["Framer", "Lovable", "Replit", "Wix"] },
+      { category: "Automation", items: ["n8n", "Make.com"] },
+      { category: "Development", items: ["Claude Code"] },
+    ],
+    projectTracks: [
+      { title: "AI Work Kit", points: ["Prompt library", "Source-checked research brief", "Claude project workspace"] },
+      {
+        title: "Creative Campaign",
+        points: ["Original image collection", "Script/copy pack", "Short-form video", "Voiceover", "Original music/song sample"],
+      },
+      { title: "Digital Experience", points: ["Responsive website or landing page", "Reviewed content", "Tested paths"] },
+      { title: "Workflow Automations", points: ["n8n and Make.com examples", "Error handling", "Human approval"] },
+      { title: "AI Assistant Prototype", points: ["Knowledge or task assistant", "Appropriate workflow", "Development approach"] },
+      { title: "Final Demonstration", points: ["Capstone walkthrough", "Project documentation", "Mock product/service pitch"] },
+    ],
+    portfolioNote:
+      "By the end of the program, a learner has a portfolio spanning an AI work kit, a creative campaign, a digital experience, workflow automations and a demonstrated AI assistant prototype: real, presentable evidence of what they can build, not just what they have studied.",
   },
   "tg-unity-studio": {
     programPhilosophy:

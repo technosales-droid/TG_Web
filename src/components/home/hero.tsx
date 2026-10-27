@@ -48,8 +48,8 @@ export function Hero() {
             </h1>
 
             <p className="mt-4 max-w-xl text-base leading-normal text-white/80 sm:mt-6 sm:leading-relaxed sm:text-lg">
-              A Nashik-based institute for practical, hands-on learning, currently led by our Digital Marketing
-              program and complemented by hands-on Game Development training.
+              A Nashik-based institute for practical, hands-on learning, led by our Complete Applied AI Program
+              and complemented by Digital Marketing and Game Development training.
             </p>
 
             <div className="mt-6 flex flex-col items-stretch gap-3 sm:mt-9 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">

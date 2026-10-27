@@ -5,8 +5,9 @@ import Image from "next/image";
 import { Clock } from "lucide-react";
 import { cn } from "cn";
 
-// Committed future directions, not yet enrollable; no routes, no fabricated details. Digital Marketing and Game
-// Development are not in this list: they are already available and covered by the Available Courses section above.
+// Committed future directions, not yet enrollable; no routes, no fabricated details. The AI Program, Digital
+// Marketing and Game Development are not in this list: they are already available and covered by the Available
+// Courses section above.
 const COMING_SOON_PROGRAMS = [
   {
     title: "Cybersecurity",
@@ -19,12 +20,6 @@ const COMING_SOON_PROGRAMS = [
     description: "Learn how data can be explored, interpreted and turned into useful insights, visualisations and decisions.",
     image: "/brand/programs-data-science.jpg",
     alt: "A laptop displaying financial charts and data visualisations on a desk",
-  },
-  {
-    title: "Artificial Intelligence & Machine Learning",
-    description: "Explore artificial intelligence, machine learning concepts and practical ways intelligent systems can be designed and applied.",
-    image: "/brand/programs-ai-ml.jpg",
-    alt: "A street scene with AI object-detection labels overlaid on people, vehicles and traffic signals",
   },
   {
     title: "Full-Stack Web Development",
@@ -124,8 +119,8 @@ export function ComingSoonPrograms() {
             </h2>
 
             <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
-              These are future directions we&rsquo;re exploring, not open for enrolment yet. Digital Marketing and
-              Game Development are the two courses available today.
+              These are future directions we&rsquo;re exploring, not open for enrolment yet. The AI Program,
+              Digital Marketing and Game Development are the three courses available today.
             </p>
           </div>
         </div>

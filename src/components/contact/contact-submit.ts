@@ -2,7 +2,7 @@ import { EMAIL_RE, phoneError } from "@/lib/access";
 import { CONTACT } from "./contact-data";
 import { BUSINESS } from "@/data/business-facts";
 
-export const INTERESTS = ["Game Development", "Digital Marketing", "General Enquiry", "Career Guidance", "Other"] as const;
+export const INTERESTS = ["AI Program", "Game Development", "Digital Marketing", "General Enquiry", "Career Guidance", "Other"] as const;
 export const STATUSES = ["School Student", "College Student", "Graduate", "Working Professional", "Parent / Guardian", "Other"] as const;
 export const CONTACT_METHODS = ["Phone", "WhatsApp", "Email"] as const;
 export const SOURCES = ["Google Search", "Instagram", "Facebook", "YouTube", "Referral", "Other"] as const;

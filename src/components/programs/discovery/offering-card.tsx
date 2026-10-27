@@ -6,6 +6,7 @@ import type { Offering } from "@/data/programs";
 import type { ViewMode } from "./program-utils";
 
 const CATEGORY_VISUAL: Record<string, { tone: string; icon: LucideIcon }> = {
+  "ai-program": { tone: "from-[#0b3d50] via-primary/80 to-brand-sky/60", icon: Sparkles },
   "digital-marketing": { tone: "from-primary via-primary/70 to-brand-sky/50", icon: Megaphone },
   "game-development": { tone: "from-brand-sky/80 via-primary/70 to-[#0b3d50]", icon: Gamepad2 },
 };

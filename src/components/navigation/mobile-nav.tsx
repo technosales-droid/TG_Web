@@ -3,8 +3,8 @@
 import Link from "next/link";
 import {
   CTA_LINK,
-  GAME_DEVELOPMENT_PROGRAMS,
   LEARNING_LINKS,
+  SECONDARY_PROGRAMS,
   SIGNATURE_PROGRAM,
   type NavLink,
 } from "@/components/navigation/nav-data";
@@ -88,7 +88,7 @@ export function MobileNav({
               {SIGNATURE_PROGRAM.label}: {SIGNATURE_PROGRAM.tagline}
             </Link>
           </li>
-          {GAME_DEVELOPMENT_PROGRAMS.map((program) => (
+          {SECONDARY_PROGRAMS.map((program) => (
             <li key={program.href}>
               <Link
                 href={program.href}

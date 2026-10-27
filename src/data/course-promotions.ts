@@ -5,7 +5,7 @@
 // still gets promoted, using its own catalogue description. Keep every line truthful: no counts, ratings, discounts,
 // deadlines, scarcity or testimonials.
 import { COURSE_DETAILS } from "./course-details";
-import { DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
+import { AI_PROGRAM_SLUG, DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
 
 export interface PromotionMessage {
   headline: string;
@@ -25,6 +25,10 @@ export interface CoursePromotion {
 }
 
 const MESSAGES: Record<string, PromotionMessage[]> = {
+  [AI_PROGRAM_SLUG]: [
+    { headline: "Build with AI, not just use it.", description: "Go from prompting to creating images, video, voice, websites and automations, hands-on.", ctaLabel: "Explore the AI Program" },
+    { headline: "A portfolio across every AI medium.", description: "Nine modules covering generative AI, Claude, creative media, websites, automation and AI agents." },
+  ],
   [DM_PROGRAM_SLUG]: [
     { headline: "Your next campaign could start here.", description: "Learn digital marketing through practical projects, tools and real-world workflows.", ctaLabel: "Explore Digital Marketing" },
     { headline: "Build work you can show.", description: "Campaign projects that turn what you learn into portfolio-worthy work." },

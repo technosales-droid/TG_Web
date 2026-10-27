@@ -8,9 +8,9 @@ import { ComingSoonPrograms } from "@/components/home/programs-preview";
 import { ClosingCta } from "@/components/home/closing-cta";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Techno Gurukul | Digital Marketing Institute in Nashik",
+  title: "Techno Gurukul | AI, Digital Marketing & Game Development Institute in Nashik",
   description:
-    "A Nashik-based institute for practical learning: Digital Marketing as our signature course, alongside hands-on Game Development training, built on real work.",
+    "A Nashik-based institute for practical learning: a Complete Applied AI Program as our signature course, alongside hands-on Digital Marketing and Game Development training, built on real work.",
   path: "/",
 });
 

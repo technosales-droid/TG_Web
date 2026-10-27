@@ -1,5 +1,5 @@
 import { LEARNING_PROJECTS_RESOURCES_ENABLED } from "@/lib/feature-flags";
-import { DM_PROGRAM_HREF, GD_PROGRAM_HREF } from "@/lib/program-routes";
+import { AI_PROGRAM_HREF, DM_PROGRAM_HREF, GD_PROGRAM_HREF } from "@/lib/program-routes";
 
 export interface NavLink {
   label: string;
@@ -8,28 +8,36 @@ export interface NavLink {
 
 export interface ProgramLink extends NavLink {
   tagline: string;
-  image: string;
+  /** Null when there's no real photography yet; the nav tile renders an icon + gradient fallback instead. */
+  image: string | null;
+  /** Shown as the small uppercase label on the tile (e.g. "Digital Marketing"). */
+  eyebrow: string;
 }
 
-// Digital Marketing is Techno Gurukul's signature course, so it takes the large "flagship" tile in the Programs
-// menu; Game Development remains a single, real, available course, shown at the same tile size as any other program.
-export const DIGITAL_MARKETING_CATEGORY = "Digital Marketing";
-
+// The AI Program is Techno Gurukul's signature course, so it takes the large "flagship" tile in the Programs
+// menu; Digital Marketing and Game Development are real, available courses, shown as secondary tiles.
 export const SIGNATURE_PROGRAM: ProgramLink = {
-  label: "Digital Marketing Course",
-  href: DM_PROGRAM_HREF,
-  tagline: "SEO, Social Media & Performance Marketing",
-  image: "/brand/course-tg-digital-marketing.png",
+  label: "AI Course",
+  href: AI_PROGRAM_HREF,
+  tagline: "Generative AI, Automation & Agentic Development",
+  image: null,
+  eyebrow: "AI Program",
 };
 
-export const PROGRAM_CATEGORY = "Game Development & Design";
-
-export const GAME_DEVELOPMENT_PROGRAMS: ProgramLink[] = [
+export const SECONDARY_PROGRAMS: ProgramLink[] = [
+  {
+    label: "Digital Marketing Course",
+    href: DM_PROGRAM_HREF,
+    tagline: "SEO, Social Media & Performance Marketing",
+    image: "/brand/course-tg-digital-marketing.png",
+    eyebrow: "Digital Marketing",
+  },
   {
     label: "Game Development Course",
     href: GD_PROGRAM_HREF,
     tagline: "Professional Game Development & Design",
     image: "/brand/course-tg-gameforge.png",
+    eyebrow: "Game Development & Design",
   },
 ];
 

@@ -12,13 +12,13 @@ import { COURSE_PROMOTIONS, type PromotionMessage } from "@/data/course-promotio
 import { cn } from "cn";
 import { useBrochureDownload } from "./brochure-download";
 import { pickNext } from "./rotation";
-import { DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
+import { AI_PROGRAM_SLUG, DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
 
 const DELAY_S = 45;
 const STORAGE_KEY = "tg-course-promo";
-// Only the two courses actually open for enrolment are promoted; the individual Game Development studios (Unity,
+// Only the three courses actually open for enrolment are promoted; the individual Game Development studios (Unity,
 // Unreal, and so on) are not advertised on their own, matching how they're presented everywhere else on the site.
-const PROMOTABLE_IDS = [DM_PROGRAM_SLUG, GD_PROGRAM_SLUG];
+const PROMOTABLE_IDS = [AI_PROGRAM_SLUG, DM_PROGRAM_SLUG, GD_PROGRAM_SLUG];
 const IDS = COURSE_PROMOTIONS.filter((p) => PROMOTABLE_IDS.includes(p.courseId)).map((p) => p.courseId);
 // At most one popup per browser session, so a visitor is never interrupted twice in one visit.
 const SESSION_SHOWN_KEY = "tg-course-promo-shown-session";
@@ -60,8 +60,8 @@ function isBusy() {
 }
 
 /**
- * One global promotion modal (native <dialog>: dims and inerts the page, locks scroll, traps focus), for the two
- * courses currently open for enrolment (Digital Marketing, Game Development). After 45 seconds of active browsing
+ * One global promotion modal (native <dialog>: dims and inerts the page, locks scroll, traps focus), for the three
+ * courses currently open for enrolment (AI Program, Digital Marketing, Game Development). After 45 seconds of active browsing
  * (tab visible) it promotes one of them; which one rotates across visits (data/promotions/rotation.ts), but never
  * more than once in a single browser session, so a visitor is interrupted at most once per visit. It stays until
  * the visitor closes it (button or Escape), not on backdrop click.

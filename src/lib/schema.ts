@@ -15,7 +15,7 @@ export function organizationSchema() {
     logo: { "@type": "ImageObject", url: `${SITE_URL}/brand/logo.png` },
     image: `${SITE_URL}/brand/logo.png`,
     description:
-      "Techno Gurukul is a Nashik-based institute for practical, hands-on learning, offering a Digital Marketing course and a Game Development course, both taught offline.",
+      "Techno Gurukul is a Nashik-based institute for practical, hands-on learning, offering a Complete Applied AI Program, a Digital Marketing course and a Game Development course, all taught offline.",
     telephone: BUSINESS.telephone,
     address: { "@type": "PostalAddress", ...BUSINESS.address },
     hasMap: BUSINESS.hasMap,

@@ -53,8 +53,9 @@ export async function GET() {
 
   const body = `# ${BUSINESS.name}
 
-> ${BUSINESS.name} is a Nashik-based learning institute offering a practical Digital Marketing course and a
-> Game Development course, both taught offline, in person, in Nashik, Maharashtra, India.
+> ${BUSINESS.name} is a Nashik-based learning institute offering a Complete Applied AI Program as its signature
+> course, alongside a practical Digital Marketing course and a Game Development course, all taught offline, in
+> person, in Nashik, Maharashtra, India.
 
 ## Programs
 

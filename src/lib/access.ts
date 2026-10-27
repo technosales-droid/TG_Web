@@ -5,6 +5,7 @@
 export const INTERESTS = [
   "Courses",
   "Admissions",
+  "AI Program",
   "Game Development",
   "Digital Marketing",
   "Projects",

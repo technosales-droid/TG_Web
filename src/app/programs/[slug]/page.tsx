@@ -9,7 +9,7 @@ import { BUSINESS, ORG_ID, PROGRAM_FACTS } from "@/data/business-facts";
 import { SITE_URL } from "@/lib/site";
 import { buildMetadata } from "@/lib/seo";
 import { breadcrumbSchema, faqSchema } from "@/lib/schema";
-import { DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
+import { AI_PROGRAM_SLUG, DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
 import { PROGRAM_FAQS } from "@/data/program-faqs";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -24,6 +24,11 @@ export function generateStaticParams() {
 // course.description (the shorter line also used on-page): a meta description earns its own 140-160 character
 // target, which the on-page copy isn't written to hit. Visible page copy (H1, subtitle) is untouched here.
 const SEO_COPY: Record<string, { title: string; description: string }> = {
+  [AI_PROGRAM_SLUG]: {
+    title: "AI Course in Nashik | Techno Gurukul",
+    description:
+      "A practical, offline AI course in Nashik covering generative AI, Claude, image/video/voice creation, AI-assisted websites, automation and agentic AI development through hands-on projects.",
+  },
   [DM_PROGRAM_SLUG]: {
     title: "Digital Marketing Course in Nashik | Techno Gurukul",
     description:

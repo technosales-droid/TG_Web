@@ -4,7 +4,7 @@
 // (JSON-LD, the program pages' key-facts table, the FAQ) picks up the new value automatically. Never invent a
 // value for an unknown field anywhere else in the codebase; render nothing for it instead.
 import { SITE_URL } from "@/lib/site";
-import { DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
+import { AI_PROGRAM_SLUG, DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
 
 export const ORG_ID = `${SITE_URL}/#organization`;
 export const WEBSITE_ID = `${SITE_URL}/#website`;
@@ -105,6 +105,28 @@ export const PROGRAM_FACTS: Record<string, ProgramFacts> = {
     topicCount: 66,
     projectsLabel: "5 projects",
     learningTracks: ["Unity", "Unreal Engine"],
+    fee: null,
+    nextBatch: null,
+    timings: null,
+    eligibility: null,
+    certificate: null,
+    demoClassAvailable: null,
+    emi: null,
+  },
+  [AI_PROGRAM_SLUG]: {
+    // Source: Technogurukul_AI_Curriculum_Overview.pdf, "A 3.5-month course..." (page 1). Mode/location confirmed
+    // by the business owner directly (same Nashik institute as DM/GD; not stated in the PDF itself).
+    duration: "3.5 months",
+    // 3.5 months expressed in days (ISO 8601 has no fractional-month designator): 3.5 * 30 = 105.
+    durationIso: "P105D",
+    mode: "Offline / In-Person",
+    location: "Nashik, Maharashtra",
+    moduleCount: 9,
+    // Counted from the PDF's own SUBTOPICS bullets across all 9 modules: 6+6+6+5+5+5+6+6+8 = 53.
+    topicCount: 53,
+    // The PDF's own "PORTFOLIO MILESTONES" list (page 11) has 6 entries; used as the projects/deliverables
+    // figure in the same spirit as DM/GD's projectsLabel.
+    projectsLabel: "6 portfolio milestones",
     fee: null,
     nextBatch: null,
     timings: null,

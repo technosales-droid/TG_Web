@@ -7,7 +7,7 @@
 // that case the hero falls back to an icon + gradient treatment (`visual`) instead of a photo, the
 // same honest fallback the /programs catalogue cards already use for programs with no image.
 import { INTERESTS, type Interest } from "@/lib/access";
-import { DM_PROGRAM_HREF, GD_PROGRAM_HREF } from "@/lib/program-routes";
+import { AI_PROGRAM_HREF, DM_PROGRAM_HREF, GD_PROGRAM_HREF } from "@/lib/program-routes";
 
 export interface ActiveProgram {
   category: string;
@@ -22,6 +22,20 @@ export interface ActiveProgram {
 }
 
 export const ACTIVE_PROGRAMS: ActiveProgram[] = [
+  {
+    category: "Artificial Intelligence",
+    title: "AI Program",
+    description:
+      "Understand generative AI, get fluent with Claude and ChatGPT, create images, video, voice and music, build an AI-assisted website and design automations and AI agents.",
+    outcome: "Understand. Create. Automate. Build.",
+    href: AI_PROGRAM_HREF,
+    // No real photography yet; the hero falls back to an icon + gradient treatment. Swap in a real photo/video
+    // path here once available -- nothing else needs to change.
+    image: null,
+    video: null,
+    alt: "",
+    visual: { tone: "navy", icon: "boxes" },
+  },
   {
     category: "Digital & Marketing",
     title: "Digital Marketing",

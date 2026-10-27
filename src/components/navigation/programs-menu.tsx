@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Sparkles } from "lucide-react";
 import { cn } from "cn";
 import {
   NavigationMenuContent,
@@ -8,22 +8,14 @@ import {
   NavigationMenuLink,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import {
-  DIGITAL_MARKETING_CATEGORY,
-  GAME_DEVELOPMENT_PROGRAMS,
-  PROGRAM_CATEGORY,
-  SIGNATURE_PROGRAM,
-  type ProgramLink,
-} from "@/components/navigation/nav-data";
+import { SECONDARY_PROGRAMS, SIGNATURE_PROGRAM, type ProgramLink } from "@/components/navigation/nav-data";
 
 function Tile({
   program,
-  eyebrow,
   flagship,
   className,
 }: {
   program: ProgramLink;
-  eyebrow?: string;
   flagship?: boolean;
   className?: string;
 }) {
@@ -36,13 +28,24 @@ function Tile({
         className
       )}
     >
-      <Image
-        src={program.image}
-        alt=""
-        fill
-        sizes={flagship ? "480px" : "240px"}
-        className="object-cover transition-transform duration-700 ease-out motion-safe:group-hover/item:scale-105"
-      />
+      {program.image ? (
+        <Image
+          src={program.image}
+          alt=""
+          fill
+          sizes={flagship ? "480px" : "240px"}
+          className="object-cover transition-transform duration-700 ease-out motion-safe:group-hover/item:scale-105"
+        />
+      ) : (
+        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-[#0b3d50] via-primary/80 to-brand-sky/60">
+          <Sparkles
+            className={cn(
+              "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white/20 transition-transform duration-700 ease-out motion-safe:group-hover/item:scale-105",
+              flagship ? "size-20" : "size-12"
+            )}
+          />
+        </div>
+      )}
       <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
 
       {flagship && (
@@ -55,9 +58,7 @@ function Tile({
       </span>
 
       <span className={cn("absolute inset-x-0 bottom-0 block", flagship ? "p-5" : "p-3.5")}>
-        {eyebrow && (
-          <span className="mb-1 block text-[11px] font-semibold tracking-widest text-white/75 uppercase">{eyebrow}</span>
-        )}
+        <span className="mb-1 block text-[11px] font-semibold tracking-widest text-white/75 uppercase">{program.eyebrow}</span>
         <span className={cn("block leading-tight font-semibold", flagship ? "text-2xl" : "text-sm")}>{program.label}</span>
         <span className={cn("mt-1 block text-white/80", flagship ? "max-w-xs text-sm" : "line-clamp-2 text-xs")}>
           {program.tagline}
@@ -88,10 +89,10 @@ export function ProgramsMenu() {
             </NavigationMenuLink>
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
-            <Tile program={SIGNATURE_PROGRAM} eyebrow={DIGITAL_MARKETING_CATEGORY} flagship className="col-span-2 h-[19rem]" />
-            {GAME_DEVELOPMENT_PROGRAMS.map((program) => (
-              <Tile key={program.href} program={program} eyebrow={PROGRAM_CATEGORY} className="h-[19rem]" />
+          <div className="grid grid-cols-3 grid-rows-2 gap-3">
+            <Tile program={SIGNATURE_PROGRAM} flagship className="col-span-2 row-span-2 h-full" />
+            {SECONDARY_PROGRAMS.map((program) => (
+              <Tile key={program.href} program={program} className="h-[9.125rem]" />
             ))}
           </div>
         </div>

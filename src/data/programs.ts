@@ -4,10 +4,11 @@
 // ready shape for this one page: Program -> Offering[], with no "coming soon" concept surfaced.
 //
 // Game Development offerings are pulled live from COURSE_CATALOGUE by slug, so this page always
-// reflects the real, validated course data rather than a second copy of it. Only Digital Marketing
-// is hand-written below, since it is modelled as a Program (not a Course) in catalogue.ts.
+// reflects the real, validated course data rather than a second copy of it. Digital Marketing and
+// the AI Program are hand-written below, since both are modelled as a Program (not a Course) in
+// catalogue.ts.
 import { COURSE_CATALOGUE } from "./catalogue";
-import { DM_PROGRAM_HREF, DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
+import { AI_PROGRAM_HREF, AI_PROGRAM_SLUG, DM_PROGRAM_HREF, DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
 
 export interface OfferingImage {
   src: string | null;
@@ -77,10 +78,38 @@ const DIGITAL_MARKETING_OFFERING: Offering = {
   href: DM_PROGRAM_HREF,
   image: { src: "/brand/course-tg-digital-marketing.png", alt: "A phone held up surrounded by digital marketing icons: content, email, ads and analytics" },
   status: "active",
+  flagship: false,
+};
+
+// No real photography exists for this program yet (source: Technogurukul_AI_Curriculum_Overview.pdf, no
+// imagery supplied). `image.src: null` is the same honest "no photo yet" state GD's studio offerings used
+// before theirs were set -- the catalogue card and nav tile both already render an icon + gradient fallback
+// for it. Swap in real photography by setting `src` here; nothing else needs to change.
+const AI_PROGRAM_OFFERING: Offering = {
+  id: AI_PROGRAM_SLUG,
+  slug: AI_PROGRAM_SLUG,
+  title: "Complete Applied AI Program",
+  subtitle: "Generative AI, Automation & Agentic Development",
+  description:
+    "A 3.5-month course to understand AI, create with it and build useful AI-powered experiences and workflows -- from prompting and Claude through image, video, voice, website and automation work to agentic AI development.",
+  duration: "3.5 Months",
+  mode: "Offline / In-Person",
+  location: "Nashik, Maharashtra",
+  tags: ["AI", "Generative AI", "Automation", "Claude", "Agentic AI"],
+  href: AI_PROGRAM_HREF,
+  image: { src: null, alt: "Students working on AI-generated creative, web and automation projects at Techno Gurukul" },
+  status: "active",
   flagship: true,
 };
 
 export const PROGRAM_CATEGORIES: ProgramCategory[] = [
+  {
+    id: "ai-program",
+    slug: "ai-program",
+    name: "AI Program",
+    description: "Practical, in-person training in generative AI, creative AI tools, automation and agentic AI development.",
+    offerings: [AI_PROGRAM_OFFERING],
+  },
   {
     id: "digital-marketing",
     slug: "digital-marketing",

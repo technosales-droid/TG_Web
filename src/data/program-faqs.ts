@@ -4,7 +4,7 @@
 // none of it is invented. The data-driven entries at the end of each list only appear once the matching field in
 // business-facts.ts is filled in; until then they're simply absent, not shown with a placeholder answer.
 import { PROGRAM_FACTS } from "./business-facts";
-import { DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
+import { AI_PROGRAM_SLUG, DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
 
 export interface FaqItem {
   question: string;
@@ -13,6 +13,7 @@ export interface FaqItem {
 
 const dm = PROGRAM_FACTS[DM_PROGRAM_SLUG];
 const gd = PROGRAM_FACTS[GD_PROGRAM_SLUG];
+const ai = PROGRAM_FACTS[AI_PROGRAM_SLUG];
 
 export const DM_FAQ: FaqItem[] = [
   {
@@ -95,7 +96,51 @@ export const GD_FAQ: FaqItem[] = [
     : []),
 ];
 
+export const AI_FAQ: FaqItem[] = [
+  {
+    question: "Is the AI Program online or offline?",
+    answer: "It's taught offline, in person, at Techno Gurukul's institute in Nashik, Maharashtra.",
+  },
+  {
+    question: "How long is the AI Program?",
+    answer: "The program runs for 3.5 months.",
+  },
+  {
+    question: "Where is the course held?",
+    answer: "At Techno Gurukul's Nashik institute, Office No. 305, Platinum Plaza, Tilak Wadi, Nashik, Maharashtra.",
+  },
+  {
+    question: "What does the AI Program curriculum cover?",
+    answer:
+      "9 modules covering 53 topics: AI foundations and prompting, a Claude deep dive, a generative AI studio covering creative concepts and AI-assisted writing, image generation, video generation, voice/music/song generation, AI-assisted website creation, automation with n8n and Make.com, and agentic AI development with Claude Code.",
+  },
+  {
+    question: "What will I build?",
+    answer: `You'll work through ${ai.projectsLabel}: an AI work kit, a creative campaign, a digital experience, workflow automations, an AI assistant prototype and a final capstone demonstration.`,
+  },
+  {
+    question: "Do I need to know how to code?",
+    answer:
+      "No prior coding experience is required to start. The program builds up from prompting and no-code AI tools through to AI-assisted website creation, workflow automation and, in the final module, development work using Claude Code.",
+  },
+  {
+    question: "Which AI tools will I use?",
+    answer:
+      "Tools explored across the program include ChatGPT, Claude and Gemini; image tools such as Adobe Firefly, Canva and Ideogram; video tools such as Google Flow, Runway and Kling; voice and music tools such as ElevenLabs and Suno; website builders such as Framer, Lovable, Replit and Wix; and n8n, Make.com and Claude Code for automation and development. The program's own material notes that specific tools, access and pricing can change, and each batch uses suitable tools available at the time.",
+  },
+  ...(ai.fee ? [{ question: "What is the fee for the AI Program?", answer: ai.fee }] : []),
+  ...(ai.emi ? [{ question: "Is EMI available for the AI Program?", answer: ai.emi }] : []),
+  ...(ai.eligibility ? [{ question: "Who is eligible for the AI Program?", answer: ai.eligibility }] : []),
+  ...(ai.certificate ? [{ question: "Do I get a certificate?", answer: ai.certificate }] : []),
+  ...(ai.nextBatch ? [{ question: "When is the next batch?", answer: ai.nextBatch }] : []),
+  ...(ai.timings ? [{ question: "What are the class timings?", answer: ai.timings }] : []),
+  ...(ai.demoClassAvailable !== null
+    ? [{ question: "Is a demo class available?", answer: ai.demoClassAvailable ? "Yes, a demo class is available -- contact us to arrange one." : "A demo class is not currently offered for this program." }]
+    : []),
+];
+
 export const PROGRAM_FAQS: Record<string, FaqItem[]> = {
+  [AI_PROGRAM_SLUG]: AI_FAQ,
   [DM_PROGRAM_SLUG]: DM_FAQ,
   [GD_PROGRAM_SLUG]: GD_FAQ,
 };
