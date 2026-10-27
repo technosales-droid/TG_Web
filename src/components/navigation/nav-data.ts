@@ -20,7 +20,7 @@ export const SIGNATURE_PROGRAM: ProgramLink = {
   label: "AI Course",
   href: AI_PROGRAM_HREF,
   tagline: "Generative AI, Automation & Agentic Development",
-  image: null,
+  image: "/brand/course-tg-ai-program.png",
   eyebrow: "AI Program",
 };
 

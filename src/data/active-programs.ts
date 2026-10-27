@@ -29,11 +29,9 @@ export const ACTIVE_PROGRAMS: ActiveProgram[] = [
       "Understand generative AI, get fluent with Claude and ChatGPT, create images, video, voice and music, build an AI-assisted website and design automations and AI agents.",
     outcome: "Understand. Create. Automate. Build.",
     href: AI_PROGRAM_HREF,
-    // No real photography yet; the hero falls back to an icon + gradient treatment. Swap in a real photo/video
-    // path here once available -- nothing else needs to change.
-    image: null,
+    image: "/brand/course-tg-ai-program.png",
     video: null,
-    alt: "",
+    alt: "A robotic hand and a human hand reaching toward each other, with an AI chip between their fingertips",
     visual: { tone: "navy", icon: "boxes" },
   },
   {

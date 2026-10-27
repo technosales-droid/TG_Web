@@ -81,10 +81,6 @@ const DIGITAL_MARKETING_OFFERING: Offering = {
   flagship: false,
 };
 
-// No real photography exists for this program yet (source: Technogurukul_AI_Curriculum_Overview.pdf, no
-// imagery supplied). `image.src: null` is the same honest "no photo yet" state GD's studio offerings used
-// before theirs were set -- the catalogue card and nav tile both already render an icon + gradient fallback
-// for it. Swap in real photography by setting `src` here; nothing else needs to change.
 const AI_PROGRAM_OFFERING: Offering = {
   id: AI_PROGRAM_SLUG,
   slug: AI_PROGRAM_SLUG,
@@ -97,7 +93,7 @@ const AI_PROGRAM_OFFERING: Offering = {
   location: "Nashik, Maharashtra",
   tags: ["AI", "Generative AI", "Automation", "Claude", "Agentic AI"],
   href: AI_PROGRAM_HREF,
-  image: { src: null, alt: "Students working on AI-generated creative, web and automation projects at Techno Gurukul" },
+  image: { src: "/brand/course-tg-ai-program.png", alt: "A robotic hand and a human hand reaching toward each other, with an AI chip between their fingertips" },
   status: "active",
   flagship: true,
 };

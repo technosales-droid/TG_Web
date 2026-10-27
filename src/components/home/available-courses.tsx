@@ -9,11 +9,11 @@ import { buttonVariants } from "@/components/ui/button";
 import { ACTIVE_PROGRAMS, type ActiveProgram } from "@/data/active-programs";
 import { AI_PROGRAM_HREF, DM_PROGRAM_HREF, GD_PROGRAM_HREF } from "@/lib/program-routes";
 
-// The three courses Techno Gurukul currently teaches, in Nashik. The AI Program is the signature/primary course;
-// Digital Marketing and Game Development are real, available courses, each shown as a secondary card. All three
-// pull from the site's existing program data, so this section can never drift out of sync with what /programs
-// actually offers. Asserted here (not filtered defensively) because these are three specific, known entries,
-// not an arbitrary list.
+// The three courses Techno Gurukul currently teaches, in Nashik. The AI Program is the signature/primary course,
+// shown as a wide spotlight banner; Digital Marketing and Game Development are real, available courses, shown
+// side by side below it. All three pull from the site's existing program data, so this section can never drift
+// out of sync with what /programs actually offers. Asserted here (not filtered defensively) because these are
+// three specific, known entries, not an arbitrary list.
 const AI_PROGRAM = ACTIVE_PROGRAMS.find((p) => p.href === AI_PROGRAM_HREF)!;
 const DIGITAL_MARKETING = ACTIVE_PROGRAMS.find((p) => p.href === DM_PROGRAM_HREF)!;
 const GAME_DEVELOPMENT = ACTIVE_PROGRAMS.find((p) => p.href === GD_PROGRAM_HREF)!;
@@ -73,30 +73,34 @@ export function AvailableCourses() {
 
         <div
           className={cn(
-            "mt-10 grid gap-6 transition-all delay-150 duration-700 lg:mt-12 lg:grid-cols-5 lg:grid-rows-2 lg:items-stretch",
+            "mt-10 flex flex-col gap-6 transition-all delay-150 duration-700 lg:mt-12",
             visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
           )}
         >
-          <PrimaryCourseCard program={AI_PROGRAM} className="lg:col-span-3 lg:row-span-2" />
-          <SecondaryCourseCard program={DIGITAL_MARKETING} className="lg:col-span-2" />
-          <SecondaryCourseCard program={GAME_DEVELOPMENT} className="lg:col-span-2" />
+          <SpotlightCourseCard program={AI_PROGRAM} />
+          <div className="grid gap-6 sm:grid-cols-2">
+            <SecondaryCourseCard program={DIGITAL_MARKETING} />
+            <SecondaryCourseCard program={GAME_DEVELOPMENT} />
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-function PrimaryCourseCard({ program, className }: { program: ActiveProgram; className?: string }) {
+/** The AI Program's wide spotlight banner: image and content sit side by side on desktop, stacked on phone, so
+ * it reads as a distinct, horizontal "featured" format rather than just a bigger version of the cards below. */
+function SpotlightCourseCard({ program }: { program: ActiveProgram }) {
   return (
-    <article className={cn("group relative flex flex-col overflow-hidden rounded-[2.5rem] border border-white/10 bg-gradient-to-br from-[#0b3d50] via-[#0d5674] to-primary", className)}>
-      <div className="relative aspect-[16/10] w-full overflow-hidden sm:aspect-[16/8]">
+    <article className="group relative flex flex-col overflow-hidden rounded-[2.5rem] border border-white/10 bg-gradient-to-br from-[#0b3d50] via-[#0d5674] to-primary lg:flex-row lg:items-stretch">
+      <div className="relative aspect-[16/10] w-full overflow-hidden sm:aspect-[21/9] lg:aspect-auto lg:w-[46%] lg:shrink-0">
         {program.image ? (
           <Image
             src={program.image}
             alt={program.alt}
             fill
             priority
-            sizes="(min-width: 1024px) 60vw, 100vw"
+            sizes="(min-width: 1024px) 46vw, 100vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
@@ -104,13 +108,13 @@ function PrimaryCourseCard({ program, className }: { program: ActiveProgram; cla
             <Sparkles className="size-20 text-white/15 transition-transform duration-500 group-hover:scale-105" />
           </div>
         )}
-        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-[#0b3d50] via-[#0b3d50]/10 to-transparent" />
+        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-[#0b3d50] via-[#0b3d50]/10 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-[#0b3d50]/40" />
         <span className="absolute top-6 left-6 inline-flex items-center rounded-full bg-brand-sky px-3.5 py-1.5 text-xs font-semibold tracking-wide text-white uppercase">
           Signature Course
         </span>
       </div>
 
-      <div className="flex flex-1 flex-col p-6 sm:p-8">
+      <div className="flex flex-1 flex-col justify-center p-6 sm:p-8 lg:p-10">
         <p className="text-xs font-semibold tracking-widest text-brand-sky uppercase">{program.category}</p>
         <h3 className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">{program.title}</h3>
         <p className="mt-3 max-w-xl text-base leading-relaxed text-white/80">{program.description}</p>
@@ -135,16 +139,16 @@ function PrimaryCourseCard({ program, className }: { program: ActiveProgram; cla
   );
 }
 
-function SecondaryCourseCard({ program, className }: { program: ActiveProgram; className?: string }) {
+function SecondaryCourseCard({ program }: { program: ActiveProgram }) {
   return (
-    <article className={cn("group relative flex flex-col overflow-hidden rounded-[2.5rem] border border-primary/10 bg-card", className)}>
-      <div className="relative aspect-[21/9] w-full overflow-hidden sm:aspect-[16/10]">
+    <article className="group relative flex flex-col overflow-hidden rounded-[2.5rem] border border-primary/10 bg-card">
+      <div className="relative aspect-[16/10] w-full overflow-hidden">
         {program.image ? (
           <Image
             src={program.image}
             alt={program.alt}
             fill
-            sizes="(min-width: 1024px) 30vw, 100vw"
+            sizes="(min-width: 1024px) 45vw, 100vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
