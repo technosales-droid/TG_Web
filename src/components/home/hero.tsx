@@ -6,9 +6,10 @@ import { cn } from "cn";
 import { HeroVideoCard } from "./hero-video-card";
 
 const HERO_IMAGE_SRC = "/brand/index-hero.jpg";
-// The people and the laptop sit in the right two-thirds of the photo; the left third is a plain dark wall, which is
-// exactly where the text sits. This keeps that same framing however the image gets cropped at other hero shapes.
-const HERO_IMAGE_POSITION = "72% 38%";
+// The team and the glowing data-visualisation screen sit in the right two-thirds of the photo; the left third is
+// dark office background, which is exactly where the text sits. This keeps that same framing however the image
+// gets cropped at other hero shapes.
+const HERO_IMAGE_POSITION = "70% 42%";
 
 // `outline-solid` matters: the shared button style sets `outline-none`, which would otherwise cancel the ring.
 const FOCUS = "focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-4 focus-visible:outline-background";
@@ -20,7 +21,7 @@ export function Hero() {
         <div className="relative isolate flex min-h-[560px] flex-col justify-center overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#0b1720] px-6 py-10 sm:min-h-[640px] sm:px-10 sm:py-16 lg:min-h-[720px] lg:px-16 xl:min-h-[800px]">
           <Image
             src={HERO_IMAGE_SRC}
-            alt="A Techno Gurukul counsellor talking with a student and their parents"
+            alt="A mentor pointing out details on a glowing data visualisation to two students at Techno Gurukul"
             fill
             priority
             sizes="100vw"
