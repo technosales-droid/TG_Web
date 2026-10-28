@@ -5,7 +5,11 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "cn";
 import { HeroVideoCard } from "./hero-video-card";
 
-const HERO_IMAGE_SRC = "/brand/index-hero.jpg";
+// Filename carries a version suffix on purpose: /public assets aren't content-hashed like webpack bundles, and
+// Next.js serves them with a 31-day Cache-Control by default. Reusing the old filename for new content would
+// leave anyone who'd already loaded the page stuck seeing the old photo for up to a month. Bump the suffix any
+// time this image's content changes.
+const HERO_IMAGE_SRC = "/brand/index-hero-2.jpg";
 // The team and the glowing data-visualisation screen sit in the right two-thirds of the photo; the left third is
 // dark office background, which is exactly where the text sits. This keeps that same framing however the image
 // gets cropped at other hero shapes.
