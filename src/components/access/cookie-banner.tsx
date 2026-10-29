@@ -13,8 +13,10 @@ const BTN = "h-11 min-w-0 whitespace-nowrap rounded-full px-3 text-sm font-semib
 
 /**
  * First-visit cookie notice. It is shown until the visitor chooses, and the three buttons are equally easy to reach:
- * reject all optional items, accept only the necessary ones, or accept all. Nothing optional loads before a choice.
- * "Reject all" and "Accept necessary" both leave only the necessary storage in place, because that cannot be switched off.
+ * reject all optional items, accept only the necessary ones, or accept all. The Google Map and analytics don't load
+ * before a choice; marketing (the Meta Pixel) is the one exception and runs by default until a visitor says
+ * otherwise -- see the `marketing` field in src/lib/consent.ts for why. "Reject all" and "Accept necessary" both
+ * turn marketing off too, same as every other optional item.
  */
 export function CookieBanner() {
   const hydrated = useHydrated();
@@ -31,7 +33,7 @@ export function CookieBanner() {
         <div className="min-w-0 lg:max-w-2xl">
           <h2 className="text-base font-semibold tracking-tight sm:text-lg">Your cookie choices</h2>
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground sm:mt-1.5 sm:text-[15px]">
-            We use necessary cookies and storage to keep the site and your access profile working. Optional content, such as the Google Map, analytics and marketing, loads only if you allow it.{" "}
+            We use necessary cookies and storage to keep the site and your access profile working. The Google Map and analytics load only if you allow them. Marketing cookies, which help us measure our ads, are on by default &mdash; you can turn them off below or in Cookie Settings.{" "}
             <Link href="/cookie-policy" className={cn("rounded font-medium text-primary underline underline-offset-2", FOCUS)}>Cookie Policy</Link>
             <span aria-hidden="true" className="mx-1.5">&middot;</span>
             <button type="button" onClick={openCookieSettings} className={cn("rounded font-medium text-primary underline underline-offset-2", FOCUS)}>

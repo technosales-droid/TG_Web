@@ -57,7 +57,7 @@ const stubs = installDomStubs();
 
 // Imported *after* the stubs above are installed on globalThis, since clearCookiesByPrefix/setConsent read
 // document/localStorage at call time, not at import time -- but importing after is the safer order regardless.
-const { clearCookiesByPrefix, setConsent } = await import("../consent.ts");
+const { clearCookiesByPrefix, setConsent, DEFAULT } = await import("../consent.ts");
 const { gtmScript, metaPixelScript, GTM_FIRED_KEY, META_PIXEL_FIRED_KEY, GTM_ID, META_PIXEL_ID } = await import(
   "../tracker-scripts.ts"
 );
@@ -84,6 +84,16 @@ describe("clearCookiesByPrefix", () => {
     stubs.setCookie("unrelated", "1");
     clearCookiesByPrefix(["_fbp", "_fbc"]);
     assert.deepEqual(stubs.cookieNames(), ["unrelated"]);
+  });
+});
+
+describe("DEFAULT consent", () => {
+  test("marketing defaults to true (opt-out) while embeds/analytics default to false (opt-in)", () => {
+    assert.equal(DEFAULT.marketing, true, "marketing must be opt-out per the business decision in consent.ts");
+    assert.equal(DEFAULT.embeds, false);
+    assert.equal(DEFAULT.analytics, false);
+    assert.equal(DEFAULT.at, null);
+    assert.equal(DEFAULT.choice, null);
   });
 });
 

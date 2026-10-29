@@ -19,11 +19,11 @@ interface Row {
 // Kept in step with the code. If you add a cookie or storage key, add it here.
 const ITEMS: Row[] = [
   { name: "__Host-tg_access (cookie)", kind: "Necessary", purpose: "Keeps your access profile signed in after you register. HttpOnly, so page scripts cannot read it. Set only after you complete the access form.", duration: "Up to 30 days, or until you sign out" },
-  { name: "tg-cookie-preferences (local storage)", kind: "Necessary", purpose: "Remembers your choice about third-party embeds and analytics.", duration: "Until you clear your browser data" },
+  { name: "tg-cookie-preferences (local storage)", kind: "Necessary", purpose: "Remembers your cookie choices, including whether you've turned marketing off.", duration: "Until you clear your browser data" },
   { name: "tg-blog-feedback (local storage)", kind: "Functional", purpose: "Keeps the comments and reviews you write on this device. Other visitors cannot see them.", duration: "Until you clear your browser data" },
   { name: "tg-course-promo (session storage)", kind: "Functional", purpose: "Remembers which program suggestions you have already seen, so they are not repeated.", duration: "Until you close the tab" },
   { name: "_ga, _ga_<container-id> (cookies)", kind: "Analytics", purpose: "Google Analytics (GA4): distinguishes visitors so we can see how the site is used, in aggregate. Loaded only if you allow analytics in your cookie preferences.", duration: "Up to 2 years" },
-  { name: "_fbp, _fbc (cookies)", kind: "Marketing", purpose: "Meta Pixel: helps us measure how effective our ads are and build audiences for future ads. Loaded only if you allow marketing in your cookie preferences.", duration: "Up to 90 days" },
+  { name: "_fbp, _fbc (cookies)", kind: "Marketing", purpose: "Meta Pixel: helps us measure how effective our ads are and build audiences for future ads. Loaded by default; set only if you haven't turned marketing off in your cookie preferences.", duration: "Up to 90 days" },
 ];
 
 export const COOKIE_SECTIONS: LegalSectionData[] = [
@@ -38,9 +38,9 @@ export const COOKIE_SECTIONS: LegalSectionData[] = [
           companies.
         </p>
         <LegalNote>
-          This list describes what the website actually does today. Analytics and marketing are both optional and
-          off by default. If what we use changes, this page and the preference settings will be updated before it
-          does.
+          This list describes what the website actually does today. Analytics is optional and off by default.
+          Marketing (the Meta Pixel) is on by default and can be turned off at any time in Cookie Settings. If
+          what we use changes, this page and the preference settings will be updated before it does.
         </LegalNote>
       </>
     ),
@@ -81,7 +81,7 @@ export const COOKIE_SECTIONS: LegalSectionData[] = [
         <li><strong className="text-foreground">Necessary:</strong> needed for something you asked for, such as staying signed in to your access profile. These cannot be switched off here.</li>
         <li><strong className="text-foreground">Functional:</strong> remember your own content and settings on this device. They do not track you across sites.</li>
         <li><strong className="text-foreground">Analytics:</strong> Google Analytics (GA4), loaded only if you allow it. Not used for advertising.</li>
-        <li><strong className="text-foreground">Marketing:</strong> the Meta Pixel, loaded only if you allow it.</li>
+        <li><strong className="text-foreground">Marketing:</strong> the Meta Pixel, on by default. Turn it off in Cookie Settings if you&rsquo;d rather it not load.</li>
       </ul>
     ),
   },
@@ -93,8 +93,9 @@ export const COOKIE_SECTIONS: LegalSectionData[] = [
         The footer can show an embedded Google Map. It is not loaded until you choose to load it, either with the Load map
         button or by allowing embeds in your cookie preferences. When it loads, Google may set its own cookies and receives
         your IP address. If you allow analytics, Google Analytics (GA4) loads and may set its own cookies to measure how
-        the site is used. If you allow marketing, the Meta Pixel loads and may set its own cookies to help us measure the
-        effectiveness of our ads and build audiences for future ads. See Google&rsquo;s and Meta&rsquo;s privacy policies
+        the site is used. The Meta Pixel loads by default to help us measure the effectiveness of our ads and build
+        audiences for future ads, and may set its own cookies when it does; turn marketing off in Cookie Settings to
+        stop it. See Google&rsquo;s and Meta&rsquo;s privacy policies
         for details. Links to social media and other sites open those sites, which have their own policies.
       </p>
     ),

@@ -88,13 +88,14 @@ export function CookieSettings() {
       </button>
       <h2 id="cookie-settings-title" className="pr-10 text-2xl font-semibold tracking-tight sm:text-3xl">Cookie preferences</h2>
       <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
-        Nothing optional is loaded unless you allow it. Read the <a href="/cookie-policy" className="font-medium text-primary underline underline-offset-2">Cookie Policy</a> for the full list.
+        Third-party embeds and analytics stay off unless you allow them. Marketing is on by default -- turn it
+        off below if you&rsquo;d rather not. Read the <a href="/cookie-policy" className="font-medium text-primary underline underline-offset-2">Cookie Policy</a> for the full list.
       </p>
       <ul className="mt-6">
         <Row title="Necessary" text="Keeps your access session and remembers these choices. The website cannot work as described without them." control={<Fixed text="Always on" />} />
         <Row title="Third-party embeds" text="Loads the Google Map in the footer. Google may set its own cookies when it loads." control={<Switch checked={embeds} onChange={setEmbeds} label="Allow third-party embeds" />} />
         <Row title="Analytics" text="Google Analytics (GA4), to help us understand how the site is used, in aggregate. Not used for advertising. Google may set its own cookies when it loads." control={<Switch checked={analytics} onChange={setAnalytics} label="Allow analytics" />} />
-        <Row title="Marketing" text="The Meta Pixel, to help us measure how effective our ads are. Meta may set its own cookies when it loads." control={<Switch checked={marketing} onChange={setMarketing} label="Allow marketing" />} />
+        <Row title="Marketing" text="The Meta Pixel, to help us measure how effective our ads are. On by default; Meta may set its own cookies unless you turn this off." control={<Switch checked={marketing} onChange={setMarketing} label="Allow marketing" />} />
       </ul>
       <div className="mt-4 flex flex-col gap-3 border-t border-primary/10 pt-6 sm:flex-row sm:justify-end">
         <button type="button" onClick={() => save(false, false, false, "rejected")} className={cn("h-11 whitespace-nowrap rounded-full px-6 text-[15px] font-semibold border border-primary/30 hover:bg-muted", FOCUS)}>Reject optional</button>
