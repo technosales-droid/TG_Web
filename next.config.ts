@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 // Security headers. The CSP allows what the site actually uses: its own scripts, styles (Next inlines both), images,
 // video and self-hosted fonts, plus the single Google Maps embed in the footer and contact page, YouTube (the
-// hero's video card: a thumbnail image, and the player only once a visitor clicks play), and the full Google
+// hero's video card: a thumbnail image, and the player only once a visitor clicks play), the full Google
 // tag-platform surface documented at https://developers.google.com/tag-platform/security/guides/csp: GTM itself
 // (gtm.js, its /td and /a image-beacon diagnostics, and tagmanager.google.com for Preview/Debug mode), the GA4
 // tag configured inside that GTM container (there is no separate GA4 script in this codebase), and the
@@ -10,19 +10,21 @@ import type { NextConfig } from "next";
 // conversion/remarketing) commonly added to the same container later -- allowed now so adding one doesn't need
 // another CSP deploy. (Google's guide also lists a `https://*.google.<TLD>` entry for every Google country
 // domain; CSP source syntax has no TLD wildcard, so that one is intentionally left out -- add specific ccTLD
-// hosts here if a future tag needs one.) All of this only ever loads once a visitor allows analytics in their
-// cookie preferences (src/components/analytics/). The GTM <noscript> fallback iframe (src/app/layout.tsx) is
-// the one exception: it needs frame-src unconditionally, since it only matters to visitors with JS disabled,
-// for whom that consent gate could never have run anyway. Applied to production builds only, because the dev
-// server needs eval and websockets for hot reload.
+// hosts here if a future tag needs one.) Also the Meta Pixel (src/components/analytics/meta-pixel.tsx):
+// connect.facebook.net loads its script, and www.facebook.com is both its tracking-call endpoint and its
+// <noscript> fallback image. All of this only ever loads once a visitor allows analytics/marketing in their
+// cookie preferences (src/lib/consent.ts). The GTM and Meta Pixel <noscript> fallbacks (src/app/layout.tsx) are
+// the one exception: they need frame-src/img-src unconditionally, since they only matter to visitors with JS
+// disabled, for whom that consent gate could never have run anyway. Applied to production builds only, because
+// the dev server needs eval and websockets for hot reload.
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://tagmanager.google.com",
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://tagmanager.google.com https://connect.facebook.net",
   "style-src 'self' 'unsafe-inline' https://tagmanager.google.com",
-  "img-src 'self' data: blob: https://i.ytimg.com https://www.googletagmanager.com https://*.google-analytics.com https://ssl.gstatic.com https://www.gstatic.com https://*.g.doubleclick.net",
+  "img-src 'self' data: blob: https://i.ytimg.com https://www.googletagmanager.com https://*.google-analytics.com https://ssl.gstatic.com https://www.gstatic.com https://*.g.doubleclick.net https://www.facebook.com",
   "media-src 'self'",
   "font-src 'self' data:",
-  "connect-src 'self' https://www.googletagmanager.com https://www.google.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.g.doubleclick.net https://pagead2.googlesyndication.com",
+  "connect-src 'self' https://www.googletagmanager.com https://www.google.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.g.doubleclick.net https://pagead2.googlesyndication.com https://www.facebook.com",
   "frame-src https://www.google.com https://www.youtube-nocookie.com https://www.googletagmanager.com",
   "object-src 'none'",
   "base-uri 'self'",

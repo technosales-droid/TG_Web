@@ -4,7 +4,7 @@ import { LegalNote, type LegalSectionData } from "./legal-layout";
 
 export const HEADING = "Cookie Policy";
 export const DESCRIPTION = "The cookies and browser storage this website uses, why, and how you can manage them.";
-export const LAST_UPDATED = "6 October 2026";
+export const LAST_UPDATED = "29 October 2026";
 
 const A = "font-medium text-primary underline-offset-2 hover:underline";
 const UL = "list-disc space-y-2 pl-5";
@@ -23,6 +23,7 @@ const ITEMS: Row[] = [
   { name: "tg-blog-feedback (local storage)", kind: "Functional", purpose: "Keeps the comments and reviews you write on this device. Other visitors cannot see them.", duration: "Until you clear your browser data" },
   { name: "tg-course-promo (session storage)", kind: "Functional", purpose: "Remembers which program suggestions you have already seen, so they are not repeated.", duration: "Until you close the tab" },
   { name: "_ga, _ga_<container-id> (cookies)", kind: "Analytics", purpose: "Google Analytics (GA4): distinguishes visitors so we can see how the site is used, in aggregate. Loaded only if you allow analytics in your cookie preferences.", duration: "Up to 2 years" },
+  { name: "_fbp, _fbc (cookies)", kind: "Marketing", purpose: "Meta Pixel: helps us measure how effective our ads are and build audiences for future ads. Loaded only if you allow marketing in your cookie preferences.", duration: "Up to 90 days" },
 ];
 
 export const COOKIE_SECTIONS: LegalSectionData[] = [
@@ -37,9 +38,9 @@ export const COOKIE_SECTIONS: LegalSectionData[] = [
           companies.
         </p>
         <LegalNote>
-          This list describes what the website actually does today. Analytics is optional and off by default; the
-          website runs no advertising or marketing tracking. If that changes, this page and the preference settings
-          will be updated before it does.
+          This list describes what the website actually does today. Analytics and marketing are both optional and
+          off by default. If what we use changes, this page and the preference settings will be updated before it
+          does.
         </LegalNote>
       </>
     ),
@@ -80,7 +81,7 @@ export const COOKIE_SECTIONS: LegalSectionData[] = [
         <li><strong className="text-foreground">Necessary:</strong> needed for something you asked for, such as staying signed in to your access profile. These cannot be switched off here.</li>
         <li><strong className="text-foreground">Functional:</strong> remember your own content and settings on this device. They do not track you across sites.</li>
         <li><strong className="text-foreground">Analytics:</strong> Google Analytics (GA4), loaded only if you allow it. Not used for advertising.</li>
-        <li><strong className="text-foreground">Marketing:</strong> not used.</li>
+        <li><strong className="text-foreground">Marketing:</strong> the Meta Pixel, loaded only if you allow it.</li>
       </ul>
     ),
   },
@@ -92,8 +93,9 @@ export const COOKIE_SECTIONS: LegalSectionData[] = [
         The footer can show an embedded Google Map. It is not loaded until you choose to load it, either with the Load map
         button or by allowing embeds in your cookie preferences. When it loads, Google may set its own cookies and receives
         your IP address. If you allow analytics, Google Analytics (GA4) loads and may set its own cookies to measure how
-        the site is used. See Google&rsquo;s privacy policy for details. Links to social media and other sites open those
-        sites, which have their own policies.
+        the site is used. If you allow marketing, the Meta Pixel loads and may set its own cookies to help us measure the
+        effectiveness of our ads and build audiences for future ads. See Google&rsquo;s and Meta&rsquo;s privacy policies
+        for details. Links to social media and other sites open those sites, which have their own policies.
       </p>
     ),
   },
@@ -103,7 +105,7 @@ export const COOKIE_SECTIONS: LegalSectionData[] = [
     body: (
       <>
         <p>
-          When you first visit, a notice lets you reject all optional items, accept only the necessary ones, or accept all. You can change your choice about third-party embeds and analytics at any time:
+          When you first visit, a notice lets you reject all optional items, accept only the necessary ones, or accept all. You can change your choice about third-party embeds, analytics and marketing at any time:
         </p>
         <p>
           <CookieSettingsButton className="h-11 rounded-full bg-primary px-6 text-[15px] font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">

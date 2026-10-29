@@ -2,25 +2,27 @@
 
 import { useSyncExternalStore } from "react";
 
-// Cookie and embed preferences. The site sets no advertising cookies, so the only optional items are third-party
-// embedded content (the Google Map) and analytics (Google Analytics). Neither loads until the visitor allows it,
-// and this record of their choice is kept in the browser's local storage (a "necessary" item: without it the
-// choice could not be kept).
+// Cookie and embed preferences. The only optional items are third-party embedded content (the Google Map),
+// analytics (Google Analytics via Google Tag Manager) and marketing (the Meta Pixel). None of these load until
+// the visitor allows them, and this record of their choice is kept in the browser's local storage (a
+// "necessary" item: without it the choice could not be kept).
 
 export type ConsentChoice = "all" | "necessary" | "rejected" | "custom";
 
 export interface Consent {
   /** Allow third-party embedded content (Google Maps). */
   embeds: boolean;
-  /** Allow Google Analytics (GA4) to load. */
+  /** Allow Google Analytics (GA4, via Google Tag Manager) to load. */
   analytics: boolean;
+  /** Allow the Meta Pixel to load. */
+  marketing: boolean;
   /** When the choice was made; null until the visitor chooses, which is when the cookie notice is shown. */
   at: string | null;
   choice: ConsentChoice | null;
 }
 
 const KEY = "tg-cookie-preferences";
-const DEFAULT: Consent = { embeds: false, analytics: false, at: null, choice: null };
+const DEFAULT: Consent = { embeds: false, analytics: false, marketing: false, at: null, choice: null };
 const listeners = new Set<() => void>();
 let cache: { raw: string | null; value: Consent } | null = null;
 
@@ -38,6 +40,7 @@ function read(): Consent {
         value = {
           embeds: v.embeds,
           analytics: typeof v.analytics === "boolean" ? v.analytics : false,
+          marketing: typeof v.marketing === "boolean" ? v.marketing : false,
           at: typeof v.at === "string" ? v.at : null,
           choice: ["all", "necessary", "rejected", "custom"].includes(v.choice) ? v.choice : null,
         };
@@ -47,12 +50,13 @@ function read(): Consent {
   return value;
 }
 
-export function setConsent(next: { embeds: boolean; analytics: boolean; choice?: ConsentChoice }) {
+export function setConsent(next: { embeds: boolean; analytics: boolean; marketing: boolean; choice?: ConsentChoice }) {
   const value: Consent = {
     embeds: next.embeds,
     analytics: next.analytics,
+    marketing: next.marketing,
     at: new Date().toISOString(),
-    choice: next.choice ?? (next.embeds || next.analytics ? "all" : "necessary"),
+    choice: next.choice ?? (next.embeds || next.analytics || next.marketing ? "all" : "necessary"),
   };
   try {
     localStorage.setItem(KEY, JSON.stringify(value));

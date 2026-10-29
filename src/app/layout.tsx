@@ -6,6 +6,7 @@ import { AccessProvider } from "@/components/access/access-provider";
 import { CookieBanner } from "@/components/access/cookie-banner";
 import { CookieSettings } from "@/components/access/cookie-settings";
 import { GoogleTagManager } from "@/components/analytics/google-tag-manager";
+import { MetaPixel } from "@/components/analytics/meta-pixel";
 import { CoursePromotionPopup } from "@/components/promotions/course-promotion-popup";
 import { FloatingContact } from "@/components/common/floating-contact";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -63,6 +64,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
+        {/* Meta Pixel noscript fallback, for the same reason and in the same place as GTM's above. The id is
+            a literal here (not imported from meta-pixel.tsx, a "use client" module) for the same reason GTM's
+            id above is: a plain value exported from a client module can't be read from this server component. */}
+        <noscript>
+          {/* eslint-disable-next-line @next/next/no-img-element -- a plain beacon pixel, not a real image Next should optimize */}
+          <img
+            height="1"
+            width="1"
+            style={{ display: "none" }}
+            src="https://www.facebook.com/tr?id=982290634949305&ev=PageView&noscript=1"
+            alt=""
+          />
+        </noscript>
         <AccessProvider>
           {SCHEMA.map((d, i) => (
             <JsonLd key={i} data={d} />
@@ -83,6 +97,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <CookieSettings />
           <CookieBanner />
           <GoogleTagManager />
+          <MetaPixel />
         </AccessProvider>
       </body>
     </html>
