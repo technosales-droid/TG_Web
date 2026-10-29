@@ -3,9 +3,7 @@
 import { useEffect } from "react";
 import Script from "next/script";
 import { clearCookiesByPrefix, useConsent } from "@/lib/consent";
-
-// Public by design: a GTM container ID is meant to be embedded in client-side code, not a secret.
-const GTM_ID = "GTM-WMBMSM8C";
+import { gtmScript } from "@/lib/tracker-scripts";
 
 /**
  * Loads Google Tag Manager only once the visitor has allowed analytics in their cookie preferences (see
@@ -20,6 +18,10 @@ const GTM_ID = "GTM-WMBMSM8C";
  * cookies GA4 already set while it was loaded -- the effect below clears anything prefixed "_ga" the moment
  * analytics consent goes false (see meta-pixel.tsx for the same pattern and why this, not Google's Consent
  * Mode "load always, suppress via consent signal" API, is used).
+ *
+ * The script's own text (gtmScript) lives in src/lib/tracker-scripts.ts, a plain module with no JSX, so
+ * src/lib/__tests__ can import and run it directly -- it can't import this file at all, since Node's own TS
+ * loader doesn't parse JSX.
  */
 export function GoogleTagManager() {
   const { analytics } = useConsent();
@@ -31,13 +33,7 @@ export function GoogleTagManager() {
   if (!analytics) return null;
   return (
     <Script id="gtm-init" strategy="afterInteractive">
-      {`
-        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','${GTM_ID}');
-      `}
+      {gtmScript()}
     </Script>
   );
 }

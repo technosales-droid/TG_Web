@@ -3,9 +3,7 @@
 import { useEffect } from "react";
 import Script from "next/script";
 import { clearCookiesByPrefix, useConsent } from "@/lib/consent";
-
-// Public by design: a Meta Pixel ID is meant to be embedded in client-side code, not a secret.
-export const META_PIXEL_ID = "982290634949305";
+import { metaPixelScript } from "@/lib/tracker-scripts";
 
 /**
  * Loads the Meta Pixel only once the visitor has allowed marketing in their cookie preferences (see
@@ -22,6 +20,10 @@ export const META_PIXEL_ID = "982290634949305";
  * consent, just told to suppress data -- a real network request to a third party either way. This component's
  * current behaviour -- no request at all until consent -- is the stricter guarantee and matches every other
  * tracker on this site, so it's kept instead.)
+ *
+ * The script's own text (metaPixelScript) lives in src/lib/tracker-scripts.ts, a plain module with no JSX, so
+ * src/lib/__tests__ can import and run it directly -- it can't import this file at all, since Node's own TS
+ * loader doesn't parse JSX.
  */
 export function MetaPixel() {
   const { marketing } = useConsent();
@@ -33,18 +35,7 @@ export function MetaPixel() {
   if (!marketing) return null;
   return (
     <Script id="meta-pixel-init" strategy="afterInteractive">
-      {`
-        !function(f,b,e,v,n,t,s)
-        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-        n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s)}(window, document,'script',
-        'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '${META_PIXEL_ID}');
-        fbq('track', 'PageView');
-      `}
+      {metaPixelScript()}
     </Script>
   );
 }
