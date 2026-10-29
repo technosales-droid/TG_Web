@@ -94,7 +94,12 @@ const subscribe = (l: () => void) => {
   };
 };
 
-export const useConsent = () => useSyncExternalStore(subscribe, read, () => DEFAULT);
+// The server/hydration snapshot can't read localStorage, so it can't tell "no choice yet" (fire by default)
+// from "already opted out" (stay off) -- it must assume the latter, or a returning opted-out visitor would
+// see the Pixel flash on for the instant before hydration corrects it. Real first-time visitors still get the
+// true opt-out DEFAULT a moment later, once `read()` runs on the client and finds nothing stored.
+const SERVER_SNAPSHOT: Consent = { ...DEFAULT, marketing: false };
+export const useConsent = () => useSyncExternalStore(subscribe, read, () => SERVER_SNAPSHOT);
 
 export const OPEN_SETTINGS_EVENT = "tg:open-cookie-settings";
 export const openCookieSettings = () => window.dispatchEvent(new Event(OPEN_SETTINGS_EVENT));
