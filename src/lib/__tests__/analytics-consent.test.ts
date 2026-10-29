@@ -40,15 +40,28 @@ function installDomStubs() {
     },
   };
 
+  // track.ts calls window.fbq(...)/window.dataLayer.push(...) directly (the same globals the real loader
+  // scripts define in a browser) -- stub just enough of `window` for it to run under plain Node.
+  let fbqCalls: unknown[][] = [];
+  let dataLayer: unknown[] = [];
+  (globalThis as unknown as { window: unknown }).window = {
+    fbq: (...args: unknown[]) => fbqCalls.push(args),
+    dataLayer: { push: (e: unknown) => dataLayer.push(e) },
+  };
+
   return {
     setCookie: (name: string, value: string) => {
       cookieJar[name] = value;
     },
     cookieNames: () => Object.keys(cookieJar),
     storageEntries: () => storage,
+    fbqCalls: () => fbqCalls,
+    dataLayerEvents: () => dataLayer,
     reset: () => {
       cookieJar = {};
       storage = {};
+      fbqCalls = [];
+      dataLayer = [];
     },
   };
 }
@@ -58,9 +71,10 @@ const stubs = installDomStubs();
 // Imported *after* the stubs above are installed on globalThis, since clearCookiesByPrefix/setConsent read
 // document/localStorage at call time, not at import time -- but importing after is the safer order regardless.
 const { clearCookiesByPrefix, setConsent, DEFAULT } = await import("../consent.ts");
-const { gtmScript, metaPixelScript, GTM_FIRED_KEY, META_PIXEL_FIRED_KEY, GTM_ID, META_PIXEL_ID } = await import(
+const { gtmScript, metaPixelScript, GTM_FIRED_FLAG, META_PIXEL_FIRED_FLAG, GTM_ID, META_PIXEL_ID } = await import(
   "../tracker-scripts.ts"
 );
+const { trackViewContent, trackLead, trackCompleteRegistration, trackContact } = await import("../track.ts");
 
 beforeEach(() => stubs.reset());
 
@@ -131,17 +145,9 @@ function runScriptTwice(script: string) {
     dataLayerPush: [],
     scriptsInserted: 0,
   };
-  const sessionStore: Record<string, string> = {};
   const fakeScriptEl = { async: false, src: "" };
   const sandbox = {
-    window: {
-      sessionStorage: {
-        getItem: (k: string) => (k in sessionStore ? sessionStore[k] : null),
-        setItem: (k: string, v: string) => {
-          sessionStore[k] = v;
-        },
-      },
-    },
+    window: {} as Record<string, unknown>,
     document: {
       createElement: () => {
         calls.scriptsInserted += 1;
@@ -158,7 +164,8 @@ function runScriptTwice(script: string) {
   sandbox.fbq = (...args: unknown[]) => calls.fbq.push(args);
   const ctx = vm.createContext(sandbox);
   // Run the identical script twice in the SAME context/window -- exactly what happens when React remounts
-  // the <Script> tag after a consent toggle, since sessionStorage (unlike a plain JS variable) survives that.
+  // the <Script> tag after a consent toggle, since window.__tgMetaPixelFired (unlike a plain JS variable
+  // scoped to the script itself) survives that remount.
   vm.runInContext(script, ctx);
   vm.runInContext(script, ctx);
   return calls;
@@ -177,17 +184,10 @@ describe("duplicate-event guards", () => {
   test("GTM: the loader only inserts gtm.js and pushes gtm.start once across two script runs in one tab", () => {
     // GTM pushes onto window.dataLayer; wrap runScriptTwice's sandbox expectations manually since dataLayer
     // is created lazily by the snippet itself (w[l]=w[l]||[]).
-    const sessionStore: Record<string, string> = {};
     let dataLayer: unknown[] = [];
     let scriptsInserted = 0;
     const sandbox = {
       window: {
-        sessionStorage: {
-          getItem: (k: string) => (k in sessionStore ? sessionStore[k] : null),
-          setItem: (k: string, v: string) => {
-            sessionStore[k] = v;
-          },
-        },
         get dataLayer() {
           return dataLayer;
         },
@@ -214,7 +214,69 @@ describe("duplicate-event guards", () => {
     assert.ok(GTM_ID.startsWith("GTM-"));
   });
 
-  test("the two trackers use different sessionStorage keys (one revoking the other must not matter)", () => {
-    assert.notEqual(GTM_FIRED_KEY, META_PIXEL_FIRED_KEY);
+  test("the two trackers use different window flags (one revoking the other must not matter)", () => {
+    assert.notEqual(GTM_FIRED_FLAG, META_PIXEL_FIRED_FLAG);
+  });
+
+  test("Meta Pixel: a fresh page load (a new window, same tab) fires init/track again on its own", () => {
+    // Two separate vm contexts stand in for two separate full page loads/reloads in the same tab -- each gets
+    // its own fresh `window`, exactly like an actual reload, which is the scenario the old sessionStorage-based
+    // guard (sessionStorage persists across a reload; a plain window property does not) used to break.
+    const first = runScriptTwice(metaPixelScript());
+    const second = runScriptTwice(metaPixelScript());
+    for (const calls of [first, second]) {
+      assert.equal(calls.fbq.filter((c) => c[0] === "init").length, 1, "each fresh load must still get its own init call");
+      assert.equal(calls.fbq.filter((c) => c[0] === "track" && c[1] === "PageView").length, 1, "each fresh load must still get its own PageView");
+    }
+  });
+});
+
+describe("track.ts: consent-aware business events", () => {
+  test("trackLead fires Meta's Lead and GA4's generate_lead only once consent allows each destination", () => {
+    // No stored choice yet: marketing's opt-out DEFAULT (true) means Meta still fires, but analytics stays
+    // opt-in (false), so GA4's generate_lead must not.
+    trackLead({ contentName: "AI Program" });
+    assert.deepEqual(stubs.fbqCalls(), [["track", "Lead", { content_name: "AI Program" }]], "marketing is opt-out, so Lead must fire even with no stored choice");
+    assert.deepEqual(stubs.dataLayerEvents(), [], "analytics is opt-in -- no stored choice must not fire generate_lead");
+
+    stubs.reset();
+    setConsent({ embeds: false, analytics: false, marketing: false, choice: "rejected" });
+    trackLead({ contentName: "AI Program" });
+    assert.deepEqual(stubs.fbqCalls(), [], "marketing explicitly turned off must not fire Lead");
+    assert.deepEqual(stubs.dataLayerEvents(), [], "analytics explicitly off must not fire generate_lead");
+
+    stubs.reset();
+    setConsent({ embeds: false, analytics: true, marketing: true, choice: "custom" });
+    trackLead({ contentName: "AI Program" });
+    assert.deepEqual(stubs.fbqCalls(), [["track", "Lead", { content_name: "AI Program" }]]);
+    assert.deepEqual(stubs.dataLayerEvents(), [{ event: "generate_lead", content_name: "AI Program" }]);
+  });
+
+  test("trackViewContent and trackCompleteRegistration never include anything beyond the given non-personal metadata", () => {
+    setConsent({ embeds: false, analytics: true, marketing: true, choice: "custom" });
+    trackViewContent({ contentName: "AI Course in Nashik", contentId: "ai-course-nashik", contentCategory: "Program" });
+    trackCompleteRegistration({ sourceType: "brochure" });
+
+    for (const call of stubs.fbqCalls()) {
+      const payload = JSON.stringify(call);
+      assert.ok(!/@/.test(payload), `fbq call must carry no email-shaped value: ${payload}`);
+    }
+    assert.deepEqual(stubs.fbqCalls()[0], [
+      "track",
+      "ViewContent",
+      { content_name: "AI Course in Nashik", content_ids: ["ai-course-nashik"], content_type: "product", content_category: "Program" },
+    ]);
+    assert.deepEqual(stubs.fbqCalls()[1], ["track", "CompleteRegistration", { content_name: "brochure", status: true }]);
+    assert.deepEqual(stubs.dataLayerEvents(), [
+      { event: "view_item", item_name: "AI Course in Nashik", item_id: "ai-course-nashik" },
+      { event: "sign_up", method: "brochure" },
+    ]);
+  });
+
+  test("trackContact distinguishes a contact-link click from any confirmed lead -- it never fires Lead/generate_lead", () => {
+    setConsent({ embeds: false, analytics: true, marketing: true, choice: "custom" });
+    trackContact("whatsapp");
+    assert.deepEqual(stubs.fbqCalls(), [["track", "Contact", { content_category: "whatsapp" }]]);
+    assert.deepEqual(stubs.dataLayerEvents(), [{ event: "contact_click", method: "whatsapp" }]);
   });
 });

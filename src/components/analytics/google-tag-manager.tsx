@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { clearCookiesByPrefix, useConsent } from "@/lib/consent";
 import { gtmScript } from "@/lib/tracker-scripts";
@@ -22,13 +23,31 @@ import { gtmScript } from "@/lib/tracker-scripts";
  * The script's own text (gtmScript) lives in src/lib/tracker-scripts.ts, a plain module with no JSX, so
  * src/lib/__tests__ can import and run it directly -- it can't import this file at all, since Node's own TS
  * loader doesn't parse JSX.
+ *
+ * App Router navigation never reloads the page, so gtm.js only ever sees the page a visitor actually landed
+ * on. The effect below pushes a page_view-shaped event to window.dataLayer on every later pathname change --
+ * whether anything in the GTM container is actually wired to react to it (a History Change trigger already
+ * covering this, or a Custom Event trigger listening for "page_view") has to be checked in the GTM workspace
+ * itself; this repo has no visibility into the container's internal tags/triggers. The first pathname is
+ * skipped since gtm.js already covers it.
  */
 export function GoogleTagManager() {
   const { analytics } = useConsent();
+  const pathname = usePathname();
+  const trackedFirstPathname = useRef(false);
 
   useEffect(() => {
     if (!analytics) clearCookiesByPrefix(["_ga"]);
   }, [analytics]);
+
+  useEffect(() => {
+    if (!analytics) return;
+    if (!trackedFirstPathname.current) {
+      trackedFirstPathname.current = true;
+      return;
+    }
+    window.dataLayer?.push({ event: "page_view", page_path: pathname, page_location: window.location.href, page_title: document.title });
+  }, [analytics, pathname]);
 
   if (!analytics) return null;
   return (

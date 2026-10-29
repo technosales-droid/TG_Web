@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { CourseCard, CourseHeader } from "@/components/course/course-hero";
 import { CourseMain } from "@/components/course/course-sections";
 import { JsonLd } from "@/components/seo/json-ld";
+import { ViewContentTracker } from "@/components/analytics/view-content-tracker";
 import { COURSE_DETAILS, getCourseDetail } from "@/data/course-details";
 import { FACULTY } from "@/data/institute";
 import { BUSINESS, ORG_ID, PROGRAM_FACTS } from "@/data/business-facts";
@@ -65,6 +66,7 @@ export default async function Page({ params }: Props) {
   const instructor = course.instructor ? FACULTY.find((f) => f.slug === course.instructor?.facultySlug) : undefined;
   return (
     <main>
+      <ViewContentTracker contentName={course.title} contentId={course.slug} contentCategory="Program" />
       <JsonLd
         data={{
           "@context": "https://schema.org",

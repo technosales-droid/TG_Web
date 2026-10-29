@@ -42,7 +42,10 @@ export const DEFAULT: Consent = { embeds: false, analytics: false, marketing: tr
 const listeners = new Set<() => void>();
 let cache: { raw: string | null; value: Consent } | null = null;
 
-function read(): Consent {
+// Exported so src/lib/track.ts can gate a business event (Lead, ViewContent, ...) fired from a plain event
+// handler, where useConsent() (a hook) isn't available -- this is the same synchronous localStorage read
+// useConsent() uses internally, just callable outside a component.
+export function read(): Consent {
   let raw: string | null = null;
   try {
     raw = localStorage.getItem(KEY);

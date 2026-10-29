@@ -18,6 +18,7 @@ import {
 import { CONTACT } from "@/components/contact/contact-data";
 import { BUSINESS } from "@/data/business-facts";
 import { cn } from "cn";
+import { trackCompleteRegistration } from "@/lib/track";
 import { ErrorText, FIELD, FOCUS, Honeypot, INVALID, Label } from "./form-ui";
 
 export interface GrantedSession {
@@ -93,7 +94,10 @@ export function AccessGate({
         body: JSON.stringify({ ...v, marketingConsent: v.marketingConsent && !minor, source, submissionId, elapsedMs: Date.now() - openedAt }),
       });
       const data = await res.json().catch(() => ({}));
-      if (res.ok && data.ok) return onGranted({ displayName: data.displayName, ageGroup: data.ageGroup });
+      if (res.ok && data.ok) {
+        trackCompleteRegistration({ sourceType: source.sourceType });
+        return onGranted({ displayName: data.displayName, ageGroup: data.ageGroup });
+      }
       setErrors({ ...(data.errors ?? {}), form: data.error ?? "Something went wrong. Please try again." });
     } catch {
       setErrors({ form: "We could not reach the server. Check your connection and try again." });

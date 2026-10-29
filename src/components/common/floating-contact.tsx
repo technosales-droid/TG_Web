@@ -7,6 +7,7 @@ import { FaWhatsapp } from "react-icons/fa6";
 import { ACTIVE_PROGRAMS } from "@/data/active-programs";
 import { footerContact } from "@/components/layout/footer-data";
 import { useConsent } from "@/lib/consent";
+import { trackContact } from "@/lib/track";
 import { useAnyDialogOpen } from "@/lib/use-any-dialog-open";
 import { cn } from "cn";
 
@@ -90,13 +91,13 @@ export function FloatingContact() {
         scrollSettled ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0"
       )}
     >
-      <a href={telHref} aria-label="Call Techno Gurukul" className={cn(BUTTON, "bg-primary")}>
+      <a href={telHref} onClick={() => trackContact("phone")} aria-label="Call Techno Gurukul" className={cn(BUTTON, "bg-primary")}>
         <Phone className="size-5 sm:size-6" aria-hidden="true" />
         <span aria-hidden="true" className={TOOLTIP}>
           Call Techno Gurukul
         </span>
       </a>
-      <a href={waHref} target="_blank" rel="noopener noreferrer" aria-label="Chat with Techno Gurukul on WhatsApp" className={cn(BUTTON, "bg-[#25D366]")}>
+      <a href={waHref} onClick={() => trackContact("whatsapp")} target="_blank" rel="noopener noreferrer" aria-label="Chat with Techno Gurukul on WhatsApp" className={cn(BUTTON, "bg-[#25D366]")}>
         <FaWhatsapp className="size-6 sm:size-7" aria-hidden="true" />
         <span aria-hidden="true" className={TOOLTIP}>
           Chat on WhatsApp

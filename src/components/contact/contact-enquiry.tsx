@@ -1,6 +1,9 @@
+"use client";
+
 import { cn } from "cn";
 import { FaWhatsapp } from "react-icons/fa6";
 import { buttonVariants } from "@/components/ui/button";
+import { trackContact } from "@/lib/track";
 import { CONTACT, ENQUIRY_ID } from "./contact-data";
 import { ContactForm } from "./contact-form";
 import { Reveal } from "./contact-reveal";
@@ -38,7 +41,7 @@ export function ContactEnquiry() {
           <div className="mt-8 border-t border-primary/15">
             <Row label="Email">
               {email ? (
-                <a href={`mailto:${email}`} className={LINK}>
+                <a href={`mailto:${email}`} onClick={() => trackContact("email")} className={LINK}>
                   {email}
                 </a>
               ) : (
@@ -48,12 +51,13 @@ export function ContactEnquiry() {
             <Row label="Phone">
               {phone ? (
                 <div className="flex flex-wrap items-center gap-3">
-                  <a href={`tel:${phone.replace(/[^\d+]/g, "")}`} className={LINK}>
+                  <a href={`tel:${phone.replace(/[^\d+]/g, "")}`} onClick={() => trackContact("phone")} className={LINK}>
                     {phone}
                   </a>
                   {whatsapp && (
                     <a
                       href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`}
+                      onClick={() => trackContact("whatsapp")}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={cn(buttonVariants({ variant: "outline", size: "sm" }), FOCUS)}

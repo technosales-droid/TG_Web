@@ -12,6 +12,7 @@ import { FloatingContact } from "@/components/common/floating-contact";
 import { JsonLd } from "@/components/seo/json-ld";
 import { SITE_URL } from "@/lib/site";
 import { organizationSchema, websiteSchema } from "@/lib/schema";
+import { GTM_ID, META_PIXEL_ID } from "@/lib/tracker-scripts";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -58,25 +59,29 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             disabled -- for whom the cookie-consent gate below (itself React) could never have run anyway. */}
         <noscript>
           <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-WMBMSM8C"
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
-        {/* Meta Pixel noscript fallback, for the same reason and in the same place as GTM's above. The id is
-            a literal here (not imported from meta-pixel.tsx, a "use client" module) for the same reason GTM's
-            id above is: a plain value exported from a client module can't be read from this server component. */}
+        {/* Meta Pixel noscript fallback, for the same reason and in the same place as GTM's above. */}
         <noscript>
           {/* eslint-disable-next-line @next/next/no-img-element -- a plain beacon pixel, not a real image Next should optimize */}
           <img
             height="1"
             width="1"
             style={{ display: "none" }}
-            src="https://www.facebook.com/tr?id=982290634949305&ev=PageView&noscript=1"
+            src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
             alt=""
           />
         </noscript>
+        {/* Mounted before {children} below so window.fbq/window.dataLayer are already defined by the time any
+            page content's own effects run (e.g. ViewContentTracker on a program page) -- React commits effects
+            top-to-bottom through the tree on mount, and these two used to be the LAST children here, after
+            {children}, which meant a page-level tracker could run before either of these had loaded anything. */}
+        <GoogleTagManager />
+        <MetaPixel />
         <AccessProvider>
           {SCHEMA.map((d, i) => (
             <JsonLd key={i} data={d} />
@@ -96,8 +101,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <FloatingContact />
           <CookieSettings />
           <CookieBanner />
-          <GoogleTagManager />
-          <MetaPixel />
         </AccessProvider>
       </body>
     </html>

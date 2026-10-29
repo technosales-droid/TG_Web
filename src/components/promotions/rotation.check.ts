@@ -1,5 +1,4 @@
 // Run: node --experimental-strip-types src/components/promotions/rotation.check.ts
-// @ts-expect-error node needs the .ts extension
 import { pickNext } from "./rotation.ts";
 
 const ids = ["a", "b", "c", "d"];

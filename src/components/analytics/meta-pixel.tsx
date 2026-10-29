@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { clearCookiesByPrefix, useConsent } from "@/lib/consent";
 import { metaPixelScript } from "@/lib/tracker-scripts";
@@ -24,13 +25,33 @@ import { metaPixelScript } from "@/lib/tracker-scripts";
  * The script's own text (metaPixelScript) lives in src/lib/tracker-scripts.ts, a plain module with no JSX, so
  * src/lib/__tests__ can import and run it directly -- it can't import this file at all, since Node's own TS
  * loader doesn't parse JSX.
+ *
+ * App Router navigation never reloads the page, so metaPixelScript()'s own PageView (fired once, for whichever
+ * page the visitor actually landed on) would otherwise be the only PageView ever sent in a tab, no matter how
+ * many pages are visited after. The effect below re-fires the standard PageView event on every later pathname
+ * change, directly on the already-initialized window.fbq, bypassing the loader script's own guard entirely --
+ * this component stays mounted across client-side navigation (it lives in the root layout), so `fbq` is
+ * already defined by the time a visitor navigates anywhere else. The first pathname is skipped since the
+ * loader script already covers it; see src/app/layout.tsx for why GoogleTagManager/MetaPixel are mounted
+ * before {children}, which keeps window.fbq defined before any page content can ever observe otherwise.
  */
 export function MetaPixel() {
   const { marketing } = useConsent();
+  const pathname = usePathname();
+  const trackedFirstPathname = useRef(false);
 
   useEffect(() => {
     if (!marketing) clearCookiesByPrefix(["_fbp", "_fbc"]);
   }, [marketing]);
+
+  useEffect(() => {
+    if (!marketing) return;
+    if (!trackedFirstPathname.current) {
+      trackedFirstPathname.current = true;
+      return;
+    }
+    window.fbq?.("track", "PageView");
+  }, [marketing, pathname]);
 
   if (!marketing) return null;
   return (
