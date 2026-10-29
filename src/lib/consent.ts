@@ -82,3 +82,21 @@ export const useConsent = () => useSyncExternalStore(subscribe, read, () => DEFA
 
 export const OPEN_SETTINGS_EVENT = "tg:open-cookie-settings";
 export const openCookieSettings = () => window.dispatchEvent(new Event(OPEN_SETTINGS_EVENT));
+
+/**
+ * Deletes every cookie on this domain whose name starts with one of the given prefixes. A tracker's own
+ * consent-gated component (GoogleTagManager, MetaPixel) stops being rendered the moment consent is revoked, but
+ * that alone doesn't remove cookies it already set while it was loaded -- call this alongside that so revoking
+ * consent actually clears them, not just stops new ones. Doesn't touch anything already loaded in memory (e.g.
+ * a stray fbq()/gtag() reference); only a full page reload drops that, which isn't forced here since nothing in
+ * this codebase calls either after the initial page-view.
+ */
+export function clearCookiesByPrefix(prefixes: string[]) {
+  if (typeof document === "undefined") return;
+  for (const pair of document.cookie.split(";")) {
+    const name = pair.split("=")[0]?.trim();
+    if (name && prefixes.some((p) => name.startsWith(p))) {
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+    }
+  }
+}

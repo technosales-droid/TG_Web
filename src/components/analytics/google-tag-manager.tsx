@@ -1,7 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
 import Script from "next/script";
-import { useConsent } from "@/lib/consent";
+import { clearCookiesByPrefix, useConsent } from "@/lib/consent";
 
 // Public by design: a GTM container ID is meant to be embedded in client-side code, not a secret.
 const GTM_ID = "GTM-WMBMSM8C";
@@ -14,9 +15,19 @@ const GTM_ID = "GTM-WMBMSM8C";
  * <noscript> fallback iframe Google also asks for is not gated: it only ever matters to visitors with JS
  * disabled, for whom this consent system (itself React) could never have run anyway, and Google's own install
  * instructions require it as high in <body> as possible -- see src/app/layout.tsx.
+ *
+ * Revoking consent unmounts the <Script> below, but that alone doesn't delete the _ga/_ga_<container-id>
+ * cookies GA4 already set while it was loaded -- the effect below clears anything prefixed "_ga" the moment
+ * analytics consent goes false (see meta-pixel.tsx for the same pattern and why this, not Google's Consent
+ * Mode "load always, suppress via consent signal" API, is used).
  */
 export function GoogleTagManager() {
   const { analytics } = useConsent();
+
+  useEffect(() => {
+    if (!analytics) clearCookiesByPrefix(["_ga"]);
+  }, [analytics]);
+
   if (!analytics) return null;
   return (
     <Script id="gtm-init" strategy="afterInteractive">
