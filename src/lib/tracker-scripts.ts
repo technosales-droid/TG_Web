@@ -5,7 +5,7 @@
 
 // Public by design: both ids are meant to be embedded in client-side code, not secrets.
 export const GTM_ID = "GTM-WMBMSM8C";
-export const META_PIXEL_ID = "982290634949305";
+export const META_PIXEL_ID = "1448322024089398";
 
 // Window-scoped flags (NOT sessionStorage) guarding each script's init/track calls against running more than
 // once per real page load. A plain `var` assignment inside an inline <script> attaches to `window`, so this
