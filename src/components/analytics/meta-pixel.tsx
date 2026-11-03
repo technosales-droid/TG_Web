@@ -2,9 +2,12 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import Script from "next/script";
 import { clearCookiesByPrefix, useConsent } from "@/lib/consent";
-import { metaPixelScript } from "@/lib/tracker-scripts";
+import { metaPixelScript, META_PIXEL_FIRED_FLAG } from "@/lib/tracker-scripts";
+
+function isMetaPixelFired(): boolean {
+  return Boolean((window as unknown as Record<string, unknown>)[META_PIXEL_FIRED_FLAG]);
+}
 
 /**
  * Loads the Meta Pixel based on the "marketing" bucket in the visitor's cookie preferences (see
@@ -14,31 +17,33 @@ import { metaPixelScript } from "@/lib/tracker-scripts";
  * who clicked "Accept all". That default -- and the compliance tradeoff it carries for EU/UK/EEA visitors --
  * is documented on the `marketing` field in consent.ts; this component just reads whatever that is.
  *
- * Turning marketing off (default-on visitor opts out, or it was off already) unmounts the <Script> below, but
- * that alone doesn't delete the _fbp/_fbc cookies the Pixel already set while it was loaded -- the effect
- * below clears those the moment marketing goes false, so "off" actually means off, not just "no new cookies
- * from now on". (Deliberately not using Meta's `fbq('consent', 'revoke')` API instead: that pattern loads
- * fbevents.js and contacts facebook.net on every visit even for a visitor who already opted out, just told to
- * suppress data afterwards -- a real network request to a third party either way, which this project avoids
- * wherever the tracker is actually off.)
+ * The actual base-install code (metaPixelScript) now runs from a single place: a static, always-present
+ * <script> in src/app/layout.tsx, present directly in the server-rendered HTML -- not from a <Script> rendered
+ * here. That used to be two independent places running the identical script text for the common case
+ * (marketing true from page load), each trusting the shared window flag inside the script to coordinate --
+ * Meta's own Ads Data Advisor then reported exactly what that risks: "'PageView' fired 2 times with identical
+ * data". Rendering it from only one place removes the need to trust that coordination at all.
  *
- * The script's own text (metaPixelScript) lives in src/lib/tracker-scripts.ts, a plain module with no JSX, so
- * src/lib/__tests__ can import and run it directly -- it can't import this file at all, since Node's own TS
- * loader doesn't parse JSX.
- *
- * App Router navigation never reloads the page, so metaPixelScript()'s own PageView (fired once, for whichever
- * page the visitor actually landed on) would otherwise be the only PageView ever sent in a tab, no matter how
- * many pages are visited after. The effect below re-fires the standard PageView event on every later pathname
- * change, directly on the already-initialized window.fbq, bypassing the loader script's own guard entirely --
- * this component stays mounted across client-side navigation (it lives in the root layout), so `fbq` is
- * already defined by the time a visitor navigates anywhere else. The first pathname is skipped since the
- * loader script already covers it; see src/app/layout.tsx for why GoogleTagManager/MetaPixel are mounted
- * before {children}, which keeps window.fbq defined before any page content can ever observe otherwise.
+ * This component now only handles what the static script's one-time, page-load consent check can't:
+ * - Clearing _fbp/_fbc the moment marketing goes false, since unmounting a <Script> isn't what gates anything
+ *   anymore, but the cookies the Pixel already set still need clearing (see the first effect below). Not using
+ *   Meta's `fbq('consent', 'revoke')` API instead: that pattern loads fbevents.js and contacts facebook.net on
+ *   every visit even for a visitor who already opted out, just told to suppress data afterwards -- a real
+ *   network request to a third party either way, which this project avoids wherever the tracker is off.
+ * - Marketing turning on LATER in the same page view (opting in via Cookie Settings, no reload) after the
+ *   static script's one-time check already ran with the old, false answer -- isMetaPixelFired() tells us
+ *   whether that already happened; if not, this re-runs the identical script text itself. Safe either way:
+ *   Meta's own loader IIFE (`if(f.fbq)return`) and the window-flag guard inside metaPixelScript() both make
+ *   re-running it, on the rare occasion it isn't actually needed, a no-op rather than a second real fire.
+ * - Re-firing the standard PageView event on every later App Router pathname change, directly on the
+ *   already-initialized window.fbq -- App Router navigation never reloads the page, so without this, only the
+ *   very first page in a tab would ever be tracked.
  */
 export function MetaPixel() {
   const { marketing } = useConsent();
   const pathname = usePathname();
-  const trackedFirstPathname = useRef(false);
+  // Starts at the page actually landed on, so that page is never treated as a "new" pathname to re-track.
+  const lastTrackedPathname = useRef(pathname);
 
   useEffect(() => {
     if (!marketing) clearCookiesByPrefix(["_fbp", "_fbc"]);
@@ -46,17 +51,25 @@ export function MetaPixel() {
 
   useEffect(() => {
     if (!marketing) return;
-    if (!trackedFirstPathname.current) {
-      trackedFirstPathname.current = true;
-      return;
+    if (!isMetaPixelFired()) {
+      // A plain dynamically-inserted <script> actually executes (unlike setting innerHTML), running the same
+      // loader + consent-gated init/track as the static one in layout.tsx -- needed here because that static
+      // script's own check already ran (and said no) before this effect could possibly know marketing had
+      // since turned on.
+      const el = document.createElement("script");
+      el.text = metaPixelScript();
+      document.head.appendChild(el);
+      el.remove();
+      lastTrackedPathname.current = pathname; // this run's own fbq('track','PageView') already covers it
     }
+  }, [marketing, pathname]);
+
+  useEffect(() => {
+    if (!marketing) return;
+    if (pathname === lastTrackedPathname.current) return;
+    lastTrackedPathname.current = pathname;
     window.fbq?.("track", "PageView");
   }, [marketing, pathname]);
 
-  if (!marketing) return null;
-  return (
-    <Script id="meta-pixel-init" strategy="afterInteractive">
-      {metaPixelScript()}
-    </Script>
-  );
+  return null;
 }
