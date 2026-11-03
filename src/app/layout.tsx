@@ -12,7 +12,7 @@ import { FloatingContact } from "@/components/common/floating-contact";
 import { JsonLd } from "@/components/seo/json-ld";
 import { SITE_URL } from "@/lib/site";
 import { organizationSchema, websiteSchema } from "@/lib/schema";
-import { GTM_ID, META_PIXEL_ID } from "@/lib/tracker-scripts";
+import { GTM_ID, META_PIXEL_ID, metaPixelScript } from "@/lib/tracker-scripts";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -76,6 +76,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             alt=""
           />
         </noscript>
+        {/* The actual Meta Pixel base code, present directly in the server-rendered HTML (not injected later
+            by next/script, which never appears in the initial markup) -- Meta's own "Install Meta Pixel" check
+            in Events Manager reads the page source for this literal code shape and can't detect a script that
+            only exists after the browser hydrates. The consent check lives INSIDE the script text itself (see
+            metaPixelScript's own comment), so this is always in the HTML while still only actually contacting
+            Meta's servers when a visitor's stored preference, or the opt-out default, allows it. */}
+        <script dangerouslySetInnerHTML={{ __html: metaPixelScript() }} />
         {/* Mounted before {children} below so window.fbq/window.dataLayer are already defined by the time any
             page content's own effects run (e.g. ViewContentTracker on a program page) -- React commits effects
             top-to-bottom through the tree on mount, and these two used to be the LAST children here, after

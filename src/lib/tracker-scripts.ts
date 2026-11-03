@@ -37,27 +37,53 @@ export function gtmScript(): string {
   `;
 }
 
-/** Meta's own Pixel loader snippet, verbatim, except the two fbq() calls after it are wrapped in the
- * window-flag guard above. Meta's loader IIFE already guards itself against re-running (`if(f.fbq)return`),
- * but those two calls are not inside that guard, so without this they'd fire again on every remount of
- * MetaPixel (the same off-then-back-on-without-reload case as GTM above) -- a duplicate 'init' and a duplicate
- * PageView event sent to Meta for one real page view. SPA navigation to a later page is handled separately, in
- * MetaPixel's own pathname effect -- this only ever runs once, for whichever page the visitor actually landed
- * on. */
+/** Meta's own Pixel loader snippet, verbatim, wrapped in two guards: a consent check around the whole thing
+ * (so an opted-out visitor's browser never even requests fbevents.js from connect.facebook.net -- not just
+ * "no init call", no network contact at all), and the window-flag guard above around the two fbq() calls
+ * (Meta's loader IIFE already guards itself against re-running via `if(f.fbq)return`, but those two calls are
+ * not inside that guard, so without this they'd fire again on every remount of MetaPixel -- the off-then-
+ * back-on-without-reload case -- a duplicate 'init' and a duplicate PageView for one real page view).
+ *
+ * The consent check (tgMetaMarketingAllowed) duplicates the marketing field's default/shape from
+ * src/lib/consent.ts by hand, rather than importing it: this function's return value becomes a literal
+ * string embedded in a plain <script> tag, including one rendered directly in src/app/layout.tsx -- a Server
+ * Component, which can't read localStorage anyway, and needs this check to run as browser JS, not at render
+ * time. Keep the two in sync if the marketing default or storage key/shape ever changes.
+ *
+ * That layout.tsx placement is the reason the whole snippet is wrapped like this at all, not just gated by a
+ * `marketing &&` in MetaPixel.tsx (a next/script "afterInteractive" <Script>, which MetaPixel still also
+ * renders, never appears in the server-rendered HTML -- only once the browser runs it after hydration): Meta's
+ * own "Install Meta Pixel" checker in Events Manager reads the page's raw HTML for this exact code shape, and
+ * never found it there, no matter how correctly it actually ran once a visitor's browser executed the page.
+ * Rendering this same text as a plain, always-present <script> fixes that, while the consent check inside it
+ * -- evaluated by the browser, not skipped by a crawler reading the source as text -- keeps the actual
+ * tracking gated exactly as before. MetaPixel.tsx's own conditional <Script> mount still exists for real-time
+ * consent changes and the SPA pathname re-fire; running this text twice on the same page load is harmless,
+ * since both guards above are idempotent. */
 export function metaPixelScript(): string {
   return `
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    if (!window.${META_PIXEL_FIRED_FLAG}) {
-      window.${META_PIXEL_FIRED_FLAG} = true;
-      fbq('init', '${META_PIXEL_ID}');
-      fbq('track', 'PageView');
+    function tgMetaMarketingAllowed() {
+      try {
+        var raw = window.localStorage.getItem('tg-cookie-preferences');
+        if (!raw) return true;
+        var v = JSON.parse(raw);
+        return typeof v.marketing === 'boolean' ? v.marketing : true;
+      } catch (e) { return true; }
+    }
+    if (tgMetaMarketingAllowed()) {
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      if (!window.${META_PIXEL_FIRED_FLAG}) {
+        window.${META_PIXEL_FIRED_FLAG} = true;
+        fbq('init', '${META_PIXEL_ID}');
+        fbq('track', 'PageView');
+      }
     }
   `;
 }

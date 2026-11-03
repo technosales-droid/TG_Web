@@ -218,6 +218,49 @@ describe("duplicate-event guards", () => {
     assert.notEqual(GTM_FIRED_FLAG, META_PIXEL_FIRED_FLAG);
   });
 
+  test("Meta Pixel: the script's own inline consent check skips init/track when the stored preference is marketing:false", () => {
+    // This is the gate that lets metaPixelScript() be rendered unconditionally as static HTML (see layout.tsx)
+    // and still only actually contact Meta when consent allows -- a real browser's localStorage, not Node's.
+    const calls = { fbq: [] as unknown[][], scriptsInserted: 0 };
+    const sandbox = {
+      window: {
+        localStorage: { getItem: (k: string) => (k === "tg-cookie-preferences" ? JSON.stringify({ marketing: false }) : null) },
+      },
+      document: {
+        createElement: () => {
+          calls.scriptsInserted += 1;
+          return { async: false, src: "" };
+        },
+        getElementsByTagName: () => [{ parentNode: { insertBefore: () => {} } }],
+      },
+      fbq: ((...args: unknown[]) => calls.fbq.push(args)) as unknown,
+    };
+    vm.runInContext(metaPixelScript(), vm.createContext(sandbox));
+    assert.deepEqual(calls.fbq, [], "marketing:false must block fbq('init'/'track') entirely");
+    assert.equal(calls.scriptsInserted, 0, "marketing:false must block the fbevents.js <script> insertion too -- no network contact at all");
+  });
+
+  test("Meta Pixel: the script's own inline consent check fires when the stored preference is marketing:true", () => {
+    const calls = { fbq: [] as unknown[][], scriptsInserted: 0 };
+    const sandbox = {
+      window: {
+        localStorage: { getItem: (k: string) => (k === "tg-cookie-preferences" ? JSON.stringify({ marketing: true }) : null) },
+      },
+      document: {
+        createElement: () => {
+          calls.scriptsInserted += 1;
+          return { async: false, src: "" };
+        },
+        getElementsByTagName: () => [{ parentNode: { insertBefore: () => {} } }],
+      },
+      fbq: ((...args: unknown[]) => calls.fbq.push(args)) as unknown,
+    };
+    vm.runInContext(metaPixelScript(), vm.createContext(sandbox));
+    assert.equal(calls.fbq.filter((c) => c[0] === "init").length, 1);
+    assert.equal(calls.fbq.filter((c) => c[0] === "track" && c[1] === "PageView").length, 1);
+    assert.equal(calls.scriptsInserted, 1);
+  });
+
   test("Meta Pixel: a fresh page load (a new window, same tab) fires init/track again on its own", () => {
     // Two separate vm contexts stand in for two separate full page loads/reloads in the same tab -- each gets
     // its own fresh `window`, exactly like an actual reload, which is the scenario the old sessionStorage-based
