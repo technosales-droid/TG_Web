@@ -44,11 +44,16 @@ export function gtmScript(): string {
  * not inside that guard, so without this they'd fire again on every remount of MetaPixel -- the off-then-
  * back-on-without-reload case -- a duplicate 'init' and a duplicate PageView for one real page view).
  *
- * The consent check (tgMetaMarketingAllowed) duplicates the marketing field's default/shape from
- * src/lib/consent.ts by hand, rather than importing it: this function's return value becomes a literal
- * string embedded in a plain <script> tag, including one rendered directly in src/app/layout.tsx -- a Server
- * Component, which can't read localStorage anyway, and needs this check to run as browser JS, not at render
- * time. Keep the two in sync if the marketing default or storage key/shape ever changes.
+ * The consent check (tgMetaMarketingAllowed) duplicates consent.ts's read() by hand, rather than importing
+ * it: this function's return value becomes a literal string embedded in a plain <script> tag, including one
+ * rendered directly in src/app/layout.tsx -- a Server Component, which can't read localStorage anyway, and
+ * needs this check to run as browser JS, not at render time. It mirrors read()'s exact two-step logic, not
+ * just the marketing field's own fallback, because the two differ: a STORED record missing `marketing` (one
+ * written before the Pixel existed) is NOT the same as NO record at all -- read() only accepts a record as
+ * valid once `embeds` is present and boolean, and only then falls back a missing `marketing` to false, not to
+ * DEFAULT's true; true is reserved for "no valid record exists yet". Collapsing that into one fallback would
+ * silently re-enable tracking for a visitor who'd already made some other explicit choice. Keep the two in
+ * sync if read()'s validation or the marketing default ever changes.
  *
  * That layout.tsx placement is the reason the whole snippet is wrapped like this at all, not just gated by a
  * `marketing &&` in MetaPixel.tsx (a next/script "afterInteractive" <Script>, which MetaPixel still also
@@ -67,7 +72,8 @@ export function metaPixelScript(): string {
         var raw = window.localStorage.getItem('tg-cookie-preferences');
         if (!raw) return true;
         var v = JSON.parse(raw);
-        return typeof v.marketing === 'boolean' ? v.marketing : true;
+        if (typeof v.embeds !== 'boolean') return true;
+        return typeof v.marketing === 'boolean' ? v.marketing : false;
       } catch (e) { return true; }
     }
     if (tgMetaMarketingAllowed()) {

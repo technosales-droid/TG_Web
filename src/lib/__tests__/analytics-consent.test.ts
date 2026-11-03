@@ -70,7 +70,7 @@ const stubs = installDomStubs();
 
 // Imported *after* the stubs above are installed on globalThis, since clearCookiesByPrefix/setConsent read
 // document/localStorage at call time, not at import time -- but importing after is the safer order regardless.
-const { clearCookiesByPrefix, setConsent, DEFAULT } = await import("../consent.ts");
+const { clearCookiesByPrefix, setConsent, DEFAULT, read } = await import("../consent.ts");
 const { gtmScript, metaPixelScript, GTM_FIRED_FLAG, META_PIXEL_FIRED_FLAG, GTM_ID, META_PIXEL_ID } = await import(
   "../tracker-scripts.ts"
 );
@@ -221,10 +221,12 @@ describe("duplicate-event guards", () => {
   test("Meta Pixel: the script's own inline consent check skips init/track when the stored preference is marketing:false", () => {
     // This is the gate that lets metaPixelScript() be rendered unconditionally as static HTML (see layout.tsx)
     // and still only actually contact Meta when consent allows -- a real browser's localStorage, not Node's.
+    // A full, valid record (embeds present) is what setConsent actually ever writes -- see the separate legacy-
+    // record test below for the case where `embeds` itself is missing.
     const calls = { fbq: [] as unknown[][], scriptsInserted: 0 };
     const sandbox = {
       window: {
-        localStorage: { getItem: (k: string) => (k === "tg-cookie-preferences" ? JSON.stringify({ marketing: false }) : null) },
+        localStorage: { getItem: (k: string) => (k === "tg-cookie-preferences" ? JSON.stringify({ embeds: false, analytics: false, marketing: false }) : null) },
       },
       document: {
         createElement: () => {
@@ -244,7 +246,7 @@ describe("duplicate-event guards", () => {
     const calls = { fbq: [] as unknown[][], scriptsInserted: 0 };
     const sandbox = {
       window: {
-        localStorage: { getItem: (k: string) => (k === "tg-cookie-preferences" ? JSON.stringify({ marketing: true }) : null) },
+        localStorage: { getItem: (k: string) => (k === "tg-cookie-preferences" ? JSON.stringify({ embeds: true, analytics: true, marketing: true }) : null) },
       },
       document: {
         createElement: () => {
@@ -259,6 +261,31 @@ describe("duplicate-event guards", () => {
     assert.equal(calls.fbq.filter((c) => c[0] === "init").length, 1);
     assert.equal(calls.fbq.filter((c) => c[0] === "track" && c[1] === "PageView").length, 1);
     assert.equal(calls.scriptsInserted, 1);
+  });
+
+  test("Meta Pixel: a legacy stored record (valid, but written before `marketing` existed) is treated as marketing:false, not DEFAULT's true", () => {
+    // Same shape read()'s own validation requires: embeds present and boolean, marketing absent -- a real
+    // record from before the Pixel existed, not "no choice made yet". Set directly into the stubbed storage
+    // (setConsent's typed signature can't produce this shape) and confirm BOTH the real consent.ts read() and
+    // the inline script resolve it the same way -- that parity is the whole point of this test.
+    stubs.storageEntries()["tg-cookie-preferences"] = JSON.stringify({ embeds: false, analytics: false, choice: "necessary" });
+
+    assert.equal(read().marketing, false, "consent.ts's own read() must resolve this legacy record to marketing:false");
+
+    const calls = { fbq: [] as unknown[][], scriptsInserted: 0 };
+    const sandbox = {
+      window: { localStorage: { getItem: (k: string) => (k === "tg-cookie-preferences" ? stubs.storageEntries()[k] : null) } },
+      document: {
+        createElement: () => {
+          calls.scriptsInserted += 1;
+          return { async: false, src: "" };
+        },
+        getElementsByTagName: () => [{ parentNode: { insertBefore: () => {} } }],
+      },
+      fbq: ((...args: unknown[]) => calls.fbq.push(args)) as unknown,
+    };
+    vm.runInContext(metaPixelScript(), vm.createContext(sandbox));
+    assert.deepEqual(calls.fbq, [], "the inline script must match read() exactly and must not fire for this legacy record");
   });
 
   test("Meta Pixel: a fresh page load (a new window, same tab) fires init/track again on its own", () => {
