@@ -86,17 +86,22 @@ export async function sendCapiEvent(e: CapiEvent): Promise<void> {
     ...(testEventCode ? { test_event_code: testEventCode } : {}),
   };
   try {
-    const res = await fetch(`https://graph.facebook.com/${GRAPH_VERSION}/${META_PIXEL_ID}/events?access_token=${token}`, {
+    // The token goes in the body, not the URL's query string -- a URL this process didn't construct (a proxy,
+    // a crash reporter, a server access log) can otherwise end up holding the live token in plain text. The
+    // Graph API accepts access_token as a normal body field on a POST just as well as a query param.
+    const res = await fetch(`https://graph.facebook.com/${GRAPH_VERSION}/${META_PIXEL_ID}/events`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ ...payload, access_token: token }),
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
     if (!res.ok) {
       const body = await res.text().catch(() => "");
       console.error(`[meta-capi] ${e.eventName} rejected: HTTP ${res.status} ${body.slice(0, 300)}`);
     }
-  } catch (err) {
-    console.error(`[meta-capi] ${e.eventName} failed: ${err instanceof Error ? err.message : String(err)}`);
+  } catch {
+    // A fixed message only -- no error.message: a fetch failure can embed the request URL (and, before the
+    // fix above, would have embedded the token too), so nothing from the thrown error is ever logged.
+    console.error(`[meta-capi] ${e.eventName}: request failed (network error or timeout).`);
   }
 }
