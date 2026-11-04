@@ -69,8 +69,16 @@ export async function sendCapiEvent(e: CapiEvent): Promise<void> {
     if (process.env.NODE_ENV === "production") console.error(`[meta-capi] ${e.eventName}: META_CAPI_ACCESS_TOKEN is not set.`);
     return;
   }
-  // Hard rule, not config: a test event code can never leave this process in production, even if one is set.
-  const testEventCode = process.env.NODE_ENV === "production" ? undefined : process.env.META_CAPI_TEST_EVENT_CODE;
+  // Presence of the env var is what turns this on, the same pattern every other secret in this file (and
+  // LEAD_WEBHOOK_URL/_SECRET elsewhere in the app) already uses -- there used to be a hard `NODE_ENV ===
+  // "production"` override here that stripped this unconditionally, which was the actual bug behind real
+  // production Lead events reaching Meta (and counting in Dataset Overview) while never once appearing in
+  // Events Manager's Test Events tool, which only lists events carrying a test_event_code: deploying
+  // META_CAPI_TEST_EVENT_CODE to production, as documented in .env.example, had no effect at all. The operator
+  // now owns clearing this var from production once a controlled test is done, exactly as .env.example already
+  // says to -- a forgotten test code silently excluding real events from ads reporting is a real risk, but it's
+  // a config-management risk every other secret here carries too, not one this file can distinguish for you.
+  const testEventCode = process.env.META_CAPI_TEST_EVENT_CODE;
   const payload = {
     data: [
       {
@@ -98,6 +106,14 @@ export async function sendCapiEvent(e: CapiEvent): Promise<void> {
     if (!res.ok) {
       const body = await res.text().catch(() => "");
       console.error(`[meta-capi] ${e.eventName} rejected: HTTP ${res.status} ${body.slice(0, 300)}`);
+    } else {
+      // Sanitized success diagnostic -- event name, id, whether it carried a test code, and Meta's own
+      // dedup/received counts (never a field from `user`, `customData`, or the token) -- so "did this actually
+      // reach Meta" is answerable from server logs alone, without waiting on Events Manager's own UI/delay.
+      const ack = await res.json().catch(() => null);
+      console.info(
+        `[meta-capi] ${e.eventName} accepted: event_id=${e.eventId} test=${Boolean(testEventCode)} events_received=${ack?.events_received ?? "?"}`
+      );
     }
   } catch {
     // A fixed message only -- no error.message: a fetch failure can embed the request URL (and, before the
