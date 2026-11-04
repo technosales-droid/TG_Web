@@ -1,4 +1,5 @@
 import { EMAIL_RE, phoneError } from "@/lib/access";
+import { read } from "@/lib/consent";
 import { CONTACT } from "./contact-data";
 import { BUSINESS } from "@/data/business-facts";
 
@@ -69,16 +70,26 @@ export function buildMailto(v: EnquiryValues): { mailto: string; email: string }
   return { mailto: `mailto:${email}?subject=${encodeURIComponent(`Enquiry: ${v.interest}`)}&body=${encodeURIComponent(lines.join("\n"))}`, email };
 }
 
-/** Sends the enquiry to the server, which stores it. Resolves to an error message when it could not be sent. */
-export async function sendEnquiry(v: EnquiryValues, openedAt: number, website: string, submissionId: string): Promise<{ ok: true } | { ok: false; error: string }> {
+/** Sends the enquiry to the server, which stores it. Resolves to an error message when it could not be sent.
+ * `trackingAllowed` tells the server whether it may send its own Meta Conversions API copy of the resulting
+ * Lead event -- this is the client's own read of its marketing-cookie consent (consent.ts), since the server
+ * has no other way to know it (consent lives only in localStorage, never a cookie). A returned `eventId` is the
+ * id the server used for that CAPI call, passed back so the browser Pixel's own Lead call (contact-form.tsx)
+ * can share it for Meta's dedup. */
+export async function sendEnquiry(
+  v: EnquiryValues,
+  openedAt: number,
+  website: string,
+  submissionId: string
+): Promise<{ ok: true; eventId?: string } | { ok: false; error: string }> {
   try {
     const res = await fetch("/api/enquiry", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...v, website, submissionId, elapsedMs: Date.now() - openedAt }),
+      body: JSON.stringify({ ...v, website, submissionId, elapsedMs: Date.now() - openedAt, trackingAllowed: read().marketing }),
     });
     const data = await res.json().catch(() => ({}));
-    if (res.ok && data.ok) return { ok: true };
+    if (res.ok && data.ok) return { ok: true, eventId: typeof data.eventId === "string" ? data.eventId : undefined };
     return { ok: false, error: data.error ?? "Something went wrong. Please try again." };
   } catch {
     return { ok: false, error: "We could not reach the server. Check your connection and try again." };

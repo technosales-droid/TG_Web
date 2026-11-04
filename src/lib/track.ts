@@ -33,17 +33,32 @@ export function trackViewContent(params: { contentName: string; contentId: strin
 }
 
 /** A real enquiry was submitted AND accepted by /api/enquiry -- call this only at that point, never on a
- * button click, a form open, or a failed/invalid submission. */
-export function trackLead(params: { contentName: string }) {
-  if (read().marketing) window.fbq?.("track", "Lead", { content_name: params.contentName });
+ * button click, a form open, or a failed/invalid submission.
+ *
+ * `eventId`, when present, is the id /api/enquiry generated server-side for its own Meta Conversions API (CAPI)
+ * copy of this same Lead (see src/lib/meta-capi.ts). Passing it to fbq's `eventID` option is what lets Meta
+ * deduplicate the browser and server copies of one real lead into a single counted event, by Meta's own rule
+ * (same event_name + same event ID) -- not a second, independent event. */
+export function trackLead(params: { contentName: string; eventId?: string }) {
+  if (read().marketing) {
+    const args: unknown[] = ["track", "Lead", { content_name: params.contentName }];
+    if (params.eventId) args.push({ eventID: params.eventId });
+    window.fbq?.(...args);
+  }
   if (read().analytics) window.dataLayer?.push({ event: "generate_lead", content_name: params.contentName });
 }
 
 /** A visitor's access-profile form was submitted AND accepted by /api/access -- the site's only real
  * registration flow (gates brochures/resources/projects). `sourceType` is the kind of content it unlocked
- * (e.g. "brochure", "resource"), never anything the visitor typed. */
-export function trackCompleteRegistration(params: { sourceType: string }) {
-  if (read().marketing) window.fbq?.("track", "CompleteRegistration", { content_name: params.sourceType, status: true });
+ * (e.g. "brochure", "resource"), never anything the visitor typed.
+ *
+ * `eventId`: see trackLead's comment above -- same CAPI/Pixel dedup purpose, for /api/access's CompleteRegistration. */
+export function trackCompleteRegistration(params: { sourceType: string; eventId?: string }) {
+  if (read().marketing) {
+    const args: unknown[] = ["track", "CompleteRegistration", { content_name: params.sourceType, status: true }];
+    if (params.eventId) args.push({ eventID: params.eventId });
+    window.fbq?.(...args);
+  }
   if (read().analytics) window.dataLayer?.push({ event: "sign_up", method: params.sourceType });
 }
 

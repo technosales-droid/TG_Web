@@ -343,6 +343,20 @@ describe("track.ts: consent-aware business events", () => {
     ]);
   });
 
+  test("trackLead and trackCompleteRegistration pass eventId through as fbq's eventID option, for Meta's browser/CAPI dedup", () => {
+    setConsent({ embeds: false, analytics: false, marketing: true, choice: "custom" });
+    trackLead({ contentName: "AI Program", eventId: "11111111-1111-1111-1111-111111111111" });
+    assert.deepEqual(stubs.fbqCalls(), [
+      ["track", "Lead", { content_name: "AI Program" }, { eventID: "11111111-1111-1111-1111-111111111111" }],
+    ]);
+
+    stubs.reset();
+    trackCompleteRegistration({ sourceType: "brochure", eventId: "22222222-2222-2222-2222-222222222222" });
+    assert.deepEqual(stubs.fbqCalls(), [
+      ["track", "CompleteRegistration", { content_name: "brochure", status: true }, { eventID: "22222222-2222-2222-2222-222222222222" }],
+    ]);
+  });
+
   test("trackContact distinguishes a contact-link click from any confirmed lead -- it never fires Lead/generate_lead", () => {
     setConsent({ embeds: false, analytics: true, marketing: true, choice: "custom" });
     trackContact("whatsapp");

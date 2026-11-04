@@ -3,8 +3,10 @@ import type { NextRequest } from "next/server";
 import { CONTACT_METHODS, INTERESTS, MESSAGE_MAX, SOURCES, STATUSES, validateEnquiry, type EnquiryValues } from "@/components/contact/contact-submit";
 import { cellSafe, cellSafeText, clean, cleanText, displayPhone, isSubmissionId, normalizePhone } from "@/lib/access";
 import { PRIVACY_POLICY_VERSION } from "@/lib/legal-versions";
+import { sendCapiEvent, splitName } from "@/lib/meta-capi";
+import { SITE_URL } from "@/lib/site";
 import { DeliveryUnavailable, deliver } from "@/server/delivery";
-import { claim, fail, guardPost, json, limited, release } from "@/server/guard";
+import { claim, clientIp, fail, guardPost, json, limited, release } from "@/server/guard";
 
 export const dynamic = "force-dynamic";
 
@@ -60,7 +62,29 @@ export async function POST(req: NextRequest) {
       receivedAt: now,
       page: "/contact",
     });
-    return json({ ok: true });
+    // One id, shared with the browser Pixel's Lead call for this same enquiry (see contact-form.tsx and
+    // track.ts's trackLead) so Meta deduplicates the two into one counted conversion instead of two.
+    // `trackingAllowed` is the client's own read of its marketing-cookie consent (consent.ts) -- this server
+    // route has no access to that, since consent is kept only in localStorage, never a cookie.
+    const eventId = randomUUID();
+    if (b.trackingAllowed === true) {
+      void sendCapiEvent({
+        eventName: "Lead",
+        eventId,
+        eventSourceUrl: `${SITE_URL}/contact`,
+        user: {
+          email: v.email,
+          phone: v.phone,
+          ...splitName(v.fullName),
+          clientIp: clientIp(req),
+          userAgent: req.headers.get("user-agent") ?? undefined,
+          fbp: req.cookies.get("_fbp")?.value,
+          fbc: req.cookies.get("_fbc")?.value,
+        },
+        customData: { content_name: v.interest },
+      });
+    }
+    return json({ ok: true, eventId });
   } catch (e) {
     release(dupKey);
     if (e instanceof DeliveryUnavailable) {

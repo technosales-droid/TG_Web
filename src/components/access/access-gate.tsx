@@ -18,6 +18,7 @@ import {
 import { CONTACT } from "@/components/contact/contact-data";
 import { BUSINESS } from "@/data/business-facts";
 import { cn } from "cn";
+import { read } from "@/lib/consent";
 import { trackCompleteRegistration } from "@/lib/track";
 import { ErrorText, FIELD, FOCUS, Honeypot, INVALID, Label } from "./form-ui";
 
@@ -91,11 +92,19 @@ export function AccessGate({
       const res = await fetch("/api/access", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...v, marketingConsent: v.marketingConsent && !minor, source, submissionId, elapsedMs: Date.now() - openedAt }),
+        body: JSON.stringify({
+          ...v,
+          marketingConsent: v.marketingConsent && !minor,
+          source,
+          submissionId,
+          elapsedMs: Date.now() - openedAt,
+          // The server has no other way to know this -- see the comment on /api/access's own use of it.
+          trackingAllowed: read().marketing,
+        }),
       });
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.ok) {
-        trackCompleteRegistration({ sourceType: source.sourceType });
+        trackCompleteRegistration({ sourceType: source.sourceType, eventId: typeof data.eventId === "string" ? data.eventId : undefined });
         return onGranted({ displayName: data.displayName, ageGroup: data.ageGroup });
       }
       setErrors({ ...(data.errors ?? {}), form: data.error ?? "Something went wrong. Please try again." });

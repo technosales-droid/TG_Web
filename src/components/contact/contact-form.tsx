@@ -150,7 +150,7 @@ export function ContactForm() {
     setSending(false);
     if (result.ok) {
       setSent(true);
-      trackLead({ contentName: values.interest || "General Enquiry" });
+      trackLead({ contentName: values.interest || "General Enquiry", eventId: result.eventId });
     } else setFailure(result.error);
   }
 

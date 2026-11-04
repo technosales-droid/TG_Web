@@ -1,4 +1,4 @@
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import {
@@ -17,10 +17,11 @@ import {
   type SourceType,
 } from "@/lib/access";
 import { PRIVACY_POLICY_VERSION, TERMS_VERSION } from "@/lib/legal-versions";
+import { sendCapiEvent, splitName } from "@/lib/meta-capi";
 import { DeliveryUnavailable, deliver } from "@/server/delivery";
 import { CONTACT } from "@/components/contact/contact-data";
 import { BUSINESS } from "@/data/business-facts";
-import { fail, guardPost, json, limited } from "@/server/guard";
+import { clientIp, fail, guardPost, json, limited } from "@/server/guard";
 import { sourceLabel } from "@/server/source-label";
 import { SessionNotConfigured, clearSessionCookie, newSessionId, sessionFrom, setSessionCookie } from "@/server/session";
 
@@ -105,7 +106,30 @@ export async function POST(req: NextRequest) {
 
   try {
     await deliver("lead", lead);
-    const res = json({ ok: true, displayName: firstName(v.name), ageGroup: v.ageGroup });
+    // One id, shared with the browser Pixel's CompleteRegistration call for this same registration (see
+    // access-gate.tsx and track.ts's trackCompleteRegistration) so Meta deduplicates the two. `trackingAllowed`
+    // is the client's own read of its marketing-cookie consent (consent.ts) -- this server route has no other
+    // way to know it, since consent lives only in localStorage, never a cookie. Never confuse this with
+    // `v.marketingConsent` above: that is the visitor's separate, explicit choice to be emailed/called about
+    // courses, not their cookie preference for ad-attribution tracking.
+    const eventId = randomUUID();
+    if (b.trackingAllowed === true) {
+      void sendCapiEvent({
+        eventName: "CompleteRegistration",
+        eventId,
+        user: {
+          email: v.email,
+          phone: v.phone,
+          ...splitName(v.name),
+          clientIp: clientIp(req),
+          userAgent: req.headers.get("user-agent") ?? undefined,
+          fbp: req.cookies.get("_fbp")?.value,
+          fbc: req.cookies.get("_fbc")?.value,
+        },
+        customData: { content_name: sourceType, status: true },
+      });
+    }
+    const res = json({ ok: true, displayName: firstName(v.name), ageGroup: v.ageGroup, eventId });
     setSessionCookie(res, { sid: id, dn: firstName(v.name), ag: v.ageGroup });
     return res;
   } catch (e) {
