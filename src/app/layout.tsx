@@ -40,6 +40,11 @@ export const metadata: Metadata = {
     images: [{ url: "/brand/link-preview.jpg", width: 1200, height: 630, alt: "Techno Gurukul" }],
   },
   twitter: { card: "summary_large_image", title: "Techno Gurukul", description, images: ["/brand/link-preview.jpg"] },
+  // Meta Business domain verification: must be a plain server-rendered <meta> tag in <head>, not injected by
+  // client JS (same requirement, and the same reason, as the Pixel's own base-code install -- see
+  // tracker-scripts.ts). Next's Metadata API renders `verification.other` entries server-side, so this
+  // satisfies that on its own, unlike a client-side approach would.
+  verification: { other: { "facebook-domain-verification": "sh4x3u6joekqzmochrcw4dimsu69d1" } },
 };
 
 export const viewport: Viewport = {
