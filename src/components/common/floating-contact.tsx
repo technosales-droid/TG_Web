@@ -75,10 +75,14 @@ export function FloatingContact() {
   const dialogOpen = useAnyDialogOpen();
   const scrollSettled = useScrollSettled();
 
-  if (!footerContact.whatsapp || !hydrated || at === null || dialogOpen) return null;
+  if (!hydrated || at === null || dialogOpen) return null;
 
-  const telHref = `tel:+${footerContact.whatsapp}`;
-  const waHref = `https://wa.me/${footerContact.whatsapp}?text=${encodeURIComponent(whatsappMessageFor(pathname))}`;
+  // Two different numbers (see footer-data.ts): `phone` is the one the Call button must dial -- a real human
+  // counselor, reachable by voice -- while `whatsapp` is a separate, call-incapable chatbot number. Each
+  // button only renders once its own number is actually set, independently of the other.
+  const telHref = footerContact.phone ? `tel:${footerContact.phone.replace(/\s+/g, "")}` : null;
+  const waHref = footerContact.whatsapp ? `https://wa.me/${footerContact.whatsapp}?text=${encodeURIComponent(whatsappMessageFor(pathname))}` : null;
+  if (!telHref && !waHref) return null;
 
   return (
     <div
@@ -91,18 +95,22 @@ export function FloatingContact() {
         scrollSettled ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0"
       )}
     >
-      <a href={telHref} onClick={() => trackContact("phone")} aria-label="Call Techno Gurukul" className={cn(BUTTON, "bg-primary")}>
-        <Phone className="size-5 sm:size-6" aria-hidden="true" />
-        <span aria-hidden="true" className={TOOLTIP}>
-          Call Techno Gurukul
-        </span>
-      </a>
-      <a href={waHref} onClick={() => trackContact("whatsapp")} target="_blank" rel="noopener noreferrer" aria-label="Chat with Techno Gurukul on WhatsApp" className={cn(BUTTON, "bg-[#25D366]")}>
-        <FaWhatsapp className="size-6 sm:size-7" aria-hidden="true" />
-        <span aria-hidden="true" className={TOOLTIP}>
-          Chat on WhatsApp
-        </span>
-      </a>
+      {telHref && (
+        <a href={telHref} onClick={() => trackContact("phone")} aria-label="Call Techno Gurukul" className={cn(BUTTON, "bg-primary")}>
+          <Phone className="size-5 sm:size-6" aria-hidden="true" />
+          <span aria-hidden="true" className={TOOLTIP}>
+            Call Techno Gurukul
+          </span>
+        </a>
+      )}
+      {waHref && (
+        <a href={waHref} onClick={() => trackContact("whatsapp")} target="_blank" rel="noopener noreferrer" aria-label="Chat with Techno Gurukul on WhatsApp" className={cn(BUTTON, "bg-[#25D366]")}>
+          <FaWhatsapp className="size-6 sm:size-7" aria-hidden="true" />
+          <span aria-hidden="true" className={TOOLTIP}>
+            Chat on WhatsApp
+          </span>
+        </a>
+      )}
     </div>
   );
 }

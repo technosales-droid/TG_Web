@@ -31,7 +31,7 @@ export const BUSINESS = {
     "https://www.facebook.com/people/TechnoGurukul/61594398658521/",
     "https://www.linkedin.com/company/technogurukul",
     "https://www.youtube.com/@techno_gurukul",
-    "https://wa.me/917387152953",
+    "https://wa.me/917387139952",
     "https://www.threads.com/@_technogurukul_",
     "https://www.pinterest.com/Techno_Gurukul/",
   ],

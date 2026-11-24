@@ -51,15 +51,17 @@ export type SocialId = "instagram" | "facebook" | "linkedin" | "youtube" | "what
 
 // The web copy's Contact page lists the email, phone and address below; all three are real, verified values.
 //
-// `whatsapp`: the number the global floating contact buttons (src/components/common/floating-contact.tsx) use for
-// both the call and the WhatsApp button, in wa.me's plain international digits format with no "+", spaces or
-// leading zero. Kept separate from `phone` above: that field drives the footer's and Contact page's own "tel:"
-// link; both currently point at the same verified number. Declared before footerSocials so the social icon
-// below can reuse it as the single source of truth, rather than a second hardcoded copy of the digits.
+// `phone` and `whatsapp` are deliberately two different numbers, each answered by a different thing: `phone`
+// is the one real human counselor's line (every "tel:" link on the site -- footer, legal pages, Contact page,
+// the floating Call button -- reads this one), while `whatsapp` is a WhatsApp Business number backed by an
+// automated chatbot/virtual assistant (answers questions, sends brochures) that cannot take a voice call at
+// all, so it is never used to build a "tel:" link anywhere. `whatsapp` is wa.me's plain international digits
+// format, no "+", spaces or leading zero. Declared before footerSocials so the social icon below can reuse it
+// as the single source of truth, rather than a second hardcoded copy of the digits.
 export const footerContact: { email: string | null; phone: string | null; whatsapp: string | null } = {
   email: BUSINESS.email,
   phone: "+91 73871 52953",
-  whatsapp: "917387152953",
+  whatsapp: "917387139952",
 };
 
 export const footerSocials: { id: SocialId; label: string; href: string | null }[] = [
