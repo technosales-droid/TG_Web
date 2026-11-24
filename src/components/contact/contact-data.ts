@@ -7,6 +7,7 @@ export const CONTACT = {
   email: footerContact.email,
   phone: footerContact.phone,
   whatsapp: footerContact.whatsapp,
+  whatsappDisplay: footerContact.whatsappDisplay,
   hours: null as string | null,
   location: footerLocation,
 };

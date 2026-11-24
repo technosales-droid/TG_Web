@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa6";
 import { cn } from "cn";
 import { CookieSettingsButton } from "@/components/access/cookie-settings";
 import { ConsentIframe } from "./consent-iframe";
@@ -136,7 +137,7 @@ function LocationCard() {
 }
 
 export function SiteFooter() {
-  const { email, phone } = footerContact;
+  const { email, phone, whatsapp, whatsappDisplay } = footerContact;
   const { name, type, locality, address, mapUrl } = footerLocation;
 
   return (
@@ -239,6 +240,26 @@ export function SiteFooter() {
                       >
                         <Phone className="size-5 shrink-0 text-background/70" aria-hidden="true" />
                         {phone}
+                      </a>
+                    </li>
+                  )}
+                  {/* A different number from Phone above (see footer-data.ts) -- a WhatsApp chatbot that
+                      cannot take a voice call. Its own line with its own visible number, not folded into the
+                      Phone line or left as the icon-only WhatsApp link in Follow Techno Gurukul above. */}
+                  {whatsapp && (
+                    <li>
+                      <a
+                        href={`https://wa.me/${whatsapp}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={cn(
+                          "flex items-center gap-3 py-1.5 text-base text-background/90 transition-colors hover:text-background",
+                          focusRing
+                        )}
+                      >
+                        <FaWhatsapp className="size-5 shrink-0 text-background/70" aria-hidden="true" />
+                        {whatsappDisplay ?? whatsapp}
+                        <span className="sr-only"> (opens WhatsApp in a new tab)</span>
                       </a>
                     </li>
                   )}

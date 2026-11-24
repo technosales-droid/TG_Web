@@ -58,10 +58,19 @@ export type SocialId = "instagram" | "facebook" | "linkedin" | "youtube" | "what
 // all, so it is never used to build a "tel:" link anywhere. `whatsapp` is wa.me's plain international digits
 // format, no "+", spaces or leading zero. Declared before footerSocials so the social icon below can reuse it
 // as the single source of truth, rather than a second hardcoded copy of the digits.
-export const footerContact: { email: string | null; phone: string | null; whatsapp: string | null } = {
+export const footerContact: {
+  email: string | null;
+  phone: string | null;
+  whatsapp: string | null;
+  /** Same number as `whatsapp`, formatted for display (wa.me needs plain digits; every visible label needs the
+   * human "+91 XXXXX XXXXX" form) -- now that the two numbers differ, both need to actually be visible, not
+   * just the phone one, so this can't stay an icon-only link with no digits shown anywhere. */
+  whatsappDisplay: string | null;
+} = {
   email: BUSINESS.email,
   phone: "+91 73871 52953",
   whatsapp: "917387139952",
+  whatsappDisplay: "+91 73871 39952",
 };
 
 export const footerSocials: { id: SocialId; label: string; href: string | null }[] = [

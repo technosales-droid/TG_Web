@@ -2,7 +2,6 @@
 
 import { cn } from "cn";
 import { FaWhatsapp } from "react-icons/fa6";
-import { buttonVariants } from "@/components/ui/button";
 import { trackContact } from "@/lib/track";
 import { CONTACT, ENQUIRY_ID } from "./contact-data";
 import { ContactForm } from "./contact-form";
@@ -24,7 +23,7 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
 
 /** One section: introduction and verified contact details on the left, the form on the right. */
 export function ContactEnquiry() {
-  const { email, phone, whatsapp, hours, location } = CONTACT;
+  const { email, phone, whatsapp, whatsappDisplay, hours, location } = CONTACT;
 
   return (
     <section id={ENQUIRY_ID} aria-labelledby="ct-enquiry-heading" className="scroll-mt-20 bg-muted/50 px-4 py-14 sm:px-6 sm:py-20 xl:py-24">
@@ -48,30 +47,34 @@ export function ContactEnquiry() {
                 PENDING
               )}
             </Row>
-            <Row label="Phone">
+            <Row label="Phone (call a counselor)">
               {phone ? (
-                <div className="flex flex-wrap items-center gap-3">
-                  <a href={`tel:${phone.replace(/[^\d+]/g, "")}`} onClick={() => trackContact("phone")} className={LINK}>
-                    {phone}
-                  </a>
-                  {whatsapp && (
-                    <a
-                      href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`}
-                      onClick={() => trackContact("whatsapp")}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={cn(buttonVariants({ variant: "outline", size: "sm" }), FOCUS)}
-                    >
-                      <FaWhatsapp className="size-4 text-[#25D366]" aria-hidden="true" />
-                      WhatsApp
-                      <span className="sr-only"> (opens in a new tab)</span>
-                    </a>
-                  )}
-                </div>
+                <a href={`tel:${phone.replace(/[^\d+]/g, "")}`} onClick={() => trackContact("phone")} className={LINK}>
+                  {phone}
+                </a>
               ) : (
                 PENDING
               )}
             </Row>
+            {/* A different number from Phone above -- see footer-data.ts: this one is a WhatsApp chatbot,
+                answers queries and sends brochures, but can't take a voice call. Its own row, with its own
+                visible number, rather than an icon-only pill next to Phone's number -- otherwise a visitor
+                has no way to tell these are two different numbers at all. */}
+            {whatsapp && (
+              <Row label="WhatsApp (chat with our assistant)">
+                <a
+                  href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`}
+                  onClick={() => trackContact("whatsapp")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(LINK, "inline-flex items-center gap-2")}
+                >
+                  <FaWhatsapp className="size-4 text-[#25D366]" aria-hidden="true" />
+                  {whatsappDisplay ?? whatsapp}
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              </Row>
+            )}
             <Row label="Location">
               <p className="text-base leading-relaxed text-foreground">{location.address ?? location.locality}</p>
               {location.mapUrl && (
