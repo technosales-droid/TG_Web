@@ -7,8 +7,7 @@
 // reflects the real, validated course data rather than a second copy of it. Digital Marketing and
 // the AI Program are hand-written below, since both are modelled as a Program (not a Course) in
 // catalogue.ts.
-import { COURSE_CATALOGUE } from "./catalogue";
-import { AI_PROGRAM_HREF, AI_PROGRAM_SLUG, DM_PROGRAM_HREF, DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
+import { AI_PROGRAM_HREF, AI_PROGRAM_SLUG, DM_PROGRAM_HREF, DM_PROGRAM_SLUG } from "@/lib/program-routes";
 
 export interface OfferingImage {
   src: string | null;
@@ -39,29 +38,6 @@ export interface ProgramCategory {
   name: string;
   description: string;
   offerings: Offering[];
-}
-
-function courseOffering(slug: string, image: OfferingImage): Offering {
-  const course = COURSE_CATALOGUE.find((c) => c.slug === slug && c.status === "active");
-  if (!course || !course.href) throw new Error(`[programs] course "${slug}" is not an active, routable course`);
-  return {
-    id: course.slug,
-    slug: course.slug,
-    title: course.title,
-    subtitle: course.subtitle,
-    description: course.description,
-    duration: course.duration,
-    mode: course.format ?? undefined,
-    // Every current course is taught at the one Nashik institute; hardcoded here rather than added as a Course
-    // field, since there is nothing (yet) for it to vary by.
-    location: "Nashik, Maharashtra",
-    tags: course.tags,
-    tools: course.tools,
-    href: course.href,
-    image,
-    status: "active",
-    flagship: course.featured,
-  };
 }
 
 const DIGITAL_MARKETING_OFFERING: Offering = {
@@ -113,18 +89,12 @@ export const PROGRAM_CATEGORIES: ProgramCategory[] = [
     description: "Practical, in-person digital marketing training covering strategy through to execution.",
     offerings: [DIGITAL_MARKETING_OFFERING],
   },
-  {
-    id: "game-development",
-    slug: "game-development",
-    name: "Game Development",
-    description: "A complete, practical path through every part of making a game.",
-    offerings: [
-      courseOffering(GD_PROGRAM_SLUG, {
-        src: "/brand/course-tg-gameforge.png",
-        alt: "A collage of game development work: code, 3D sculpting and digital art on tablets",
-      }),
-    ],
-  },
+  // TEMPORARY: the "game-development" category (Game Development Professional Program) is paused -- admissions
+  // closed, brochure withdrawn. Removing it here is what actually hides it from /programs (ALL_OFFERINGS below)
+  // and, downstream, from generateStaticParams (programs/[slug]/page.tsx), sitemap.ts, llms.txt and
+  // course-promotions.ts, all of which derive from COURSE_DETAILS, which derives from ALL_OFFERINGS. To restore:
+  // put this category back (its old shape is in git history/the commit that removed it) and remove the
+  // matching redirect in next.config.ts plus the other changes that same commit made.
 ];
 
 export const ALL_OFFERINGS: (Offering & { category: string; categorySlug: string })[] = PROGRAM_CATEGORIES.flatMap(

@@ -11,7 +11,7 @@ import { ACTIVE_PROGRAMS } from "@/data/active-programs";
 import { PROJECTS, isProjectPublic, type Project } from "@/data/projects";
 import { RESOURCES, isResourcePublic } from "@/data/resources";
 import { sourceTypeForCreator, type SourceType } from "@/lib/access";
-import { AI_PROGRAM_SLUG, DM_PROGRAM_SLUG, GD_PROGRAM_SLUG } from "@/lib/program-routes";
+import { AI_PROGRAM_SLUG, DM_PROGRAM_SLUG } from "@/lib/program-routes";
 
 export interface GatedProjectContent {
   longDescription?: string;
@@ -82,12 +82,9 @@ const BROCHURE_CONTENT: Record<string, GatedBrochureContent> = {
     downloadName: "techno-gurukul-digital-marketing-brochure.pdf",
     contentType: "application/pdf",
   },
-  [GD_PROGRAM_SLUG]: {
-    kind: "file",
-    file: "brochure-game-development.pdf",
-    downloadName: "techno-gurukul-game-development-brochure.pdf",
-    contentType: "application/pdf",
-  },
+  // TEMPORARY: Game Development's brochure entry removed while the course is paused -- see active-programs.ts.
+  // The validation loop below requires every entry here to match an ACTIVE_PROGRAMS course, so this and that
+  // removal must travel together; restore both at once.
 };
 
 const isSafeUrl = (u: string) => /^(https:\/\/|\/)[^\s]+$/.test(u);

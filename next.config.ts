@@ -76,6 +76,14 @@ const nextConfig: NextConfig = {
       // bookmarks and any external site that linked the old slug must keep working.
       { source: "/programs/tg-digital-marketing", destination: "/programs/digital-marketing-course-nashik", permanent: true },
       { source: "/programs/tg-gameforge", destination: "/programs/game-development-course-nashik", permanent: true },
+      // TEMPORARY: Game Development is paused (admissions closed, brochure withdrawn) -- not a permanent URL
+      // change like the ones above, so `permanent: false` (a 307) rather than `permanent: true` (a 308), which
+      // would tell search engines and browsers to treat the move as final and cache it hard. Existing inbound
+      // links (blog posts, bookmarks, search results) land safely on /programs instead of a 404. To restore:
+      // delete this one redirect, and reverse this same commit's changes to active-programs.ts, programs.ts,
+      // gated-content.ts, nav-data.ts, available-courses.tsx, programs-preview.tsx, course-promotion-popup.tsx
+      // and this page's own metadata.
+      { source: "/programs/game-development-course-nashik", destination: "/programs", permanent: false },
     ];
   },
 };

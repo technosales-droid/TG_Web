@@ -6,17 +6,20 @@ import Link from "next/link";
 import { ArrowUpRight, Clock } from "lucide-react";
 import { cn } from "cn";
 import { ACTIVE_PROGRAMS, type ActiveProgram } from "@/data/active-programs";
-import { AI_PROGRAM_HREF, DM_PROGRAM_HREF, GD_PROGRAM_HREF } from "@/lib/program-routes";
+import { AI_PROGRAM_HREF, DM_PROGRAM_HREF } from "@/lib/program-routes";
 
-// The three courses Techno Gurukul currently teaches, in Nashik, as equal-size cards (inset photo, category
-// pill, title + description, a footer meta row) -- the AI Program's pill just reads "Signature" instead of its
-// category. All three pull from the site's existing program data, so this section can never drift out of sync
-// with what /programs actually offers. Asserted here (not filtered defensively) because these are three
-// specific, known entries.
+// The courses Techno Gurukul currently teaches, in Nashik, as equal-size cards (inset photo, category pill,
+// title + description, a footer meta row) -- the AI Program's pill just reads "Signature" instead of its
+// category. Both pull from the site's existing program data, so this section can never drift out of sync with
+// what /programs actually offers. Asserted here (not filtered defensively) because these are specific, known
+// entries.
+//
+// TEMPORARY: Game Development was a third entry here until it was paused (admissions closed, brochure
+// withdrawn) -- see active-programs.ts. Restore its `ACTIVE_PROGRAMS.find(...)!` line here, and the lg:grid-cols
+// below back to 3, once it's back.
 const PROGRAMS: ActiveProgram[] = [
   ACTIVE_PROGRAMS.find((p) => p.href === AI_PROGRAM_HREF)!,
   ACTIVE_PROGRAMS.find((p) => p.href === DM_PROGRAM_HREF)!,
-  ACTIVE_PROGRAMS.find((p) => p.href === GD_PROGRAM_HREF)!,
 ];
 
 function prefersReducedMotion() {
@@ -67,14 +70,14 @@ export function AvailableCourses() {
             Start With What&rsquo;s Available Today.
           </h2>
           <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
-            The AI Program, Digital Marketing and Game Development are open for enrolment at our Nashik institute
-            right now. Everything else further down the page is on the way.
+            The AI Program and Digital Marketing are open for enrolment at our Nashik institute right now.
+            Everything else further down the page is on the way.
           </p>
         </div>
 
         <div
           className={cn(
-            "mt-10 grid gap-6 transition-all delay-150 duration-700 sm:grid-cols-2 lg:mt-12 lg:grid-cols-3",
+            "mt-10 grid gap-6 transition-all delay-150 duration-700 sm:grid-cols-2 lg:mt-12",
             visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
           )}
         >

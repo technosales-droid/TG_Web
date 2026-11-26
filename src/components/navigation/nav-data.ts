@@ -1,5 +1,5 @@
 import { LEARNING_PROJECTS_RESOURCES_ENABLED } from "@/lib/feature-flags";
-import { AI_PROGRAM_HREF, DM_PROGRAM_HREF, GD_PROGRAM_HREF } from "@/lib/program-routes";
+import { AI_PROGRAM_HREF, DM_PROGRAM_HREF } from "@/lib/program-routes";
 
 export interface NavLink {
   label: string;
@@ -15,7 +15,7 @@ export interface ProgramLink extends NavLink {
 }
 
 // The AI Program is Techno Gurukul's signature course, so it takes the large "flagship" tile in the Programs
-// menu; Digital Marketing and Game Development are real, available courses, shown as secondary tiles.
+// menu; Digital Marketing is a real, available course, shown as a secondary tile.
 export const SIGNATURE_PROGRAM: ProgramLink = {
   label: "AI Course",
   href: AI_PROGRAM_HREF,
@@ -24,6 +24,8 @@ export const SIGNATURE_PROGRAM: ProgramLink = {
   eyebrow: "AI Program",
 };
 
+// TEMPORARY: the Game Development Course tile was removed -- the course is paused (admissions closed, brochure
+// withdrawn). Restore by putting its tile object back here (see git history for this commit).
 export const SECONDARY_PROGRAMS: ProgramLink[] = [
   {
     label: "Digital Marketing Course",
@@ -31,13 +33,6 @@ export const SECONDARY_PROGRAMS: ProgramLink[] = [
     tagline: "SEO, Social Media & Performance Marketing",
     image: "/brand/course-tg-digital-marketing.png",
     eyebrow: "Digital Marketing",
-  },
-  {
-    label: "Game Development Course",
-    href: GD_PROGRAM_HREF,
-    tagline: "Professional Game Development & Design",
-    image: "/brand/course-tg-gameforge.png",
-    eyebrow: "Game Development & Design",
   },
 ];
 

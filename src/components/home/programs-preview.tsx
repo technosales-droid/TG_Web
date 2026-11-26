@@ -5,9 +5,10 @@ import Image from "next/image";
 import { Clock } from "lucide-react";
 import { cn } from "cn";
 
-// Committed future directions, not yet enrollable; no routes, no fabricated details. The AI Program, Digital
-// Marketing and Game Development are not in this list: they are already available and covered by the Available
-// Courses section above.
+// Committed future directions, not yet enrollable; no routes, no fabricated details. The AI Program and Digital
+// Marketing are not in this list: they are already available and covered by the Available Courses section
+// above. (Game Development is also absent here -- it's TEMPORARILY paused, not "coming soon"; see
+// active-programs.ts.)
 const COMING_SOON_PROGRAMS = [
   {
     title: "Cybersecurity",
@@ -119,8 +120,8 @@ export function ComingSoonPrograms() {
             </h2>
 
             <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
-              These are future directions we&rsquo;re exploring, not open for enrolment yet. The AI Program,
-              Digital Marketing and Game Development are the three courses available today.
+              These are future directions we&rsquo;re exploring, not open for enrolment yet. The AI Program and
+              Digital Marketing are the courses available today.
             </p>
           </div>
         </div>

@@ -7,7 +7,7 @@
 // that case the hero falls back to an icon + gradient treatment (`visual`) instead of a photo, the
 // same honest fallback the /programs catalogue cards already use for programs with no image.
 import { INTERESTS, type Interest } from "@/lib/access";
-import { AI_PROGRAM_HREF, DM_PROGRAM_HREF, GD_PROGRAM_HREF } from "@/lib/program-routes";
+import { AI_PROGRAM_HREF, DM_PROGRAM_HREF } from "@/lib/program-routes";
 
 export interface ActiveProgram {
   category: string;
@@ -45,17 +45,10 @@ export const ACTIVE_PROGRAMS: ActiveProgram[] = [
     video: "/brand/programs-digital-marketing.mp4",
     alt: "A laptop showing a digital marketing strategy breakdown beside matching handwritten notes",
   },
-  {
-    category: "Creative Technology",
-    title: "Game Development",
-    description:
-      "Learn the foundations of game creation through design, development, interactive systems and hands-on project work.",
-    outcome: "Design. Build. Play.",
-    href: GD_PROGRAM_HREF,
-    image: "/brand/programs-game-development.jpg",
-    video: "/brand/programs-game-development.mp4",
-    alt: "A person editing a game scene across multiple monitors in a production studio",
-  },
+  // TEMPORARY: Game Development removed -- paused (admissions closed, brochure withdrawn). Removing it from
+  // this list is what disables its brochure (gated-content.ts's BROCHURE_CONTENT validates against this array),
+  // its homepage marquee card, its "I'm interested in" WhatsApp message, and activeProgramInterest() for it.
+  // Restore by putting this object back (see git history for this commit) with its href, image and video.
 ];
 
 /** `href`'s program as its plain catalogue name (e.g. "Digital Marketing"), usable as an access-form Interest value;
